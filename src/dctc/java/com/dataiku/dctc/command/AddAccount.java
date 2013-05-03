@@ -111,6 +111,7 @@ public class AddAccount extends Command {
                     System.err.println("\rOK, listed " + nbuckets + " buckets in your GCS account");
                 } catch (Exception e) {
                     System.err.println("\rCould not list your buckets using these credentials. GCS said: " + e.getMessage());
+                    e.printStackTrace();
                     continue;
                 }
                 configuration.put("gs", account, "mail", email);

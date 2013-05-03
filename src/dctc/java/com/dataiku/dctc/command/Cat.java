@@ -2,6 +2,7 @@ package com.dataiku.dctc.command;
 
 import java.util.List;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -52,7 +53,10 @@ public class Cat extends Command {
     	InputStream i;
     	try {
             i = AutoGZip.buildInput(file);
-    	} catch (IOException e) {
+        } catch (FileNotFoundException e) {
+            error (file.givenName(), "No such file or directory", 1);
+            return;
+        } catch (IOException e) {
             error("Could not open file " + file.givenName(), e, 2);
             return;
         }

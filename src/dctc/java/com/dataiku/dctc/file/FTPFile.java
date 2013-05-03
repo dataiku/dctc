@@ -25,6 +25,21 @@ public class FTPFile extends AbstractGFile {
             this.path = "/";
         }
     }
+    public FTPFile(String server, String username, String password,
+                   String path, short port, FTPClient ftp, org.apache.commons.net.ftp.FTPFile file) {
+        this.server = server;
+        this.username = username;
+        this.password = password;
+        this.port = port;
+        this.path = FileManipulation.trimEnd(path, fileSeparator());
+        if (this.path.length() == 0) {
+            this.path = "/";
+        }
+        this.ftp = ftp;
+        this.exists = true;
+        this.file = file.isFile();
+        parse(file);
+    }
     public FTPFile(Params p, String path) {
         this(p.getMandParam("host"),
              p.getMandParam("username"),
@@ -46,19 +61,23 @@ public class FTPFile extends AbstractGFile {
     }
     @Override
     public FTPFile createInstanceFor(String path) {
-        return new FTPFile(server, username, password, path, port);
+        return new FTPFile(server, username, password, path, port, ftp, null);
     }
     @Override
     public FTPFile createSubFile(String path, String separator) {
-        if (path.length() == 0) {
-            return this;
-        }
-        return createInstanceFor(FileManipulation.concat(this.path, path, fileSeparator(), separator));
+        return new FTPFile(server, username, password,
+                           FileManipulation.concat(this.path, path, fileSeparator(), separator),
+                           port, ftp, null);
+    }
+    public FTPFile createSubFile(String path, String separator, org.apache.commons.net.ftp.FTPFile file) {
+        return new FTPFile(server, username, password,
+                           FileManipulation.concat(this.path, path, fileSeparator(), separator),
+                           port, ftp, file);
     }
 
     private void fastStat() throws IOException {
         // Init exists and file variable FAST.
-        if (list != null) {
+        if (list != null || exists) {
             return;
         }
         ftpInit();
@@ -105,7 +124,6 @@ public class FTPFile extends AbstractGFile {
     @Override
     public boolean isFile() throws IOException{
         fastStat();
-
         return exists && file;
     }
     @Override
@@ -121,8 +139,9 @@ public class FTPFile extends AbstractGFile {
     public String getProtocol() {
         return Protocol.FTP.getCanonicalName();
     }
-    protected List<String> list() throws IOException {
-        if (list != null) {
+    @Override
+    public List<FTPFile> glist() throws IOException {
+        if (list != null || (exists && file)) {
             return list;
         }
 
@@ -131,59 +150,33 @@ public class FTPFile extends AbstractGFile {
         exists = false;
         file = false;
         if (cwd(path)) {
-            list = new ArrayList<String>();
+            list = new ArrayList<FTPFile>();
             exists = true;
-            for (String file: ftp.listNames()) {
-                String fileName = FileManipulation.concat(path, file, fileSeparator());
-                if (!fileName.equals(path)) {
-                    list.add(fileName);
-                } else {
-                    this.file = true;
-                    break;
-                }
+            for (org.apache.commons.net.ftp.FTPFile file: ftp.listFiles()) {
+                list.add(createSubFile(file.getName(), "/", file));
             }
         }
         return list;
     }
-    @Override
-    public List<FTPFile> glist() throws IOException {
-        return createInstanceFor(list());
-    }
-    protected List<String> recursiveList() throws IOException {
+    public List<FTPFile> grecursiveList() throws IOException {
         if (recurList != null) {
             return recurList;
         }
-        recurList = new ArrayList<String>(0);
-        if (isFile()) {
-            recurList.add(getAbsolutePath());
-            return recurList;
-        } else if (isDirectory()) {
-            if (list() == null) {
-                return recurList;
-            }
-            recurList.add(getAbsolutePath());
-            for (String s: list()) {
-                FTPFile f = createSubFile(FileManipulation.getSonPath(getAbsolutePath(), s, "/"), fileSeparator());
-                recurList.add(f.getAbsolutePath());
+        recurList = new ArrayList<FTPFile>(0);
+        recurList.add(this);
+        if (isDirectory()) {
+            for (FTPFile f: glist()) {
+                recurList.add(f);
 
                 if (f.isDirectory()) {
-                    List<String> rec = f.recursiveList();
-                    if (rec == null) {
-                        continue;
-                    }
-                    for (int i = 1; i < rec.size(); ++i) {
-                        recurList.add(rec.get(i));
+                    List<FTPFile> rec = f.grecursiveList();
+                    for (FTPFile sub: rec) {
+                        recurList.add(sub);
                     }
                 }
             }
-            return recurList;
-        } else {
-            return null; // Do not follow soft/hard link.
         }
-    }
-    @Override
-    public List<FTPFile> grecursiveList() throws IOException {
-        return createInstanceFor(recursiveList());
+        return recurList;
     }
     @Override
     public String givenName() {
@@ -313,22 +306,18 @@ public class FTPFile extends AbstractGFile {
         if (ftp != null) {
             return;
         }
-
         createFtp();
         connect();
         login();
     }
-    private boolean cwd(String path) {
-        try {
-            ftp.cwd("/");
-            if (path.equals(fileSeparator())) {
-                return true;
-            } else {
-                ftp.cwd(path);
-                return !ftp.printWorkingDirectory().equals("\"" + fileSeparator() + "\"");
-            }
-        } catch (IOException e) {
-            return false;
+    private boolean cwd(String path) throws IOException {
+        ftp.cwd("/");
+        if (path.equals(fileSeparator())) {
+            return true;
+        } else {
+            ftp.cwd(path);
+            return !ftp.printWorkingDirectory().equals("\"" + fileSeparator() + "\"")
+                && !ftp.printWorkingDirectory().equals(fileSeparator());
         }
     }
     private void resolve() throws IOException {
@@ -383,8 +372,8 @@ public class FTPFile extends AbstractGFile {
     private long date; // no 2038 bug.
     private long size = -1;
     private FTPClient ftp;
-    private List<String> list;
-    private List<String> recurList;
+    private List<FTPFile> list;
+    private List<FTPFile> recurList;
     private Acl acl;
 
     @Override

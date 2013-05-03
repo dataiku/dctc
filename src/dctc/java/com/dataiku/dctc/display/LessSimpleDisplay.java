@@ -3,6 +3,7 @@ package com.dataiku.dctc.display;
 import java.util.List;
 
 import com.dataiku.dctc.copy.CopyTaskRunnable;
+import com.dataiku.dip.utils.FriendlyTime;
 
 public class LessSimpleDisplay extends AbstractTransferRateDisplay {
     @Override
@@ -13,8 +14,9 @@ public class LessSimpleDisplay extends AbstractTransferRateDisplay {
     protected final void beginLoop(int taskSize) {
     }
     protected final void endLoop() {
-        System.out.print(String.format("    \rdone: %s/%s - %d/%d files done - %sBps - %d transfer(s) running.",
+        System.out.print(String.format("    \rdone: %s/%s in %s - %d/%d files done - %sBps - %d transfer(s) running.",
                                        Size.getReadableSize(doneTransfer()),
+                                       FriendlyTime.elaspeTime(tick() / 10 + 1),
                                        prettyWholeSize(),
                                        nbDone(),
                                        nbFiles(),
@@ -29,7 +31,7 @@ public class LessSimpleDisplay extends AbstractTransferRateDisplay {
     }
     protected final void done() {
         System.out.println();
-        System.out.println("Copy " + Size.getReadableSize(doneTransfer()) + " in "
-                           + Date.getReadableDate(tick() / 10 + 1));
+        System.out.println("Copied " + Size.getReadableSize(doneTransfer()) + " in "
+                           + FriendlyTime.elaspeTime(tick() / 10 + 1));
     }
 }

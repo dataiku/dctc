@@ -23,6 +23,7 @@ import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Logger;
 import com.jcraft.jsch.Session;
 
 public class SshFile extends AbstractGFile {
@@ -113,6 +114,19 @@ public class SshFile extends AbstractGFile {
             if (knownHosts.exists()) {
                 connData.jsch.setKnownHosts(knownHosts.getAbsolutePath());
             }
+//             DON'T REMOVE THAT. IT'S USEFUL FOR DEBUGGING
+//                    Logger l = new Logger() {
+//                        @Override
+//                        public void log(int arg0, String arg1) {
+//                            System.out.println(arg1);
+//                        }
+//                        
+//                        @Override
+//                        public boolean isEnabled(int arg0) {
+//                            return true;
+//                        }
+//                    };
+//                    connData.jsch.setLogger(l);
 
             connData.session = connData.jsch.getSession(connData.username,connData.host, connData.port);
             if (skipHostKeyCheck) {

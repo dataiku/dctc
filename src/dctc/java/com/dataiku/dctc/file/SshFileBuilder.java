@@ -60,6 +60,8 @@ public class SshFileBuilder extends ProtocolFileBuilder {
             String[] path = FileManipulation.split(protocolData, ":", 2);
             System.err.println("debug: SshFileBuilder: " + "path[0]: " + path[0]);
             System.err.println("debug: SshFileBuilder: " + "path[1]: " + path[1]);
+            System.err.println("debug: SshFileBuilder: " + "user[0]: " + user[0]);
+            System.err.println("debug: SshFileBuilder: " + "user[1]: " + user[1]);
             if (FileManipulation.contains(path[0], "[")) {
                 throw new IllegalArgumentException("Doesn't manage ipv6 address");
             }
