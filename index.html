@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <title>dctc by dataiku</title>
+  <title>dctc by Dataiku</title>
 
   <link rel="stylesheet" href="stylesheets/styles.css">
   <link rel="stylesheet" href="stylesheets/pygment_trac.css">
@@ -15,7 +15,7 @@
 <body>
     <div class="wrapper">
       <header>
-        <h1>dctc</h1>
+        <h1><a href="index.html">dctc</a></h1>
         <p>Dataiku Cloud Transport Client</p>
 
         <p class="view">
@@ -24,6 +24,7 @@
                 <li><a href="https://dev.dataiku.com/downloads/dctc">Browse <strong>Downloads</strong></a></li>
                 <li><a href="https://github.com/dataiku/dctc">View On <strong>GitHub</strong></a></li>
             </ul>
+
         </p>
     </header>
     <section>
@@ -45,30 +46,33 @@
             Simply copy and run this from a Terminal window:
         </p>
 
-        <pre><code>sh $(curl http://dev.dataiku.com/downloads/dctc/download-dctc)
-        </code></pre>
+        <pre><code>sh $(curl http://dev.dataiku.com/downloads/dctc/download-dctc)</code></pre>
+
+        <p>You can run the downloaded <code>dctc</code> file directly from this location or put it in your PATH</p>
 
         <h1>Quick start</h1>
 
         <p>For the S3 and Google Cloud Storage protocols, you first need to add an account to dctc :</p>
 
          <pre><code>% dctc add-account s3
-          # Follow the instructions
-         </code></pre>
+# Follow the instructions</code></pre>
 
-        <p>Running <code>dctc</code> without any arguments lists the available commands.</p>
+        <p>Running <code>dctc</code> without any arguments lists the available commands.<br />
 
-        <p>Running <code>dctc command --help</code> details the usage of the command.</p> 
+        Running <code>dctc command --help</code> details the usage of the command.</p> 
 
         <pre><code># List the files and folders in a S3 bucket
-          % dctc ls s3://my-bucket
+% dctc ls s3://my-bucket
 
-          # Synchronize incrementally a GCS path to a local file
-          % dctc sync gs://my-bucket/my-path target-directory
+# Synchronize incrementally a GCS path to a local file
+% dctc sync gs://my-bucket/my-path target-directory
 
-          # Copy a folder from GCS to HDFS, compressing all files to .gz on the way
-          % dctc cp -R -c gs://my-bucket/my-path hdfs:///input-data
-        </code></pre>
+# Copy a folder from GCS to HDFS, compressing all files to .gz on the way
+% dctc cp -R -c gs://my-bucket/my-path hdfs:///input-data
+
+# Dispatch the lines of a file to 8 files on S3, compressed with gzip
+% dctc dispatch input-file s3://target-bucket/target-location -f random -nf 8 -c
+</code></pre>
 
         <h1>Features</h1>
 

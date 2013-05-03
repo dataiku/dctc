@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <title>dctc by Dataiku - Protocols</title>
+
+  <link rel="stylesheet" href="stylesheets/styles.css">
+  <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="index.html">dctc</a></h1>
+        <p>Dataiku Cloud Transport Client</p>
+
+        <p class="view">
+
+          <ul>
+            <li><a href="https://dev.dataiku.com/downloads/dctc">Browse <strong>Downloads</strong></a></li>
+            <li><a href="https://github.com/dataiku/dctc">View On <strong>GitHub</strong></a></li>
+          </ul>
+        </p>
+      </header>
+      <section>
+        <h1>Protocols configuration</h1>
+
+        <p>
+          Most protocols supported by dctc have a notion of user account. For each protocol, dctc supports multiple accounts.
+        </p>
+        <p>
+          dctc has a configuration file, stored:
+        </p>
+        <ul>
+          <li>in <strong>~/.dctcrc</strong> on Unix (Linux, Mac OS X) systems</li>
+          <li>in <strong>User/Application Data/...</strong> on Windows</li>
+        </ul>
+        <p>
+          For each protocol, the configuration file has a section like
+        </p>
+        <pre><code>[protocol_name]
+default = account_name
+account_name1.param1 = value
+account_name1.param2 = value
+account_name2.param1 = value
+account_name2.param2 = value</code></pre>
+
+        <p>
+          Parameter names are specific to each protocol.<br />
+          If there is only one account defined for a protocol, the <code>default</code> setting is optional.<br />
+          A default configuration file is automatically created the first time you run dctc.<br />
+          All commands operating on files recognize URL schemes that are specific to each protocol.
+        </p>
+
+        <h1>Hadoop HDFS</h1>
+
+        <h2>Configuration</h2>
+
+        <p> If you have the <code>HADOOP_HOME</code> or <code>HADOOP_PREFIX</code> environment variable defined, you do not need any configuration, <code>dctc</code> will automatically connect to your Hadoop environment.</p>
+
+        <p>Else, you need to create a configuration entry with one configuration parameter : <conf>hadoopConfDir</code>. This must point to the location of your "conf" folder in Hadoop (ie, the folder containing the <code>core-site.xml</code> file).</p>
+
+        <pre><code>[hdfs]
+account1.hadoopConfDir=/opt/hadoop/hadoop-0.20.2/conf</code></pre>
+
+        <h2>URLs</h2>
+
+        <p>URLs are in the form <code>hdfs://PATH</code>, where PATH is an absolute path within the HDFS filesystem.
+        
+                For example: <code>hdfs:///web-data/tracking-logs</code></p>
+
+        <h2>MapR FS</h2>
+
+        <p>To access MapR filesystems, dctc needs some additional code and configuration. TODO</p>
+
+        <h1>Amazon S3</h1>
+
+        <h2>Configuration</h2>
+
+        <p>For S3, dctc provides an automatic wizard to help you configure your account. Run it with:</p>
+        <pre><code>% dctc add-account s3 [account_name]</code></pre>
+        <p>If you want to add multiple S3 accounts, specifying an account name is mandatory.</p>
+
+        An S3 account can also be manually configured. The following parameters are recognized:
+        <ul>
+          <li><strong>access_key</strong>: AWS access key</li>
+          <li><strong>secret_key</strong>: AWS secret key</li>
+          <li><strong>default_path</strong>: A fragment that will be prepended to all non-absolute paths</li>
+        </ul>
+
+        <p>To create an AWS access key / secret key pair, go to the <a href="https://portal.aws.amazon.com/gp/aws/securityCredentials">Security Credentials</a> page of your <a href="https://console.aws.amazon.com/console/home">AWS console</a>.</p>
+
+        <h2>URLs</h2>
+
+        URLs are in the form <code>s3://PATH</code>, with the following examples:
+
+        <ul>
+          <li><code>s3://my-bucket/path/within/bucket</code></li>
+          <li><code>s3://a/path/somewhere</code> (the default_path will be prepended)
+        </ul>
+
+        <h1>Google Cloud Storage</h1>
+
+        <h2>Configuration</h2>
+
+        <p>For GCS, dctc provides an automatic wizard to help you configure your account. Run it with:</p>
+        <pre><code>% dctc add-account gs [account_name]</code></pre>
+        <p>If you want to add multiple GCS accounts, specifying an account name is mandatory.</p>
+
+        An GS account can also be manually configured. The following parameters are recognized:
+        <ul>
+          <li><strong>mail</strong>: Service account email address (in the form number-string@developer.gserviceaccount.com)</li>
+          <li><strong>key_path</strong>: Absolute path to the private key file that you downloaded from Google</li>
+          <li><strong>default_path</strong>: A fragment that will be prepended to all non-absolute paths</li>
+        </ul>
+
+        <p>To create a service account, go to the "API Access" page of the <a href="https://code.google.com/apis/console">APIS console</a>, create an OAuth access if you have not yet done so, and then create a <em>Service Account</em>.</p>
+
+        <h2>URLs</h2>
+
+        URLs are in the form <code>gs://PATH</code>, with the following examples:
+
+        <ul>
+          <li><code>gs://my-bucket/path/within/bucket</code></li>
+          <li><code>gs://a/path/somewhere</code> (the default_path will be prepended)
+        </ul>
+
+
+        <h1>FTP</h1>
+
+        <p>FTP can operate either with a configuration specifying hostname, username and password, or by specifying all data on the command line.</p>
+
+        <h3>With configuration</h3>
+
+        <p>Configuration for a FTP connection must contain the following parameters:</p>
+        <ul>
+          <li><strong>host</strong>: FTP Server host name</li>
+          <li><strong>username</strong>: User name</li>
+          <li><strong>password</strong>: Password</li>
+        </ul>
+
+        <p>
+                You must then connect using the name of the account in the configuration file.
+          For example: <code>ftp://accountname@/path/on/the/ftp/server</code>
+        </p>
+
+        <p><strong>Important note: </strong> FTP does not support the "default" account. You must always explicitely select an account.</p>
+
+        <h3>On the command line</h3>
+
+        <p>You can connect either anonymously or with a login password:</p>
+        <ul>
+          <li><code>ftp://host/path</code></li>
+          <li><code>ftp://username:password@host/path</code></li>
+        </ul>
+
+
+
+        <h1>SCP / SFTP</h1>
+
+        <p>SFTP can operate either with a configuration specifying hostname, username (and optionally, password or key file), or by specifying all data on the command line.</p>
+
+        <h3>With configuration</h3>
+
+        <p>Configuration for a SSH connection must contain the following parameters:</p>
+        <ul>
+          <li><strong>host</strong>: SSH Server host name</li>
+          <li><strong>username</strong>: User name</li>
+          <li>Optional : <strong>password</strong>: Password</li>
+          <li>Optional : <strong>key</strong>: SSH private key file path</li>
+          <li>Optional : <strong>passphrase</strong>: SSH private key passphrase</li>
+          <li>Optional : <strong>skip_host_key_check</strong>: Allow connection without prompt, even if the host is not in the ~/.ssh/known_hosts file</li>
+        </ul>
+
+        <p>
+            If neither password nor key are specified, password is prompted on the command line.<br />
+            If key is specified, passphrase is not specified, and the key is encrypted, passphrase is prompted on the command line.
+          </p>
+
+          <p>Connections are then made using <code>ssh://account_name@:/absolute/path</code> or <code>ssh://account_name@:path/relative/to/homedir</code>.
+          </p>
+        <p><strong>Important note: </strong> SSH does not support the "default" account. You must always explicitely select an account.</p>
+
+        <h3>On the command line</h3>
+
+        <p>Connect using <code>ssh://user@host:/absolute/path</code> or <code>ssh://user@host:path/relative/to/homedir</code>. This only supports password authentication. The password is prompted on the command line.</p>
+
+      </section>
+
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/dataiku">dataiku</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+      var pageTracker = _gat._getTracker("UA-34872768-2");
+      pageTracker._trackPageview();
+    } catch(err) {}
+    </script>
+
+  </body>
+  </html>
