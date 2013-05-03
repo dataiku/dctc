@@ -2,7 +2,7 @@
 
 JARFILE=../dist/dctc-tool.jar
 
-DEST=dctc
+DEST=$1
 
 rm -f $DEST
 
