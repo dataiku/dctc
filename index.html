@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Dctc by dataiku</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Dctc</h1>
+        <p>Dataiku Cloud Transport Client</p>
+
+        <p class="view"><a href="https://github.com/dataiku/dctc">View the Project on GitHub <small>dataiku/dctc</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/dataiku/dctc/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/dataiku/dctc/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/dataiku/dctc">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>14:14 clement@MacBook-Air-de-Clement ~/code/dctc/packager% vi create-dctc-selfextracting.sh 
+dctc is a tool to ease the manipulation and transfer of files across various storage types.</p>
+
+<p>The following storage systems are supported:</p>
+
+<ul>
+<li>Regular filesystem</li>
+<li>Hadoop HDFS</li>
+<li>Amazon S3</li>
+<li>Google Cloud Storage</li>
+<li>FTP</li>
+<li>SCP / SFTP</li>
+</ul><p>dctc provides various commands to operate on all storage systems.</p>
+
+<h1>Installing dctc</h1>
+
+<p>The easiest way to install dctc is to get our standalone binary.
+Simply copy and run this from a Terminal window:</p>
+
+<pre><code>sh $(curl http://dev.dataiku.com/downloads/dctc/download-dctc)
+</code></pre>
+
+<h1>Quick start</h1>
+
+<p>For the S3 and Google Cloud Storage protocols, you first need to add an account to dctc.</p>
+
+<p>For example, run:</p>
+
+<pre><code>dctc add-account s3
+</code></pre>
+
+<p>Then, follow the instructions.</p>
+
+<p>Running dctc without any arguments will list the available commands.</p>
+
+<p>Running dctc command --help will detail the usage of the command.</p>
+
+<p>Here are a few examples</p>
+
+<pre><code># List the files and folders in a S3 bucket
+dctc ls s3://my-bucket
+
+# Synchronize incrementally a GCS path to a local file
+dctc sync gs://my-bucket/my-path target-directory
+
+# Copy a folder from GCS to HDFS, compressing all files to .gz on the way
+dctc cp -R -c gs://my-bucket/my-path hdfs:///input-data
+</code></pre>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/dataiku">dataiku</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-34872768-2");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
