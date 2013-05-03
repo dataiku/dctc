@@ -1,0 +1,16 @@
+#! /bin/sh -e
+
+# Downloads the latest version of DCTC to the current folder, make it executable.
+# That's all folks.
+
+DCTC_VERSION=0.0.1
+DCTC_BASEDIR=http://dev.dataiku.com/downloads/dctc
+
+echo "About to download dctc from $DCTC_BASEDIR, version $DCTC_VERSION"
+echo "Press enter to continue"
+read
+curl $DCTC_BASEDIR/$DCTC_VERSION/dctc > dctc
+chmod a+rx dctc
+
+echo "Done. dctc has been downloaded to $PWD/dctc. You can now run dctc !"
+echo "For more information, visit http://dctc.io"
