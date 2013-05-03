@@ -1,5 +1,6 @@
 package com.dataiku.dctc.file;
 
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
@@ -23,7 +24,7 @@ public class FileManipulation {
     public static String translatePath(String src,
                                        String srcSeparator,
                                        String dstSeparator) {
-        return src.replaceAll(Pattern.quote(srcSeparator), dstSeparator);
+        return src.replaceAll(Pattern.quote(srcSeparator), dstSeparator.equals("\\") ? "\\\\" : dstSeparator);
     }
     public static String concat(String prefix,
                                 String suffix,
