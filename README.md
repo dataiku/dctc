@@ -7,11 +7,11 @@ To get started, visit http://dataiku.github.io/dctc
 
 # Issues
 
-If you have a bug or feature request for dctc, please ["open an issue"](https://github.com/dataiku/dctc/issues)
+If you have a bug or feature request for dctc, please [open an issue](https://github.com/dataiku/dctc/issues)
 
 # Community
 
-To keep track of news, ["follow @dataiku on Twitter"](http://twitter.com/dataiku)
+To keep track of news, [follow @dataiku on Twitter](http://twitter.com/dataiku)
 
 # Copyright and license
 
