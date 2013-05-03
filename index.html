@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Dctc by dataiku</title>
+    <title>dctc by @ataiku</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
@@ -15,7 +15,7 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1>Dctc</h1>
+        <h1>dctc</h1>
         <p>Dataiku Cloud Transport Client</p>
 
         <p class="view"><a href="https://github.com/dataiku/dctc">View the Project on GitHub <small>dataiku/dctc</small></a></p>
@@ -28,11 +28,8 @@
         </ul>
       </header>
       <section>
-        <p>14:14 clement@MacBook-Air-de-Clement ~/code/dctc/packager% vi create-dctc-selfextracting.sh 
-dctc is a tool to ease the manipulation and transfer of files across various storage types.</p>
-
-<p>The following storage systems are supported:</p>
-
+        <p>
+<strong>dctc</strong> (Dataiku Cloud Transport Client) is a tool to ease the manipulation and transfer of files across various storage types:</p>
 <ul>
 <li>Regular filesystem</li>
 <li>Hadoop HDFS</li>
@@ -40,9 +37,9 @@ dctc is a tool to ease the manipulation and transfer of files across various sto
 <li>Google Cloud Storage</li>
 <li>FTP</li>
 <li>SCP / SFTP</li>
-</ul><p>dctc provides various commands to operate on all storage systems.</p>
+</ul>
 
-<h1>Installing dctc</h1>
+<h1>Installation</h1>
 
 <p>The easiest way to install dctc is to get our standalone binary.
 Simply copy and run this from a Terminal window:</p>
@@ -52,31 +49,46 @@ Simply copy and run this from a Terminal window:</p>
 
 <h1>Quick start</h1>
 
-<p>For the S3 and Google Cloud Storage protocols, you first need to add an account to dctc.</p>
+<p>For the S3 and Google Cloud Storage protocols, you first need to add an account to dctc :</p>
 
-<p>For example, run:</p>
-
-<pre><code>dctc add-account s3
+<pre><code>% dctc add-account s3
 </code></pre>
 
 <p>Then, follow the instructions.</p>
 
-<p>Running dctc without any arguments will list the available commands.</p>
+<p>Running <code>dctc</code> without any arguments lists the available commands.</p>
 
-<p>Running dctc command --help will detail the usage of the command.</p>
+<p>Running <code>dctc command --help</code> details the usage of the command.</p>
 
 <p>Here are a few examples</p>
 
 <pre><code># List the files and folders in a S3 bucket
-dctc ls s3://my-bucket
+% dctc ls s3://my-bucket
 
 # Synchronize incrementally a GCS path to a local file
-dctc sync gs://my-bucket/my-path target-directory
+% dctc sync gs://my-bucket/my-path target-directory
 
 # Copy a folder from GCS to HDFS, compressing all files to .gz on the way
-dctc cp -R -c gs://my-bucket/my-path hdfs:///input-data
+% dctc cp -R -c gs://my-bucket/my-path hdfs:///input-data
 </code></pre>
       </section>
+
+<h1>Features</h1>
+
+<code>dctc</code> solves many real-life data management problems:
+
+<ul>
+  <li>Incremental syncing with the <a href="commands.html#sync">sync</a> command</li>
+  <li>Smart files splitting and merging with the <a href="commands.html#dispatch">dispatch</a> command</li>
+  <li></li>
+  <li></li>
+  <li></li>
+</ul>
+
+<h1>Going further</h1>
+
+
+
       <footer>
         <p>This project is maintained by <a href="https://github.com/dataiku">dataiku</a></p>
         <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
