@@ -7,10 +7,11 @@ DCTC_VERSION=0.1.1
 DCTC_BASEDIR=http://downloads.dataiku.com/dctc/$DCTC_VERSION
 
 echo "About to download dctc from $DCTC_BASEDIR"
-echo "Press enter to continue"
-read
+echo "Press Enter to continue"
+read A
 curl $DCTC_BASEDIR/dctc-standalone-$DCTC_VERSION.sh > dctc
 chmod a+rx dctc
 
-echo "Done. dctc has been downloaded to $PWD/dctc. You can now run dctc !"
+echo ""
+echo "Done. dctc has been downloaded to $PWD/dctc. You can now run dctc from this location."
 echo "For more information, visit http://dctc.io"
