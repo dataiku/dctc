@@ -16,8 +16,8 @@ public class LessSimpleDisplay extends AbstractTransferRateDisplay {
     protected final void endLoop() {
         System.out.print(String.format("    \rdone: %s/%s in %s - %d/%d files done - %sBps - %d transfer(s) running.",
                                        Size.getReadableSize(doneTransfer()),
-                                       FriendlyTime.elaspeTime(tick() / 10 + 1),
                                        prettyWholeSize(),
+                                       FriendlyTime.elaspeTime(tick() / 10 + 1),
                                        nbDone(),
                                        nbFiles(),
                                        Size.getReadableSize(getBnd()),
