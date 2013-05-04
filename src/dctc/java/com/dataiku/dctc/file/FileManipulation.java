@@ -24,7 +24,7 @@ public class FileManipulation {
     public static String translatePath(String src,
                                        String srcSeparator,
                                        String dstSeparator) {
-        return src.replaceAll(Pattern.quote(srcSeparator), dstSeparator.equals("\\") ? "\\\\" : dstSeparator);
+        return StringUtils.replace(src, srcSeparator, dstSeparator);
     }
     public static String concat(String prefix,
                                 String suffix,
