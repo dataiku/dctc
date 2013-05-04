@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <title>dctc by Dataiku - Commands</title>
+
+  <link rel="stylesheet" href="stylesheets/styles.css">
+  <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="index.html">dctc</a></h1>
+        <p>Dataiku Cloud Transport Client</p>
+
+        <p class="view">
+
+             <p>Cloud transfers made simple</p>
+            <ul class="view">
+                <li><a href="index.html#install">How to <strong>Download</strong></a></li>
+                <li><a href="https://github.com/dataiku/dctc">View On <strong>GitHub</strong></a></li>
+            </ul>
+
+        </p>
+
+        <p>&nbsp;</p>
+        <h4>Documentation</h4>
+        <ul>
+          <li><a href="index.html">Overview</a></li>
+          <li><a href="commands.html">Commands</a></li>
+          <li><a href="protocols.html">Protocols</a></li>
+        </ul>
+    </header>
+      <section>
+        <h1>Commands overview</h1>
+
+        <p><code>dctc</code> provides many commands to work on files. All commands manipulate the files through URLs
+          as defined in the <a href="protocols.html">protocols documentation</a>.<br />
+          To some extent, <code>dctc</code> commands work like their UNIX counterparts.
+        </p>
+
+        <p>
+          Running <code>dctc</code> with no arguments lists the available commands.<br />
+          All commands accept the <code>--help</code> option to get a detailed summary and list of options
+        </p>
+
+        <h1 id="ls">ls and find</h1>
+
+        <p>The <code>ls</code> and <code>find</code> commands are used to list files and folders.</p>
+        <ul>
+          <li><code>ls</code> lists a single folder, or folders recursively with the <code>-R</code> option. It displays relative paths.</li>
+          <li><code>find</code> lists recursively, displaying absolute addresses</li>
+        </ul>
+
+        <h1 id="cat">cat</h1>
+
+        <p>
+          <code>cat</code> displays the content of one or several files, to the standard output.<br />
+          If a GZip-compressed file (ends with .gz extension) is encountered, it is automatically uncompressed.
+        </p>
+
+        <pre><code>% dctc cat s3://bucket/file
+# Displays the content of the file
+
+% dctc cat s3://bucket/file C:\Windows\win.ini ssh://user@hostname:file
+# Displays and concatenates files, across protocols</code></pre>
+
+        <h1 id="head"><span id="tail">head and tail</span></h1>
+
+        <p>
+          <code>head</code> and <code>tail</code> display the beginning (resp. end) of a file, in number of lines
+        </p>
+
+        <h1 id="cp">cp</h1>
+
+        <p><code>cp</code> copies files and folders.</p>
+
+        <pre><code>% dctc cp [OPT...] SOURCE_FILES... TARGET</code></pre>
+
+        <p>Target is created as a folder if it does not exist and</p>
+        <ul>
+          <li>either there are several sources</li>
+          <li>or the source is a folder</li>
+        </ul>
+
+        <h3>Compression and archiving</h3>
+
+        <ul>
+          <li>Automatically compress all output files using GZip, with the <code>-c</code> option</li>
+          <li>Automatically uncompress all GZip-compressed input files, with the <code>-u</code> option</li>
+          <li>Create a Zip archive by using a "filename.zip" target and the <code>-a</code> option</li>
+          <li>Automatically unarchive input Zip archives using the <code>-ua</code> option</li>
+        </ul>
+
+
+        <h1>sync</h1>
+
+        TODO
+
+        <h1>dispatch</h1>
+
+        TODO
+
+        <h1>grep</h1>
+
+        TODO
+
+        <h1>rm, rmdir, mv, mkdir</h1>
+
+        TODO
+
+        <h1>add-account</h1>
+
+        <p>This command starts a wizard to ease the addition of a S3 or GS account to the dctc configuration. For more information, see the <a href="protocols.html">protocols page</a>.</p>
+
+      </section>
+
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/dataiku">dataiku</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+      var pageTracker = _gat._getTracker("UA-34872768-2");
+      pageTracker._trackPageview();
+    } catch(err) {}
+    </script>
+
+  </body>
+  </html>
