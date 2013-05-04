@@ -3,7 +3,7 @@ dctc
 
 dctc (Dataiku Cloud Transport Client) is a tool to ease the manipulation and transfer of files across various storage types.
 
-To get started, visit http://dataiku.github.io/dctc
+To get started, visit http://dctc.io
 
 # Issues
 
