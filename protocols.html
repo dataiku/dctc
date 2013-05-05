@@ -38,10 +38,32 @@
     </header>
       <section>
         <h1>Protocols configuration</h1>
+        
+        <h2>Protocols, accounts, default account</h2>
+        
+        <p>
+          All <code>dctc</code> commands operate on files, across all protocols supported by <code>dctc</code>.<br />
+          In <code>dctc</code> command lines, files are denoted by <em>URLs</em>.<br />
+          URL schemes are specific to each protocol and are detailed below.
+        </p>
+        
+        <p>
+          For example, the following <code>cp</code> command copies an input file in the S3 protocol, 
+          to an output file in the hdfs protocol:
+        </p>
+        <code><pre>% dctc cp s3://bucket/path hdfs:///path/to/output/file</pre></code>
 
         <p>
-          Most protocols supported by dctc have a notion of user account. For each protocol, dctc supports multiple accounts.
+          Most protocols supported by dctc have a notion of <em>user account</em>.<br />
+          <code>dctc</code> supports multiple accounts per protocol, with one of the accounts
+          being the <em>default account</em> for the protocol.<br />
+          Non-default accounts are generally accessed using the <code>account@</code>
+          prefix in the URL. For example, to copy a S3 file from the account named "a2"
+          to a local file, use:
         </p>
+        <code><pre>% dctc cp s3://a2@bucket/path local-path</pre></code>
+        
+        <h2>Configuration file</h2>
         <p>
           dctc has a configuration file, stored:
         </p>
@@ -53,7 +75,7 @@
           For each protocol, the configuration file has a section like
         </p>
         <pre><code>[protocol_name]
-default = account_name
+default = account_name1 # Indicates which of the accounts for this protocol should be the default account
 account_name1.param1 = value
 account_name1.param2 = value
 account_name2.param1 = value
@@ -63,7 +85,7 @@ account_name2.param2 = value</code></pre>
           Parameter names are specific to each protocol.<br />
           If there is only one account defined for a protocol, the <code>default</code> setting is optional.<br />
           A default configuration file is automatically created the first time you run dctc.<br />
-          All commands operating on files recognize URL schemes that are specific to each protocol.
+        
         </p>
 
         <h1>Hadoop HDFS</h1>
