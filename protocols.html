@@ -257,12 +257,18 @@ company.password = thisisaverysecretpasswordnobodywillguessit
 
 
         <h1>SCP / SFTP</h1>
-
-        <p>SFTP can operate either with a configuration specifying hostname, username (and optionally, password or key file), or by specifying all data on the command line.</p>
+        
+        
+        <p><code>dctc</code> can operate on SCP filesystems:</p>
+          
+        <ul>
+          <li>either using the configuration file, with an account specifying the hostname, username and optionally password or private key file,</li>
+          <li>or by specifying all required data in the URL</li>
+        </ul>
 
         <h3>With configuration</h3>
 
-        <p>Configuration for a SSH connection must contain the following parameters:</p>
+        <p>Configuration for a SCP connection must contain the following parameters (the protocol name is "ssh"):</p>
         <ul>
           <li><strong>host</strong>: SSH Server host name</li>
           <li><strong>username</strong>: User name</li>
@@ -272,18 +278,52 @@ company.password = thisisaverysecretpasswordnobodywillguessit
           <li>Optional : <strong>skip_host_key_check</strong>: Allow connection without prompt, even if the host is not in the ~/.ssh/known_hosts file</li>
         </ul>
 
-        <p>
-            If neither password nor key are specified, password is prompted on the command line.<br />
-            If key is specified, passphrase is not specified, and the key is encrypted, passphrase is prompted on the command line.
-          </p>
+        <ul>
+          <li> If neither password nor key are specified, password is prompted on the command line.</li>
+          <li> If key is specified, but passphrase is not specified and the key is encrypted, passphrase is prompted on the command line.
+         </li>
+        </ul>
 
-          <p>Connections are then made using <code>ssh://account_name@:/absolute/path</code> or <code>ssh://account_name@:path/relative/to/homedir</code>.
+        <p>
+          The URL to use is then <code>ssh://account_name@:/absolute/path</code> or 
+          <code>ssh://account_name@:path/relative/to/homedir</code>.
           </p>
-        <p><strong>Important note: </strong> SSH does not support the "default" account. You must always explicitely select an account.</p>
+        <p>
+          <strong>Important note: </strong> SSH does not support the "default" account. 
+          You must always indicate an account with <code>accountname@</code>.
+        </p>
 
         <h3>On the command line</h3>
 
-        <p>Connect using <code>ssh://user@host:/absolute/path</code> or <code>ssh://user@host:path/relative/to/homedir</code>. This only supports password authentication. The password is prompted on the command line.</p>
+        <p>You can specify on the URL a SSH remote, using:
+           <code>ssh://user@host:/absolute/path</code> or 
+           <code>ssh://user@host:path/relative/to/homedir</code>.<br />
+           This only supports password authentication. The password is prompted on the command line.
+        </p>
+        
+        <h3>Example</h3>
+
+   <p>With the following configuration file:</p>
+        <pre><code>[ssh]
+server1.hostname = server1.mycompany.com
+server1.username = john
+server1.key = /home/john/.ssh/id_rsa
+
+server2.hostname = server2.mycompany.com
+server2.username = john
+
+server3.hostname = server3.mycompany.com
+server3.username = john
+server3.password = myp4sswoRd</code></pre>
+        
+        <p>you could have the following:</p>
+        
+        <pre><code>% dctc cp -R ssh://server1@:folder ssh://server2@:/backup
+# Backup data from $HOME/folder on server1 to /backup on server2.
+# Password for server2 will be prompted on the command line.
+
+% dctc ls ssh://john@server4.mycompany.com:
+# List $HOME on server4. Password for server4 will be prompted on the command line</code></pre>
 
       </section>
 
