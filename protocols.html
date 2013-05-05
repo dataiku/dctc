@@ -101,9 +101,17 @@ account1.hadoopConfDir=/opt/hadoop/hadoop-0.20.2/conf</code></pre>
 
         <h2>URLs</h2>
 
-        <p>URLs are in the form <code>hdfs://PATH</code>, where PATH is an absolute path within the HDFS filesystem.
+        <p>
+          URLs are in the form <code>hdfs://PATH</code>, where PATH is an absolute path within the HDFS filesystem.<br />
+          For example: <code>hdfs:///web-data/tracking-logs</code>.<br />
+          Non-default accounts are accessed with the syntax <code>hdfs://account@PATH</code>.<br />
+          For example: <code>hdfs://my_hdfs_2@/other/path/on/other/hdfs</code>.
+        </p>
         
-                For example: <code>hdfs:///web-data/tracking-logs</code></p>
+        <p><strong>Important note</strong>: If you use the environment variables instead of using the 
+          configuration file, you can only have one HDFS account, the default one.<br />
+          If you define any account in your configuration file, the environment variables are ignored.
+        </p>
 
         <h2>MapR FS</h2>
 
@@ -125,15 +133,26 @@ account1.hadoopConfDir=/opt/hadoop/hadoop-0.20.2/conf</code></pre>
         </ul>
 
         <p>To create an AWS access key / secret key pair, go to the <a href="https://portal.aws.amazon.com/gp/aws/securityCredentials">Security Credentials</a> page of your <a href="https://console.aws.amazon.com/console/home">AWS console</a>.</p>
+        
+        <p>Configuration file sample</p>
+        
+        <code><pre>[s3]
+default=account1
+account1.access_key = AKIAZIOJDIOHUHEUINDLOI
+account1.secret_key = Azioujeiojpdo1233/haiuzeyiuhoiasjo3QS
+account2.access_key = AKIAPOVCXVKNZEHIOJIOJF
+account2.secret_key = B123qsdiojpazeokpz235/ZHjqbuohzaiojz2</pre></code>
 
         <h2>URLs</h2>
 
-        URLs are in the form <code>s3://PATH</code>, with the following examples:
+        <p>URLs are in the form <code>s3://PATH</code>, with the following examples:</p>
 
         <ul>
           <li><code>s3://my-bucket/path/within/bucket</code></li>
           <li><code>s3://a/path/somewhere</code> (the default_path will be prepended)
         </ul>
+        
+        <p>Non-default accounts are accessed using the <code>s3://account@bucket/path</code> syntax.</p>
 
         <h1>Google Cloud Storage</h1>
 
