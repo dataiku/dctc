@@ -86,35 +86,16 @@ account_name2.param2 = value</code></pre>
           If there is only one account defined for a protocol, the <code>default</code> setting is optional.<br />
           A default configuration file is automatically created the first time you run dctc.<br />
         </p>
-
-        <h1>Hadoop HDFS</h1>
-
-        <h2>Configuration</h2>
-
-        <p> If you have the <code>HADOOP_HOME</code> or <code>HADOOP_PREFIX</code> environment variable defined, you do not need any configuration, <code>dctc</code> will automatically connect to your Hadoop environment.</p>
-
-        <p>Else, you need to create a configuration entry with one configuration parameter : <conf>hadoopConfDir</code>. This must point to the location of your "conf" folder in Hadoop (ie, the folder containing the <code>core-site.xml</code> file).</p>
-
-        <pre><code>[hdfs]
-account1.hadoopConfDir=/opt/hadoop/hadoop-0.20.2/conf</code></pre>
-
-        <h2>URLs</h2>
-
+        
+        <h1>Local files</h1>
+        
         <p>
-          URLs are in the form <code>hdfs://PATH</code>, where PATH is an absolute path within the HDFS filesystem.<br />
-          For example: <code>hdfs:///web-data/tracking-logs</code>.<br />
-          Non-default accounts are accessed with the syntax <code>hdfs://account@PATH</code>.<br />
-          For example: <code>hdfs://my_hdfs_2@/other/path/on/other/hdfs</code>.
+        No configuration is required for local files. You can reference them using <code>local:///path/on/local/fs</code>, or
+        more simply using <code>/path/on/local/fs</code>.
         </p>
         
-        <p><strong>Important note</strong>: If you use the environment variables instead of using the 
-          configuration file, you can only have one HDFS account, the default one.<br />
-          If you define any account in your configuration file, the environment variables are ignored.
-        </p>
-
-        <h2>MapR FS</h2>
-
-        <p>To access MapR filesystems, dctc needs some additional code and configuration. TODO</p>
+        <p>For example:</p>
+        <pre><code>% dctc ls /etc</code></pre>
 
         <h1>Amazon S3</h1>
 
@@ -198,6 +179,36 @@ account2.secret_key = /Users/john/secret/gs/key_123095490690384.p12</pre></code>
         
         <p>For example, to copy a file from the default GS account to a specific GS account:</p>
         <code><pre>% dctc cp gs://bucket1/folder/path gs://account2@bucket2/other_/path</pre></code>
+        
+        <h1>Hadoop HDFS</h1>
+
+        <h2>Configuration</h2>
+
+        <p> If you have the <code>HADOOP_HOME</code> or <code>HADOOP_PREFIX</code> environment variable defined, you do not need any configuration, <code>dctc</code> will automatically connect to your Hadoop environment.</p>
+
+        <p>Else, you need to create a configuration entry with one configuration parameter : <conf>hadoopConfDir</code>. This must point to the location of your "conf" folder in Hadoop (ie, the folder containing the <code>core-site.xml</code> file).</p>
+
+        <pre><code>[hdfs]
+account1.hadoopConfDir=/opt/hadoop/hadoop-0.20.2/conf</code></pre>
+
+        <h2>URLs</h2>
+
+        <p>
+          URLs are in the form <code>hdfs://PATH</code>, where PATH is an absolute path within the HDFS filesystem.<br />
+          For example: <code>hdfs:///web-data/tracking-logs</code>.<br />
+          Non-default accounts are accessed with the syntax <code>hdfs://account@PATH</code>.<br />
+          For example: <code>hdfs://my_hdfs_2@/other/path/on/other/hdfs</code>.
+        </p>
+        
+        <p><strong>Important note</strong>: If you use the environment variables instead of using the 
+          configuration file, you can only have one HDFS account, the default one.<br />
+          If you define any account in your configuration file, the environment variables are ignored.
+        </p>
+
+        <h2>MapR FS</h2>
+
+        <p>To access MapR filesystems, dctc needs some additional code and configuration. TODO</p>
+
 
 
         <h1>FTP</h1>
