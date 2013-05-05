@@ -43,7 +43,7 @@
         
         <p>
           All <code>dctc</code> commands operate on files, across all protocols supported by <code>dctc</code>.<br />
-          In <code>dctc</code> command lines, files are denoted by <em>URLs</em>.<br />
+          In <code>dctc</code> command lines, files are denoted by <em>URLs</em>.
           URL schemes are specific to each protocol and are detailed below.
         </p>
         
@@ -85,7 +85,6 @@ account_name2.param2 = value</code></pre>
           Parameter names are specific to each protocol.<br />
           If there is only one account defined for a protocol, the <code>default</code> setting is optional.<br />
           A default configuration file is automatically created the first time you run dctc.<br />
-        
         </p>
 
         <h1>Hadoop HDFS</h1>
@@ -169,7 +168,18 @@ account2.secret_key = B123qsdiojpazeokpz235/ZHjqbuohzaiojz2</pre></code>
           <li><strong>default_path</strong>: A fragment that will be prepended to all non-absolute paths</li>
         </ul>
 
-        <p>To create a service account, go to the "API Access" page of the <a href="https://code.google.com/apis/console">APIS console</a>, create an OAuth access if you have not yet done so, and then create a <em>Service Account</em>.</p>
+        <p>To create a service account, go to the "API Access" page of the <a href="https://code.google.com/apis/console">APIS console</a>, create an OAuth access if you have not yet done so, and then create a <em>Service Account</em>.
+          Google will let you download a .p12 key file. Save it to disk and use the path to the saved key in the <code>key_path</code> parameter.
+        </p>
+
+        <p>Configuration file sample</p>
+        
+        <code><pre>[gs]
+default=account1
+account1.mail = 5456156165164554@developer.gserviceaccount.com
+account1.key_path = /Users/john/secret/gs/key_5456156165164554.p12
+account2.mail = 123095490690384@developer.gserviceaccount.com
+account2.secret_key = /Users/john/secret/gs/key_123095490690384.p12</pre></code>
 
         <h2>URLs</h2>
 
@@ -179,6 +189,11 @@ account2.secret_key = B123qsdiojpazeokpz235/ZHjqbuohzaiojz2</pre></code>
           <li><code>gs://my-bucket/path/within/bucket</code></li>
           <li><code>gs://a/path/somewhere</code> (the default_path will be prepended)
         </ul>
+
+        <p>Non-default accounts are accessed using the <code>gs://account@bucket/path</code> syntax.</p>
+        
+        <p>For example, to copy a file from the default GS account to a specific GS account:</p>
+        <code><pre>% dctc cp gs://bucket1/folder/path gs://account2@bucket2/other_/path</pre></code>
 
 
         <h1>FTP</h1>
