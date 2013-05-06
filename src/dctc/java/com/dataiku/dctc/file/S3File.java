@@ -393,6 +393,14 @@ public class S3File extends BucketBasedFile {
                     }
                     if (recursiveFileList.size() == 0) {
                         type = Type.NOT_FOUND;
+                        S3File root = new S3File("", s3);
+                        for (S3File s3Bucket: root.glist()) {
+                            if (s3Bucket.getFileName().equals(bucket)) {
+                                type = Type.PATH_IN_BUCKET;
+                                break;
+                            }
+                        }
+
                     }
                     else {
                         type = Type.PATH_IN_BUCKET;
