@@ -245,15 +245,13 @@ public class S3File extends BucketBasedFile {
     }
     @Override
     public void mkdirs() throws IOException {
-        if (FileManipulation.getDepth(getAbsolutePath(), fileSeparator()) == 1) {
-            // Create the bucket
+        if (!exists()) {
             try {
                 s3.createBucket(bucket);
             } catch (AmazonS3Exception e) {
                 throw wrapProperly("createBucket", e);
             }
         }
-        // Nothing to do. Directory doesn't exists on s3.
     }
     @Override
     public void mkdir() throws IOException {
