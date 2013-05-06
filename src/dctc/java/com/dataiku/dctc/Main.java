@@ -150,8 +150,6 @@ public class Main {
                     cmd.setFileBuilder(builder);
                     try {
                         cmd.perform(cmdargs);
-                    } catch (IOException e) {
-                        System.err.println("dctc: " + e.getMessage());
                     } catch (Command.EndOfCommandException e) {}
                     System.exit(cmd.getExitCode());
                 }

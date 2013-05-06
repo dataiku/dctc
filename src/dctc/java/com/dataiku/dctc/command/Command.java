@@ -44,7 +44,7 @@ public abstract class Command {
         }
         return res;
     }
-    public void perform(String[] args) throws IOException {
+    public void perform(String[] args) {
         // Default implementation could be override
         List<GeneralizedFile> arguments = getArgs(args);
         if (arguments != null) {
@@ -124,13 +124,18 @@ public abstract class Command {
         }
     }
 
-    protected List<GeneralizedFile> getArgs(String[] shellargs) throws IOException{
+    protected List<GeneralizedFile> getArgs(String[] shellargs) {
         parseCommandLine(shellargs);
         List<GeneralizedFile> args = new ArrayList<GeneralizedFile>();
         for (String arg: getFileArguments(line.getArgs())) {
             GeneralizedFile garg = build(arg);
             if (GlobalConf.getResolveGlobbing()) {
-                args.addAll(Globbing.resolve(garg, false));
+                try {
+                    args.addAll(Globbing.resolve(garg, false));
+                } catch (IOException e) {
+                    error(garg.givenName(), "Doesn't resolve globbing", 2);
+                    args.add(garg);
+                }
             } else {
                 args.add(garg);
             }

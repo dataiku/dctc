@@ -42,7 +42,7 @@ public class Grep extends Command {
 
     // Public
     @Override
-    public void perform(String[] args) throws IOException {
+    public void perform(String[] args) {
         List<GeneralizedFile> arguments = getArgs(args);
         if (arguments != null) {
             perform(arguments, pattern);

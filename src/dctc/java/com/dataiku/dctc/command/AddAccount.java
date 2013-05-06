@@ -23,7 +23,7 @@ public class AddAccount extends Command {
     }
     
     @Override
-    public void perform(String[] args) throws IOException {
+    public void perform(String[] args) {
         parseCommandLine(args);
         if (args.length == 0) {
             usage();
@@ -85,7 +85,11 @@ public class AddAccount extends Command {
                 configuration.put("s3", account, "access_key", accessKey);
                 configuration.put("s3", account, "secret_key", secretKey);
                 System.err.println("Updating configuration file : " + GlobalConf.confFile());
-                configuration.write(GlobalConf.confFile());
+                try {
+                    configuration.write(GlobalConf.confFile());
+                } catch (IOException e) {
+                    error(GlobalConf.confFile(), "Couldn't write in the configuration file", e, 3);
+                }
                 return;
             }
         }
@@ -118,7 +122,11 @@ public class AddAccount extends Command {
                 configuration.put("gs", account, "mail", email);
                 configuration.put("gs", account, "key_path", keyPath);
                 System.err.println("Updating configuration file: " + GlobalConf.confFile());
-                configuration.write(GlobalConf.confFile());
+                try {
+                    configuration.write(GlobalConf.confFile());
+                } catch (IOException e) {
+                    error(GlobalConf.confFile(), "Couldn't write in the configuration file", e, 3);
+                }
                 return;
             }
         }

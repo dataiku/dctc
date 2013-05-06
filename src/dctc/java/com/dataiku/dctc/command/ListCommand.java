@@ -37,7 +37,7 @@ public abstract class ListCommand extends Command {
     protected abstract void leave(GeneralizedFile sourceDir);
 
     @Override
-    public void perform(String[] args) throws IOException {
+    public void perform(String[] args) {
         List<GeneralizedFile> arguments = getArgs(args);
         if (earlyCheck(arguments)) {
             return;
