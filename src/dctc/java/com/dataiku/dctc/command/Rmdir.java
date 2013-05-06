@@ -22,9 +22,11 @@ public class Rmdir extends Command {
             try {
                 if (!arg.exists()) {
                     error(arg.givenName(), "No such file or directory", 2);
+                    continue;
                 }
                 else if (!arg.isEmpty()) {
                     error(arg.givenName(), "Directory not empty", 2);
+                    continue;
                 }
                 arg.delete();
                 if (hasOption("v")) {
