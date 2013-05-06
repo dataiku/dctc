@@ -175,7 +175,18 @@ public class S3File extends BucketBasedFile {
     }
     @Override
     public InputStream getRange(long begin, long length) throws IOException {
-        return null; // FIXME:
+        try {
+            GetObjectRequest req = new GetObjectRequest(bucket, path);
+            req.setRange(begin, begin + length);
+            S3Object obj = s3.getObject(req);
+            return obj.getObjectContent();
+        } catch (AmazonS3Exception access) {
+            if (isFileNotFound(access)) {
+                throw new FileNotFoundException(getAbsoluteAddress());
+            } else {
+                throw wrapProperly("getObject", access);
+            }
+        }
     }
     @Override
     public InputStream inputStream() throws IOException {
@@ -190,6 +201,17 @@ public class S3File extends BucketBasedFile {
             }
         }
     }
+    @Override
+    public InputStream getLastLines(long lineNumber) throws IOException {
+        assert false: "Not Implemented.";
+        return null;
+    }
+
+    @Override
+    public InputStream getLastBytes(long byteNumber) throws IOException {
+        return getRange(getSize() - byteNumber ,byteNumber);
+    }
+
     public OutputStream outputStream() throws IOException {
         return new AmazonS3OutputStream(s3, bucket, path, allocate);
     }
@@ -449,15 +471,4 @@ public class S3File extends BucketBasedFile {
     List<S3File> glist;
     List<String> bucketList;
     List<S3File> grecursiveList;
-    @Override
-    public InputStream getLastLines(long lineNumber) throws IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public InputStream getLastBytes(long byteNumber) throws IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }
