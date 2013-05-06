@@ -52,10 +52,11 @@ public abstract class Command {
         }
     }
     @SuppressWarnings("static-access")
-    protected void longOpt(Options opt, String desc, String optArgName, String optName) {
+    protected void longOpt(Options opt, String desc, String longName,
+                           String shortName, String paramName) {
         OptionBuilder.withDescription(desc);
         OptionBuilder.hasArg();
-        opt.addOption(OptionBuilder.withLongOpt(optArgName).create(optName));
+        opt.addOption(OptionBuilder.withArgName(paramName).withLongOpt(shortName).create(longName));
     }
     public void perform(List<GeneralizedFile> args) throws IOException {
         throw new NotImplementedException();

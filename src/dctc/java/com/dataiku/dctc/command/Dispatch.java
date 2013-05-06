@@ -54,20 +54,20 @@ public class Dispatch extends ListCommand {
         Options options = new Options();
         options.addOption("c", "compress", false, "Compress all files (add a .gz extension).");
 
-        longOpt(options, "Prefix the names of output files with a constant string", "prefix", "p");
-        longOpt(options, "Suffix the names of output files with a constant string", "suffix", "s");
-        longOpt(options, "Column to use for 'value', 'hash' and 'time' functions.", "column", "col");
+        longOpt(options, "Prefix the names of output files with a constant string", "prefix", "p", "pre");
+        longOpt(options, "Suffix the names of output files with a constant string", "suffix", "s", "suf");
+        longOpt(options, "Column to use for 'value', 'hash' and 'time' functions.", "column", "col", "column-name");
         longOpt(options,
                 "Function to use to dispatch (one of 'random', 'value', 'hash', or 'time').",
-                "function", "f");
+                "function", "f", "fct-name");
         longOpt(options, "Number of output files to create for 'hash' and 'random' functions",
-                "nb-files", "nf");
-        longOpt(options, "Time format string for the 'time' function.", "time-format", "tf");
+                "nb-files", "nf", "number");
+        longOpt(options, "Time format string for the 'time' function.", "time-format", "tf", "format");
         longOpt(options, "Dispatch time period for the 'time' function"
-                +" (one of 'year', 'month', 'day' or 'hour').", "time-period", "tp");
-        longOpt(options, "Format type for the input files. Only supports 'csv'.", "input-format", "if");
-        longOpt(options, "Separator character for CSV format", "input-separator", "isep");
-        longOpt(options, "Quote character for CSV format", "input-quote", "iquot");
+                +" (one of 'year', 'month', 'day' or 'hour').", "time-period", "tp", "period");
+        longOpt(options, "Format type for the input files. Only supports 'csv'.", "input-format", "if", "file-format");
+        longOpt(options, "Separator character for CSV format", "input-separator", "isep", "separator");
+        longOpt(options, "Quote character for CSV format", "input-quote", "iquot", "quote-character");
         return options;
     }
 

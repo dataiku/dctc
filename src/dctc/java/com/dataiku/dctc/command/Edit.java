@@ -125,7 +125,7 @@ public class Edit extends Command {
     @Override
     protected Options setOptions() {
         Options options = new Options();
-        longOpt(options, "Override the EDITOR variable.", "editor", "e");
+        longOpt(options, "Override the EDITOR variable.", "editor", "e", "command");
         return options;
     }
 
