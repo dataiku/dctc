@@ -3,6 +3,7 @@ package com.dataiku.dctc.configuration;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.display.DisplayFactory;
 import com.dataiku.dctc.display.ThreadedDisplay;
 import com.dataiku.dctc.exception.UserException;
@@ -11,8 +12,7 @@ import com.dataiku.dip.utils.DKUtils;
 
 public class GlobalConf {
     public static String confFile() {
-        return System.getProperty("user.home")
-                + (System.getProperty("os.name").startsWith("Window") ? "/dctcrc" : "/.dctcrc");
+        return GlobalConstants.userHome + (GlobalConstants.isWindows ? "/dctcrc" : "/.dctcrc");
     }
     public static void setGlobalSettings(Map<String, String> settings) {
         for (Entry<String, String> elt: settings.entrySet()) {
