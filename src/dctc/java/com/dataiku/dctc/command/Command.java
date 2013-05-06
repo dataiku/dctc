@@ -143,6 +143,9 @@ public abstract class Command {
         DCTCLog.error(cmdname(), msg, exception);
         exitCode(exitCode);
     }
+    protected void error(String fileName, String msg, Throwable exception, int exitCode) {
+        error("`" + fileName + "' failed: " + msg, exception, exitCode);
+    }
     protected void exitCode(int exitCode) {
         this.exitCode = Math.max(exitCode, this.exitCode);
     }

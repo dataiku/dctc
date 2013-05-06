@@ -105,7 +105,7 @@ public class Tail extends Command {
                         idx = (idx + 1) % (int) nbLine();
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    error(arg.givenName(), "error", e, 2);
                 }
                 for (long i = 0; i < nbLine(); ++i) {
                     System.out.println(buf[(int) (idx + i) % (int) nbLine]);
