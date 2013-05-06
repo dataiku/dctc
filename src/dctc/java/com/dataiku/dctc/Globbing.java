@@ -40,8 +40,8 @@ public class Globbing {
     static public List<GeneralizedFile> resolve(GeneralizedFile globbing, boolean showHidden) throws IOException {
         List<GeneralizedFile> res = new ArrayList<GeneralizedFile>();
         boolean first = true;
-        String path = globbing.getAbsolutePath(); // getPath() instead of getAbsolutePath()
-        if (hasGlobbing(path)) {
+        if (hasGlobbing(globbing.givenName())) {
+            String path = globbing.getAbsolutePath();
             String[] split = path.split(globbing.fileSeparator());
             String prevPath = "";
             for (int i = 0; i < split.length; ++i) {
