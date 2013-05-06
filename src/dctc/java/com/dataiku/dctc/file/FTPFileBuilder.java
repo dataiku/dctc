@@ -62,10 +62,13 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
     }
 
     private FTPFile build(String host, String username, String password, String path) {
-        short port  = 21;
+        int port  = 21;
         if (host.indexOf(":") != -1) {
             String[/*port/host*/] splittedHost = FileManipulation.invSplit(host, ":", 2);
-            port = Short.parseShort(splittedHost[0]);
+            port = Integer.parseInt(splittedHost[0]);
+            if (port < 1 || port > 65535) {
+                throw new UserException("A port must be between 1 and 65535 (included).");
+            }
             host = splittedHost[1];
         }
         return new FTPFile(host, username, password, path, port);

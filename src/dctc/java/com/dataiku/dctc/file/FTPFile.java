@@ -15,7 +15,7 @@ import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.dataiku.dip.utils.Params;
 
 public class FTPFile extends AbstractGFile {
-    public FTPFile(String server, String username, String password, String path, short port) {
+    public FTPFile(String server, String username, String password, String path, int port) {
         this.server = server;
         this.username = username;
         this.password = password;
@@ -26,7 +26,7 @@ public class FTPFile extends AbstractGFile {
         }
     }
     public FTPFile(String server, String username, String password,
-                   String path, short port, FTPClient ftp, org.apache.commons.net.ftp.FTPFile file) {
+                   String path, int port, FTPClient ftp, org.apache.commons.net.ftp.FTPFile file) {
         this.server = server;
         this.username = username;
         this.password = password;
@@ -368,7 +368,7 @@ public class FTPFile extends AbstractGFile {
     private String username;
     private String password;
     private String path;
-    private short port;
+    private int port;
     private long date; // no 2038 bug.
     private long size = -1;
     private FTPClient ftp;
