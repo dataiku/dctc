@@ -14,14 +14,14 @@ public class LessSimpleDisplay extends AbstractTransferRateDisplay {
     protected final void beginLoop(int taskSize) {
     }
     protected final void endLoop() {
-        System.out.print(String.format("    \rdone: %s/%s in %s - %d/%d files done - %sBps - %d transfer(s) running.",
-                                       Size.getReadableSize(doneTransfer()),
-                                       prettyWholeSize(),
-                                       FriendlyTime.elaspeTime(tick() / 10 + 1),
-                                       nbDone(),
-                                       nbFiles(),
-                                       Size.getReadableSize(getBnd()),
-                                       nbRunning()));
+        print(String.format("done: %s/%s in %s - %d/%d files done - %sBps - %d transfer(s) running.",
+                            Size.getReadableSize(doneTransfer()),
+                            prettyWholeSize(),
+                            FriendlyTime.elaspeTime(tick() / 10 + 1),
+                            nbDone(),
+                            nbFiles(),
+                            Size.getReadableSize(getBnd()),
+                            nbRunning()));
     }
     protected final void done(CopyTaskRunnable task) {
     }

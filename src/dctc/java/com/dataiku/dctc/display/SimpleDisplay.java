@@ -18,7 +18,7 @@ public class SimpleDisplay extends AbstractThreadedDisplay {
     }
     @Override
     protected void resetLoop() {
-        System.out.print("\rdone: " + Size.getReadableSize(done + transfer) + "/" + prettyFilesSize + "   ");
+        print("done: " + Size.getReadableSize(done + transfer) + "/" + prettyFilesSize);
         transfer = 0;
     }
     @Override
