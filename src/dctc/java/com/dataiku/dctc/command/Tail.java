@@ -35,16 +35,8 @@ public class Tail extends Command {
     protected Options setOptions() {
         Options opt = new Options();
 
-        OptionBuilder.withArgName("K");
-        OptionBuilder.hasArg();
-        OptionBuilder.withDescription("Output the last K bytes.");
-        opt.addOption(OptionBuilder.create("byte"));
-
-        OptionBuilder.withArgName("K");
-        OptionBuilder.hasArg();
-        OptionBuilder.withDescription("Output the last K lines.");
-        opt.addOption(OptionBuilder.create("line"));
-
+        longOpt(opt, "Output the last K bytes", "bytes", "b", "K");
+        longOpt(opt, "Output the last K lines", "lines", "n", "K");
         return opt;
     }
     @Override
