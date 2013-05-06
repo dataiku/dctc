@@ -57,7 +57,7 @@ public class Cat extends Command {
             error (file.givenName(), "No such file or directory", 1);
             return;
         } catch (IOException e) {
-            error("Could not open file " + file.givenName(), e, 2);
+            error(file.givenName(), "Could not open file: " + e.getMessage(), e, 2);
             return;
         }
         try {
