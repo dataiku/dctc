@@ -57,7 +57,7 @@ public abstract class Command {
         OptionBuilder.hasArg();
         opt.addOption(OptionBuilder.withLongOpt(optArgName).create(optName));
     }
-    public void perform(List<GeneralizedFile> args) {
+    public void perform(List<GeneralizedFile> args) throws IOException {
         throw new NotImplementedException();
     }
 
@@ -87,7 +87,7 @@ public abstract class Command {
     public int getExitCode() {
         return exitCode;
     }
-    public void perform(GeneralizedFile[] args) {
+    public void perform(GeneralizedFile[] args) throws IOException {
         List<GeneralizedFile> gargs = new ArrayList<GeneralizedFile>();
         for (GeneralizedFile arg: args) {
             gargs.add(arg);
