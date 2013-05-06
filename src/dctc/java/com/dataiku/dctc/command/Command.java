@@ -44,7 +44,7 @@ public abstract class Command {
         }
         return res;
     }
-    public void perform(String[] args) {
+    public void perform(String[] args) throws IOException {
         // Default implementation could be override
         List<GeneralizedFile> arguments = getArgs(args);
         if (arguments != null) {
