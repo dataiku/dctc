@@ -7,10 +7,16 @@ public class DCTCLog {
         STDERR,
         LOG4J
     };
-    private static Mode mode = Mode.STDERR;
+    public enum Level {
+        ERROR,
+        DEBUG
+    }
 
     public static void setMode(Mode newMode) {
         mode = newMode;
+    }
+    public static void setLevel(Level newLvl) {
+        lvl = newLvl;
     }
 
     public static void info(String module, String message) {
@@ -60,7 +66,9 @@ public class DCTCLog {
     public static void warn(String module, String message, Throwable t) {
         if (mode == Mode.STDERR) {
             System.err.println("dctc " + module + ": WARNING: " + message);
-            t.printStackTrace();
+            if (lvl == Level.DEBUG) {
+                t.printStackTrace();
+            }
         } else if (mode == Mode.LOG4J) {
             Logger.getLogger("dctc." + module).warn(message, t);
         }
@@ -68,9 +76,13 @@ public class DCTCLog {
     public static void error(String module, String message, Throwable t) {
         if (mode == Mode.STDERR) {
             System.err.println("dctc " + module + ": ERROR: " + message);
-            t.printStackTrace();
+            if (lvl == Level.DEBUG) {
+                t.printStackTrace();
+            }
         } else if (mode == Mode.LOG4J) {
             Logger.getLogger("dctc." + module).error(message, t);
         }
     }
+    private static Mode mode = Mode.STDERR;
+    private static Level lvl = Level.ERROR;
 }

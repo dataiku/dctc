@@ -120,6 +120,7 @@ public abstract class Command {
         }
         if (line.hasOption("V")) {
             Logger.getRootLogger().setLevel(Level.DEBUG);
+            DCTCLog.setLevel(DCTCLog.Level.DEBUG);
         }
     }
 
