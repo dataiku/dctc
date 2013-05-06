@@ -15,7 +15,7 @@ public class Mkdir extends Command {
     public String longDescription() {
         return "Create directories. Parent directories must exist";
     }
-    
+
     // Public
     @Override
     public void perform(List<GeneralizedFile> args) {
@@ -26,7 +26,7 @@ public class Mkdir extends Command {
         for (GeneralizedFile arg: args) {
             try {
                 if (arg.exists()) {
-                    error("cannot create directory `" + arg.givenName() + ": File exists", 1);
+                    error(arg.givenName(), "cannot create directory, file exists", 1);
                 } else {
                     arg.mkdir();
                     if (verbose()) {

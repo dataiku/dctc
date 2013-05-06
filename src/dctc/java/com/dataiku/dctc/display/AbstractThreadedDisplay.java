@@ -21,7 +21,6 @@ abstract public class AbstractThreadedDisplay implements ThreadedDisplay {
                         taskList.remove(i);
                     }
                 }
-                
             }
             sleep(100);
             resetLoop();

@@ -20,13 +20,13 @@ public class Grep extends Command {
     }
     public String longDescription() {
         return "Search the pattern in input files and outputs the lines that match.\n" +
-                "The pattern is handled as a non-anchored regular expression.\n" + 
+                "The pattern is handled as a non-anchored regular expression.\n" +
                 "\n" +
                 "dctc grep only offers a tiny subset of the capabilities of POSIX or GNU grep.\n" +
                 "It is intended as a fallback for systems that do not offer a native grep \n"+
                 "(eg, Microsoft Windows). For UNIX systems, use dctc cat|grep";
     }
-    
+
     protected Options setOptions() {
         Options options = new Options();
 

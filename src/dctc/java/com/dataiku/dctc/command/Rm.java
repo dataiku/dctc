@@ -15,7 +15,6 @@ public class Rm extends Command {
     public String longDescription() {
         return "Remove files and folders. By default, it will refuse to remove folders. Use -r";
     }
-    
     // Public
     @Override
     public void perform(List<GeneralizedFile> args) {
@@ -124,7 +123,7 @@ public class Rm extends Command {
                     // If one file is not delete, we must not delete
                     // the root.
                     List<? extends GeneralizedFile> sons = arg.grecursiveList();
-                    for (int i = sons.size() -1; i != -1; --i) {
+                    for (int i = sons.size() - 1; i != -1; --i) {
                         GeneralizedFile son = sons.get(i);
                         if (son.isDirectory()) {
                             if (dirAsk(son)) {
@@ -174,7 +173,7 @@ public class Rm extends Command {
     }
     private void verbose(String arg) {
         if (verbose()) {
-            System.out.println("removed ‘" + arg + "’");
+            System.out.println("removed `" + arg + "'");
         }
     }
 

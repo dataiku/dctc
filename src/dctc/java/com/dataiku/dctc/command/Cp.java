@@ -31,7 +31,7 @@ public class Cp extends ListCommand {
                 "dctc cp can uncompress and compress GZip-compressed inputs and outputs\n" +
                 "dctc cp can also be used to create or expand ZIP archives";
     }
-    
+
     // Public
     @Override
     public final String cmdname() {
@@ -86,7 +86,7 @@ public class Cp extends ListCommand {
     @Override
     protected boolean recursion(GeneralizedFile dir) {
         if (!recur()) {
-            warn("Omitting directory `"+ dir.givenName() + "'");
+            warn("Omitting directory `" + dir.givenName() + "'");
             return false;
         }
         return true;

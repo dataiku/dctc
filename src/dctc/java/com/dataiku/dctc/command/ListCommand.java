@@ -202,6 +202,5 @@ public abstract class ListCommand extends Command {
 
     // Attributes
     private List<CopyTask> taskList = new ArrayList<CopyTask>();
-
     private static Logger logger = Logger.getLogger("dctc.command");
 }

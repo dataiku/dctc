@@ -116,7 +116,7 @@ public class Dispatch extends ListCommand {
     @Override
     public final void execute(List<CopyTask> tasks, int exitCode) throws IOException {
         if (tasks.size() == 0) return;
-        
+
         SplitFunction fct = buildDispatchFunction();
 
         Format fmt = buildFormat(splitFunction(), tasks.get(0));

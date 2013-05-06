@@ -22,20 +22,20 @@ public class Sync extends Command {
     }
     public String longDescription() {
         return "Synchronize locations. This command will copy all files from " +
-        		"source to destination in order to have the destination contain " +
-        		"all source files.\n"+
-        		"\n"+
-        		"Files that are non-existing in destination are always copied. For\n"+
-        		"files that already exist in the destination, behaviour depends on the\n"+
-        		"-m and -t flags. Without them, files are copied if their size have changed\n"+
-        		"\n"+
-        		"With -t, the modification time is taken into account. WARNING: dctc sync\n"+
-        		"does not currently preserve mtimes, so you cannot use -t to re-sync already\n"+
-        		"synced folders, it would always recopy all.\n"+
-        		"With -m, the MD5 hash is computed and files are copied if the MD5 hash \n"+
-        		"does not match.";
+              "source to destination in order to have the destination contain " +
+              "all source files.\n"+
+              "\n"+
+              "Files that are non-existing in destination are always copied. For\n"+
+              "files that already exist in the destination, behaviour depends on the\n"+
+              "-m and -t flags. Without them, files are copied if their size have changed\n"+
+              "\n"+
+              "With -t, the modification time is taken into account. WARNING: dctc sync\n"+
+              "does not currently preserve mtimes, so you cannot use -t to re-sync already\n"+
+              "synced folders, it would always recopy all.\n"+
+              "With -m, the MD5 hash is computed and files are copied if the MD5 hash \n"+
+              "does not match.";
     }
-    
+
     // Public
     @Override
     public final String cmdname() {
@@ -76,15 +76,15 @@ public class Sync extends Command {
             exitCode(1);
             return;
         }
-        
+
         SyncComputer computer = new SyncComputer(args.subList(0, args.size() - 1), args.get(args.size() - 1));
         SyncComputer.IncrementalFilter filter = new SyncComputer.IncrementalFilter();
         filter.type = getSyncType();
-        
+
         computer.compressTargets = compress();
         computer.recurseInSources = true;
         computer.filter = filter;
-        
+
         try {
             List<CopyTask> tasks = computer.computeTasksList();
             if (hasOption("n")) {
@@ -96,7 +96,7 @@ public class Sync extends Command {
             error("File not found : " + e.getMessage(), 1);
         } catch (IOException e) {
             error("Failed to sync", e, 2);
-        }       
+        }
     }
 
     private void execute(List<CopyTask> tasks) throws IOException {

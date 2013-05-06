@@ -31,7 +31,6 @@ import com.dataiku.dctc.configuration.CredentialProviderBank;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.FileBuilder;
-import com.dataiku.dip.utils.StdOut;
 
 public class Main {
     private static void globalUsage(int exitCode) {

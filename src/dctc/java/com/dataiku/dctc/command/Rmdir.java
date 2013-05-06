@@ -14,8 +14,6 @@ public class Rmdir extends Command {
     public String longDescription() {
         return "Remove empty folders. If the target folder is not empty, rmdir will error out.";
     }
-    
-    
     @Override
     public void perform(List<GeneralizedFile> args) {
         for (GeneralizedFile arg: args) {

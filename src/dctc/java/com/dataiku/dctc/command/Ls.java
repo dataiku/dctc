@@ -19,7 +19,6 @@ import com.dataiku.dctc.display.Size;
 import com.dataiku.dctc.file.Acl;
 import com.dataiku.dctc.file.FileManipulation;
 import com.dataiku.dctc.file.GeneralizedFile;
-import com.dataiku.dip.utils.DKUtils;
 
 public class Ls extends Command {
     public String tagline() {
@@ -28,7 +27,7 @@ public class Ls extends Command {
     public String longDescription() {
         return "List the contents of folders, with detailed attributes if requested";
     }
-    
+
     // Public
     @Override
     public void perform(String[] args) {

@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.lang.StringUtils;
 
@@ -25,7 +24,7 @@ public class Edit extends Command {
         return " The file is downloaded, an editor is opened, and if the file was modified, "+
                 "it's uploaded back to its original location";
     }
-    
+
     @Override
     public String cmdname() {
         return "edit";

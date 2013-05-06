@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.List;
 
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.io.IOUtils;
 
@@ -22,7 +21,6 @@ public class Tail extends Command {
         return "Output the last N lines or bytes of the input files";
     }
 
-    
     @Override
     public String cmdname() {
         return "tail";

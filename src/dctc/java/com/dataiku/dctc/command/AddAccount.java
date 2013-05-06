@@ -21,7 +21,7 @@ public class AddAccount extends Command {
     public String longDescription() {
         return "Add an account to the DCTC file configuration using a command-line wizard. Supported protocols are 's3' and 'gs'";
     }
-    
+
     @Override
     public void perform(String[] args) {
         parseCommandLine(args);

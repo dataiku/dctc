@@ -3,8 +3,6 @@ package com.dataiku.dctc.display;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import com.dataiku.dctc.copy.CopyTaskRunnable;
 
 abstract public class AbstractTransferRateDisplay implements ThreadedDisplay {

@@ -24,7 +24,7 @@ public class Cat extends Command {
     public String longDescription() {
         return "Concatenates the content of all input files to standard output. GZip compressed files are automatically uncompressed";
     }
-    
+
     // Public
     @Override
     public void perform(List<GeneralizedFile> args) {
@@ -50,8 +50,8 @@ public class Cat extends Command {
 
     // Private
     private void print(GeneralizedFile file) {
-    	InputStream i;
-    	try {
+        InputStream i;
+        try {
             i = AutoGZip.buildInput(file);
         } catch (FileNotFoundException e) {
             error (file.givenName(), "No such file or directory", 1);

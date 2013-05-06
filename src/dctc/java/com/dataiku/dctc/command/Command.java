@@ -28,7 +28,7 @@ public abstract class Command {
     public static class EndOfCommandException extends Error {
         private static final long serialVersionUID = 1L;
     }
-    
+
     // Description of what the command does
     public abstract String cmdname();
     public abstract String tagline();

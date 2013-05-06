@@ -21,7 +21,7 @@ public class Head extends Command {
     public String longDescription() {
         return "Output the first N lines of the input files";
     }
-    
+
     @SuppressWarnings("static-access")
     protected Options setOptions() {
         Options options = new Options();

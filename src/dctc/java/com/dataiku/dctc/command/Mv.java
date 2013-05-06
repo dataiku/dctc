@@ -71,13 +71,13 @@ public class Mv extends ListCommand {
         return true;
     }
     protected boolean mkdirs(GeneralizedFile dst) {
-    	try {
+        try {
             dst.mkdirs();
             return true;
-    	} catch (IOException e) {
+        } catch (IOException e) {
             error(dst.givenName(), e.getMessage(), 3);
             return false;
-    	}
+        }
     }
     protected boolean dstRoot(GeneralizedFile dst) throws IOException {
         if (!dst.exists() || dst.isDirectory() || archive()) {

@@ -1,8 +1,5 @@
 package com.dataiku.dctc.file;
 
-import java.util.logging.Logger;
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang.StringUtils;
 
 public class FileManipulation {
