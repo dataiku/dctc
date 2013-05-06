@@ -44,7 +44,7 @@ public abstract class Command {
         }
         return res;
     }
-    public void perform(String[] args) throws IOException {
+    public void perform(String[] args) {
         // Default implementation could be override
         List<GeneralizedFile> arguments = getArgs(args);
         if (arguments != null) {
@@ -58,7 +58,7 @@ public abstract class Command {
         OptionBuilder.hasArg();
         opt.addOption(OptionBuilder.withArgName(paramName).withLongOpt(shortName).create(longName));
     }
-    public void perform(List<GeneralizedFile> args) throws IOException {
+    public void perform(List<GeneralizedFile> args) {
         throw new NotImplementedException();
     }
 
@@ -88,7 +88,7 @@ public abstract class Command {
     public int getExitCode() {
         return exitCode;
     }
-    public void perform(GeneralizedFile[] args) throws IOException {
+    public void perform(GeneralizedFile[] args) {
         List<GeneralizedFile> gargs = new ArrayList<GeneralizedFile>();
         for (GeneralizedFile arg: args) {
             gargs.add(arg);
