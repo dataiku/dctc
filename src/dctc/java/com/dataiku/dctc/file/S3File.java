@@ -199,6 +199,12 @@ public class S3File extends BucketBasedFile {
             } else {
                 throw wrapProperly("getObject", access);
             }
+        } catch (AmazonClientException e) {
+            if (e.getMessage().startsWith("Unable to unmarshall response")) {
+                throw new IOException("Is a directory (Unable to unmarshall s3 response)");
+            } else {
+                throw e;
+            }
         }
     }
     @Override
