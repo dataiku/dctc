@@ -128,7 +128,9 @@ public class Main {
                 String usercmd = args[0];
                 String[] cmdargs = new String[args.length - 1];
                 System.arraycopy(args, 1, cmdargs, 0, args.length - 1);
-                if (usercmd.equals("help")) {
+                if (usercmd.equals("help") || usercmd.equals("-help")
+                    || usercmd.equals("--help") || usercmd.equals("-h")
+                    || usercmd.equals("-?")) {
                     if (cmdargs.length > 0) {
                         commandHelp(0, cmdargs[0]);
                     } else {
