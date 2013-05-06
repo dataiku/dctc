@@ -120,7 +120,13 @@ public class Main {
             fillCommand();
             DCTCLog.setMode(Mode.STDERR);
 
-            Configuration conf = new Configuration(GlobalConf.confFile());
+            Configuration conf;
+            try {
+                conf = new Configuration(GlobalConf.confFile());
+            } catch (IOException e) {
+                System.err.println("dctc fail: " + e.getMessage());
+                return;
+            }
             CredentialProviderBank bank = new CredentialProviderBank(conf);
             FileBuilder builder = new FileBuilder(bank);
 
@@ -155,8 +161,6 @@ public class Main {
         } catch (UserException e) {
             System.err.println("dctc: ERROR: " + e.getMessage());
             System.exit(1);
-        } catch (IOException e) {
-            DCTCLog.error("main", "Command failed", e);
         }
     }
 
