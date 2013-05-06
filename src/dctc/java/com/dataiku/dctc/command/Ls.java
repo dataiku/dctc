@@ -146,8 +146,8 @@ public class Ls extends Command {
         List<GeneralizedFile> dirs = new ArrayList<GeneralizedFile>();
         List<GeneralizedFile> fs = new ArrayList<GeneralizedFile>();
 
-        try {
-            for (GeneralizedFile file: files) {
+        for (GeneralizedFile file: files) {
+            try {
                 if (file.exists()) {
                     if (file.isFile() || !head) {
                         fs.add(file);
@@ -158,62 +158,58 @@ public class Ls extends Command {
                 } else {
                     error(file.givenName(), "Not Found", 1);
                 }
+            } catch (IOException e) {
+                error(file.givenName(), e.getMessage(), e, 2);
             }
-            int i = 0;
-            if (fs.size() != 0 || !head) {
-                printSize(fs);
+        }
+        int i = 0;
+        if (fs.size() != 0 || !head) {
+            printSize(fs);
+        }
+        if (sort()) {
+            Collections.sort(fs);
+        }
+        for (GeneralizedFile file: fs) {
+            ++i;
+            if (!head) {
+                print(file, file.getFileName(), true);
+            } else {
+                print(file, file.givenName(), true);
             }
-            if (sort()) {
-                Collections.sort(fs);
-            }
-            for (GeneralizedFile file: fs) {
-                ++i;
-                if (!head) {
-                    print(file, file.getFileName(), true);
-                } else {
-                    print(file, file.givenName(), true);
-                }
-            }
+        }
 
-            cleanPrint(i != 0 && dirs.size() != 0);
-            i = 0;
+        cleanPrint(i != 0 && dirs.size() != 0);
+        i = 0;
 
-            for (GeneralizedFile dir: dirs) {
-                cleanPrint(++i != 1);
+        for (GeneralizedFile dir: dirs) {
+            cleanPrint(++i != 1);
 
-                List<GeneralizedFile> list;
-                try {
-                    list = (List<GeneralizedFile>) dir.glist();
-                } catch (IOException e) {
-                    error(e.getMessage(), 2);
-                    continue;
+            List<GeneralizedFile> list;
+            try {
+                list = (List<GeneralizedFile>) dir.glist();
+            } catch (IOException e) {
+                error(e.getMessage(), 2);
+                continue;
+            }
+            if (dirs.size() > 1 || fs.size() > 0 || recursion()) {
+                header(dir);
+            }
+            if (!recursion()) {
+                printSize(list);
+                if (sort()) {
+                    Collections.sort(list);
                 }
-                if (dirs.size() > 1 || fs.size() > 0 || recursion()) {
-                    header(dir);
-                }
-                if (!recursion()) {
-                    printSize(list);
-                    try {
-                        if (sort()) {
-                            Collections.sort(list);
-                        }
-                        for (int j = 0; j < list.size(); ++j) {
-                            GeneralizedFile subfile = list.get(j);
-                            print(subfile, subfile.getFileName(), false);
-                            if (j + 1 > list.size()) {
-                                new_line();
-                            }
-                        }
-                        cleanPrint(false);
-                    } catch (IOException e) {
-                        error(e.getMessage(), 2);
+                for (int j = 0; j < list.size(); ++j) {
+                    GeneralizedFile subfile = list.get(j);
+                    print(subfile, subfile.getFileName(), false);
+                    if (j + 1 > list.size()) {
+                        new_line();
                     }
-                } else {
-                    perform(list, false);
                 }
+                cleanPrint(false);
+            } else {
+                perform(list, false);
             }
-        } catch (IOException e) {
-            error("ls failed", e, 1);
         }
     }
 
@@ -221,16 +217,25 @@ public class Ls extends Command {
         System.out.println(f.givenName() + ":");
     }
 
-    private boolean hide(GeneralizedFile f, boolean forcePrint) throws IOException {
-        return !(forcePrint || ((hidden() || !f.isHidden()) && (!temp() || !f.isTempFile())));
+    private boolean hide(GeneralizedFile f, boolean forcePrint) {
+        try {
+            return !(forcePrint || ((hidden() || !f.isHidden()) && (!temp() || !f.isTempFile())));
+        } catch (IOException e) {
+            error(f.givenName(), "failed ", e, 1);
+            return false;
+        }
     }
-    private void printSize(List<? extends GeneralizedFile> fs) throws IOException {
+    private void printSize(List<? extends GeneralizedFile> fs) {
         if (listing()) {
             boolean hideTotal = true;
             long size = 0;
             for (GeneralizedFile f: fs) {
                 if (!hide(f, false)) {
-                    size += f.getSize();
+                    try {
+                        size += f.getSize();
+                    } catch (IOException e) {
+                        error(f.givenName(), "failed to get the size", e, 1);
+                    }
                     hideTotal = false;
                 }
             }
@@ -257,24 +262,35 @@ public class Ls extends Command {
         System.out.print(dateFormat.format(date));
     }
 
-    private void print(GeneralizedFile file, String f, boolean forcePrint) throws IOException {
+    private void print(GeneralizedFile file, String f, boolean forcePrint) {
         if (!hide(file, forcePrint)) {
             if (listing()) {
                 // Print directly.
                 /// Date
                 if (file.hasAcl()) {
-                    Acl acl = file.getAcl();
-                    System.out.print(acl.getMode().substring(0, 4) + " ");
+                    Acl acl;
+                    try {
+                        acl = file.getAcl();
+                        System.out.print(acl.getMode().substring(0, 4) + " ");
+                    } catch (IOException e) {
+                        error(file.givenName(), "failed to get Acl", e, 2);
+                        System.out.print("     ");
+                    }
                 } else {
                     System.out.print("     ");
                 }
                 printDate(file);
                 System.out.print("	");
                 /// Size
-                if (humanReadable()) {
-                    System.out.print(Size.getReadableSize(file.getSize(), "#0"));
-                } else {
-                    System.out.print(file.getSize());
+                try {
+                    long size = file.getSize();
+                    if (humanReadable()) {
+                        System.out.print(Size.getReadableSize(size, "#0"));
+                    } else {
+                        System.out.print(size);
+                    }
+                } catch (IOException e) {
+                    System.out.print("    ");
                 }
                 /// File Name
                 System.out.print("	");

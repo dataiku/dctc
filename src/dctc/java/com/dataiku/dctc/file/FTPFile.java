@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.net.UnknownHostException;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -285,11 +286,11 @@ public class FTPFile extends AbstractGFile {
     private void connect() throws IOException {
         try {
             ftp.connect(server, port);
-            if (!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
-                throw new Exception();
-            }
-        } catch (Exception e) {
-            throw new IOException("Fail Connect: " + e.getMessage());
+        } catch (UnknownHostException e) {
+            throw new IOException ("Fail to Connect to " + server);
+        }
+        if (!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
+            throw new IOException("Fail to Connect to " + server);
         }
     }
     private void login() {
