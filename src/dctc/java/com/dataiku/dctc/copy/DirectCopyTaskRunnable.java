@@ -26,18 +26,17 @@ public class DirectCopyTaskRunnable extends CopyTaskRunnable {
         if (logger.isDebugEnabled()) {
             logger.debug("Copying " + print());
         }
-        if (out.directCopy(in)) {
-            inc(in.getSize());
-            return;
-        }
         if (in.isDirectory()) {
             inc(GlobalConstants.FOUR_KIO);
             return;
         }
+        out.mkpath();
+        if (out.directCopy(in)) {
+            inc(in.getSize());
+            return;
+        }
 
         if (out.hasOutputStream()) {
-            out.mkpath();
-
             if (!out.allocate(in.getSize())) {
                 throw new IOException("Can't transfer " + in.getAbsoluteAddress() + ": file too big for the destination file system");
             }
