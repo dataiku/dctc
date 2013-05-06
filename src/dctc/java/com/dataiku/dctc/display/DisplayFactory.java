@@ -14,6 +14,8 @@ public class DisplayFactory {
             return new SimpleDisplay();
         } else if (type.equals("list")) {
             return new ListDisplay();
+        } else if (type.equals("tty-pretty")) {
+            return new LessSimpleDisplay();
         } else if (type.equals("pretty") || type.equals("auto")) {
             try {
                 // NCurses is not always available
