@@ -5,10 +5,20 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 
 import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.GlobalConstants;
 
 public abstract class CopyTaskRunnable implements Runnable {
     protected CopyTaskRunnable(GeneralizedFile input) {
         this.in = input;
+        try {
+            if (!input.isDirectory()) {
+                this.inSize = input.getSize();
+            } else {
+                this.inSize = GlobalConstants.FOUR_KIO;
+            }
+        } catch (IOException e) {
+            this.inSize = -1;
+        }
     }
     public GeneralizedFile getInputFile() {
         return in;
@@ -36,14 +46,6 @@ public abstract class CopyTaskRunnable implements Runnable {
     public long read() {
         return read;
     }
-    public long size() {
-        // TODO FIXME: Cache it
-        try {
-            return in.getSize();
-        } catch (IOException e) {
-            return 0;
-        }
-    }
 
     public void run() {
         synchronized (started) {
@@ -58,6 +60,9 @@ public abstract class CopyTaskRunnable implements Runnable {
         }
         done = true;
     }
+    public long getInSize() {
+        return inSize;
+    }
 
     public  abstract void work() throws IOException;
     public abstract String print() throws IOException;
@@ -67,6 +72,7 @@ public abstract class CopyTaskRunnable implements Runnable {
     private Boolean done = false;
     private Long read = 0l;
     private IOException exp;
+    private long inSize;
 
     private static Logger logger = Logger.getLogger("dctc.copy");
 }

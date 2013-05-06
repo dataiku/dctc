@@ -262,7 +262,7 @@ public class FTPFile extends AbstractGFile {
         return date;
     }
     @Override
-    public synchronized long getSize() throws IOException {
+    public long getSize() throws IOException {
         resolve();
         return size;
     }

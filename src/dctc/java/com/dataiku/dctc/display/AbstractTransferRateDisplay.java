@@ -34,7 +34,7 @@ abstract public class AbstractTransferRateDisplay implements ThreadedDisplay {
                         } else {
                             done(elt);
                         }
-                        done += elt.size();
+                        done += elt.getInSize();
                         tasks.remove(i);
                     } else {
                         if (elt.isStarted()) {
@@ -111,7 +111,7 @@ abstract public class AbstractTransferRateDisplay implements ThreadedDisplay {
     private synchronized void calculateSize(List<CopyTaskRunnable> tasks) {
         wholeSize = 0;
         for (CopyTaskRunnable task: tasks) {
-            wholeSize += task.size();
+            wholeSize += task.getInSize();
         }
         prettyWholeSize = Size.getReadableSize(wholeSize);
     }

@@ -66,14 +66,14 @@ public class NCursesDisplay extends AbstractTransferRateDisplay {
         }
         String str = Size.getReadableSize(task.read())
             + "/"
-            + Size.getReadableSize(task.size())
+            + Size.getReadableSize(task.getInSize())
             + "\t\t";
         try {
             str += task.print();
         } catch (IOException e) {
             str += task.getInputFile().givenName();
         }
-        prettyDisplay(str, task.read(), task.size(), currentLine++);
+        prettyDisplay(str, task.read(), task.getInSize(), currentLine++);
     }
 
     private void prettyDisplay(String str, long transferred, long total, int line) {

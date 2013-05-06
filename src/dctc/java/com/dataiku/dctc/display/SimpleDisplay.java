@@ -9,7 +9,7 @@ public class SimpleDisplay extends AbstractThreadedDisplay {
     @Override
     protected final boolean display(CopyTaskRunnable task) {
         if (task.isDone()) {
-            done += task.size();
+            done += task.getInSize();
             return true;
         } else {
             transfer += task.read();
@@ -25,7 +25,7 @@ public class SimpleDisplay extends AbstractThreadedDisplay {
     protected final void init(List<CopyTaskRunnable> taskList) {
         wholeFilesSize = 0;
         for (CopyTaskRunnable task: taskList) {
-            wholeFilesSize += task.size();
+            wholeFilesSize += task.getInSize();
         }
         prettyFilesSize = Size.getReadableSize(wholeFilesSize);
     }
