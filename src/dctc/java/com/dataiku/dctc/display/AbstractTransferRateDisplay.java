@@ -108,7 +108,7 @@ abstract public class AbstractTransferRateDisplay implements ThreadedDisplay {
     private void initVar() {
         bandWidth = new long[10];
     }
-    private void calculateSize(List<CopyTaskRunnable> tasks) {
+    private synchronized void calculateSize(List<CopyTaskRunnable> tasks) {
         wholeSize = 0;
         for (CopyTaskRunnable task: tasks) {
             wholeSize += task.size();
@@ -116,7 +116,7 @@ abstract public class AbstractTransferRateDisplay implements ThreadedDisplay {
         prettyWholeSize = Size.getReadableSize(wholeSize);
     }
     protected void print(String msg) {
-        for (int i = lastLength - msg.length(); i > 0; --i) {
+        for (int i = lastLength - msg.length(); i >= 0; --i) {
             System.out.print(" ");
         }
         System.out.print("\r");

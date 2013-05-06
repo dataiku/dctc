@@ -46,7 +46,7 @@ abstract public class AbstractThreadedDisplay implements ThreadedDisplay {
         }
     }
     protected void print(String msg) {
-        for (int i = lastLength - msg.length(); i > 0; --i) {
+        for (int i = lastLength - msg.length(); i >= 0; --i) {
             System.out.print(" ");
         }
         System.out.print("\r");
