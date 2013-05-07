@@ -167,7 +167,7 @@ public class Rm extends Command {
             return true;
         } else {
             if (!force()) {
-                error("cannot remove ‘" + arg.givenName() + "’: No such file or directory", 2);
+                error("cannot remove `" + arg.givenName() + "': No such file or directory", 2);
             }
             return false;
         }
