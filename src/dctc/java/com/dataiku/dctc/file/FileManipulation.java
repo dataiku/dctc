@@ -172,7 +172,7 @@ public class FileManipulation {
             && !(son.indexOf(separator, parent.length() + separator.length()) != -1); // Just one more separator?
     }
     public static boolean isSon(String parent, String son, String separator) {
-        parent = trimEnd(parent, separator);
+        parent = trimEnd(parent, separator) + separator;
         son = trimEnd(son, separator);
 
         return son.startsWith(parent) // has the same prefix?
