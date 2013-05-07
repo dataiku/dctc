@@ -45,7 +45,7 @@ public class S3File extends BucketBasedFile {
 
     protected S3File(String directoryPath, AmazonS3 s3, List<S3File> sons) {
         this.s3 = s3;
-        this.type = Type.PATH_IN_BUCKET;
+        this.type = Type.DIR;
         grecursiveList = sons;
         glist = new ArrayList<S3File>();
         for (S3File s: sons) {
@@ -90,7 +90,7 @@ public class S3File extends BucketBasedFile {
         String subNameWithBucket = FileManipulation.concat(getAbsolutePath(),
                 path, fileSeparator(), separator);
 
-        if (type == Type.PATH_IN_BUCKET && recursiveFileList != null) {
+        if (type == Type.DIR && recursiveFileList != null) {
             for (S3ObjectSummary sum : recursiveFileList) {
                 if ((bucket + "/" + sum.getKey()).equals(subNameWithBucket)) {
                     return new S3File(sum, s3);
@@ -124,7 +124,7 @@ public class S3File extends BucketBasedFile {
                 glist.add(new S3File(f, s3));
             }
             return glist;
-        } else if (type == Type.PATH_IN_BUCKET) {
+        } else if (type == Type.DIR) {
             glist = new ArrayList<S3File>();
             for (S3ObjectSummary f: recursiveFileList) {
                 if (FileManipulation.isDirectSon(path, f.getKey(), fileSeparator())) {
@@ -251,9 +251,10 @@ public class S3File extends BucketBasedFile {
     }
     @Override
     public void mkdirs() throws IOException {
-        if (!exists()) {
+        if (!exists() && type != Type.BUCKET_EXISTS) {
             try {
                 s3.createBucket(bucket);
+                type = Type.DIR;
             } catch (AmazonS3Exception e) {
                 throw wrapProperly("createBucket", e);
             }
@@ -386,7 +387,7 @@ public class S3File extends BucketBasedFile {
                 recursiveFileList = new ArrayList<S3ObjectSummary>();
                 try {
                     ObjectListing list = s3.listObjects(new ListObjectsRequest()
-                    .withBucketName(bucket).withPrefix(path.length() > 0  ? path : null));
+                                                        .withBucketName(bucket).withPrefix(path.length() > 0  ? path : null));
                     while (true) {
                         for (S3ObjectSummary sum : list.getObjectSummaries()) {
                             recursiveFileList.add(sum);
@@ -402,21 +403,27 @@ public class S3File extends BucketBasedFile {
                         S3File root = new S3File("", s3);
                         for (S3File s3Bucket: root.glist()) {
                             if (s3Bucket.getFileName().equals(bucket)) {
-                                type = Type.PATH_IN_BUCKET;
+                                type = Type.BUCKET_EXISTS;
                                 break;
                             }
                         }
 
                     }
                     else {
-                        type = Type.PATH_IN_BUCKET;
+                        type = Type.DIR;
                     }
                 } catch (AmazonS3Exception e) {
                     if (isFileNotFound(e)) {
                         type = Type.NOT_FOUND;
                     } else {
                         type = Type.FAILURE;
-                        throw wrapProperly("list bucket " + bucket, e);
+                        S3File root = new S3File("", s3);
+                        for (S3File s3Bucket: root.glist()) {
+                            if (s3Bucket.getFileName().equals(bucket)) {
+                                throw wrapProperly("list bucket " + bucket, e);
+                            }
+                        }
+                        type = Type.NOT_FOUND;
                     }
                 }
             }
@@ -425,8 +432,8 @@ public class S3File extends BucketBasedFile {
 
     private boolean isFileNotFound(AmazonS3Exception e) {
         if (e.getStatusCode() == 404
-                && (e.getMessage().equals("Not Found") || e.getErrorCode().equals("NoSuchBucket") || 
-                        e.getErrorCode().equals("NoSuchKey"))) {
+            && (e.getMessage().equals("Not Found") || e.getErrorCode().equals("NoSuchBucket") ||
+                e.getErrorCode().equals("NoSuchKey"))) {
             return true;
         }
         return false;

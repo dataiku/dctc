@@ -114,7 +114,7 @@ public class GoogleFile extends BucketBasedFile {
             return newNotFound(this, subName);
         }
 
-        if (type == Type.PATH_IN_BUCKET && recursiveFileList != null) {
+        if (type == Type.DIR && recursiveFileList != null) {
             for (StorageObject so : recursiveFileList) {
                 if (("/" + bucket + "/" + so.getName()).equals(subName)) {
                     return new GoogleFile(this, so);
@@ -143,7 +143,7 @@ public class GoogleFile extends BucketBasedFile {
         } else if (type == Type.ROOT) {
             /* Return the list of buckets */
             return bucketsList;
-        } else if (type == Type.PATH_IN_BUCKET) {
+        } else if (type == Type.DIR) {
             if (list == null) {
                 list = new ArrayList<String>();
                 for (StorageObject f: recursiveFileList) {
@@ -348,10 +348,10 @@ public class GoogleFile extends BucketBasedFile {
                         recursiveListFromPathInternal();
                         if (recursiveFileList.size() > 0) {
                             /* In GCS, a path only exists if it has children, by definition */
-                            type = Type.PATH_IN_BUCKET;
+                            type = Type.DIR;
                         } else if (path.length() == 0) {
                             /* There is an exception : the root of a bucket always exists, if we did not have an error */
-                            type = Type.PATH_IN_BUCKET;
+                            type = Type.DIR;
                         } else {
                             type = Type.NOT_FOUND;
                         }

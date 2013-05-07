@@ -20,9 +20,9 @@ public abstract class BucketBasedFile extends AbstractGFile {
     @Override
     public boolean exists() throws IOException {
         resolve();
-        assert( type !=Type.UNRESOLVED);
+        assert(type !=Type.UNRESOLVED);
         assert(type != Type.FAILURE); // If failure, it should have already thrown
-        return type != Type.NOT_FOUND;
+        return !(type == Type.NOT_FOUND || type == Type.BUCKET_EXISTS);
     }
     @Override
     public boolean isDirectory() throws IOException {
@@ -31,7 +31,7 @@ public abstract class BucketBasedFile extends AbstractGFile {
         }
         resolve();
         assert(type != Type.FAILURE); // If failure, it should have already thrown
-        return type == Type.ROOT || type == Type.PATH_IN_BUCKET;
+        return type == Type.ROOT || type == Type.DIR;
     }
     @Override
     public boolean isFile() throws IOException {
@@ -57,7 +57,8 @@ public abstract class BucketBasedFile extends AbstractGFile {
         FAILURE,
         NOT_FOUND,
         FILE,
-        PATH_IN_BUCKET,
+        DIR,
+        BUCKET_EXISTS, // Is a valid path, and the bucket exists
         ROOT
     };
 
