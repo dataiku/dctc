@@ -315,7 +315,7 @@ public class GSFile extends BucketBasedFile {
             if (bucket.length() == 0) {
                 type = Type.ROOT;
                 /* List the buckets */
-                String projectId = userMail.substring(0, Math.min(userMail.indexOf("@"), userMail.indexOf("-")));
+                String projectId = userMail.substring(0, Math.min(userMail.indexOf("@"), userMail.indexOf("-") > 0 ? userMail.indexOf("-") : Integer.MAX_VALUE));
                 UnsignedLong ul = UnsignedLong.asUnsigned(Long.parseLong(projectId));
                 Buckets bucketsObj = storage.buckets().list(ul).execute();
                 bucketsList = new ArrayList<String>();
