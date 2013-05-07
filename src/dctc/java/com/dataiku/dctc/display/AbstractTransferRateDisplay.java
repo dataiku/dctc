@@ -3,6 +3,8 @@ package com.dataiku.dctc.display;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.dataiku.dctc.copy.CopyTaskRunnable;
 
 abstract public class AbstractTransferRateDisplay implements ThreadedDisplay {
@@ -18,14 +20,19 @@ abstract public class AbstractTransferRateDisplay implements ThreadedDisplay {
         while (!tasks.isEmpty()) {
             // Re-initialize needed variables
             transfer = 0;
+            sizeOfFilesBeingTransfered = 0;
             nbRunning = 0;
 
             beginLoop(tasks.size());
 
-            for (int i = 0; i < tasks.size(); ++i) {
+            for (int i = tasks.size() - 1; i >= 0; i--) {
                 CopyTaskRunnable elt = tasks.get(i);
                 synchronized (elt) {
                     if (elt.isDone()) {
+                        /* Sanity checks */
+                        if (!elt.isStarted()) {
+                            System.err.println("Unexpected: done and not started for " +  elt.getInputFile().getAbsoluteAddress());
+                        }
                         ++nbDone;
                         if (elt.getException() != null) {
                             ++nbFail;
@@ -40,7 +47,10 @@ abstract public class AbstractTransferRateDisplay implements ThreadedDisplay {
                         if (elt.isStarted()) {
                             ++nbRunning;
                             started(elt);
-                            transfer += elt.read();
+                            long thisT = elt.read();
+                            long thisS = elt.getInSize();
+                            sizeOfFilesBeingTransfered += thisS;
+                            transfer += thisT;
                         }
                     }
                 }
@@ -135,8 +145,9 @@ abstract public class AbstractTransferRateDisplay implements ThreadedDisplay {
     private long bndWdth;
     private int tick;
     /// Size transfered
-    private long done;
-    private long transfer;
+    protected long done;
+    protected long transfer;
+    protected long sizeOfFilesBeingTransfered;
     private int nbDone;
     private int nbRunning;
     private int nbFail;
