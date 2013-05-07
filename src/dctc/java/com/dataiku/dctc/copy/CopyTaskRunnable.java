@@ -23,32 +23,27 @@ public abstract class CopyTaskRunnable implements Runnable {
     public GeneralizedFile getInputFile() {
         return in;
     }
-    public boolean isStarted() {
-        synchronized (this) {
-            return started;
-        }
+    public synchronized boolean isStarted() {
+        return started;
     }
 
-    public boolean isDone() {
-        synchronized (done) {
-            return done;
-        }
+    public synchronized boolean isDone() {
+        return done;
     }
 
     public IOException getException() {
         return exp;
     }
-    protected void inc(long size) {
-        synchronized (read) {
-            read += size;
-        }
+
+    protected synchronized void inc(long size) {
+        read += size;
     }
-    public long read() {
+    public synchronized long read() {
         return read;
     }
 
     public void run() {
-        synchronized (started) {
+        synchronized (this) {
             started = true;
         }
 
@@ -58,9 +53,11 @@ public abstract class CopyTaskRunnable implements Runnable {
             logger.info("Error in copy of " + getInputFile().getAbsoluteAddress(), e);
             exp = e;
         }
-        done = true;
+        synchronized (this) {
+            done = true;
+        }
     }
-    public long getInSize() {
+    public synchronized long getInSize() {
         return inSize;
     }
 
@@ -68,9 +65,9 @@ public abstract class CopyTaskRunnable implements Runnable {
     public abstract String print() throws IOException;
 
     protected GeneralizedFile in;
-    private Boolean started = false;
-    private Boolean done = false;
-    private Long read = 0l;
+    private boolean started = false;
+    private boolean done = false;
+    private long read;
     private IOException exp;
     private long inSize;
 
