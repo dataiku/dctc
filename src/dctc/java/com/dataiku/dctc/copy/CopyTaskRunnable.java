@@ -31,7 +31,7 @@ public abstract class CopyTaskRunnable implements Runnable {
         return done;
     }
 
-    public IOException getException() {
+    public Exception getException() {
         return exp;
     }
 
@@ -49,7 +49,7 @@ public abstract class CopyTaskRunnable implements Runnable {
 
         try {
             work();
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.info("Error in copy of " + getInputFile().getAbsoluteAddress(), e);
             exp = e;
         }
@@ -68,7 +68,7 @@ public abstract class CopyTaskRunnable implements Runnable {
     private boolean started = false;
     private boolean done = false;
     private long read;
-    private IOException exp;
+    private Exception exp;
     private long inSize;
 
     private static Logger logger = Logger.getLogger("dctc.copy");
