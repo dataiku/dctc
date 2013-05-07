@@ -19,7 +19,7 @@ public class GSFileBuilder extends ProtocolFileBuilder {
         Params p = bank.getAccountParams(getProtocol().getCanonicalName(), accountData);
         validateAccountParams(accountData, p);
 
-        return new GoogleFile(p.getMandParam("mail"), p.getMandParam("key_path"),
+        return new GSFile(p.getMandParam("mail"), p.getMandParam("key_path"),
                 translateDefaultPath(p, protocolData));
     }
     @Override

@@ -33,7 +33,7 @@ import com.google.api.services.storage.model.Objects;
 import com.google.api.services.storage.model.StorageObject;
 import com.google.common.primitives.UnsignedLong;
 
-public class GoogleFile extends BucketBasedFile {
+public class GSFile extends BucketBasedFile {
     // Constructors
     private void __init(String userMail, String keyPath, String path) {
         this.userMail = userMail;
@@ -42,7 +42,7 @@ public class GoogleFile extends BucketBasedFile {
         this.bucket = split[0];
         this.path = split[1];
     }
-    public GoogleFile(String userMail, String keyPath, String path) {
+    public GSFile(String userMail, String keyPath, String path) {
         __init(userMail, keyPath, path);
 
         httpTransport = new NetHttpTransport();
@@ -59,7 +59,7 @@ public class GoogleFile extends BucketBasedFile {
         }
     }
 
-    private GoogleFile(GoogleCredential cred, Storage storage, HttpTransport httpTransport,
+    private GSFile(GoogleCredential cred, Storage storage, HttpTransport httpTransport,
                 String userMail, String keyPath, String path) {
         __init(userMail, keyPath, path);
         this.cred = cred;
@@ -68,7 +68,7 @@ public class GoogleFile extends BucketBasedFile {
     }
 
     /** Internal constructor that takes a fully-resolved file. */
-    private GoogleFile(GoogleFile parent, StorageObject object) throws IOException {
+    private GSFile(GSFile parent, StorageObject object) throws IOException {
         __init(parent.userMail, parent.keyPath, parent.bucket + "/" + object.getName());
         this.cred = parent.cred;
         this.storage = parent.storage;
@@ -79,16 +79,16 @@ public class GoogleFile extends BucketBasedFile {
         assert (exists());
     }
 
-    private static GoogleFile newNotFound(GoogleFile parent, String absolutePath) {
-        GoogleFile ret = new GoogleFile(parent.cred, parent.storage, parent.httpTransport, parent.userMail, parent.keyPath,
+    private static GSFile newNotFound(GSFile parent, String absolutePath) {
+        GSFile ret = new GSFile(parent.cred, parent.storage, parent.httpTransport, parent.userMail, parent.keyPath,
                 absolutePath);
         ret.type = Type.NOT_FOUND;
         return ret;
     }
     @Override
-    public final List<GoogleFile> createInstanceFor(List<String> paths) {
+    public final List<GSFile> createInstanceFor(List<String> paths) {
         if (paths != null) {
-            List<GoogleFile> res = new ArrayList<GoogleFile>();
+            List<GSFile> res = new ArrayList<GSFile>();
             for (int i = 0; i < paths.size(); ++i) {
                 res.add(createInstanceFor(paths.get(i)));
             }
@@ -98,11 +98,11 @@ public class GoogleFile extends BucketBasedFile {
         }
     }
     @Override
-    public GoogleFile createInstanceFor(String path) {
-        return new GoogleFile(cred, storage, httpTransport, userMail, keyPath, path);
+    public GSFile createInstanceFor(String path) {
+        return new GSFile(cred, storage, httpTransport, userMail, keyPath, path);
     }
     @Override
-    public GoogleFile createSubFile(String path, String separator) throws IOException {
+    public GSFile createSubFile(String path, String separator) throws IOException {
         /* If this file is resolved, and we already have the list, then maybe we can reuse a storage object / type */
         String subName = FileManipulation.concat(getAbsolutePath(),
                 path,
@@ -117,7 +117,7 @@ public class GoogleFile extends BucketBasedFile {
         if (type == Type.DIR && recursiveFileList != null) {
             for (StorageObject so : recursiveFileList) {
                 if (("/" + bucket + "/" + so.getName()).equals(subName)) {
-                    return new GoogleFile(this, so);
+                    return new GSFile(this, so);
                 }
             }
             /* Not found --> So we know that it is a not found, create it ! */
@@ -164,26 +164,26 @@ public class GoogleFile extends BucketBasedFile {
         throw new Error("not reached");
     }
     @Override
-    public List<GoogleFile> glist() throws IOException {
+    public List<GSFile> glist() throws IOException {
         return createInstanceFor(list());
     }
 
     @Override
-    public List<GoogleFile> grecursiveList() throws IOException {
+    public List<GSFile> grecursiveList() throws IOException {
         resolve();
-        grecursiveList = new ArrayList<GoogleFile>();
+        grecursiveList = new ArrayList<GSFile>();
         if (type == Type.ROOT) {
             for (String bucket: bucketsList) {
-                GoogleFile l = createInstanceFor(bucket);
+                GSFile l = createInstanceFor(bucket);
                 l.resolve();
                 for (StorageObject so: l.recursiveFileList) {
-                    grecursiveList.add(new GoogleFile(this, so));
+                    grecursiveList.add(new GSFile(this, so));
                 }
             }
         }
         else {
             for (StorageObject so : recursiveFileList) {
-                grecursiveList.add(new GoogleFile(this, so));
+                grecursiveList.add(new GSFile(this, so));
             }
         }
         return grecursiveList;
@@ -432,7 +432,7 @@ public class GoogleFile extends BucketBasedFile {
     private StorageObject fileStorageObject;
     private List<StorageObject> recursiveFileList;
     private List<String> bucketsList;
-    private List<GoogleFile> grecursiveList;
+    private List<GSFile> grecursiveList;
     private List<String> list;
 
     // Backend stuff

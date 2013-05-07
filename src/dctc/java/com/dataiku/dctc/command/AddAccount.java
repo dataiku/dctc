@@ -11,7 +11,7 @@ import com.dataiku.dctc.configuration.CredentialProviderBank;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.display.Interactive;
 import com.dataiku.dctc.exception.UserException;
-import com.dataiku.dctc.file.GoogleFile;
+import com.dataiku.dctc.file.GSFile;
 import com.dataiku.dctc.file.S3File;
 
 public class AddAccount extends Command {
@@ -111,7 +111,7 @@ public class AddAccount extends Command {
 
                 System.err.print("Please wait...");
                 try {
-                    GoogleFile gfile = new GoogleFile(email, keyPath, "/");
+                    GSFile gfile = new GSFile(email, keyPath, "/");
                     int nbuckets = gfile.glist().size();
                     System.err.println("\rOK, listed " + nbuckets + " buckets in your GCS account");
                 } catch (Exception e) {
