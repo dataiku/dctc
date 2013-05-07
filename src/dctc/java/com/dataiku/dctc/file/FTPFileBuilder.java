@@ -1,8 +1,12 @@
 package com.dataiku.dctc.file;
 
+import java.lang.NumberFormatException;
+
+import com.dataiku.dctc.DCTCLog;
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
+import com.dataiku.dctc.command.Command.EndOfCommandException;
 import com.dataiku.dip.utils.Params;
 
 /**
@@ -66,7 +70,15 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
         int port  = GlobalConstants.FTP_PORT;
         if (host.indexOf(":") != -1) {
             String[/*port/host*/] splittedHost = FileManipulation.invSplit(host, ":", 2);
-            port = Integer.parseInt(splittedHost[0]);
+
+            try {
+                port = Integer.parseInt(splittedHost[0]);
+            } catch (NumberFormatException e) {
+                DCTCLog.error("FTP file builder", "`"
+                        + splittedHost[0]
+                                + "' is not a Number. Need a number between 1 and 65536 (included) for the ftp port.");
+                throw new EndOfCommandException();
+            }
             if (port < 1 || port > 65535) {
                 throw new UserException("A port must be between 1 and 65535 (included).");
             }
