@@ -374,18 +374,23 @@ public class GSFile extends BucketBasedFile {
         assert(type != Type.ROOT);
         assert(recursiveFileList == null);
         assert(bucket.length() > 0);
+        String pageToken = null;
 
         recursiveFileList = new ArrayList<StorageObject>();
         try {
-            Objects objects = storage.objects().list(bucket).setPrefix(path).execute();
-            List<StorageObject> objs = objects.getItems();
-            if (objs != null) {
-                for(StorageObject o: objs) {
-                    if (FileManipulation.isSon(path, o.getName(), fileSeparator())) {
-                        recursiveFileList.add(o);
+            do {
+                Objects objects = storage.objects().list(bucket).setPrefix(path).setPageToken(pageToken).execute();
+                pageToken = objects.getNextPageToken();
+                List<StorageObject> objs = objects.getItems();
+
+                if (objs != null) {
+                    for(StorageObject o: objs) {
+                        if (FileManipulation.isSon(path, o.getName(), fileSeparator())) {
+                            recursiveFileList.add(o);
+                        }
                     }
                 }
-            }
+            } while (pageToken != null);
         } catch (GoogleJsonResponseException e) {
             if (e.getStatusCode() == 404) {
                 throw new FileNotFoundException(getAbsoluteAddress());
