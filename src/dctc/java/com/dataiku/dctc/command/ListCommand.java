@@ -194,7 +194,6 @@ public abstract class ListCommand extends Command {
             root = root.substring(0, root.length() - 3);
         }
         if (shouldAdd(src, dst, root)) {
-            logger.info("Add task " + src.getAbsoluteAddress());
             taskList.add(new CopyTask(src, dst, root, deleteSource()));
         } else {
             logger.info("Should not add");
