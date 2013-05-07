@@ -138,13 +138,13 @@ public class Rm extends Command {
                     }
                 } else {
                     if (verbose()) {
-                        for (GeneralizedFile son: arg.grecursiveList()) {
+                        List<GeneralizedFile> rlist = (List<GeneralizedFile>) arg.grecursiveList();
+                        for (int i = rlist.size() - 1; i != -1; --i) {
+                            GeneralizedFile son = rlist.get(i);
                             verbose(son.givenName());
                             del(son);
                         }
                     }
-                    verbose(arg.givenName());
-                    del(arg);
                 }
             }
         } else {
