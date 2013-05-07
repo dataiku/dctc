@@ -9,6 +9,7 @@ import java.util.concurrent.ThreadFactory;
 
 import org.apache.log4j.Logger;
 
+import com.dataiku.dctc.DCTCLog;
 import com.dataiku.dctc.display.ThreadedDisplay;
 
 public class CopyTasksExecutor {
@@ -72,14 +73,14 @@ public class CopyTasksExecutor {
     public void displayErrors() {
         for (CopyTaskRunnable runnable: errors) {
             if (runnable.getException() != null) {
-                error(runnable.getInputFile().givenName(), runnable.getException().getMessage());
+                error(runnable.getInputFile().givenName(), runnable.getException());
             }
         }
     }
 
     // Private
-    private void error(String fileName, String errorMessage) {
-        System.err.println("dctc `" + fileName + "': " + errorMessage);
+    private void error(String fileName, Exception exception) {
+        DCTCLog.error("copy task executor", "`" + fileName + "':" + exception.getMessage());
     }
 
     // Attributes
