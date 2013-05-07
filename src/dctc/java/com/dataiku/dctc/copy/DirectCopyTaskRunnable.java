@@ -9,6 +9,7 @@ import java.util.zip.GZIPOutputStream;
 import org.apache.commons.io.input.CountingInputStream;
 import org.apache.log4j.Logger;
 
+import com.dataiku.dctc.DCTCLog;
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.file.GeneralizedFile;
 
@@ -24,7 +25,7 @@ public class DirectCopyTaskRunnable extends CopyTaskRunnable {
     @Override
     public void work() throws IOException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Copying " + print());
+            logger.debug("Start Copying: " + print());
         }
         if (in.isDirectory()) {
             inc(GlobalConstants.FOUR_KIO);
