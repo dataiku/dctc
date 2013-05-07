@@ -109,6 +109,7 @@ public class Sync extends Command {
         CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, GlobalConf.getThreadLimit());
         exec.run(tasks, false);
         if (exec.hasFail()) {
+            exitCode(2);
             exec.displayErrors();
         }
     }
