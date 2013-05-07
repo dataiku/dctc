@@ -122,6 +122,7 @@
                 <include name="com/google/common/io/**/*" />
                 <include name="com/google/common/collect/**/*" />
                 <include name="com/google/common/primitives/**/*" />
+                <include name="com/google/common/hash/**/*" />
             </zipfileset>
             <zipfileset src="lib/ivy/core/hadoop-core-1.0.3.jar">
                 <include name="org/apache/hadoop/fs/**/*" />
