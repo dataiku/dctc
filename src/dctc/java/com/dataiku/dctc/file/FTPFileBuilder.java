@@ -1,5 +1,6 @@
 package com.dataiku.dctc.file;
 
+import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.dataiku.dip.utils.Params;
@@ -62,7 +63,7 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
     }
 
     private FTPFile build(String host, String username, String password, String path) {
-        int port  = 21;
+        int port  = GlobalConstants.FTP_PORT;
         if (host.indexOf(":") != -1) {
             String[/*port/host*/] splittedHost = FileManipulation.invSplit(host, ":", 2);
             port = Integer.parseInt(splittedHost[0]);
