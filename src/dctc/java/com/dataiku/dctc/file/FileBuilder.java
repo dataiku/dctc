@@ -9,7 +9,7 @@ public class FileBuilder {
         GS("gs", new GSFileBuilder()),
         FTP("ftp", new FTPFileBuilder()),
         SSH("ssh", new SshFileBuilder()),
-        HDFS("hdfs", new HDFSFileBuilder()),
+        HDFS("hdfs", new HdfsFileBuilder()),
         LOCAL("local", new LocalFileBuilder());
 
         Protocol(String canonicalName, ProtocolFileBuilder builder) {

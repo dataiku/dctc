@@ -8,7 +8,7 @@ import com.dataiku.dip.hadoop.HadoopUtils;
 import com.dataiku.dip.utils.ErrorContext;
 import com.dataiku.dip.utils.Params;
 
-public class HDFSFileBuilder extends ProtocolFileBuilder {
+public class HdfsFileBuilder extends ProtocolFileBuilder {
 
     @Override
     public Protocol getProtocol() {
