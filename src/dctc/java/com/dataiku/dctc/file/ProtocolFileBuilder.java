@@ -24,7 +24,7 @@ public abstract class ProtocolFileBuilder {
         }
     }
     protected void checkMandatory(String account, Params p, String key) {
-        if (!p.hasParam(key) || p.getParamOrEmpty(key).length() == 0) {
+        if (!p.hasParam(key) || p.getParamOrEmpty(key).isEmpty()) {
             throw new UserException(String.format("For protocol %s and %s, parameter '%s' is mandatory",
                                                   getProtocol().getCanonicalName(),
                                                   account == null ? "default account" : "account " + account, key));
