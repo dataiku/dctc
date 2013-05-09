@@ -16,18 +16,18 @@ public class HDFSFileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public void validateAccountParams(String accountData, Params p) {
-        checkAllowedOnly(accountData, p, new String[]{"hadoopConfDir"});
-        checkMandatory(accountData, p, "hadoopConfDir");
+    public void validateAccountParams(String accountSettings, Params p) {
+        checkAllowedOnly(accountSettings, p, new String[]{"hadoopConfDir"});
+        checkMandatory(accountSettings, p, "hadoopConfDir");
     }
 
     @Override
-    public GeneralizedFile buildFile(String accountData, String protocolData) {
+    public GeneralizedFile buildFile(String accountSettings, String rawPath) {
         Params p = null;
-        if (accountData != null) {
-            p = bank.getAccountParams("hdfs", accountData);
+        if (accountSettings != null) {
+            p = bank.getAccountParams("hdfs", accountSettings);
         } else {
-            p = bank.getAccountParamsIfExists("hdfs", accountData);
+            p = bank.getAccountParamsIfExists("hdfs", accountSettings);
 
             if (p == null) {
                 /* I can still try to build using HADOOP_HOME */
@@ -40,11 +40,11 @@ public class HDFSFileBuilder extends ProtocolFileBuilder {
         if (p == null) {
             conf.addResource(new Path(HadoopUtils.getCoreSiteLocation()));
         } else {
-            validateAccountParams(accountData, p);
+            validateAccountParams(accountSettings, p);
             conf.addResource(new Path(p.getNonEmptyMandParam("hadoopConfDir")));
         }
 
-        return new HdfsFile(protocolData, accountData, conf);
+        return new HdfsFile(rawPath, accountSettings, conf);
     }
     @Override
     public final String fileSeparator() {

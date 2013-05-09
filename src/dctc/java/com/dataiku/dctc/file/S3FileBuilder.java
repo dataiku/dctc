@@ -25,10 +25,10 @@ public class S3FileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public synchronized GeneralizedFile buildFile(String accountData, String protocolData) {
-        String accountName = bank.getResolvedAccountName(getProtocol().getCanonicalName(), accountData);
-        Params p = bank.getAccountParams(getProtocol().getCanonicalName(), accountData);
-        validateAccountParams(accountData, p);
+    public synchronized GeneralizedFile buildFile(String accountSettings, String rawPath) {
+        String accountName = bank.getResolvedAccountName(getProtocol().getCanonicalName(), accountSettings);
+        Params p = bank.getAccountParams(getProtocol().getCanonicalName(), accountSettings);
+        validateAccountParams(accountSettings, p);
 
         AmazonS3 s3 = builtConnections.get(accountName);
         if (s3 == null) {
@@ -39,7 +39,7 @@ public class S3FileBuilder extends ProtocolFileBuilder {
             builtConnections.put(accountName, s3);
         }
 
-        return new S3File(translateDefaultPath(p, protocolData), s3);
+        return new S3File(translateDefaultPath(p, rawPath), s3);
     }
     @Override
     public final String fileSeparator() {

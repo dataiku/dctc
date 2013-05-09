@@ -39,27 +39,27 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public synchronized FTPFile buildFile(String accountData, String protocolData) {
-        if (accountData == null) {
-            if (protocolData.isEmpty() || protocolData.equals("/")) {
+    public synchronized FTPFile buildFile(String accountSettings, String rawPath) {
+        if (accountSettings == null) {
+            if (rawPath.isEmpty() || rawPath.equals("/")) {
                 throw new UserException("No account given for FTP, host is mandatory");
             }
 
-            String[/*host/path*/] path = FileManipulation.split(protocolData, "/", 2);
+            String[/*host/path*/] path = FileManipulation.split(rawPath, "/", 2);
             return build(path[0], "anonymous", "anonymous", path[1]);
-        } else if (accountData.contains(":")) {
-            if (protocolData.isEmpty() || protocolData.equals("/")) {
+        } else if (accountSettings.contains(":")) {
+            if (rawPath.isEmpty() || rawPath.equals("/")) {
                 throw new UserException("No account given for FTP, host is mandatory");
             }
 
-            String[/*host/path*/] path = FileManipulation.split(protocolData, "/", 2);
-            String[] accountChunks = FileManipulation.split(accountData, ":", 2);
+            String[/*host/path*/] path = FileManipulation.split(rawPath, "/", 2);
+            String[] accountChunks = FileManipulation.split(accountSettings, ":", 2);
             return build(path[0], accountChunks[0], accountChunks[1], path[1]);
         } else {
-            Params p = bank.getAccountParams(getProtocol().getCanonicalName(), accountData);
-            // validateAccountParams(accountData, p);
+            Params p = bank.getAccountParams(getProtocol().getCanonicalName(), accountSettings);
+            // validateAccountParams(accountSettings, p);
 
-            return new FTPFile(p, translateDefaultPath(p, protocolData));
+            return new FTPFile(p, translateDefaultPath(p, rawPath));
         }
     }
     public Protocol getProtocol() {

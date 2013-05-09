@@ -27,14 +27,14 @@ public class SshFileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public synchronized GeneralizedFile buildFile(String account, String protocolData) {
+    public synchronized GeneralizedFile buildFile(String account, String rawPath) {
         if (account == null) {
             throw new UserException("For SSH, you must specify either ssh://user@host/path or ssh://conf_account@/path");
         }
 
         Params p = bank.getAccountParamsIfExists(getProtocol().getCanonicalName(), account);
         if (p != null) {
-            String[] path = FileManipulation.split(protocolData, ":", 2, false);
+            String[] path = FileManipulation.split(rawPath, ":", 2, false);
             if (path[1] == null || path[0].isEmpty()) {
                 path[1] = path[0];
                 path[0] = p.getMandParam("host");
@@ -57,7 +57,7 @@ public class SshFileBuilder extends ProtocolFileBuilder {
             }
         } else {
             String[] user = FileManipulation.split(account, ":", 2, false);
-            String[] path = FileManipulation.split(protocolData, ":", 2);
+            String[] path = FileManipulation.split(rawPath, ":", 2);
             System.err.println("debug: SshFileBuilder: " + "path[0]: " + path[0]);
             System.err.println("debug: SshFileBuilder: " + "path[1]: " + path[1]);
             System.err.println("debug: SshFileBuilder: " + "user[0]: " + user[0]);

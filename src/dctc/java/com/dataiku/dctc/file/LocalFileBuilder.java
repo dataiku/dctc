@@ -12,8 +12,8 @@ public class LocalFileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public GeneralizedFile buildFile(String accountData, String protocolData) {
-        return new LocalFile(protocolData);
+    public GeneralizedFile buildFile(String accountSettings, String rawPath) {
+        return new LocalFile(rawPath);
     }
     @Override
     public final String fileSeparator() {

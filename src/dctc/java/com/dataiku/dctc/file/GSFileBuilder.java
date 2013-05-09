@@ -14,13 +14,13 @@ public class GSFileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public synchronized GeneralizedFile buildFile(String accountData, String protocolData) {
+    public synchronized GeneralizedFile buildFile(String accountSettings, String rawPath) {
         assert bank != null;
-        Params p = bank.getAccountParams(getProtocol().getCanonicalName(), accountData);
-        validateAccountParams(accountData, p);
+        Params p = bank.getAccountParams(getProtocol().getCanonicalName(), accountSettings);
+        validateAccountParams(accountSettings, p);
 
         return new GSFile(p.getMandParam("mail"), p.getMandParam("key_path"),
-                translateDefaultPath(p, protocolData));
+                translateDefaultPath(p, rawPath));
     }
     @Override
     public final String fileSeparator() {
