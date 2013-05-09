@@ -140,6 +140,9 @@ public class Params {
         if (s == null) return defaultValue;
         return s;
     }
+    public String getParamOrEmpty(String name) {
+        return getParam(name, "");
+    }
     // Get a mandatory parameter. Throw an illegal argument exception
     // if the paramater is non define.
     public String getMandParam(String name) {
