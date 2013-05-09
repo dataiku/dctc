@@ -1,6 +1,6 @@
 #! /bin/sh
 
-JARFILE=../dist/dctc-tool.jar
+JARFILE=../dist/dataiku-dctc.jar
 
 DEST=$1
 
