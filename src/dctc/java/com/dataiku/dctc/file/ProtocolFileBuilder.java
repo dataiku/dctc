@@ -36,8 +36,8 @@ public abstract class ProtocolFileBuilder {
     }
 
     protected String translateDefaultPath(Params accountParams, String protocolData) {
-        String defaultPath = accountParams.getParam("default_path", null);
-        if (defaultPath == null || defaultPath.isEmpty()) {
+        String defaultPath = accountParams.getParam("default_path", "");
+        if (defaultPath.isEmpty()) {
             return protocolData;
         }
         if (FileManipulation.isAbsolute(protocolData, fileSeparator())) {
