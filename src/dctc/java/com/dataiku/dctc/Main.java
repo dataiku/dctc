@@ -37,7 +37,7 @@ public class Main {
         if (exitCode != 0) {
             System.setOut(System.err);
         }
-        System.out.println("usage: dctc cmd [CMDARGUMENTS...]");
+        System.out.println("usage: dctc command [OPTIONS...] [ARGUMENTS...]");
         System.out.println();
         System.out.println("Available commands are:");
         for (Command cmd: cmds.values()) {
