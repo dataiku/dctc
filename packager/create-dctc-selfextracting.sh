@@ -1,19 +1,37 @@
 #! /bin/sh
 
+set -e
+
 JARFILE=../dist/dataiku-dctc.jar
 
-DEST=$1
+line_pattern=XX_LINE_XX
 
-rm -f $DEST
+if ! [ -f $JARFILE ]; then
+    echo Run ant
+    echo Press enter to continue
+    read foo
+    cd ..
+    ant clean dctc-jar
+    cd -
+fi
 
-# Add the header
-touch $DEST
-echo '#! /bin/sh' >> $DEST
-echo 'TMPFILE=`mktemp /tmp/temp.XXXX`' >> $DEST
-echo "PAYLOAD_START=6" >> $DEST
-echo 'tail -n +$PAYLOAD_START $0 > $TMPFILE' >> $DEST
-echo 'java -jar $TMPFILE "$@"' >> $DEST
-echo 'RET=$?; rm -f $TMPFILE; exit $RET' >> $DEST
+if [ x$1 = x ]; then
+    DEST=dctc
+else
+    DEST=$1
+fi
+TMP_DEST=`mktemp /tmp/dctc.XXXX`
+
+cat >$TMP_DEST<<.
+#! /bin/sh
+TMPFILE=\`mktemp /tmp/temp.XXXX\`
+tail -n+$line_pattern \$0 > \$TMPFILE
+java -jar \$TMPFILE "\$@"
+RET=\$?; rm -f \$TMPFILE; exit $RET
+.
+
+sed -e "s/$line_pattern/`wc -l <$DEST`/" $TMP_DEST > $DEST
 cat $JARFILE >> $DEST
+chmod u+x $DEST
 
-chmod 755 $DEST
+rm $TMP_DEST
