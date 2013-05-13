@@ -334,6 +334,8 @@ public class FTPFile extends AbstractGFile {
             return;
         }
         ftpInit();
+        ftp.setBufferSize(0); // FIXME: Delete me when commons-net-3.3
+
         ftp.cwd("/");
         ftp.cwd(pathToFile());
         String fileName = getFileName();
