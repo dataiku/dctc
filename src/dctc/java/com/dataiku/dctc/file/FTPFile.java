@@ -141,7 +141,11 @@ public class FTPFile extends AbstractGFile {
     }
     @Override
     public List<FTPFile> glist() throws IOException {
-        if (list != null || (exists && file)) {
+        if (list != null) {
+            return list;
+        }
+        if (exists && file) {
+            list = new ArrayList<FTPFile>();
             return list;
         }
 
@@ -149,8 +153,8 @@ public class FTPFile extends AbstractGFile {
 
         exists = false;
         file = false;
+        list = new ArrayList<FTPFile>();
         if (cwd(path)) {
-            list = new ArrayList<FTPFile>();
             exists = true;
             for (org.apache.commons.net.ftp.FTPFile file: ftp.listFiles()) {
                 list.add(createSubFile(file.getName(), "/", file));
@@ -164,6 +168,7 @@ public class FTPFile extends AbstractGFile {
         }
         recurList = new ArrayList<FTPFile>(0);
         recurList.add(this);
+        System.err.println("debug: FTPFile: " + "givenPath(): " + givenPath());
         if (isDirectory()) {
             for (FTPFile f: glist()) {
                 recurList.add(f);
