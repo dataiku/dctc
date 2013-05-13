@@ -24,10 +24,13 @@ public class Alias {
                     args.add(tab);
                 }
             }
-        }
-
-        for (int i = 1; i < cmdargs.length; ++i) {
-            args.add(cmdargs[i]);
+            for (int i = 1; i < cmdargs.length; ++i) {
+                args.add(cmdargs[i]);
+            }
+        } else {
+            for (int i = 0; i < cmdargs.length; ++i) {
+                args.add(cmdargs[i]);
+            }
         }
 
         String[] res = new String[args.size()];
