@@ -20,7 +20,7 @@ public class SshFileBuilder extends ProtocolFileBuilder {
     @Override
     public void validateAccountParams(String account, Params p) {
         checkAllowedOnly(account, p, new String[]{"host", "port", "username",
-                                                  "password", "key", "default_path", "passphrase",
+                                                  "password", "key", "passphrase",
                                                   "skip_host_key_check"});
         checkMandatory(account, p, "host");
         checkMandatory(account, p, "username");
@@ -43,7 +43,7 @@ public class SshFileBuilder extends ProtocolFileBuilder {
                 return new SshFile(path[0],
                                    p.getMandParam("username"),
                                    p.getParam("password"),
-                                   translateDefaultPath(p, path[1]),
+                                   path[1],
                                    p.getShortParam("port", GlobalConstants.SSH_PORT),
                                    p.getBoolParam("skip_host_key_check", false));
             } else {
@@ -51,7 +51,7 @@ public class SshFileBuilder extends ProtocolFileBuilder {
                                    p.getMandParam("username"),
                                    p.getMandParam("key"),
                                    p.getParam("passphrase"),
-                                   translateDefaultPath(p, path[1]),
+                                   path[1],
                                    p.getShortParam("port", GlobalConstants.SSH_PORT),
                                    p.getBoolParam("skip_host_key_check", false));
             }
