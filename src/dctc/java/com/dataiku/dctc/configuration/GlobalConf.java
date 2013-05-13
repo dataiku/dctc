@@ -21,9 +21,11 @@ public class GlobalConf {
 
             if (key.equals("display")) {
                 display = new DisplayFactory(value);
-            } else if (key.equals("thread_max")) {
+            }
+            else if (key.equals("thread_max")) {
                 threadLimit = Integer.parseInt(value);
-            } else if (key.equals("globbing")) {
+            }
+            else if (key.equals("globbing")) {
                 String lowerValue = value.toLowerCase();
                 if ("yes".startsWith(lowerValue) || "true".startsWith(lowerValue) || "1".equals(lowerValue)) {
                     resolveGlobbing = true;
@@ -33,7 +35,8 @@ public class GlobalConf {
                 } else {
                     System.err.println("Unknow value (" + value + ") for globbing settings");
                 }
-            } else {
+            }
+            else {
                 throw new UserException("In configuration file: invalid option '" + key + "' in [global] section");
             }
         }

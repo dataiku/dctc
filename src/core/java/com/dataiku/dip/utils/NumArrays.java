@@ -9,9 +9,9 @@ import java.util.Map;
 import org.apache.commons.lang.mutable.MutableInt;
 
 public class NumArrays {
-    
+
     /* Find the position of the maximum value in an array */
-    
+
     public static int maxIndex(int[] array) {
         int maxVal = Integer.MIN_VALUE;
         int maxPos = -1;
@@ -45,9 +45,9 @@ public class NumArrays {
         }
         return maxPos;
     }
-    
+
     /* Sum the elements in an array */
- 
+
     public static int sum(int[] array) {
         int ret = 0;
         for (int i = 0; i < array.length; i++) ret += array[i];
@@ -81,16 +81,16 @@ public class NumArrays {
         for (int i = 0; i < array.length; i++) ret += array[i] * array[i];
         return ret;
     }
- 
-    
-    
+
+
+
     /**
      * Returns an array of array[2].
      * Each sub array is [unique value, number of times it appears].
-     * 
-     * Additionally, the result is sorted by increasing value 
-     * 
-     * For example, 
+     *
+     * Additionally, the result is sorted by increasing value
+     *
+     * For example,
      *   distinctValuesCounts([7,2,1,2,2,2,7]) --> [[1,1][2,4][7,2] ]
      */
     public static int[][] distinctValuesCounts(int[] array) {
@@ -107,7 +107,7 @@ public class NumArrays {
         List<Integer> values = new ArrayList<Integer>();
         values.addAll(map.keySet());
         Collections.sort(values);
-        
+
         int[][] ret = new int[values.size()][];
         for (int i = 0; i < values.size(); i++) {
             int v = values.get(i);

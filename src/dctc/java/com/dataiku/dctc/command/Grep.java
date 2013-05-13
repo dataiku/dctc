@@ -168,7 +168,7 @@ public class Grep extends Command {
             IOUtils.closeQuietly(i);
         }
     }
-    
+
     private void matchAndPrint(GeneralizedFile file, String line, String pattern, boolean header) {
         if (match(line, pattern)) {
             if (header) {

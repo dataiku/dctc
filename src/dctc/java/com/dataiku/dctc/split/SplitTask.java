@@ -29,7 +29,7 @@ public class SplitTask extends CopyTaskRunnable {
         FormatExtractor formatExtractor = FormatExtractorFactory.build(format);
 
         SplitProcessorOutput out = new SplitProcessorOutput(fact);
-        
+
         InputStream realStream = null;
         if (in.getFileName().endsWith(".gz")) {
             countable = new CountingInputStream(in.inputStream());

@@ -55,7 +55,6 @@ public interface GeneralizedFile extends Comparable<GeneralizedFile> {
      */
     public abstract void mkpath() throws IOException;
 
-
     // Stream operation.
     public boolean hasOutputStream();
     public InputStream inputStream() throws IOException;

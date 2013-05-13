@@ -136,7 +136,7 @@ public abstract class AbstractGFile implements GeneralizedFile {
         }
     }
 
-    /** Create the path leading to this file, including intermediate folders */ 
+    /* Create the path leading to this file, including intermediate folders */
     public abstract void mkpath() throws IOException;
 
     // Abstract Method.

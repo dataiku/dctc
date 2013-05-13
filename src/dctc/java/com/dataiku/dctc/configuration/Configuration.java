@@ -58,7 +58,7 @@ public class Configuration {
        fw.write(sb.toString());
        fw.close();
    }
-   public void read(String file) throws IOException {
+    public void read(String file) throws IOException {
         File f = new File(file);
         if (!f.exists()) {
             create(f);
@@ -151,7 +151,6 @@ public class Configuration {
     }
     public void drop(String section) {
         conf.remove(section);
-        assert !conf.containsKey(section);
     }
 
     // Attributes

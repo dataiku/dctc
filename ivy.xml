@@ -30,8 +30,8 @@
         <dependency org="commons-net" name="commons-net" rev="3.2" />
         <dependency org="com.jcraft" name="jsch" rev="0.1.49" />
         <dependency org="org.apache.hadoop" name="hadoop-core" rev="1.0.3">
-		<exclude org="org.eclipse.jdt" />
-	</dependency>
+            <exclude org="org.eclipse.jdt" />
+        </dependency>
 
         <!-- Tests -->
         <dependency org="junit" name="junit" rev="4.8.1"/>

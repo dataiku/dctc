@@ -80,7 +80,7 @@ public class CopyTasksExecutor {
 
     // Private
     private void error(String fileName, Exception exception) {
-        DCTCLog.error("copy task executor", "`" + fileName + "':" + exception.getMessage());
+        DCTCLog.error("copy task executor", "`" + fileName + "': " + exception.getMessage());
     }
 
     // Attributes

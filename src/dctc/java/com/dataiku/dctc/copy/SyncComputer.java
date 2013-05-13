@@ -94,7 +94,7 @@ public class SyncComputer {
 
     public List<CopyTask> computeTasksList() throws IOException {
         checkArgs(sources, target);
-        
+
         // Compute the recursive target list, so that subsequent existence checks on subfiles work
         if (target.isDirectory()) {
             target.grecursiveList();
@@ -168,8 +168,8 @@ public class SyncComputer {
 
     private void addCandidate(GeneralizedFile src, GeneralizedFile dst, String root) throws IOException {
         // Syncing empty folders still causes trouble ...
-        if (src.isDirectory()) return; 
-        
+        if (src.isDirectory()) return;
+
         if (compressTargets && !src.isDirectory() && !root.endsWith(".gz")) {
             root += ".gz";
         }

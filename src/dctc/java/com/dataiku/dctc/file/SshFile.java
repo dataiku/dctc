@@ -119,7 +119,7 @@ public class SshFile extends AbstractGFile {
 //                        public void log(int arg0, String arg1) {
 //                            System.out.println(arg1);
 //                        }
-//                        
+//
 //                        @Override
 //                        public boolean isEnabled(int arg0) {
 //                            return true;
