@@ -105,9 +105,14 @@ public class Rm extends Command {
             notEmpty(arg);
         }
     }
-    private boolean dirAsk(GeneralizedFile arg) {
-        return Interactive.ask("rm", "rm: descend into directory `" + arg.givenName() + "'? ",
-                               "yY", "nN");
+    private boolean dirAsk(GeneralizedFile arg) throws IOException {
+        if (arg.isEmpty()) {
+            return Interactive.ask("rm", "rm: remove directory `" + arg.givenName() + "'? ",
+                                   "yY", "nN");
+        } else {
+            return Interactive.ask("rm", "rm: descend into directory `" + arg.givenName() + "'? ",
+                                   "yY", "nN");
+        }
     }
     private boolean fileAsk(GeneralizedFile arg) {
         return Interactive.ask("rm", "rm: remove regular file `" + arg.givenName() + "'? ",
