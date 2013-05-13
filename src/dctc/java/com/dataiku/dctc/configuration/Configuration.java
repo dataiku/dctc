@@ -141,6 +141,10 @@ public class Configuration {
             return;
         }
     }
+    public void drop(String section) {
+        conf.remove(section);
+        assert !conf.containsKey(section);
+    }
 
     // Attributes
     private Map<String, Map<String, String>> conf = new HashMap<String, Map<String, String>>();
