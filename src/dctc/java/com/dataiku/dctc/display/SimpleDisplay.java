@@ -9,6 +9,9 @@ public class SimpleDisplay extends AbstractThreadedDisplay {
     @Override
     protected final boolean display(CopyTaskRunnable task) {
         if (task.isDone()) {
+            if (task.getException() != null) {
+                ++failed;
+            }
             done += task.getInSize();
             return true;
         } else {
@@ -18,7 +21,13 @@ public class SimpleDisplay extends AbstractThreadedDisplay {
     }
     @Override
     protected void resetLoop() {
-        print("done: " + Size.getReadableSize(done + transfer) + "/" + prettyFilesSize);
+        String msg = "done: " + Size.getReadableSize(done + transfer) + "/" + prettyFilesSize;
+        if (failed != 0) {
+            msg += " with " + failed + " fail(s).";
+        } else {
+            msg += ".";
+        }
+        print(msg);
         transfer = 0;
     }
     @Override
@@ -39,4 +48,5 @@ public class SimpleDisplay extends AbstractThreadedDisplay {
     private String prettyFilesSize;
     private long done;
     private long transfer;
+    private int failed;
 }
