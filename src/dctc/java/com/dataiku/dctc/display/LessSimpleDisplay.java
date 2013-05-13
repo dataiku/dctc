@@ -17,7 +17,7 @@ public class LessSimpleDisplay extends AbstractTransferRateDisplay {
         print(String.format("done: %s/%s in %s - %d/%d files done - %sBps - %d transfer(s) running.",
                             Size.getReadableSize(doneTransfer()),
                             prettyWholeSize(),
-                            FriendlyTime.elaspeTime(tick() / 10 + 1),
+                            FriendlyTime.elaspeTime(getElapsedTime() / 1000),
                             nbDone(),
                             nbFiles(),
                             Size.getReadableSize(getBnd()),
@@ -32,6 +32,6 @@ public class LessSimpleDisplay extends AbstractTransferRateDisplay {
     protected final void done() {
         System.out.println();
         System.out.println("Copied " + Size.getReadableSize(doneTransfer()) + " in "
-                           + FriendlyTime.elaspeTime(tick() / 10 + 1));
+                           + FriendlyTime.elaspeTime(getTotalElapsedTime() / 1000));
     }
 }

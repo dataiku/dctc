@@ -7,6 +7,7 @@ import com.dataiku.dctc.copy.CopyTaskRunnable;
 
 abstract public class AbstractTransferRateDisplay implements ThreadedDisplay {
     public final List<CopyTaskRunnable> work(List<CopyTaskRunnable> tasks) {
+        start();
         // Init
         nbFiles = tasks.size();
         init(tasks);
@@ -64,6 +65,7 @@ abstract public class AbstractTransferRateDisplay implements ThreadedDisplay {
             endLoop();
             sleep(100);
         }
+        end();
         done();
         return errorList;
     }
@@ -131,8 +133,31 @@ abstract public class AbstractTransferRateDisplay implements ThreadedDisplay {
         System.out.print(msg);
         lastLength = msg.length();
     }
-    private int lastLength;
+    protected long getStartTime() {
+        return start;
+    }
+    protected long getTime() {
+        return System.currentTimeMillis();
+    }
+    protected long getEndTime() {
+        assert end != 0 : "!(end != 0)";
+        return end;
+    }
+    protected long getElapsedTime() {
+        return getTime() - getStartTime();
+    }
+    protected long getTotalElapsedTime() {
+        return getEndTime() - getStartTime();
+    }
 
+    private void start() {
+        start = System.currentTimeMillis();
+    }
+    private void end() {
+        end = System.currentTimeMillis();
+    }
+
+    private int lastLength;
     // Attributes
     /// File sizes
     private long wholeSize;
@@ -150,4 +175,6 @@ abstract public class AbstractTransferRateDisplay implements ThreadedDisplay {
     private int nbRunning;
     private int nbFail;
     private int nbFiles;
+    private long start;
+    private long end;
 }
