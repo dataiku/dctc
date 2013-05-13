@@ -79,7 +79,7 @@ public class LocalFile extends AbstractGFile {
     }
     @Override
     public String forbiddenCharacter() {
-        if (System.getProperty("os.name").startsWith("Windows")) {
+        if (GlobalConstants.isWindows) {
             return "/\\?*:|\"<>";
         } else {
             return "/";
@@ -87,7 +87,7 @@ public class LocalFile extends AbstractGFile {
     }
     @Override
     public String absolutePattern() {
-        if (System.getProperty("os.name").startsWith("Windows")) {
+        if (GlobalConstants.isWindows) {
             return GlobalConstants.WINDOWS_ROOT_PATH_PATTERN;
         }
         else {

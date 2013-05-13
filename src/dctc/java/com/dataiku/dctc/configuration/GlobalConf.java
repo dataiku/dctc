@@ -62,7 +62,7 @@ public class GlobalConf {
     static private int colNumber;
     public synchronized static int getColNumber() {
         if (colNumber == 0) {
-            if (System.getProperty("os.name").contains("Windows")) {
+            if (GlobalConstants.isWindows) {
                 colNumber = 80; // Unsupported
             } else {
                 try {
@@ -84,7 +84,7 @@ public class GlobalConf {
         return System.console() != null;
     }
     public static String pathSeparator() {
-        if (System.getProperty("os.name").startsWith("Window")) {
+        if (GlobalConstants.isWindows) {
             return ";";
         } else {
             return ":";
