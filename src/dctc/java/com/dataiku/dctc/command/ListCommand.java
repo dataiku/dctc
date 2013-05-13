@@ -128,8 +128,8 @@ public abstract class ListCommand extends Command {
                         if (subfile.givenName().equals(source.givenName())) {
                             continue;
                         }
-                        if (includeLastPathElementInTarget() &&
-                                (dst.exists() || sources.length > 1)) {
+                        if (includeLastPathElementInTarget()
+                            || dst.exists() || sources.length > 1) {
                             dstRoot = FileManipulation.getSonSubPath(source.givenName(),
                                     subfile.givenName(),
                                     source.fileSeparator());
@@ -143,7 +143,8 @@ public abstract class ListCommand extends Command {
                     leave(source);
                 }
             } else {
-                if (dst.isDirectory() || dst.givenName().endsWith(dst.fileSeparator())) {
+                if (dst.isDirectory()
+                    || sources.length > 1 || dst.givenName().endsWith(dst.fileSeparator())) {
                     addQueue(source, dst, source.getFileName());
                 } else {
                     addQueue(source, dst, "");
