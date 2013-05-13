@@ -172,8 +172,7 @@ public class FileManipulation {
         parent = trimEnd(parent, separator) + separator;
         son = trimEnd(son, separator);
 
-        return son.startsWith(parent) // has the same prefix?
-            && son.length() > parent.length() + separator.length(); // has the good longer?
+        return son.startsWith(parent); // has the same prefix?
     }
     // if isSon(parent, subPath) get the value for isDirectSon(parent, path) == true
     public static String getDirectSon(String parent, String subPath, String separator) {
