@@ -27,7 +27,7 @@ public class FTPFile extends AbstractGFile {
         }
     }
     public FTPFile(String server, String username, String password,
-                   String path, int port, FTPClient ftp, org.apache.commons.net.ftp.FTPFile file) {
+                   String path, int port, org.apache.commons.net.ftp.FTPFile file) {
         this.server = server;
         this.username = username;
         this.password = password;
@@ -36,7 +36,6 @@ public class FTPFile extends AbstractGFile {
         if (this.path.length() == 0) {
             this.path = "/";
         }
-        this.ftp = ftp;
         this.exists = true;
         this.file = file.isFile();
         parse(file);
@@ -62,18 +61,18 @@ public class FTPFile extends AbstractGFile {
     }
     @Override
     public FTPFile createInstanceFor(String path) {
-        return new FTPFile(server, username, password, path, port, ftp, null);
+        return new FTPFile(server, username, password, path, port, null);
     }
     @Override
     public FTPFile createSubFile(String path, String separator) {
         return new FTPFile(server, username, password,
                            FileManipulation.concat(this.path, path, fileSeparator(), separator),
-                           port, ftp, null);
+                           port, null);
     }
     public FTPFile createSubFile(String path, String separator, org.apache.commons.net.ftp.FTPFile file) {
         return new FTPFile(server, username, password,
                            FileManipulation.concat(this.path, path, fileSeparator(), separator),
-                           port, ftp, file);
+                           port, file);
     }
 
     private void fastStat() throws IOException {
