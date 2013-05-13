@@ -37,9 +37,8 @@ abstract public class AbstractTransferRateDisplay implements ThreadedDisplay {
                             ++nbFail;
                             errorList.add(elt);
                             fail(elt);
-                        } else {
-                            done(elt);
                         }
+                        done(elt);
                         done += elt.getInSize();
                         tasks.remove(i);
                     } else {
