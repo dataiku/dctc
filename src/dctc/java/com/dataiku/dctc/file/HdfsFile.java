@@ -135,6 +135,10 @@ public class HdfsFile extends AbstractGFile {
         return getProtocol() + "://" + path;
     }
     @Override
+    public String givenPath() {
+        return path;
+    }
+    @Override
     public void mkdirs() throws IOException {
         initFileSystem();
         if (! fileSystem.mkdirs(new Path(path))) {

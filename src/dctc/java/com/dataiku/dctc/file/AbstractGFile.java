@@ -146,6 +146,7 @@ public abstract class AbstractGFile implements GeneralizedFile {
     public abstract boolean isFile() throws IOException;
     public abstract String getAbsolutePath();
     public abstract String givenName();
+    public abstract String givenPath();
     public abstract String getProtocol();
     public abstract void mkdirs() throws IOException;
     public abstract void mkdir() throws IOException;

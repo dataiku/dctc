@@ -44,6 +44,10 @@ public abstract class BucketBasedFile extends AbstractGFile {
         return getProtocol() + "://" + FileManipulation.concat(bucket, path, fileSeparator());
     }
     @Override
+    public String givenPath() {
+        return path;
+    }
+    @Override
     public String getAbsolutePath() {
         return fileSeparator() + FileManipulation.concat(bucket, path, fileSeparator());
     }

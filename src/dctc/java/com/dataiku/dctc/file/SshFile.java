@@ -253,6 +253,10 @@ public class SshFile extends AbstractGFile {
         return getAbsoluteAddress();
     }
     @Override
+    public String givenPath() {
+        return path;
+    }
+    @Override
     public String getProtocol() {
         return Protocol.SSH.getCanonicalName();
     }

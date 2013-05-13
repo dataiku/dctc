@@ -36,6 +36,7 @@ public interface GeneralizedFile extends Comparable<GeneralizedFile> {
     public List<? extends GeneralizedFile> grecursiveList() throws IOException;
 
     public String givenName();
+    public String givenPath();
     public String pathToFile() throws IOException; // For /foo/bar/baz return /foo/bar/.
 
     /**

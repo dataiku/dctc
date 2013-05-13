@@ -148,6 +148,10 @@ public class LocalFile extends AbstractGFile {
         return fileName;
     }
     @Override
+    public String givenPath() {
+        return fileName;
+    }
+    @Override
     public void mkdirs() throws IOException {
         File file = new File(pathToFile());
         DKUFileUtils.mkdirs(file);

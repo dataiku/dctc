@@ -184,6 +184,10 @@ public class FTPFile extends AbstractGFile {
         return "ftp://" + FileManipulation.concat(server, path, fileSeparator());
     }
     @Override
+    public String givenPath() {
+        return path;
+    }
+    @Override
     public void mkdirs() throws IOException {
         ftpInit();
         cwd("/");
