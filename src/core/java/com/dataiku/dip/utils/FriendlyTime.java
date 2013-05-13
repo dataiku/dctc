@@ -101,7 +101,7 @@ public class FriendlyTime {
     diff[3] > 1 ? "s" : ""));*/
 		return sb.toString();
 	}
-    public static String elaspeTime(int time) {
+    public static String elaspeTime(long time) {
         String res = "";
         for (int i = 0; i < 3; ++i) {
             if (time == 0) {
@@ -110,7 +110,7 @@ public class FriendlyTime {
                 }
                 break;
             } else {
-                int t = time % div[i];
+                long t = time % div[i];
                 time /= div[i];
                 res = "" + t + unit[i] + res;
             }
