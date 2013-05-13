@@ -126,7 +126,7 @@ abstract public class AbstractTransferRateDisplay implements ThreadedDisplay {
         prettyWholeSize = Size.getReadableSize(wholeSize);
     }
     protected void print(String msg) {
-        for (int i = lastLength - msg.length(); i >= 0; --i) {
+        for (int i = lastLength - msg.length() + 1; i >= 0; --i) {
             System.out.print(" ");
         }
         System.out.print("\r");
