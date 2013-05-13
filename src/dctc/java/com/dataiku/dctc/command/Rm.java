@@ -143,6 +143,8 @@ public class Rm extends Command {
                             verbose(son.givenName());
                             del(son);
                         }
+                    } else {
+                        del(arg);
                     }
                 }
             }
