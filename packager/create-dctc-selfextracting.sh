@@ -11,7 +11,7 @@ if ! [ -f $JARFILE ]; then
     echo Press enter to continue
     read foo
     cd ..
-    ant clean dctc-jar
+    ant clean tooljar
     cd -
 fi
 
