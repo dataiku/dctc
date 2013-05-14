@@ -80,11 +80,7 @@ public class Mv extends ListCommand {
         }
     }
     protected boolean dstRoot(GeneralizedFile dst) throws IOException {
-        if (!dst.exists() || dst.isDirectory() || archive()) {
-            return true;
-        }
-        error(dst.givenName(), "Is a regular file.", 1);
-        return false;
+        return true;
     }
     protected void leave(GeneralizedFile sourceDir) {
         list.add(sourceDir);
