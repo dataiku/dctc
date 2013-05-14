@@ -187,6 +187,7 @@ public abstract class Command {
     }
 
     // Private methods
+    @SuppressWarnings("static-access")
     private void initOptions() {
         if (opt == null) {
             opt = setOptions();

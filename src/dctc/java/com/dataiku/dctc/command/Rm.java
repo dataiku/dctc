@@ -142,6 +142,7 @@ public class Rm extends Command {
                     }
                 } else {
                     if (verbose()) {
+                        @SuppressWarnings("unchecked")
                         List<GeneralizedFile> rlist = (List<GeneralizedFile>) arg.grecursiveList();
                         for (int i = rlist.size() - 1; i != -1; --i) {
                             GeneralizedFile son = rlist.get(i);
