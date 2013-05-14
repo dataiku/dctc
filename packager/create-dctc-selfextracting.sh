@@ -2,7 +2,7 @@
 
 set -e
 
-JARFILE=../dist/dataiku-dctc.jar
+JARFILE=../dist/dctc-tool.jar
 
 line_pattern=XX_LINE_XX
 
@@ -30,7 +30,7 @@ java -jar \$TMPFILE "\$@"
 RET=\$?; rm -f \$TMPFILE; exit $RET
 .
 
-sed -e "s/$line_pattern/`wc -l <$DEST`/" $TMP_DEST > $DEST
+sed -e "s/$line_pattern/`wc -l <$TMP_DEST`/" $TMP_DEST > $DEST
 cat $JARFILE >> $DEST
 chmod u+x $DEST
 
