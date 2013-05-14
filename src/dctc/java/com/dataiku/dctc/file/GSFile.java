@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -218,7 +220,7 @@ public class GSFile extends BucketBasedFile {
         InputStreamContent mediaContent = new InputStreamContent("text/plain",
                 new BufferedInputStream(contentStream));
 
-        String url = "http://storage.googleapis.com/" + FileManipulation.concat(bucket, path, fileSeparator());
+        String url = "http://storage.googleapis.com/" + URLEncoder.encode(FileManipulation.concat(bucket, path, fileSeparator()), "UTF-8");
 
         initRequestFactory();
         HttpRequest req = requestFactory.buildPutRequest(new GenericUrl(url), mediaContent);
@@ -407,8 +409,8 @@ public class GSFile extends BucketBasedFile {
         }
     }
 
-    private GenericUrl url() {
-        return new GenericUrl("https://storage.googleapis.com/" + FileManipulation.concat(bucket, path, "/"));
+    private GenericUrl url() throws UnsupportedEncodingException {
+        return new GenericUrl("https://storage.googleapis.com/" + URLEncoder.encode(FileManipulation.concat(bucket, path, "/"), "UTF-8"));
     }
     @Override
     public Acl getAcl() throws IOException {
