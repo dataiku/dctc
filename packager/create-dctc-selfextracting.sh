@@ -8,8 +8,7 @@ line_pattern=XX_LINE_XX
 
 if ! [ -f $JARFILE ]; then
     echo Run ant
-    echo Press enter to continue
-    read foo
+    sleep 1
     cd ..
     ant clean tooljar
     cd -
