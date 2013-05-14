@@ -101,7 +101,7 @@ public class FriendlyTime {
     diff[3] > 1 ? "s" : ""));*/
 		return sb.toString();
 	}
-    public static String elaspeTime(long time) {
+    public static String elapsedTime(long time) {
         String res = "";
         for (int i = 0; i < 3; ++i) {
             if (time == 0) {
