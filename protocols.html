@@ -186,7 +186,7 @@ account2.secret_key = /Users/john/secret/gs/key_123095490690384.p12</pre></code>
 
         <p> If you have the <code>HADOOP_HOME</code> or <code>HADOOP_PREFIX</code> environment variable defined, you do not need any configuration, <code>dctc</code> will automatically connect to your Hadoop environment.</p>
 
-        <p>Else, you need to create a configuration entry with one configuration parameter : <conf>hadoopConfDir</code>. This must point to the location of your "conf" folder in Hadoop (ie, the folder containing the <code>core-site.xml</code> file).</p>
+        <p>Else, you need to create a configuration entry with one configuration parameter: <conf>hadoopConfDir</code>. This must point to the location of your "conf" folder in Hadoop (ie, the folder containing the <code>core-site.xml</code> file).</p>
 
         <pre><code>[hdfs]
 account1.hadoopConfDir=/opt/hadoop/hadoop-0.20.2/conf</code></pre>
@@ -283,10 +283,10 @@ company.password = thisisaverysecretpasswordnobodywillguessit
         <ul>
           <li><strong>host</strong>: SSH Server host name</li>
           <li><strong>username</strong>: User name</li>
-          <li>Optional : <strong>password</strong>: Password</li>
-          <li>Optional : <strong>key</strong>: SSH private key file path</li>
-          <li>Optional : <strong>passphrase</strong>: SSH private key passphrase</li>
-          <li>Optional : <strong>skip_host_key_check</strong>: Allow connection without prompt, even if the host is not in the ~/.ssh/known_hosts file</li>
+          <li>Optional: <strong>password</strong>: Password</li>
+          <li>Optional: <strong>key</strong>: SSH private key file path</li>
+          <li>Optional: <strong>passphrase</strong>: SSH private key passphrase</li>
+          <li>Optional: <strong>skip_host_key_check</strong>: Allow connection without prompt, even if the host is not in the ~/.ssh/known_hosts file</li>
         </ul>
 
         <ul>
