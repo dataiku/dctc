@@ -10,6 +10,7 @@ public class FileBuilder {
         FTP("ftp", new FTPFileBuilder()),
         SSH("ssh", new SshFileBuilder()),
         HDFS("hdfs", new HdfsFileBuilder()),
+        HTTP("http", new HttpFileBuilder()),
         LOCAL("local", new LocalFileBuilder());
 
         Protocol(String canonicalName, ProtocolFileBuilder builder) {
@@ -30,6 +31,7 @@ public class FileBuilder {
             if (protocol.equalsIgnoreCase("gs")) return GS;
             if (protocol.equalsIgnoreCase("ftp")) return FTP;
             if (protocol.equalsIgnoreCase("ssh")) return SSH;
+            if (protocol.equalsIgnoreCase("http")) return HTTP;
             if (protocol.equalsIgnoreCase("hdfs")) return HDFS;
             throw new UserException("Unknown protocol: " + protocol);
         }

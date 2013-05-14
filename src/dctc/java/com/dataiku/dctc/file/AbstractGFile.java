@@ -102,7 +102,7 @@ public abstract class AbstractGFile implements GeneralizedFile {
         return getHashAlgorithm().equals(algorithm);
     }
     @Override
-    public final boolean hasDate() {
+    public boolean hasDate() {
         return true;
     }
     @Override
@@ -113,7 +113,7 @@ public abstract class AbstractGFile implements GeneralizedFile {
         throw new IllegalArgumentException("Acl is not implemented for " + getProtocol());
     }
     @Override
-    public final boolean hasSize() {
+    public boolean hasSize() {
         return true;
     }
     @Override // Should be override if hash is supported
