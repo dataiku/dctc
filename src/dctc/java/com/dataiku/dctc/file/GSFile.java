@@ -13,6 +13,8 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.amazonaws.services.sns.model.NotFoundException;
 import com.dataiku.dctc.GlobalConstants;
@@ -20,12 +22,14 @@ import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpContent;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.InputStreamContent;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.storage.Storage;
 import com.google.api.services.storage.Storage.Builder;
@@ -191,13 +195,38 @@ public class GSFile extends BucketBasedFile {
         return grecursiveList;
     }
     @Override
-    public void mkdirs() {
+    public void mkdirs() throws IOException {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("name", bucket);
+        } catch (JSONException e) {
+            System.err.println("debug: GSFile: epic fail");
+
+        }
+
+        initRequestFactory();
+        HttpContent requestContent = new JsonHttpContent(new JacksonFactory(), obj.toString());
+        System.err.println("debug: GSFile: " + "requestContent.toString(): " + requestContent.toString());
+        String projectId = userMail.substring(0, Math.min(userMail.indexOf("@"), userMail.indexOf("-") > 0 ? userMail.indexOf("-") : Integer.MAX_VALUE));
+        String url1= "https://www.googleapis.com/storage/v1beta2/b?project=1072491393333&projection=noAcl&key="
+            + "dataiku.com:cd-dwh-poc";
+        String url = "https://www.googleapis.com/storage/v1beta2/b?project="
+            + projectId + "&projection=noAcl&key=" + "dataiku.com:cd-dwh-poc";
+        System.err.println("debug: GSFile: " + "url1: " + url1);
+        HttpRequest req = requestFactory.buildPostRequest(new GenericUrl(url1), requestContent);
+        HttpResponse response = req.execute();
+        if (!response.isSuccessStatusCode()) {
+            System.err.println("debug: GSFile: fail!!!");
+
+        }
     }
     @Override
-    public void mkdir() {
+    public void mkdir() throws IOException {
+        mkdirs();
     }
     @Override
-    public void mkpath() {
+    public void mkpath() throws IOException {
+        mkdirs();
     }
 
     @Override
