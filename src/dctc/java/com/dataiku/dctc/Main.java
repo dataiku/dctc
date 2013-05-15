@@ -131,6 +131,8 @@ public class Main {
             Alias alias = new Alias();
             alias.setAlias(conf.getOrCreateSection("alias"));
             conf.drop("alias");
+            GlobalConf.setGlobalSettings(conf.getOrCreateSection("global"));
+            conf.drop("global");
             CredentialProviderBank bank = new CredentialProviderBank(conf);
             FileBuilder builder = new FileBuilder(bank);
 

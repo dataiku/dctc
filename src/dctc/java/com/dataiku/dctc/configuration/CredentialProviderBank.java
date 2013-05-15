@@ -39,41 +39,37 @@ public class CredentialProviderBank {
             String sectionKey = e.getKey();
             Map<String, String> sectionValues = e.getValue();
 
-            if (sectionKey.equals("global")) {
-                setGlobalSettings(sectionValues);
-            } else {
-                /* Ignore command-specific stuff */
-                boolean found = false;
-                for (String commandSection : commandSections) {
-                    if (sectionKey.equals(commandSection)) { found = true; break; }
-                }
-                if (found) continue;
+            /* Ignore command-specific stuff */
+            boolean found = false;
+            for (String commandSection : commandSections) {
+                if (sectionKey.equals(commandSection)) { found = true; break; }
+            }
+            if (found) continue;
 
-                Protocol proto = Protocol.forName(sectionKey);
-                String firstAccount = null;
+            Protocol proto = Protocol.forName(sectionKey);
+            String firstAccount = null;
 
-                for (Map.Entry<String, String> entry : sectionValues.entrySet()) {
-                    if (entry.getKey().contains(".")) {
-                        String[] chunks = entry.getKey().split("\\.");
-                        if (firstAccount == null) firstAccount = chunks[0];
-                        addCredentiaParam(proto.getCanonicalName(), chunks[0], chunks[1], entry.getValue());
-                    } else if (entry.getKey().equals("default")) {
-                        protocolToDefaultAccount.put(proto.getCanonicalName(), entry.getValue());
-                    } else {
-                        throw new UserException("Unexpected parameter " + entry.getKey() + " in section " + sectionKey +", " +
-                        		"expected either 'default' or 'account.param' key");
-                    }
+            for (Map.Entry<String, String> entry : sectionValues.entrySet()) {
+                if (entry.getKey().contains(".")) {
+                    String[] chunks = entry.getKey().split("\\.");
+                    if (firstAccount == null) firstAccount = chunks[0];
+                    addCredentiaParam(proto.getCanonicalName(), chunks[0], chunks[1], entry.getValue());
+                } else if (entry.getKey().equals("default")) {
+                    protocolToDefaultAccount.put(proto.getCanonicalName(), entry.getValue());
+                } else {
+                    throw new UserException("Unexpected parameter " + entry.getKey() + " in section " + sectionKey +", " +
+                                            "expected either 'default' or 'account.param' key");
                 }
-                if (protocolToDefaultAccount.containsKey(proto.getCanonicalName())) {
-                    String defaultAccount = protocolToDefaultAccount.get(proto.getCanonicalName());
-                    if (getAccountParamsIfExists(proto.getCanonicalName(), defaultAccount) == null) {
-                        throw new UserException("Invalid default account '" + defaultAccount + "' for protocol " + proto.getCanonicalName());
-                    }
+            }
+            if (protocolToDefaultAccount.containsKey(proto.getCanonicalName())) {
+                String defaultAccount = protocolToDefaultAccount.get(proto.getCanonicalName());
+                if (getAccountParamsIfExists(proto.getCanonicalName(), defaultAccount) == null) {
+                    throw new UserException("Invalid default account '" + defaultAccount + "' for protocol " + proto.getCanonicalName());
                 }
-                if (!protocolToDefaultAccount.containsKey(proto.getCanonicalName())) {
-                    /* Take the first one */
-                    protocolToDefaultAccount.put(proto.getCanonicalName(), firstAccount);
-                }
+            }
+            if (!protocolToDefaultAccount.containsKey(proto.getCanonicalName())) {
+                /* Take the first one */
+                protocolToDefaultAccount.put(proto.getCanonicalName(), firstAccount);
             }
         }
     }
@@ -131,9 +127,5 @@ public class CredentialProviderBank {
         }
         Params p = creds.get(account);
         return p;
-    }
-
-    private void setGlobalSettings(Map<String, String> settings) {
-        GlobalConf.setGlobalSettings(settings);
     }
 }
