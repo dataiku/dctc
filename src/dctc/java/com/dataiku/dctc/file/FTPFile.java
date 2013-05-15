@@ -61,13 +61,13 @@ public class FTPFile extends AbstractGFile {
     }
     @Override
     public FTPFile createInstanceFor(String path) {
-        return new FTPFile(server, username, password, path, port, null);
+        return new FTPFile(server, username, password, path, port);
     }
     @Override
     public FTPFile createSubFile(String path, String separator) {
         return new FTPFile(server, username, password,
                            FileManipulation.concat(this.path, path, fileSeparator(), separator),
-                           port, null);
+                           port);
     }
     public FTPFile createSubFile(String path, String separator, org.apache.commons.net.ftp.FTPFile file) {
         return new FTPFile(server, username, password,
