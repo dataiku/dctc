@@ -134,7 +134,7 @@ public abstract class Command {
                 try {
                     args.addAll(Globbing.resolve(garg, false));
                 } catch (IOException e) {
-                    error(garg.givenName(), "Doesn't resolve globbing", 2);
+                    error(garg.givenName(), "Doesn't resolve globbing for " + garg.givenName(), 2);
                     args.add(garg);
                 }
             } else {
