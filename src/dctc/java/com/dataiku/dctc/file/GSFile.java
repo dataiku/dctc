@@ -200,24 +200,20 @@ public class GSFile extends BucketBasedFile {
         try {
             obj.put("name", bucket);
         } catch (JSONException e) {
-            System.err.println("debug: GSFile: epic fail");
-
+            throw new IOException(e);
         }
 
         initRequestFactory();
         HttpContent requestContent = new JsonHttpContent(new JacksonFactory(), obj.toString());
-        System.err.println("debug: GSFile: " + "requestContent.toString(): " + requestContent.toString());
         String projectId = userMail.substring(0, Math.min(userMail.indexOf("@"), userMail.indexOf("-") > 0 ? userMail.indexOf("-") : Integer.MAX_VALUE));
         String url1= "https://www.googleapis.com/storage/v1beta2/b?project=1072491393333&projection=noAcl&key="
             + "dataiku.com:cd-dwh-poc";
         String url = "https://www.googleapis.com/storage/v1beta2/b?project="
             + projectId + "&projection=noAcl&key=" + "dataiku.com:cd-dwh-poc";
-        System.err.println("debug: GSFile: " + "url1: " + url1);
         HttpRequest req = requestFactory.buildPostRequest(new GenericUrl(url1), requestContent);
         HttpResponse response = req.execute();
         if (!response.isSuccessStatusCode()) {
-            System.err.println("debug: GSFile: fail!!!");
-
+            throw new IOException("fail to create bucket: " + bucket);
         }
     }
     @Override

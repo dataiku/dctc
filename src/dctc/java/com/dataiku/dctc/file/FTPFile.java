@@ -168,7 +168,6 @@ public class FTPFile extends AbstractGFile {
         }
         recurList = new ArrayList<FTPFile>(0);
         recurList.add(this);
-        System.err.println("debug: FTPFile: " + "givenPath(): " + givenPath());
         if (isDirectory()) {
             for (FTPFile f: glist()) {
                 recurList.add(f);
