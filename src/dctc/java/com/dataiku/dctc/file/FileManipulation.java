@@ -1,6 +1,7 @@
 package com.dataiku.dctc.file;
 
 import org.apache.commons.lang.StringUtils;
+import static com.dataiku.dctc.PrettyString.quoted;
 
 public class FileManipulation {
     public static String extension(String file,
@@ -164,13 +165,21 @@ public class FileManipulation {
         parent = trimEnd(parent, separator);
         son = trimEnd(son, separator);
 
+        if (parent.isEmpty()) {
+            return getDepth(trimBegin(son, separator), separator) < 1;
+        }
+
         return son.startsWith(parent) // has the same prefix?
-            && son.length() > parent.length() + separator.length() // has the good longer?
             && !(son.indexOf(separator, parent.length() + separator.length()) != -1); // Just one more separator?
     }
     public static boolean isSon(String parent, String son, String separator) {
-        parent = trimEnd(parent, separator) + separator;
+        parent = trimEnd(parent, separator);
         son = trimEnd(son, separator);
+
+        if (parent.isEmpty()) {
+            return true;
+        }
+        parent += "/";
 
         return son.startsWith(parent); // has the same prefix?
     }
@@ -179,9 +188,9 @@ public class FileManipulation {
         parent = trimEnd(parent, separator);
         subPath = trimEnd(subPath, separator);
 
-        if (!isSon(parent, subPath, separator)) {
-            throw new IllegalArgumentException("dctc FileManipulation: `" + parent + "' is not the parent of `" + subPath + "'.");
-        }
+        assert isSon(parent, subPath, separator)
+            : "isSon(" + quoted(parent) + ", " + quoted(subPath) + ", " + separator + ")";
+
         int index = subPath.indexOf(separator, parent.length() + separator.length());
         if (index == -1) {
             return subPath; // subPath is the direct son.
