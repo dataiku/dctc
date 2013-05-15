@@ -108,6 +108,7 @@ public abstract class Command {
             line = parser.parse(opt, shellargs);
         } catch (ParseException exp) {
             error(exp.getMessage(), 1);
+            usage();
             throw new EndOfCommandException();
 
         }
