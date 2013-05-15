@@ -25,6 +25,7 @@ public class SshUserInfo implements UserInfo {
     public boolean promptPassphrase(String arg0) {
         if (password == null) {
             System.out.print(arg0 + ": ");
+            System.out.flush();
         }
         return true;
     }
@@ -32,6 +33,7 @@ public class SshUserInfo implements UserInfo {
     public boolean promptPassword(String arg0) {
         if (password == null) {
             System.out.print(arg0 + ": ");
+            System.out.flush();
         }
         return true;
     }
@@ -39,6 +41,7 @@ public class SshUserInfo implements UserInfo {
     public boolean promptYesNo(String arg0) {
         if (GlobalConf.isInteractif()) {
             System.out.print(arg0.substring(0, arg0.length() - 1) + " (yes/no)? ");
+            System.out.flush();
             while (true) {
                 String response = System.console().readLine();
                 if (response.equals("yes")) {
@@ -47,6 +50,7 @@ public class SshUserInfo implements UserInfo {
                     return false;
                 }
                 System.out.print("Please type 'yes' or 'no': ");
+                System.out.flush();
             }
         }
         return true;
