@@ -115,16 +115,19 @@ public class S3File extends BucketBasedFile {
         resolve();
         if (type == Type.NOT_FOUND) {
             throw new NotFoundException(getAbsoluteAddress());
-        } else if (glist != null) {
+        }
+        else if (glist != null) {
             return glist;
-        } else if (type == Type.ROOT) {
+        }
+        else if (type == Type.ROOT) {
             /* Return the list of buckets, already in the list */
             glist = new ArrayList<S3File>();
             for (String f: bucketList) {
                 glist.add(new S3File(f, s3));
             }
             return glist;
-        } else if (type == Type.DIR) {
+        }
+        else if (isDirectory()) {
             glist = new ArrayList<S3File>();
             for (S3ObjectSummary f: recursiveFileList) {
                 if (FileManipulation.isDirectSon(path, f.getKey(), fileSeparator())) {
@@ -145,7 +148,8 @@ public class S3File extends BucketBasedFile {
                 }
             }
             return glist;
-        } else if (type == Type.FILE) {
+        }
+        else if (isFile()) {
             throw new IOException("can't list " + getAbsoluteAddress() + ": is a file");
         }
         throw new Error("not reached");
