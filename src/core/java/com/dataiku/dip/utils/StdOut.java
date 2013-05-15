@@ -35,6 +35,7 @@ public class StdOut extends PrintStream {
     @Override
     public void flush() {
         out.print(sb.toString());
+        out.flush();
         sb = new StringBuilder();
     }
     @Override
