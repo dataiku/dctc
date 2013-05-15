@@ -78,12 +78,6 @@ public class CredentialProviderBank {
         return protocolCredentials.get(protocol);
     }
 
-    @SuppressWarnings("serial")
-    public static class ProtocolCredentials extends HashMap<String, Params> {}
-
-    private Map<String, String> protocolToDefaultAccount = new HashMap<String, String>();
-    private Map<String, ProtocolCredentials> protocolCredentials = new HashMap<String, ProtocolCredentials>();
-
     public Params getAccountParams(String protocol, String account) {
         assert(protocol != null);
 
@@ -128,4 +122,10 @@ public class CredentialProviderBank {
         Params p = creds.get(account);
         return p;
     }
+
+    @SuppressWarnings("serial")
+    public static class ProtocolCredentials extends HashMap<String, Params> {}
+
+    private Map<String, String> protocolToDefaultAccount = new HashMap<String, String>();
+    private Map<String, ProtocolCredentials> protocolCredentials = new HashMap<String, ProtocolCredentials>();
 }
