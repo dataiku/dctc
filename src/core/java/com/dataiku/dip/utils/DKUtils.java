@@ -110,6 +110,24 @@ public class DKUtils {
         return tout.baos.toByteArray();
     }
 
+    /* Execute and returns stdout - logs stderr - throws if return code is non zero */
+    public static byte[] execAndGetOutput(String[] args, String[] env, File cwd) throws IOException,
+                                                                              InterruptedException {
+        Process p = Runtime.getRuntime().exec(args, env, cwd);
+        GatheringStreamEater tout = new GatheringStreamEater(p.getInputStream());
+        tout.start();
+        Thread terr = new LoggingStreamEater(p.getErrorStream(), org.apache.log4j.Level.INFO);
+        terr.start();
+        int rv = p.waitFor();
+        if (rv != 0) {
+            //System.out.println(tout.sb.toString());
+            throw new IOException("Return code is non-zero: " + rv);
+        }
+        tout.join();
+        terr.join();
+        return tout.baos.toByteArray();
+    }
+    
     /* Eat a stream and log its output */
     static class LoggingStreamEater extends Thread {
         LoggingStreamEater(InputStream is, org.apache.log4j.Level level) {
