@@ -27,13 +27,15 @@ public class GlobalConf {
             }
             else if (key.equals("globbing")) {
                 String lowerValue = value.toLowerCase();
-                if ("yes".startsWith(lowerValue) || "true".startsWith(lowerValue) || "1".equals(lowerValue)) {
-                    resolveGlobbing = true;
+                resolveGlobbing = getBoolean(value);
+                if (resolveGlobbing == null) {
+                    System.err.println("Unknown value (" + value + ") for globbing settings");
                 }
-                else if ("no".startsWith(lowerValue) || "false".startsWith(lowerValue) || "0".equals(lowerValue)) {
-                    resolveGlobbing = false;
-                } else {
-                    System.err.println("Unknow value (" + value + ") for globbing settings");
+            }
+            else if (key.equals("show_git_hash")) {
+                showGitHash = getBoolean(value);
+                if (showGitHash == null) {
+                    System.err.println("Unknown value (" + value + ") for show git hash settings");
                 }
             }
             else {
@@ -92,10 +94,26 @@ public class GlobalConf {
             return ":";
         }
     }
+    public static boolean showGitHash() {
+        return showGitHash;
+    }
 
+    // Privates
+    private static Boolean getBoolean(String value) {
+        String lowerValue = value.toLowerCase();
+        if ("yes".startsWith(lowerValue) || "true".startsWith(lowerValue) || "1".equals(lowerValue)) {
+            return true;
+        }
+        else if ("no".startsWith(lowerValue) || "false".startsWith(lowerValue) || "0".equals(lowerValue)) {
+            return false;
+        } else {
+            return null;
+        }
+    }
     // Attributes
     static private int colNumber;
-    static DisplayFactory display = new DisplayFactory("auto");
-    static int threadLimit = Runtime.getRuntime().availableProcessors();
-    static boolean resolveGlobbing = true;
+    static private DisplayFactory display = new DisplayFactory("auto");
+    static private int threadLimit = Runtime.getRuntime().availableProcessors();
+    static private Boolean resolveGlobbing = true;
+    static private Boolean showGitHash = true;
 }
