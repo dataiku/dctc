@@ -26,13 +26,11 @@ public class FileBuilder {
         private ProtocolFileBuilder builder;
 
         public static Protocol forName(String protocol) {
-            if (protocol.equalsIgnoreCase("file") || protocol.equalsIgnoreCase("local")) return LOCAL;
-            if (protocol.equalsIgnoreCase("s3")) return S3;
-            if (protocol.equalsIgnoreCase("gs")) return GS;
-            if (protocol.equalsIgnoreCase("ftp")) return FTP;
-            if (protocol.equalsIgnoreCase("ssh")) return SSH;
-            if (protocol.equalsIgnoreCase("http")) return HTTP;
-            if (protocol.equalsIgnoreCase("hdfs")) return HDFS;
+            for (Protocol proto: Protocol.values()) {
+                if (protocol.equals(proto.getCanonicalName())) {
+                    return proto;
+                }
+            }
             throw new UserException("Unknown protocol: " + protocol);
         }
     }
