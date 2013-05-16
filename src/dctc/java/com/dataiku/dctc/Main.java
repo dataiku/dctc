@@ -150,7 +150,7 @@ public class Main {
 
                     if (cmd.cmdname().equals("add-account")) {
                         assert cmd instanceof AddAccount;
-                        ((AddAccount) cmd).setConfiguration(conf.getConfiguration());
+                        ((AddAccount) cmd).setConfiguration(conf.getConfAppenders());
                     }
                     //cmd.setConfiguration(conf);
                     cmd.setFileBuilder(conf.getFileBuilder());

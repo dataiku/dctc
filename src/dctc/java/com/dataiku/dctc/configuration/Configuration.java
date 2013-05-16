@@ -25,8 +25,8 @@ import static com.dataiku.dctc.PrettyString.nl;
 import com.dataiku.dip.utils.Params;
 
 public class Configuration {
-    public void writeAddedConf(String file) throws IOException {
-        if (addedConfiguration.size() == 0) {
+    public void appendConfTo(String file) throws IOException {
+        if (conf.size() == 0) {
             return;
         }
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -37,7 +37,7 @@ public class Configuration {
 
         sb.append(eol);
         sb.append("# Added by dctc wizard (" + dateFormat.format(date) + ")." + eol);
-        Iterator<?> iterator = addedConfiguration.entrySet().iterator();
+        Iterator<?> iterator = conf.entrySet().iterator();
         iterator.hasNext();
         while (true) {
             @SuppressWarnings("unchecked")
@@ -108,6 +108,7 @@ public class Configuration {
             IOUtils.closeQuietly(stream);
         }
     }
+
     public Map<String, Map<String, String>> getSections() {
         return conf;
     }
@@ -123,7 +124,7 @@ public class Configuration {
         return sectionData;
     }
     public void put(String proto, String accountName, String keyName, String keyValue) {
-        getNotNull(proto, addedConfiguration).put(accountName + "." + keyName , keyValue);
+        getNotNull(proto, conf).put(accountName + "." + keyName , keyValue);
     }
     public Params getSectionAsParams(String section) {
         return new Params(getOrCreateSection(section));
@@ -160,6 +161,4 @@ public class Configuration {
     // Attributes
     private Set<String> nonValidSection = new HashSet<String>();
     private Map<String, Map<String, String>> conf = new HashMap<String, Map<String, String>>();
-    private Map<String, Map<String, String>> addedConfiguration
-        = new HashMap<String, Map<String, String>>();
 }

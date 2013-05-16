@@ -36,8 +36,11 @@ public class StructuredConf {
         }
         return builder;
     }
-    public Configuration getConfiguration() {
-        return conf;
+    public Configuration getConfAppenders() {
+        if (confAppenders == null) {
+            confAppenders = new Configuration();
+        }
+        return confAppenders;
     }
 
     // Private Methods
@@ -61,5 +64,6 @@ public class StructuredConf {
     private Alias alias = new Alias();
     private CredentialProviderBank bank = new CredentialProviderBank();
     private Configuration conf = new Configuration();
+    private Configuration confAppenders;
     private FileBuilder builder;
 }
