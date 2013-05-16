@@ -32,6 +32,7 @@
         <dependency org="org.apache.hadoop" name="hadoop-core" rev="1.0.3">
             <exclude org="org.eclipse.jdt" />
         </dependency>
+        <dependency org="commons-httpclient" name="commons-httpclient" rev="3.1"/>
 
         <!-- Tests -->
         <dependency org="junit" name="junit" rev="4.8.1"/>
