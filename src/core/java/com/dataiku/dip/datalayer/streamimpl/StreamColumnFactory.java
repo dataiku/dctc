@@ -10,7 +10,7 @@ import com.dataiku.dip.datalayer.ColumnFactory;
 
 public class StreamColumnFactory implements ColumnFactory {
     @Override
-    public Column column(String name) {
+    public synchronized Column column(String name) {
         StreamColumn c = map.get(name);
         if (c == null) {
             c = new StreamColumn();
@@ -22,7 +22,7 @@ public class StreamColumnFactory implements ColumnFactory {
         return c;
     }
     @Override
-    public StreamColumn columnAfter(String before, String after) {
+    public synchronized StreamColumn columnAfter(String before, String after) {
         StreamColumn c = map.get(after);
         if (c == null) {
             c = new StreamColumn();
@@ -41,12 +41,12 @@ public class StreamColumnFactory implements ColumnFactory {
     }
 
     @Override
-    public void deleteColumn(String name) {
+    public synchronized void deleteColumn(String name) {
         list.remove(map.get(name));
         map.remove(name);
     }
 
-    void renameColumn(StreamColumn sc, String newName) {
+    synchronized void renameColumn(StreamColumn sc, String newName) {
         map.remove(sc.getName());
         sc.name = newName;
         map.put(newName, sc);
@@ -56,7 +56,7 @@ public class StreamColumnFactory implements ColumnFactory {
     Map<String, StreamColumn> map = new LinkedHashMap<String, StreamColumn>();
 
     @Override
-    public Iterable<Column> columns() {
+    public synchronized Iterable<Column> columns() {
         /* Copy because we might modify the collection while iterating */
         List<Column> l = new ArrayList<Column>();
         l.addAll(list);
