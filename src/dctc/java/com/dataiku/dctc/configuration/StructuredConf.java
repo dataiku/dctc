@@ -1,0 +1,65 @@
+package com.dataiku.dctc.configuration;
+
+import java.io.IOException;
+import java.util.Set;
+import static com.dataiku.dctc.PrettyString.eol;
+import com.dataiku.dctc.file.FileBuilder.Protocol;
+import com.dataiku.dctc.file.FileBuilder;
+
+public class StructuredConf {
+
+    public void parse(String file) throws IOException {
+        conf.parse(file);
+        alias();
+        global();
+        bank();
+        Set<String> nonValidSection = conf.getNonValidSection();
+        if (nonValidSection.size() != 0) {
+            StringBuilder b = new StringBuilder();
+            b.append("Invalid section detected:");
+            for (String key : nonValidSection) {
+                b.append(eol() + "dctc: error: Invalid section: " + key);
+            }
+            throw new IOException(b.toString());
+        }
+    }
+
+    public CredentialProviderBank getCredentialProviderBank() {
+        return bank;
+    }
+    public Alias getAlias() {
+        return alias;
+    }
+    public FileBuilder getFileBuilder() {
+        if (builder == null) {
+            builder = new FileBuilder(bank);
+        }
+        return builder;
+    }
+    public Configuration getConfiguration() {
+        return conf;
+    }
+
+    // Private Methods
+    private void alias() {
+        alias.setAlias(conf.getOrCreateSection("alias"));
+        conf.valid("alias");
+    }
+    private void bank() {
+        for (Protocol protocol: Protocol.values()) {
+            String proto = protocol.getCanonicalName();
+            bank.setProtocolSettings(proto, conf.getOrCreateSection(proto));
+            conf.valid(proto);
+        }
+    }
+    private void global() {
+        GlobalConf.setGlobalSettings(conf.getOrCreateSection("global"));
+        conf.valid("global");
+    }
+
+    // Attributes
+    private Alias alias = new Alias();
+    private CredentialProviderBank bank = new CredentialProviderBank();
+    private Configuration conf = new Configuration();
+    private FileBuilder builder;
+}

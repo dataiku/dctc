@@ -460,7 +460,7 @@ public class Ls extends Command {
     private boolean color() {
         if (colorize == null) {
             colorize = (GlobalConf.isInteractif() || System.getenv("CLICOLOR_FORCE") != null) &&
-                (hasOption("G") || configuration.getSectionAsParams("ls").getBoolParam("color", false));
+                (hasOption("G"));
         }
         return colorize;
     }

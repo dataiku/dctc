@@ -81,10 +81,6 @@ public abstract class Command {
         return this;
     }
 
-    public void setConfiguration(Configuration configuration) {
-        this.configuration = configuration;
-    }
-
     public int getExitCode() {
         return exitCode;
     }
@@ -205,6 +201,5 @@ public abstract class Command {
     private CommandLine line;
     private int exitCode;
     private FileBuilder builder;
-    protected Configuration configuration;
     private Options opt;
 }

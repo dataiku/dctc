@@ -13,6 +13,7 @@ import com.dataiku.dctc.display.Interactive;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.GSFile;
 import com.dataiku.dctc.file.S3File;
+import com.dataiku.dctc.configuration.Configuration;
 
 public class AddAccount extends Command {
     public String tagline() {
@@ -40,7 +41,8 @@ public class AddAccount extends Command {
             account = args[1];
         }
 
-        CredentialProviderBank bank = new CredentialProviderBank(configuration);
+        CredentialProviderBank bank = new CredentialProviderBank();
+        // FIXME: configuration);
 
         if (bank.getProtocolCredentials(proto) != null) {
             if (account == null) {
@@ -86,7 +88,7 @@ public class AddAccount extends Command {
                 configuration.put("s3", account, "secret_key", secretKey);
                 System.err.println("Updating configuration file : " + GlobalConf.confFile());
                 try {
-                    configuration.write(GlobalConf.confFile());
+                    configuration.writeAddedConf(GlobalConf.confFile());
                 } catch (IOException e) {
                     error(GlobalConf.confFile(), "Couldn't write in the configuration file", e, 3);
                 }
@@ -123,7 +125,7 @@ public class AddAccount extends Command {
                 configuration.put("gs", account, "key_path", keyPath);
                 System.err.println("Updating configuration file: " + GlobalConf.confFile());
                 try {
-                    configuration.write(GlobalConf.confFile());
+                    configuration.writeAddedConf(GlobalConf.confFile());
                 } catch (IOException e) {
                     error(GlobalConf.confFile(), "Couldn't write in the configuration file", e, 3);
                 }
@@ -131,19 +133,22 @@ public class AddAccount extends Command {
             }
         }
     }
-
     @Override
     protected String proto() {
         return "dctc add-account protocol [account-name]";
     }
-
     @Override
     protected Options setOptions() {
         return new Options();
     }
-
     @Override
     public String cmdname() {
         return "add-account";
     }
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
+    }
+
+    // Attributes
+    private Configuration configuration;
 }

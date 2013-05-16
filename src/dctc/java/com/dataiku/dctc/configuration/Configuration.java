@@ -11,9 +11,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
@@ -23,10 +25,7 @@ import static com.dataiku.dctc.PrettyString.nl;
 import com.dataiku.dip.utils.Params;
 
 public class Configuration {
-    public Configuration(String file) throws IOException {
-        read(file);
-    }
-    public void write(String file) throws IOException {
+    public void writeAddedConf(String file) throws IOException {
         if (addedConfiguration.size() == 0) {
             return;
         }
@@ -58,7 +57,7 @@ public class Configuration {
        fw.write(sb.toString());
        fw.close();
    }
-    public void read(String file) throws IOException {
+    public void parse(String file) throws IOException {
         File f = new File(file);
         if (!f.exists()) {
             create(f);
@@ -76,7 +75,9 @@ public class Configuration {
                         int closingElt = line.lastIndexOf(']');
                         if (closingElt > 1) {
                             protocol = new HashMap<String, String>();
-                            conf.put(line.substring(1, closingElt), protocol);
+                            String protocolName = line.substring(1, closingElt);
+                            conf.put(protocolName, protocol);
+                            nonValidSection.add(protocolName);
                         }
                         else {
                             if (closingElt == -1) {
@@ -149,11 +150,15 @@ public class Configuration {
             return;
         }
     }
-    public void drop(String section) {
-        conf.remove(section);
+    public void valid(String section) {
+        nonValidSection.remove(section);
+    }
+    public Set<String> getNonValidSection() {
+        return nonValidSection;
     }
 
     // Attributes
+    private Set<String> nonValidSection = new HashSet<String>();
     private Map<String, Map<String, String>> conf = new HashMap<String, Map<String, String>>();
     private Map<String, Map<String, String>> addedConfiguration
         = new HashMap<String, Map<String, String>>();

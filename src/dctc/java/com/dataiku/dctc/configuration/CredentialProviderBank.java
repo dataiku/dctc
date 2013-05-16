@@ -5,17 +5,17 @@ import java.util.Map;
 
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
+import com.dataiku.dctc.file.FileManipulation;
+import static com.dataiku.dctc.PrettyString.pquoted;
+import static com.dataiku.dctc.PrettyString.scat;
 import com.dataiku.dip.utils.ErrorContext;
 import com.dataiku.dip.utils.Params;
 
 public class CredentialProviderBank {
     public CredentialProviderBank() {
     }
-    public CredentialProviderBank(Configuration conf) {
-        add(conf);
-    }
 
-    private void addCredentiaParam(String protocol, String account, String key, String value) {
+    private void addCredentialParam(String protocol, String account, String key, String value) {
         ProtocolCredentials pcre = protocolCredentials.get(protocol);
         if (pcre == null) {
             pcre = new ProtocolCredentials();
@@ -32,45 +32,37 @@ public class CredentialProviderBank {
         accountCred.add(key, value);
     }
 
-    static String[] commandSections = new String[]{"ls"};
-
-    public void add(Configuration conf) {
-        for (Map.Entry<String, Map<String, String>> e: conf.getSections().entrySet()) {
-            String sectionKey = e.getKey();
-            Map<String, String> sectionValues = e.getValue();
-
-            /* Ignore command-specific stuff */
-            boolean found = false;
-            for (String commandSection : commandSections) {
-                if (sectionKey.equals(commandSection)) { found = true; break; }
-            }
-            if (found) continue;
-
-            Protocol proto = Protocol.forName(sectionKey);
-            String firstAccount = null;
-
-            for (Map.Entry<String, String> entry : sectionValues.entrySet()) {
-                if (entry.getKey().contains(".")) {
-                    String[] chunks = entry.getKey().split("\\.");
-                    if (firstAccount == null) firstAccount = chunks[0];
-                    addCredentiaParam(proto.getCanonicalName(), chunks[0], chunks[1], entry.getValue());
-                } else if (entry.getKey().equals("default")) {
-                    protocolToDefaultAccount.put(proto.getCanonicalName(), entry.getValue());
-                } else {
-                    throw new UserException("Unexpected parameter " + entry.getKey() + " in section " + sectionKey +", " +
-                                            "expected either 'default' or 'account.param' key");
+    public void setProtocolSettings(String protocol, Map<String, String> settings) {
+        Protocol proto = Protocol.forName(protocol);
+        String firstAccount = null;
+        for (Map.Entry<String, String> setting: settings.entrySet()) {
+            String key = setting.getKey();
+            String value = setting.getValue();
+            if (key.contains(".")) {
+                String[/*user/option*/] opt = FileManipulation.split(key, ".", 2);
+                if (firstAccount == null) {
+                    firstAccount = opt[0];
                 }
+                addCredentialParam(protocol, opt[0], opt[1], value);
             }
-            if (protocolToDefaultAccount.containsKey(proto.getCanonicalName())) {
-                String defaultAccount = protocolToDefaultAccount.get(proto.getCanonicalName());
-                if (getAccountParamsIfExists(proto.getCanonicalName(), defaultAccount) == null) {
-                    throw new UserException("Invalid default account '" + defaultAccount + "' for protocol " + proto.getCanonicalName());
-                }
+            else if (key.equals("default")) {
+                protocolToDefaultAccount.put(protocol, value);
             }
-            if (!protocolToDefaultAccount.containsKey(proto.getCanonicalName())) {
-                /* Take the first one */
-                protocolToDefaultAccount.put(proto.getCanonicalName(), firstAccount);
+            else {
+                throw new UserException(scat("Unexpected parameter", pquoted(key),
+                                             "in the protocol section", pquoted(protocol) + ", ",
+                                             "expected either `default' or `account.param' key."));
             }
+        }
+        if (protocolToDefaultAccount.containsKey(protocol)) {
+            String defaultAccount = protocolToDefaultAccount.get(protocol);
+            if (getAccountParamsIfExists(protocol, defaultAccount) == null) {
+                throw new UserException(scat("Invalid default account",
+                                             pquoted(defaultAccount),
+                                             "for protocol", pquoted(protocol)));
+            }
+        } else {
+            protocolToDefaultAccount.put(protocol, firstAccount);
         }
     }
 

@@ -28,6 +28,7 @@ import com.dataiku.dctc.command.Sync;
 import com.dataiku.dctc.command.Tail;
 import com.dataiku.dctc.configuration.Alias;
 import com.dataiku.dctc.configuration.Configuration;
+import com.dataiku.dctc.configuration.StructuredConf;
 import com.dataiku.dctc.configuration.CredentialProviderBank;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.exception.UserException;
@@ -121,23 +122,17 @@ public class Main {
             fillCommand();
             DCTCLog.setMode(Mode.STDERR);
 
-            Configuration conf;
+            StructuredConf conf;
             try {
-                conf = new Configuration(GlobalConf.confFile());
+                conf = new StructuredConf();
+            conf.parse(GlobalConf.confFile());
             } catch (IOException e) {
                 System.err.println("dctc fail: " + e.getMessage());
                 return;
             }
-            Alias alias = new Alias();
-            alias.setAlias(conf.getOrCreateSection("alias"));
-            conf.drop("alias");
-            GlobalConf.setGlobalSettings(conf.getOrCreateSection("global"));
-            conf.drop("global");
-            CredentialProviderBank bank = new CredentialProviderBank(conf);
-            FileBuilder builder = new FileBuilder(bank);
 
             if (args.length >= 1) {
-                args = alias.resolve(args);
+                args = conf.getAlias().resolve(args);
                 String usercmd = args[0];
                 String[] cmdargs = new String[args.length - 1];
                 System.arraycopy(args, 1, cmdargs, 0, args.length - 1);
@@ -153,8 +148,12 @@ public class Main {
                 if (cmds.containsKey(usercmd)) {
                     Command cmd = cmds.get(usercmd);
 
-                    cmd.setConfiguration(conf);
-                    cmd.setFileBuilder(builder);
+                    if (cmd.cmdname().equals("add-account")) {
+                        assert cmd instanceof AddAccount;
+                        ((AddAccount) cmd).setConfiguration(conf.getConfiguration());
+                    }
+                    //cmd.setConfiguration(conf);
+                    cmd.setFileBuilder(conf.getFileBuilder());
                     try {
                         cmd.perform(cmdargs);
                     } catch (Command.EndOfCommandException e) {}
