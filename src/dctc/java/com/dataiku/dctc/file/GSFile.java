@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.amazonaws.services.sns.model.NotFoundException;
+import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
@@ -196,24 +197,8 @@ public class GSFile extends BucketBasedFile {
     }
     @Override
     public void mkdirs() throws IOException {
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("name", bucket);
-        } catch (JSONException e) {
-            throw new IOException(e);
-        }
-
-        initRequestFactory();
-        HttpContent requestContent = new JsonHttpContent(new JacksonFactory(), obj.toString());
-        String projectId = userMail.substring(0, Math.min(userMail.indexOf("@"), userMail.indexOf("-") > 0 ? userMail.indexOf("-") : Integer.MAX_VALUE));
-        String url1= "https://www.googleapis.com/storage/v1beta2/b?project=1072491393333&projection=noAcl&key="
-            + "dataiku.com:cd-dwh-poc";
-        String url = "https://www.googleapis.com/storage/v1beta2/b?project="
-            + projectId + "&projection=noAcl&key=" + "dataiku.com:cd-dwh-poc";
-        HttpRequest req = requestFactory.buildPostRequest(new GenericUrl(url1), requestContent);
-        HttpResponse response = req.execute();
-        if (!response.isSuccessStatusCode()) {
-            throw new IOException("fail to create bucket: " + bucket);
+        if (type != Type.BUCKET_EXISTS) {
+            throw new UserException("Cannot create Google Storage bucket.");
         }
     }
     @Override
