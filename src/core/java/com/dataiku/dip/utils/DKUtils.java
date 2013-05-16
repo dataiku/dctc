@@ -13,7 +13,10 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTimeZone;
@@ -64,7 +67,7 @@ public class DKUtils {
 
     /* Execute and log, returns return code */
     public static int execAndLog(String[] args, String[] env) throws IOException,
-                                                                     InterruptedException {
+    InterruptedException {
         Process p = Runtime.getRuntime().exec(args, env);
         Thread tout = new LoggingStreamEater(p.getInputStream(), org.apache.log4j.Level.INFO);
         tout.start();
@@ -78,7 +81,7 @@ public class DKUtils {
 
     /* Execute and log, throws if return coded non zero */
     public static void execAndLogThrows(String[] args, String[] env,
-                                        File cwd) throws IOException, InterruptedException {
+            File cwd) throws IOException, InterruptedException {
         Process p = Runtime.getRuntime().exec(args, env, cwd);
         Thread tout = new LoggingStreamEater(p.getInputStream(), org.apache.log4j.Level.INFO);
         tout.start();
@@ -94,7 +97,7 @@ public class DKUtils {
 
     /* Execute and returns stdout - logs stderr - throws if return code is non zero */
     public static byte[] execAndGetOutput(String[] args, String[] env) throws IOException,
-                                                                              InterruptedException {
+    InterruptedException {
         Process p = Runtime.getRuntime().exec(args, env);
         GatheringStreamEater tout = new GatheringStreamEater(p.getInputStream());
         tout.start();
@@ -112,7 +115,7 @@ public class DKUtils {
 
     /* Execute and returns stdout - logs stderr - throws if return code is non zero */
     public static byte[] execAndGetOutput(String[] args, String[] env, File cwd) throws IOException,
-                                                                              InterruptedException {
+    InterruptedException {
         Process p = Runtime.getRuntime().exec(args, env, cwd);
         GatheringStreamEater tout = new GatheringStreamEater(p.getInputStream());
         tout.start();
@@ -127,7 +130,7 @@ public class DKUtils {
         terr.join();
         return tout.baos.toByteArray();
     }
-    
+
     /* Eat a stream and log its output */
     static class LoggingStreamEater extends Thread {
         LoggingStreamEater(InputStream is, org.apache.log4j.Level level) {
@@ -207,5 +210,26 @@ public class DKUtils {
         return sb.toString();
     }
 
+    /** 
+     * Parse an array of "key=value" strings to a map.
+     * TODO: Should handle quoting of the value
+     */
+    public static Map<String, String> parseKVStringArray(String[] array) {
+        Map<String, String> map = new HashMap<String, String>();
+        for (String val : array) {
+            String[] chunks =val.split("=");
+            if (chunks.length < 2) {
+                throw new IllegalArgumentException("Illegal param : " + val + ", expected key=value");
+            }
+            String paramValue = val.substring(chunks[0].length() + 1);
+            map.put(chunks[0], paramValue);
+        }
+        return map;
+    }
+
+    public static Map<String, String> parseKVStringArray(Collection<String> array) {
+        return parseKVStringArray(array.toArray(new String[0]));
+    }
+    
     private static Logger logger = Logger.getLogger("dku.utils");
 }
