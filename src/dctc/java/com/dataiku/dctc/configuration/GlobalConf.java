@@ -62,7 +62,6 @@ public class GlobalConf {
         return threadLimit;
     }
 
-    static private int colNumber;
     public synchronized static int getColNumber() {
         if (colNumber == 0) {
             if (GlobalConstants.isWindows) {
@@ -95,6 +94,7 @@ public class GlobalConf {
     }
 
     // Attributes
+    static private int colNumber;
     static DisplayFactory display = new DisplayFactory("auto");
     static int threadLimit = Runtime.getRuntime().availableProcessors();
     static boolean resolveGlobbing = true;
