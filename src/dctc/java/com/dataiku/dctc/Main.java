@@ -111,6 +111,11 @@ public class Main {
        System.setOut(new StdOut(System.out));
        System.setErr(new StdOut(System.err));
     }
+    public static void warn(StructuredConf conf) {
+        if (GlobalConf.showGitHash() && !Version.isStable) {
+            System.err.println(Version.pretty());
+        }
+    }
     public static void main(String[] args) {
         atExit();
         atBegin();
@@ -127,6 +132,7 @@ public class Main {
                 System.err.println("dctc fail: " + e.getMessage());
                 return;
             }
+            warn(conf);
 
             if (args.length >= 1) {
                 args = conf.getAlias().resolve(args);

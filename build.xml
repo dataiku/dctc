@@ -64,6 +64,9 @@
     </target>
 
     <target name="dctc-jar" depends="resolve, core-jar">
+        <exec executable="./dctc-hash-update.sh">
+            <arg value="./src/dctc/java/com/dataiku/dctc/configuration/Version.java" />
+        </exec>
         <path id="lib.path.id">
             <fileset dir="${clib.dir}" />
             <fileset dir="${extlib.dir}" />
@@ -85,6 +88,9 @@
             <compilerarg value="-Xlint:varargs" />
         </javac>
         <jar destfile="${dctc-jar.file}" basedir="${dctc-jar.build}" />
+        <move file="./src/dctc/java/com/dataiku/dctc/configuration/Version.javae"
+              tofile="./src/dctc/java/com/dataiku/dctc/configuration/Version.java"/>
+
     </target>
 
     <target name="tooljar" depends="dctc-jar">
