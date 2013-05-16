@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.cli.Options;
-import org.apache.log4j.Logger;
 
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.copy.CopyTask;
@@ -122,6 +121,4 @@ public class Cp extends ListCommand {
     // Attributes
     private Boolean recur = null;
     private Boolean interactive = null;
-
-    private static Logger logger = Logger.getLogger("dctc.cp");
 }

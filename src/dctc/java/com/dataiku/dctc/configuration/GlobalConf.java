@@ -26,7 +26,6 @@ public class GlobalConf {
                 threadLimit = Integer.parseInt(value);
             }
             else if (key.equals("globbing")) {
-                String lowerValue = value.toLowerCase();
                 resolveGlobbing = getBoolean(value);
                 if (resolveGlobbing == null) {
                     System.err.println("Unknown value (" + value + ") for globbing settings");

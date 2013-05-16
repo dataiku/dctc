@@ -1,11 +1,6 @@
 package com.dataiku.dctc.file;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-
 import com.dataiku.dctc.file.FileBuilder.Protocol;
-import com.dataiku.dip.hadoop.HadoopUtils;
-import com.dataiku.dip.utils.ErrorContext;
 import com.dataiku.dip.utils.Params;
 
 public class HttpFileBuilder extends ProtocolFileBuilder {

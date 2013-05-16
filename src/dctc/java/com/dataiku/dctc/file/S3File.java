@@ -447,9 +447,6 @@ public class S3File extends BucketBasedFile {
         return new IOException("Failed to " + failedCall + ": status=" + e.getStatusCode() +
                 " code=" + e.getErrorCode() + " message=" + e.getMessage(),e );
     }
-    private IOException wrapProperly(String failedCall, AmazonClientException e) {
-        return new IOException("Failed to " + failedCall + ": message=" + e.getMessage());
-    }
 
     /// Public
     public AmazonS3 getAmazonS3() {

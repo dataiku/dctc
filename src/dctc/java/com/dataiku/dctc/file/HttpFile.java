@@ -6,10 +6,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -18,11 +14,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Node;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
 
 public class HttpFile extends AbstractGFile {
 
@@ -56,7 +47,6 @@ public class HttpFile extends AbstractGFile {
     public List<HttpFile> glist() throws IOException {
         if (list == null) {
             list = new ArrayList<HttpFile>();
-            InputStream is = inputStream();
             Document doc = Jsoup.connect(givenName()).get();
             recur(doc.body().childNodes());
         }

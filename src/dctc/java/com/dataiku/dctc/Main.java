@@ -26,13 +26,10 @@ import com.dataiku.dctc.command.Rm;
 import com.dataiku.dctc.command.Rmdir;
 import com.dataiku.dctc.command.Sync;
 import com.dataiku.dctc.command.Tail;
-import com.dataiku.dctc.configuration.Alias;
-import com.dataiku.dctc.configuration.Configuration;
+import com.dataiku.dctc.configuration.Version;
 import com.dataiku.dctc.configuration.StructuredConf;
-import com.dataiku.dctc.configuration.CredentialProviderBank;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.exception.UserException;
-import com.dataiku.dctc.file.FileBuilder;
 import com.dataiku.dip.utils.StdOut;
 
 public class Main {

@@ -14,7 +14,6 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.LocalFileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.RawLocalFileSystem;
-import org.apache.log4j.Logger;
 
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
@@ -248,5 +247,4 @@ public class HdfsFile extends AbstractGFile {
     private List<String> list;
     private List<String> recursiveList;
     private FileStatus status;
-    private static Logger logger = Logger.getLogger("dctc.file.hdfs");
 }

@@ -18,7 +18,6 @@ import org.apache.log4j.Logger;
 import com.dataiku.dctc.DCTCLog;
 import com.dataiku.dctc.Globbing;
 import com.dataiku.dctc.Main;
-import com.dataiku.dctc.configuration.Configuration;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.file.FileBuilder;
 import com.dataiku.dctc.file.GeneralizedFile;
@@ -51,12 +50,13 @@ public abstract class Command {
             perform(arguments);
         }
     }
-    @SuppressWarnings("static-access")
     protected void longOpt(Options opt, String desc, String longName,
                            String shortName, String paramName) {
         OptionBuilder.withDescription(desc);
         OptionBuilder.hasArg();
-        opt.addOption(OptionBuilder.withArgName(paramName).withLongOpt(shortName).create(longName));
+        OptionBuilder.withArgName(paramName);
+        OptionBuilder.withLongOpt(shortName);
+        opt.addOption(OptionBuilder.create(longName));
     }
     public void perform(List<GeneralizedFile> args) {
         throw new NotImplementedException();
@@ -185,13 +185,12 @@ public abstract class Command {
     }
 
     // Private methods
-    @SuppressWarnings("static-access")
     private void initOptions() {
         if (opt == null) {
             opt = setOptions();
             OptionBuilder.withDescription("Display this help message.");
-            opt.addOption(OptionBuilder.withLongOpt("help").create());
-            // opt.addOption("help", false, );
+            OptionBuilder.withLongOpt("help");
+            opt.addOption(OptionBuilder.create());
             opt.addOption("v", "verbose", false, "Enable verbose logging");
             opt.addOption("V", "VV", false, "Enable debug logging");
         }

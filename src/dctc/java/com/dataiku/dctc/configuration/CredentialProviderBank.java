@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.dataiku.dctc.exception.UserException;
-import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.dataiku.dctc.file.FileManipulation;
 import static com.dataiku.dctc.PrettyString.pquoted;
 import static com.dataiku.dctc.PrettyString.scat;
@@ -33,7 +32,6 @@ public class CredentialProviderBank {
     }
 
     public void setProtocolSettings(String protocol, Map<String, String> settings) {
-        Protocol proto = Protocol.forName(protocol);
         String firstAccount = null;
         for (Map.Entry<String, String> setting: settings.entrySet()) {
             String key = setting.getKey();

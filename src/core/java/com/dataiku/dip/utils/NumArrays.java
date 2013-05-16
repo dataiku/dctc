@@ -65,15 +65,15 @@ public class NumArrays {
     }
 
     /* Sum the squares of the elements in an array */
-    
+
     public static long sumSquare(int[] array) {
         long ret = 0;
-        for (int i = 0; i < array.length; i++) ret += (long)array[i]*(long)array[i]; 
+        for (int i = 0; i < array.length; i++) ret += (long)array[i]*array[i];
         return ret;
     }
     public static long sumSquare(long[] array) {
         long ret = 0;
-        for (int i = 0; i < array.length; i++) ret += (long)array[i]*(long)array[i]; 
+        for (int i = 0; i < array.length; i++) ret += array[i]*array[i];
         return ret;
     }
     public static double sumSquare(double[] array) {

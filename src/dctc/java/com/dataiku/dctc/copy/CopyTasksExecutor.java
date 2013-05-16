@@ -7,8 +7,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
-import org.apache.log4j.Logger;
-
 import com.dataiku.dctc.DCTCLog;
 import com.dataiku.dctc.display.ThreadedDisplay;
 
@@ -88,5 +86,4 @@ public class CopyTasksExecutor {
     private CopyTaskRunnableFactory fact;
     private ThreadedDisplay display;
     private List<CopyTaskRunnable> errors;
-    private static Logger logger = Logger.getLogger("dctc.copyexecutor");
 }

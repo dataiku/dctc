@@ -13,8 +13,6 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.amazonaws.services.sns.model.NotFoundException;
 import com.dataiku.dctc.exception.UserException;
@@ -23,14 +21,12 @@ import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpContent;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.InputStreamContent;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.storage.Storage;
 import com.google.api.services.storage.Storage.Builder;

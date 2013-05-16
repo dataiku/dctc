@@ -21,11 +21,13 @@ public class Head extends Command {
     public String longDescription() {
         return "Output the first N lines of the input files";
     }
-
-    @SuppressWarnings("static-access")
     protected Options setOptions() {
         Options options = new Options();
-        options.addOption(OptionBuilder.withArgName("number").hasArg().withLongOpt("lines").withDescription("Display the first `number' lines of each file").create("n"));
+        OptionBuilder.withArgName("number");
+        OptionBuilder.hasArg();
+        OptionBuilder.withLongOpt("lines");
+        OptionBuilder.withDescription("Display the first `number' lines of each file");
+        options.addOption(OptionBuilder.create("n"));
         return options;
     }
 
