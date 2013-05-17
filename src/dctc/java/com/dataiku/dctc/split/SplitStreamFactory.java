@@ -1,7 +1,7 @@
 package com.dataiku.dctc.split;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -19,11 +19,11 @@ import com.dataiku.dip.output.OutputFormatter;
 
 public class SplitStreamFactory {
     protected static class Output {
-        Output(OutputStreamWriter outputStreamWriter, OutputFormatter outputFormatter) {
-            this.outputStreamWriter = outputStreamWriter;
+        Output(OutputStream outputStream, OutputFormatter outputFormatter) {
+            this.outputStream = outputStream;
             this.outputFormatter = outputFormatter;
         }
-        public OutputStreamWriter outputStreamWriter;
+        public OutputStream outputStream;
         public OutputFormatter outputFormatter;
     }
 
@@ -47,7 +47,7 @@ public class SplitStreamFactory {
         if (out == null) {
             out = newStream(splitIndex);
             outputStreams.put(splitIndex, out);
-            out.outputFormatter.header(sourceCF, out.outputStreamWriter);
+            out.outputFormatter.header(sourceCF, out.outputStream);
         }
         return out;
     }
@@ -65,19 +65,19 @@ public class SplitStreamFactory {
         } else if (inputFormat.getType().equals("line")) {
             formatter = new LineOutputFormatter();
         }
-        return new Output(new OutputStreamWriter(AutoGZip.buildOutput(out)), formatter);
+        return new Output(AutoGZip.buildOutput(out), formatter);
     }
 
     // Called by the processor output.
     // Synchronized because we directly write in the output files
     synchronized void emitRow(ColumnFactory sourceCF, Row row) throws IOException {
         Output o = get(sourceCF, row);
-        o.outputFormatter.format(row, sourceCF, o.outputStreamWriter);
+        o.outputFormatter.format(row, sourceCF, o.outputStream);
     }
 
     public synchronized void close() {
         for (Entry<String, Output> it: outputStreams.entrySet()) {
-            IOUtils.closeQuietly(it.getValue().outputStreamWriter);
+            IOUtils.closeQuietly(it.getValue().outputStream);
         }
     }
 

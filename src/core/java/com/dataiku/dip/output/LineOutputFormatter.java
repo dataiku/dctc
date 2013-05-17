@@ -7,8 +7,9 @@ import com.dataiku.dip.datalayer.Column;
 import com.dataiku.dip.datalayer.ColumnFactory;
 import com.dataiku.dip.datalayer.Row;
 
-public class LineOutputFormatter implements OutputFormatter {
+public class LineOutputFormatter extends StringOutputFormatter {
     public LineOutputFormatter() {
+        super("utf8");
     }
     
     private Column lineColumn;

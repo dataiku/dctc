@@ -11,11 +11,12 @@ import com.dataiku.dip.datalayer.Column;
 import com.dataiku.dip.datalayer.ColumnFactory;
 import com.dataiku.dip.datalayer.Row;
 
-public class CSVOutputFormatter implements OutputFormatter {
+public class CSVOutputFormatter extends StringOutputFormatter {
 	private char delimiter;
 	private List<Column> headerColumns = new ArrayList<Column>();
 
 	public CSVOutputFormatter(char delimiter) {
+	    super("utf8");
 		this.delimiter = delimiter;
 	}
 

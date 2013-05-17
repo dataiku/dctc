@@ -5,7 +5,7 @@ import org.apache.commons.lang.NotImplementedException;
 import com.dataiku.dip.input.Format;
 import com.dataiku.dip.input.formats.CSVFormatConfig;
 
-public class OutputFormatterFactory {
+public class CSVOnlyOutputFormatterFactory {
     public static OutputFormatter build(Format fmt) {
 
         if (fmt.getType().equals("csv")) {

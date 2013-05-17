@@ -3,7 +3,6 @@ package com.dataiku.dctc.split;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +29,7 @@ public class TmpSplitStreamFactory extends SplitStreamFactory {
         File tmpFile = File.createTempFile("Foo", "bar.toto");
         tmpFile.deleteOnExit();
 
-        Output output = new Output(new OutputStreamWriter(new FileOutputStream(tmpFile)), formatter);
+        Output output = new Output(new FileOutputStream(tmpFile), formatter);
         TmpOutput tmpOutput = new TmpOutput(output, tmpFile);
         map.put(splitIndex, tmpOutput);
 
