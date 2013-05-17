@@ -60,7 +60,7 @@ public class Params {
 
         public List<String> childrenKeys(String prefix, boolean includeSelfKey) {
             List<String> o = new ArrayList<String>();
-            for (KeyValue child: children) {
+            for (KeyValue child: getChildren()) {
                 String name = child.key;
                 if (includeSelfKey) name = key + "." + name;
                 if (prefix != null) name = prefix + "." + name;
