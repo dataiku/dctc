@@ -34,9 +34,10 @@ public class SimpleCopyTaskRunnableFactory implements CopyTaskRunnableFactory {
             return new ArchiveCopyTaskRunnable(task, ite.next());
         } else {
             return new DirectCopyTaskRunnable(task.src,
-                                      task.dstDir.createSubFile(task.dstFileName,
-                                                                task.src.fileSeparator()),
-                                      task.deleteSrc);
+                                              task.dstDir.createSubFile(task.dstFileName,
+                                                                        task.src.fileSeparator()),
+                                              task.deleteSrc,
+                                              preserveDate);
         }
     }
 

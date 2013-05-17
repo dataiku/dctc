@@ -11,7 +11,7 @@ public class LineOutputFormatter extends StringOutputFormatter {
     public LineOutputFormatter() {
         super("utf8");
     }
-    
+
     private Column lineColumn;
 
     @Override

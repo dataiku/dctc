@@ -13,7 +13,7 @@ import com.dataiku.dip.output.CSVOutputFormatter;
 import com.dataiku.dip.output.OutputFormatter;
 
 public class TmpSplitStreamFactory extends SplitStreamFactory {
-    public TmpSplitStreamFactory(GeneralizedFile dir, String prefix, String postfix, SplitFunction fct, 
+    public TmpSplitStreamFactory(GeneralizedFile dir, String prefix, String postfix, SplitFunction fct,
                                 String selectedColumn, Format format, boolean compress) {
         super(dir, prefix, postfix, fct, selectedColumn, format, compress);
         this.map = new HashMap<String, TmpOutput>();

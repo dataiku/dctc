@@ -58,7 +58,7 @@ public class SplitStreamFactory {
         GeneralizedFile out = dir.createSubFile(fileName, dir.fileSeparator());
         out.mkpath();
         System.out.println("CREATE OUT " + out.getAbsoluteAddress());
-        
+
         OutputFormatter formatter = null;
         if (inputFormat.getType().equals("csv")) {
             formatter = new CSVOutputFormatter(inputFormat.getCharParam("separator"));

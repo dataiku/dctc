@@ -8,14 +8,14 @@ import com.dataiku.dip.output.OutputWriter;
 public class StreamContext implements Context{
     public InputSplit split;
     public OutputWriter output;
-     
+
     @Override
     public InputSplit getMainInputSplit(){
         return split;
     }
 
-	@Override
-	public FormatExtractor getFormatExtractor() {
-		return null;
-	}
+    @Override
+    public FormatExtractor getFormatExtractor() {
+        return null;
+    }
 }
