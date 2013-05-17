@@ -194,7 +194,7 @@ public class GSFile extends BucketBasedFile {
     @Override
     public void mkdirs() throws IOException {
         if (type != Type.BUCKET_EXISTS) {
-            throw new UserException("Cannot create Google Storage bucket.");
+            throw new UserException("Cannot create Google Storage bucket. Please go to https://cloud.google.com/console to create a bucket");
         }
     }
     @Override
