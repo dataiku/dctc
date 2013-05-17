@@ -27,7 +27,7 @@ public class StructuredConf {
         }
     }
     public void parse(String file) throws IOException {
-        conf.parse(new File(file));
+        parse(new File(file));
     }
 
     public CredentialProviderBank getCredentialProviderBank() {
