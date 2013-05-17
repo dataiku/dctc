@@ -76,7 +76,7 @@ public class CredentialProviderBank {
             if (protocol.equals("s3")) {
                 throw new UserException("No credentials for protocol '" + protocol + "'. You can add an account using 'dctc add-account'");
             } else {
-                throw new UserException("No credentials for protocol '" + protocol + "'. Please edit configuration file: " + GlobalConf.confFile());
+                throw new UserException("No credentials for protocol '" + protocol + "'. Please edit configuration file: " + GlobalConf.confPath());
             }
         }
         if (account == null) {
@@ -87,7 +87,7 @@ public class CredentialProviderBank {
             if (protocol.equals("s3")) {
                 throw new UserException("No credentials for protocol '" + protocol + "' and account '" + account + "'. You can add an account using 'dctc add-account'");
             } else {
-                throw new UserException("No credentials for protocol '" + protocol + "' and account '" + account + "'.Please edit configuration file: " + GlobalConf.confFile());
+                throw new UserException("No credentials for protocol '" + protocol + "' and account '" + account + "'.Please edit configuration file: " + GlobalConf.confPath());
             }
         }
         return p;

@@ -86,11 +86,11 @@ public class AddAccount extends Command {
                 }
                 configuration.put("s3", account, "access_key", accessKey);
                 configuration.put("s3", account, "secret_key", secretKey);
-                System.err.println("Updating configuration file : " + GlobalConf.confFile());
+                System.err.println("Updating configuration file : " + GlobalConf.confPath());
                 try {
-                    configuration.appendConfTo(GlobalConf.confFile());
+                    configuration.appendConfTo(GlobalConf.confPath());
                 } catch (IOException e) {
-                    error(GlobalConf.confFile(), "Couldn't write in the configuration file", e, 3);
+                    error(GlobalConf.confPath(), "Couldn't write in the configuration file", e, 3);
                 }
                 return;
             }
@@ -123,11 +123,11 @@ public class AddAccount extends Command {
                 }
                 configuration.put("gs", account, "mail", email);
                 configuration.put("gs", account, "key_path", keyPath);
-                System.err.println("Updating configuration file: " + GlobalConf.confFile());
+                System.err.println("Updating configuration file: " + GlobalConf.confPath());
                 try {
-                    configuration.appendConfTo(GlobalConf.confFile());
+                    configuration.appendConfTo(GlobalConf.confPath());
                 } catch (IOException e) {
-                    error(GlobalConf.confFile(), "Couldn't write in the configuration file", e, 3);
+                    error(GlobalConf.confPath(), "Couldn't write in the configuration file", e, 3);
                 }
                 return;
             }

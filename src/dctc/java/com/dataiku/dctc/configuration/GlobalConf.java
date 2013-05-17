@@ -1,5 +1,6 @@
 package com.dataiku.dctc.configuration;
 
+import java.io.File;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -11,7 +12,10 @@ import com.dataiku.dip.utils.DKUtils;
 
 
 public class GlobalConf {
-    public static String confFile() {
+    public static File confFile() {
+        return new File(confPath());
+    }
+    public static String confPath() {
         return GlobalConstants.userHome + (GlobalConstants.isWindows ? "/dctcrc" : "/.dctcrc");
     }
     public static void setGlobalSettings(Map<String, String> settings) {

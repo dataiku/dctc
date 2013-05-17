@@ -127,7 +127,7 @@ public class Main {
             StructuredConf conf;
             try {
                 conf = new StructuredConf();
-            conf.parse(GlobalConf.confFile());
+            conf.parse(GlobalConf.confPath());
             } catch (IOException e) {
                 System.err.println("dctc fail: " + e.getMessage());
                 return;
