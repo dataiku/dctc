@@ -246,6 +246,11 @@ public class SshFile extends AbstractGFile {
         return connData.host + path;
     }
     @Override
+    public String getAbsoluteAddress() {
+        return getProtocol() + "://" + this.connData.username
+            + "@" + this.connData.host + ":" + path;
+    }
+    @Override
     public String givenName() {
         /* We have to use the absolute path here because of the
          * weirdness of SSH when it comes to having a home folder
