@@ -76,6 +76,7 @@ public interface GeneralizedFile extends Comparable<GeneralizedFile> {
     public String getHash() throws IOException;
     public String getHashAlgorithm();
     public long getDate() throws IOException;
+    public void setDate(long date) throws IOException;
     public long getSize() throws IOException;
     public boolean allocate(long size);
 }

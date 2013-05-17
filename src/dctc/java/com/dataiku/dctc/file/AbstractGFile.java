@@ -125,6 +125,9 @@ public abstract class AbstractGFile implements GeneralizedFile {
     public String forbiddenCharacter() {
         return "";
     }
+    @Override
+    public void setDate(long date) {
+    }
 
     // Protected methods
     protected String clean(String path) {

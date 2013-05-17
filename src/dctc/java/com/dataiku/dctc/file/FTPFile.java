@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.net.UnknownHostException;
 
@@ -38,6 +39,7 @@ public class FTPFile extends AbstractGFile {
         }
         this.exists = true;
         this.file = file.isFile();
+        this.ftpfile = file;
         parse(file);
     }
     public FTPFile(Params p, String path) {
@@ -270,6 +272,12 @@ public class FTPFile extends AbstractGFile {
         return date;
     }
     @Override
+    public void setDate(long date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(date);
+        ftpfile.setTimestamp(cal);
+    }
+    @Override
     public long getSize() throws IOException {
         resolve();
         return size;
@@ -284,6 +292,29 @@ public class FTPFile extends AbstractGFile {
     public Acl getAcl() throws IOException {
         resolve();
         return acl;
+    }
+    @Override
+    public InputStream getLastLines(long lineNumber) throws IOException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    @Override
+    public InputStream getLastBytes(long byteNumber) throws IOException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    @Override
+    public InputStream getRange(long begin, long length) throws IOException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    @Override
+    public boolean hasHash() {
+        return false;
+    }
+    @Override
+    public String getHash() throws IOException {
+        return getProtocol();
     }
 
     /// Private
@@ -385,28 +416,5 @@ public class FTPFile extends AbstractGFile {
     private List<FTPFile> list;
     private List<FTPFile> recurList;
     private Acl acl;
-
-    @Override
-    public InputStream getLastLines(long lineNumber) throws IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    @Override
-    public InputStream getLastBytes(long byteNumber) throws IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    @Override
-    public InputStream getRange(long begin, long length) throws IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    @Override
-    public boolean hasHash() {
-        return false;
-    }
-    @Override
-    public String getHash() throws IOException {
-        return getProtocol();
-    }
+    private org.apache.commons.net.ftp.FTPFile ftpfile;
 }

@@ -237,6 +237,10 @@ public class LocalFile extends AbstractGFile {
         return f.lastModified();
     }
     @Override
+    public void setDate(long date) {
+        f.setLastModified(date);
+    }
+    @Override
     public long getSize() {
         return f.length();
     }
