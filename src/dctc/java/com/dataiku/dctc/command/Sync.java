@@ -104,7 +104,7 @@ public class Sync extends Command {
         if (tasks.size() == 0) {
             return;
         }
-        SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(false /*uncompress*/, false /*compress*/);
+        SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(false /*uncompress*/, false /*compress*/, false /* preserve date*/);
         ThreadedDisplay display = GlobalConf.getDisplay();
         CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, GlobalConf.getThreadLimit());
         exec.run(tasks, false);

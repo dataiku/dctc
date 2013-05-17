@@ -14,11 +14,13 @@ import com.dataiku.dctc.file.GeneralizedFile;
 
 // This shouldn't be used as is.
 public class DirectCopyTaskRunnable extends CopyTaskRunnable {
-    DirectCopyTaskRunnable(GeneralizedFile in, GeneralizedFile out, boolean deleteSrc) {
+    DirectCopyTaskRunnable(GeneralizedFile in, GeneralizedFile out,
+                           boolean deleteSrc, boolean preserveDate) {
         super(in);
 
         this.out = out;
         this.deleteSrc = deleteSrc;
+        this.preserveDate = preserveDate;
     }
 
     @Override
@@ -69,6 +71,9 @@ public class DirectCopyTaskRunnable extends CopyTaskRunnable {
             }
             i.close();
             o.close();
+            if (preserveDate) {
+                out.setDate(in.getDate());
+            }
             if (deleteSrc) {
                 in.delete();
             }
@@ -102,5 +107,6 @@ public class DirectCopyTaskRunnable extends CopyTaskRunnable {
     private boolean readIndirection = false;
     private GeneralizedFile out;
     private boolean deleteSrc;
+    private boolean preserveDate;
     private static Logger logger = Logger.getLogger("dctc.copy");
 }

@@ -68,12 +68,15 @@ public class Cp extends ListCommand {
         opt.addOption("ua", "unarchive", false, "Uncompress all archives found in the command line.");
         opt.addOption("i", "interactive", false, "Prompt before overwrite");
         opt.addOption("a", "archive", false, "Archives all input files into a single destination file using the destination file extension as identifier for the archive method. Supported archive methods are 'zip'");
+        opt.addOption("p", "preserve", false, "Preserve the time stamp");
 
         return opt;
     }
     @Override
     public void execute(List<CopyTask> tasks, int exitCode) throws IOException {
-        SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(unarchive(), archive());
+        SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(unarchive(),
+                                                                               archive(),
+                                                                               hasOption("p"));
         ThreadedDisplay display = GlobalConf.getDisplay();
         CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, GlobalConf.getThreadLimit());
         exec.run(tasks, archive());
@@ -100,7 +103,7 @@ public class Cp extends ListCommand {
     }
     @Override
     protected boolean dstRoot(GeneralizedFile dst) throws IOException {
-        return !dst.exists() || dst.isDirectory() || archive();
+        return true;
     }
     @Override
     protected void leave(GeneralizedFile sourceDir) {

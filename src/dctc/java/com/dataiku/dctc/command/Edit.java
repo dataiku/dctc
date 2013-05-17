@@ -135,7 +135,7 @@ public class Edit extends Command {
 
     // Private
     private void copy(List<CopyTask> tasks) throws IOException {
-        SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(false, false);
+        SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(false, false, true);
         for (CopyTask task : tasks) {
             fact.build(task).work();
         }

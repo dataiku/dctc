@@ -9,9 +9,10 @@ import com.dataiku.dctc.file.GeneralizedFile;
 
 // Direct move with archiving/unarchiving management.
 public class SimpleCopyTaskRunnableFactory implements CopyTaskRunnableFactory {
-    public SimpleCopyTaskRunnableFactory(boolean unarchive, boolean archive) {
+    public SimpleCopyTaskRunnableFactory(boolean unarchive, boolean archive, boolean preserveDate) {
         this.unarchive = unarchive;
         this.archive = archive;
+        this.preserveDate = preserveDate;
     }
     @Override
     public CopyTaskRunnable build(CopyTask task) throws IOException {
@@ -50,6 +51,7 @@ public class SimpleCopyTaskRunnableFactory implements CopyTaskRunnableFactory {
 
     private boolean archive;
     private boolean unarchive;
+    private boolean preserveDate;
     private OutputArchiveIterable archiveIterable = null;
     private OutputArchiveIterator ite;
 }

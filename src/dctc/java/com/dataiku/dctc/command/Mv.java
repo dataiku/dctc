@@ -30,7 +30,7 @@ public class Mv extends ListCommand {
     @Override
     public void execute(List<CopyTask> tasks, int exitCode) throws IOException {
         if (exitCode == 0) {
-            SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(false, false);
+            SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(false, false, false);
             ThreadedDisplay display = GlobalConf.getDisplay();
             CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, GlobalConf.getThreadLimit());
 
