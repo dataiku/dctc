@@ -24,9 +24,7 @@ public class StdOut extends PrintStream {
         int index = msg.indexOf("\n");
 
         if (index != -1) {
-            sb.append(msg.substring(0, index + 1));
-            flush();
-            sb.append(index + 1);
+            sb.append(msg);
             flush();
         } else {
             sb.append(msg);
