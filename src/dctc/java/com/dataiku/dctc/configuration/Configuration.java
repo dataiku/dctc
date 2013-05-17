@@ -57,14 +57,13 @@ public class Configuration {
        fw.write(sb.toString());
        fw.close();
    }
-    public void parse(String file) throws IOException {
-        File f = new File(file);
-        if (!f.exists()) {
-            create(f);
+    public void parse(File file) throws IOException {
+        if (!file.exists()) {
+            create(file);
         }
-        if (!f.exists()) return;
+        if (!file.exists()) return;
 
-        BufferedReader stream =  new BufferedReader(new InputStreamReader(new FileInputStream(f)));
+        BufferedReader stream =  new BufferedReader(new InputStreamReader(new FileInputStream(file)));
         String line;
         Map<String, String> protocol = null;
         try {

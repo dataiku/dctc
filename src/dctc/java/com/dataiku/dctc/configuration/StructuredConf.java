@@ -1,14 +1,17 @@
 package com.dataiku.dctc.configuration;
 
+import static com.dataiku.dctc.PrettyString.eol;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.Set;
-import static com.dataiku.dctc.PrettyString.eol;
-import com.dataiku.dctc.file.FileBuilder.Protocol;
+
 import com.dataiku.dctc.file.FileBuilder;
+import com.dataiku.dctc.file.FileBuilder.Protocol;
 
 public class StructuredConf {
 
-    public void parse(String file) throws IOException {
+    public void parse(File file) throws IOException {
         conf.parse(file);
         alias();
         global();
@@ -22,6 +25,9 @@ public class StructuredConf {
             }
             throw new IOException(b.toString());
         }
+    }
+    public void parse(String file) throws IOException {
+        conf.parse(new File(file));
     }
 
     public CredentialProviderBank getCredentialProviderBank() {
