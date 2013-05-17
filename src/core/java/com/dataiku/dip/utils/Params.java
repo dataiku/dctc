@@ -124,7 +124,19 @@ public class Params {
     public void add(String key, double value) {
         add(key, Double.toString(value));
     }
-
+    
+    public Params with(String key, String value) {
+        add(key, value);
+        return this;
+    }
+    public Params with(String key, long value) {
+        add(key, value);
+        return this;
+    }
+    public Params with(String key, double value) {
+        add(key, value);
+        return this;
+    }
     public boolean hasParam(String name) {
         return params.containsKey(name);
     }
