@@ -1,8 +1,8 @@
 package com.dataiku.dctc;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
@@ -26,9 +26,9 @@ import com.dataiku.dctc.command.Rm;
 import com.dataiku.dctc.command.Rmdir;
 import com.dataiku.dctc.command.Sync;
 import com.dataiku.dctc.command.Tail;
-import com.dataiku.dctc.configuration.Version;
-import com.dataiku.dctc.configuration.StructuredConf;
 import com.dataiku.dctc.configuration.GlobalConf;
+import com.dataiku.dctc.configuration.StructuredConf;
+import com.dataiku.dctc.configuration.Version;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dip.utils.StdOut;
 
@@ -171,5 +171,5 @@ public class Main {
         }
     }
 
-    private static Map<String, Command> cmds = new HashMap<String, Command>();
+    private static Map<String, Command> cmds = new TreeMap<String, Command>();
 }
