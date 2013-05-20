@@ -69,7 +69,6 @@ public abstract class Command {
         }
         initOptions();
         HelpFormatter formatter = new HelpFormatter();
-        formatter.setDescPadding(10);
         formatter.printHelp(proto(), opt);
 
     }
