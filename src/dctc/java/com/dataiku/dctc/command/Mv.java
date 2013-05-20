@@ -79,8 +79,7 @@ public class Mv extends ListCommand {
             return false;
         }
     }
-    protected boolean dstRoot(GeneralizedFile dst) throws IOException {
-        return true;
+    protected void dstRoot(GeneralizedFile dst) throws IOException {
     }
     protected void leave(GeneralizedFile sourceDir) {
         list.add(sourceDir);

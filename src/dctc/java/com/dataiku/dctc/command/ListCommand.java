@@ -31,7 +31,7 @@ public abstract class ListCommand extends Command {
     protected abstract boolean shouldAdd(GeneralizedFile src,
             GeneralizedFile dst,
             String root) throws IOException;
-    protected abstract boolean dstRoot(GeneralizedFile dst) throws IOException;
+    protected abstract void dstRoot(GeneralizedFile dst) throws IOException;
     // Tell to the implementation that ListCommand leave `sourceDir'
     // directory.
     protected abstract void leave(GeneralizedFile sourceDir);
@@ -100,12 +100,7 @@ public abstract class ListCommand extends Command {
             return;
         }
 
-        if (!dstRoot(dst)) {
-            logger.info("Abort copy : !dstRoot");
-
-            exitCode(1);
-            return;
-        }
+        dstRoot(dst);
         // src contains at least one element.
         for (GeneralizedFile source: sources) {
             logger.debug("Check " + source.getAbsoluteAddress());

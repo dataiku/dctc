@@ -102,8 +102,7 @@ public class Cp extends ListCommand {
         return !dst.exists() || noClobber() || ask(dst);
     }
     @Override
-    protected boolean dstRoot(GeneralizedFile dst) throws IOException {
-        return true;
+    protected void dstRoot(GeneralizedFile dst) throws IOException {
     }
     @Override
     protected void leave(GeneralizedFile sourceDir) {

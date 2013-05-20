@@ -143,17 +143,11 @@ public class Dispatch extends ListCommand {
         return true;
     }
     @Override
-    protected boolean dstRoot(GeneralizedFile dst) throws IOException {
-        if (!dst.exists() || dst.isDirectory()) {
-            this.dst = dst;
-            try {
-                dst.mkpath();
-                return true;
-            } catch (IOException e) {
-                error(dst.givenName(), e.getMessage(), 3);
-            }
+    protected void dstRoot(GeneralizedFile dst) throws IOException {
+        if (!dst.exists()) {
+            dst.mkpath();
         }
-        return false;
+        this.dst = dst;
     }
     @Override
     protected void leave(GeneralizedFile sourceDir) {
