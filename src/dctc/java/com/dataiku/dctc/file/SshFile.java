@@ -19,6 +19,7 @@ import org.apache.commons.io.IOUtils;
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.configuration.SshUserInfo;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
+import static com.dataiku.dctc.PrettyString.eol;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.ChannelSftp;
@@ -175,7 +176,7 @@ public class SshFile extends AbstractGFile {
                 path += "/";
             }
             path = path.replaceAll("#", "\\#");
-            list(list, realpath + "; ls -1 -- \"" + path + "\"| sed -e 's#^#" + path + "#'|" + format);
+            list(list, realpath + "; ls -a1 -- \"" + path + "\"| sed -e 's#^#" + path + "#'|" + format);
         }
         return list;
     }
@@ -464,6 +465,10 @@ public class SshFile extends AbstractGFile {
             IOUtils.copy(channel.getInputStream(), writer, "UTF-8");
             String str = writer.toString();
             disconnect(channel);
+            int errorStatut = channel.getExitStatus();
+            if (errorStatut != 0) {
+                throw new IOException("Unknown error on: " + getAbsoluteAddress() + eol() + "receive: " + channel.getExitStatus() + eol() + str);
+            }
             return str;
         } catch (JSchException e) {
             throw new IOException("dctc Sshfile: failed: " + path, e);
@@ -519,9 +524,12 @@ public class SshFile extends AbstractGFile {
         String[] split = exec(cmd).split("\n");
 
         for (String s: split) {
-            if (!s.isEmpty()) {
+            if (!s.isEmpty() && !(s.equals(".") || s.equals(".."))) {
                 l.add(parseAndBuild(s));
             }
+        }
+        if (l.size() == 0) {
+            throw new IOException("Permission denied.");
         }
     }
     private String getPath() {
