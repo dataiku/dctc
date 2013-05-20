@@ -213,8 +213,8 @@ public class SshFile extends AbstractGFile {
             }
             return newNotFound(this, childPathWithoutHost);
         }
-        return new SshFile(FileManipulation.concat(getPath(), path,
-                fileSeparator(), fileSeparator), this);
+        return new SshFile(FileManipulation.concat(path, subpath,
+                                                   fileSeparator(), fileSeparator), this);
     }
     @Override
     public boolean exists() throws IOException {
