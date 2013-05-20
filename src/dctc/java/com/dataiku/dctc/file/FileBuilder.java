@@ -26,6 +26,7 @@ public class FileBuilder {
         private ProtocolFileBuilder builder;
 
         public static Protocol forName(String protocol) {
+            protocol = protocol.toLowerCase();
             if (protocol.equals("file")) protocol = "local";
             for (Protocol proto: Protocol.values()) {
                 if (protocol.equals(proto.getCanonicalName())) {
