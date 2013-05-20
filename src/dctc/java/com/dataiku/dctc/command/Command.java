@@ -55,8 +55,8 @@ public abstract class Command {
         OptionBuilder.withDescription(desc);
         OptionBuilder.hasArg();
         OptionBuilder.withArgName(paramName);
-        OptionBuilder.withLongOpt(shortName);
-        opt.addOption(OptionBuilder.create(longName));
+        OptionBuilder.withLongOpt(longName);
+        opt.addOption(OptionBuilder.create(shortName));
     }
     public void perform(List<GeneralizedFile> args) {
         throw new NotImplementedException();
