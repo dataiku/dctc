@@ -18,7 +18,6 @@ import com.dataiku.dip.input.StreamInputSplitProgressListener;
 import com.dataiku.dip.input.stream.EnrichedInputStream;
 import com.dataiku.dip.input.stream.StreamsInputSplit;
 import com.google.common.io.CountingInputStream;
-import com.google.refine.expr.functions.html.ParseHtml;
 
 public class CSVFormatExtractor extends AbstractFormatExtractor  {
     public CSVFormatExtractor(CSVFormatConfig conf) {
@@ -48,8 +47,15 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
             //            modifiersField.setInt(irsField, irsField.getModifiers() & ~Modifier.FINAL);
             //            irsField.set(null, 2048);
 
-            CSVReader reader = new CSVReader(new InputStreamReader(cis, "utf8"), conf.separator,
-                    conf.quoteChar);
+            CSVReader reader = null;
+            if (conf.escapeChar != null) {
+                reader = new CSVReader(new InputStreamReader(cis, conf.charset), conf.separator,
+                    conf.quoteChar, conf.escapeChar);
+            } else {
+                reader = new CSVReader(new InputStreamReader(cis, conf.charset), conf.separator,
+                        conf.quoteChar);
+                
+            }
             try {
                 List<Column> columns = new ArrayList<Column>();
                 for (int i = 0; i < conf.skipRowsBeforeHeader; i++) {
