@@ -21,9 +21,11 @@ import com.dataiku.dctc.configuration.SshUserInfo;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
+import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import com.jcraft.jsch.SftpException;
 
 public class SshFile extends AbstractGFile {
     static class ConnectionData {
@@ -329,11 +331,15 @@ public class SshFile extends AbstractGFile {
     @Override
     public OutputStream outputStream() throws IOException {
         try {
-            Channel channel = connect("scp -t " + path);
-            OutputStream out = channel.getOutputStream();
-            String cmd = "C0644 " + getSize() + " " + path + "\n";
-            out.write(cmd.getBytes());
-            return out;
+            Channel channel = connData.session.openChannel("sftp");
+            channel.connect();
+            ChannelSftp channelSftp = (ChannelSftp)channel;
+            try {
+                return channelSftp.put(path, 0);
+            } catch (SftpException e) {
+                throw new IOException("dctc SshFile: Failed to get output stream for: " + path, e);
+
+            }
         } catch (JSchException e) {
             throw new IOException("dctc SshFile: Failed to get output stream for: " + path, e);
         }
