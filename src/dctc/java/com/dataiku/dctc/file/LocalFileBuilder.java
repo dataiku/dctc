@@ -5,7 +5,7 @@ import com.dataiku.dip.utils.Params;
 
 public class LocalFileBuilder extends ProtocolFileBuilder {
     @Override
-    public Protocol getProtocol() { return Protocol.LOCAL; }
+    public Protocol getProtocol() { return Protocol.FILE; }
 
     @Override
     public void validateAccountParams(String account, Params p) {

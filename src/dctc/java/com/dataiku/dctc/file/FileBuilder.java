@@ -5,13 +5,13 @@ import com.dataiku.dctc.exception.UserException;
 
 public class FileBuilder {
     public enum Protocol {
-        S3("s3", new S3FileBuilder()),
-        GS("gs", new GSFileBuilder()),
         FTP("ftp", new FTPFileBuilder()),
-        SSH("ssh", new SshFileBuilder()),
+        FILE("file", new LocalFileBuilder()),
+        GS("gs", new GSFileBuilder()),
         HDFS("hdfs", new HdfsFileBuilder()),
         HTTP("http", new HttpFileBuilder()),
-        LOCAL("local", new LocalFileBuilder());
+        S3("s3", new S3FileBuilder()),
+        SSH("ssh", new SshFileBuilder());
 
         Protocol(String canonicalName, ProtocolFileBuilder builder) {
             this.canonicalName = canonicalName;
@@ -27,11 +27,13 @@ public class FileBuilder {
 
         public static Protocol forName(String protocol) {
             protocol = protocol.toLowerCase();
-            if (protocol.equals("file")) protocol = "local";
             for (Protocol proto: Protocol.values()) {
                 if (protocol.equals(proto.getCanonicalName())) {
                     return proto;
                 }
+            }
+            if (protocol.equals("local")) {
+                return FILE;
             }
             throw new UserException("Unknown protocol: " + protocol);
         }
@@ -45,7 +47,7 @@ public class FileBuilder {
     public GeneralizedFile buildFile(String uri) {
         int protocolSeparator = uri.indexOf("://");
         if (protocolSeparator == -1) {
-            return Protocol.LOCAL.builder.buildFile(null, uri);
+            return Protocol.FILE.builder.buildFile(null, uri);
         }
 
         Protocol protocol = Protocol.forName(uri.substring(0, protocolSeparator));

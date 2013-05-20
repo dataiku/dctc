@@ -71,7 +71,7 @@ public class LocalFile extends AbstractGFile {
     }
     @Override
     public String getProtocol() {
-        return Protocol.LOCAL.getCanonicalName();
+        return Protocol.FILE.getCanonicalName();
     }
     @Override
     public String fileSeparator() {
