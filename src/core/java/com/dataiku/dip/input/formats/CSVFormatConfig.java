@@ -15,22 +15,27 @@ public class CSVFormatConfig {
 		} else {
 		    quoteChar = '"';
 		}
-		headerLines = p.getIntParam("headerLines", 0);
-		colHeadersRecord = p.getIntParam("colsHeaderLine", -1);
+		skipRowsBeforeHeader = p.getIntParam(AbstractFormatExtractor.PARAM_skipRowsBeforeHeader, 0);
+		parseHeaderRow = p.getBoolParam(AbstractFormatExtractor.PARAM_parseHeaderRow, true);
+        skipRowsAfterHeader = p.getIntParam(AbstractFormatExtractor.PARAM_skipRowsAfterHeader, 0);
 	}
 	public void toParams(Format f) {
 	    f.addParam("charset", "" + charset);
 		f.addParam("separator", "" + separator);
 		f.addParam("quoteChar", "" + quoteChar);
-		f.addParam("headerLines", headerLines);
-		f.addParam("colsHeaderLine", colHeadersRecord);
+		
+		f.addParam(AbstractFormatExtractor.PARAM_skipRowsBeforeHeader, skipRowsBeforeHeader);
+		f.addParam(AbstractFormatExtractor.PARAM_parseHeaderRow, ""+parseHeaderRow);
+		f.addParam(AbstractFormatExtractor.PARAM_skipRowsAfterHeader, skipRowsAfterHeader);
 	}
 	
 	public String charset;
 	public char separator;
 	public char quoteChar;
-    public int headerLines;
-	public int colHeadersRecord= -1;
+    
+	public int skipRowsBeforeHeader;
+    public boolean parseHeaderRow;
+    public int skipRowsAfterHeader;
 
 	int probableNumberOfRecords;
 }

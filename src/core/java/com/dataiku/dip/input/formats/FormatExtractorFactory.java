@@ -9,7 +9,6 @@ import com.dataiku.dip.utils.RegexpFieldsBuilder;
 
 public class FormatExtractorFactory {
     public static FormatExtractor build(Format fmt) {
-
         if (fmt.getType().equals("csv")) {
             CSVFormatConfig csvConfig = new CSVFormatConfig(fmt);
             CSVFormatExtractor csvExtractor = new CSVFormatExtractor(csvConfig);
@@ -32,9 +31,11 @@ public class FormatExtractorFactory {
                     ErrorContext.pop();
                 }
             }
-
-            return new FixedWidthFormatExtractor(offsets);
-
+            return new FixedWidthFormatExtractor(offsets, 
+                       fmt.getParams().getIntParam(AbstractFormatExtractor.PARAM_skipRowsBeforeHeader, 0),
+                       fmt.getParams().getBoolParam(AbstractFormatExtractor.PARAM_parseHeaderRow, true),
+                       fmt.getParams().getIntParam(AbstractFormatExtractor.PARAM_skipRowsAfterHeader, 0));
+                       
         } else if (fmt.getType().equals("regexp_fields")) {
             RegexpFieldsBuilder rfb = RegexpFieldsBuilderFactory.build(fmt);
             RegexpBasedFormatExtractor extractor = new RegexpBasedFormatExtractor(rfb);

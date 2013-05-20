@@ -18,6 +18,7 @@ import com.dataiku.dip.input.StreamInputSplitProgressListener;
 import com.dataiku.dip.input.stream.EnrichedInputStream;
 import com.dataiku.dip.input.stream.StreamsInputSplit;
 import com.google.common.io.CountingInputStream;
+import com.google.refine.expr.functions.html.ParseHtml;
 
 public class CSVFormatExtractor extends AbstractFormatExtractor  {
     public CSVFormatExtractor(CSVFormatConfig conf) {
@@ -28,8 +29,8 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
 
     @Override
     public boolean run(StreamsInputSplit in, ProcessorOutput out, ProcessorOutput err,
-                       ColumnFactory cf, RowFactory rf, StreamInputSplitProgressListener listener,
-                       ExtractionLimit limit) throws Exception {
+            ColumnFactory cf, RowFactory rf, StreamInputSplitProgressListener listener,
+            ExtractionLimit limit) throws Exception {
         logger.info("CSV running with separator : '" + conf.separator + "'");
         while (true) {
             EnrichedInputStream stream = in.nextStream();
@@ -51,19 +52,32 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                     conf.quoteChar);
             try {
                 List<Column> columns = new ArrayList<Column>();
-                for (int i = 0; i < conf.headerLines; i++) {
+                for (int i = 0; i < conf.skipRowsBeforeHeader; i++) {
                     String[] line = reader.readNext();
                     if (line == null) {
                         out.lastRowEmitted();
                         break;
                     }
-                    if (i == conf.colHeadersRecord) {
+                }
+                if (conf.parseHeaderRow) {
+                    String[] line = reader.readNext();
+                    if (line == null) {
+                        out.lastRowEmitted();
+                    }
+                    if (line[0].startsWith("#")) {
                         line[0] = line[0].substring(1);
-                        for (String ch : line) {
-                            ch = ch.trim();
-                            Column cd = cf.column(ch);
-                            columns.add(cd);
-                        }
+                    }
+                    for (String ch : line) {
+                        ch = ch.trim();
+                        Column cd = cf.column(ch);
+                        columns.add(cd);
+                    }
+                }
+                for (int i = 0; i < conf.skipRowsAfterHeader; i++) {
+                    String[] line = reader.readNext();
+                    if (line == null) {
+                        out.lastRowEmitted();
+                        break;
                     }
                 }
 
