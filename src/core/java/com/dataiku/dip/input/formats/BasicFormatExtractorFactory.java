@@ -7,7 +7,7 @@ import com.dataiku.dip.input.Format;
 import com.dataiku.dip.utils.ErrorContext;
 import com.dataiku.dip.utils.RegexpFieldsBuilder;
 
-public class FormatExtractorFactory {
+public class BasicFormatExtractorFactory {
     public static FormatExtractor build(Format fmt) {
         if (fmt.getType().equals("csv")) {
             CSVFormatConfig csvConfig = new CSVFormatConfig(fmt);
