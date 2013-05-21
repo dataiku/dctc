@@ -19,4 +19,11 @@ public class DKUFileUtils {
     public static void mkdirsParent(File file) throws IOException {
         mkdirs(file.getParentFile());
     }
+    
+    public static String readFileToStringUTF8(File file) throws IOException {
+        return FileUtils.readFileToString(file, "utf8");
+    }
+    public static void writeFileUTF8(File file, String content) throws IOException {
+        FileUtils.write(file, content, "utf8");
+    }
 }
