@@ -124,7 +124,7 @@ public class Params {
     public void add(String key, double value) {
         add(key, Double.toString(value));
     }
-    
+
     public Params with(String key, String value) {
         add(key, value);
         return this;
@@ -236,7 +236,7 @@ public class Params {
     }
 
     /* Get as char */
- 
+
     public char getCharParam(String name) {
         String s = getMandParam(name);
         if (s.length() != 1) {
@@ -277,6 +277,16 @@ public class Params {
         return v.split(",");
     }
 
+    public List<Integer> getCSVParamAsIntList(String name, String defaultValue) {
+        String v = getParam(name, defaultValue);
+        String[] chunks = v.split(",");
+        List<Integer> out = new ArrayList<Integer>();
+        for (String s : chunks) {
+            out.add(Integer.parseInt(s));
+        }
+        return out;
+    }
+
     public KeyValue getAsKV(String name) {
         return intermediate.get(name);
     }
@@ -309,13 +319,13 @@ public class Params {
         }
 
         Collections.sort(validList, new Comparator<String>() {
-                @Override
-                    public int compare(String o1, String o2) {
-                    int i1 = Integer.parseInt(o1);
-                    int i2 = Integer.parseInt(o2);
-                    return i1 > i2 ? 1 : (i1 < i2 ? - 1 : 0);
-                }
-            });
+            @Override
+            public int compare(String o1, String o2) {
+                int i1 = Integer.parseInt(o1);
+                int i2 = Integer.parseInt(o2);
+                return i1 > i2 ? 1 : (i1 < i2 ? - 1 : 0);
+            }
+        });
         return validList;
     }
 
