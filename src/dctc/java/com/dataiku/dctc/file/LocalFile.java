@@ -44,7 +44,12 @@ public class LocalFile extends AbstractGFile {
     }
     @Override
     public LocalFile createSubFile(String path, String separator) {
-        return createInstanceFor(FileManipulation.concat(getAbsolutePath(), path, fileSeparator(), separator));
+        if (fileName.equals(".") ||
+            fileName.equals("./")) {
+            return createInstanceFor(path);
+        } else {
+            return createInstanceFor(FileManipulation.concat(getAbsolutePath(), path, fileSeparator(), separator));
+        }
     }
 
     // Public
