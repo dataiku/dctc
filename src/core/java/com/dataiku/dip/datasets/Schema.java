@@ -1,5 +1,6 @@
 package com.dataiku.dip.datasets;
 
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -30,7 +31,11 @@ public class Schema {
         Type(String name) {
             this.name = name;
         }
-        String name;
+        private String name;
+
+        public String getName() {
+            return name;
+        }
 
         public static Type forName(String name) {
             if (ARRAY_PATTERN.matcher(name).matches()) {
@@ -42,6 +47,63 @@ public class Schema {
                 }
             }
             throw ErrorContext.iae("Type not found: " +name);
+        }
+    }
+
+    public static Type fromSQLType(int sqlType) {
+        switch (sqlType) {
+
+        case Types.BIGINT:
+            return Type.BIGINT;
+        case Types.BOOLEAN:
+            return Type.BOOLEAN;
+        case Types.CHAR:
+            return Type.STRING;
+        case Types.DECIMAL:
+            return Type.FLOAT;
+        case Types.DOUBLE:
+            return Type.DOUBLE;
+        case Types.FLOAT:
+            return Type.FLOAT;
+        case Types.INTEGER:
+            return Type.INT;
+        case Types.TINYINT:
+            return Type.TINYINT;
+        case Types.LONGVARCHAR:
+            return Type.STRING;
+        case Types.VARCHAR:
+            return Type.STRING;
+        case Types.NULL:
+            return Type.STRING;
+
+
+        case Types.ARRAY:
+        case Types.BINARY:
+        case Types.BIT:
+        case Types.BLOB:
+        case Types.CLOB:
+        case Types.DATALINK:
+        case Types.DATE:
+        case Types.DISTINCT:
+        case Types.JAVA_OBJECT:
+        case Types.LONGNVARCHAR:
+        case Types.LONGVARBINARY:
+        case Types.NCHAR:
+        case Types.NCLOB:
+        case Types.NUMERIC:
+        case Types.NVARCHAR:
+        case Types.OTHER:
+        case Types.REAL:
+        case Types.REF:
+        case Types.ROWID:
+        case Types.SMALLINT:
+        case Types.SQLXML:
+        case Types.STRUCT:
+        case Types.TIME:
+        case Types.TIMESTAMP:
+        case Types.VARBINARY:
+        default:
+            throw new IllegalArgumentException("Can't handle SQL type " + sqlType);
         }
     }
 
