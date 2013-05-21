@@ -1,8 +1,8 @@
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="dctc" default="tooljar">
+ <project xmlns:ivy="antlib:org.apache.ivy.ant" name="dctc" default="tooljar">
     <property name="ivy.install.version" value="2.0.0-beta1"/>
     <property name="ivy.jar.dir" value="${basedir}/ivy"/>
     <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar"/>
-
+ 
     <property name="build.dir" value="build"/>
     <property name="ivylib.dir" value="lib/ivy"/>
     <property name="extlib.dir" value="lib/third"/>
