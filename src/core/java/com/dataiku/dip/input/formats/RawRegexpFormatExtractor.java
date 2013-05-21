@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import jline.internal.InputStreamReader;
+
 import org.apache.log4j.Logger;
 
 import com.dataiku.dip.datalayer.Column;
@@ -17,7 +19,6 @@ import com.dataiku.dip.datalayer.RowFactory;
 import com.dataiku.dip.input.StreamInputSplitProgressListener;
 import com.dataiku.dip.input.stream.EnrichedInputStream;
 import com.dataiku.dip.input.stream.StreamsInputSplit;
-import com.dataiku.dip.shaker.services.InputUtils;
 import com.google.common.io.CountingInputStream;
 
 public class RawRegexpFormatExtractor extends AbstractFormatExtractor  {
@@ -52,7 +53,7 @@ public class RawRegexpFormatExtractor extends AbstractFormatExtractor  {
             InputStream is = stream.stream();
             CountingInputStream cis = new CountingInputStream(is);
 
-            BufferedReader br = new BufferedReader(InputUtils.strictCharsetReader(cis, charset));
+            BufferedReader br = new BufferedReader(new InputStreamReader(cis, charset));
             try {
                 long nlines = 0;
                 Matcher m = pattern.matcher(""); 
