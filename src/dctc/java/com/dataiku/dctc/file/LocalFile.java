@@ -48,7 +48,7 @@ public class LocalFile extends AbstractGFile {
             fileName.equals("./")) {
             return createInstanceFor(path);
         } else {
-            return createInstanceFor(FileManipulation.concat(getAbsolutePath(), path, fileSeparator(), separator));
+            return createInstanceFor(FileManipulation.concat(fileName, path, fileSeparator()));
         }
     }
 
