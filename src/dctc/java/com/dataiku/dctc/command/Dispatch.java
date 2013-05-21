@@ -20,7 +20,7 @@ import com.dataiku.dctc.split.SplitFactory;
 import com.dataiku.dctc.split.SplitFunction;
 import com.dataiku.dctc.split.ValueFunction;
 import com.dataiku.dip.input.Format;
-import com.dataiku.dip.input.formats.FormatExtractorFactory;
+import com.dataiku.dip.input.formats.BasicFormatExtractorFactory;
 import com.dataiku.dip.partitioning.TimeDimension;
 
 /**
@@ -121,7 +121,7 @@ public class Dispatch extends ListCommand {
 
         Format fmt = buildFormat(splitFunction(), tasks.get(0));
         // Test the format right away
-        FormatExtractorFactory.build(fmt);
+        BasicFormatExtractorFactory.build(fmt);
 
         SplitFactory fact = new SplitFactory(dst, prefix(), postfix(), fct, column(), fmt, compress());
         ThreadedDisplay display = GlobalConf.getDisplay();
