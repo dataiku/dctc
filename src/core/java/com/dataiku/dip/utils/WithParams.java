@@ -47,5 +47,5 @@ public class WithParams {
 
     /* Get as CSV */
     public List<String> getCSVParamAsList(String name, String defaultValue) { return internalParams.getCSVParamAsList(name, defaultValue); }
-    public String[] getCSVParamAsArray(String name, String defaultValue) { return internalParams.getCSVParamAsArray(name, defaultValue); }
+    public String[] getCSVParamAsArray(String name, String defaultValue) { return internalParams.getCSVParam(name, defaultValue); }
 }

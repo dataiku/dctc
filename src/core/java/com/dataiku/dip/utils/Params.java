@@ -265,16 +265,32 @@ public class Params {
 
     /* Get as CSV */
 
-    public List<String> getCSVParamAsList(String name, String defaultValue) {
-        String v = getParam(name, defaultValue);
-        String[] chunks = v.split(",");
+    public List<String> getCSVParamAsList(String name, String defaultValue, String separator) {
         List<String> out = new ArrayList<String>();
-        for (String s : chunks) out.add(s);
+        for (String cell: getCSVParam(name, defaultValue, separator)) {
+            out.add(cell);
+        }
         return out;
+
     }
-    public String[] getCSVParamAsArray(String name, String defaultValue) {
+    public List<String> getCSVParamAsList(String name, String defaultValue) {
+        return getCSVParamAsList(name, defaultValue, ",");
+    }
+    public List<String> getCSVParamAsList(String name) {
+        return getCSVParamAsList(name, null);
+    }
+    public String[] getCSVParam(String name, String defaultValue) {
+        return getCSVParam(name, defaultValue, ",");
+    }
+    public String[] getCSVParam(String name, String defaultValue, String separator) {
         String v = getParam(name, defaultValue);
-        return v.split(",");
+        if (v == null) {
+            return new String[0];
+        }
+        return v.split(separator);
+    }
+    public String[] getCSVParam(String name) {
+        return getCSVParam(name, null);
     }
 
     public List<Integer> getCSVParamAsIntList(String name, String defaultValue) {
