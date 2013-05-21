@@ -38,7 +38,7 @@ public class BasicFormatExtractorFactory {
                        
         } else if (fmt.getType().equals("regexp_fields")) {
             RegexpFieldsBuilder rfb = RegexpFieldsBuilderFactory.build(fmt);
-            RegexpBasedFormatExtractor extractor = new RegexpBasedFormatExtractor(rfb);
+            SmartRegexpFormatExtractor extractor = new SmartRegexpFormatExtractor(rfb);
             return extractor;
         }
         else if (fmt.getType().equals("line")) {
