@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 import com.dataiku.dip.datalayer.Column;
 import com.dataiku.dip.utils.ErrorContext;
-import com.dataiku.dip.utils.Params;
 
 public class Schema {
     public static enum Type {
@@ -113,27 +112,21 @@ public class Schema {
     }
     public Schema(Schema other) {
         for (SchemaColumn c : other.columns) {
-            columns.add(new SchemaColumn(c.getName(), c.typeName()));
+            columns.add(new SchemaColumn(c));
         }
     }
+    
     public Schema(List<SchemaColumn> other) {
         this.columns = other;
     }
 
-    public static Schema fromParams(Params wp) {
-        Schema schema = new Schema();
-        for (String colIdx : wp.getChildrenAsIntList("columns")) {
-            SchemaColumn c = new SchemaColumn();
-            c.includeInOutput(true); // TODO
-            c.setName(wp.getMandParam("columns." + colIdx + ".name"));
-            c.typeName(wp.getMandParam("columns." + colIdx + ".type"));
-            schema.columns.add(c);
-        }
-        return schema;
-    }
-
     public static class SchemaColumn extends Column {
         public SchemaColumn() {}
+        public SchemaColumn(SchemaColumn other) {
+            this.name = other.name;
+            this.typeName = other.typeName;
+            this.comment = other.comment;
+        }
         public SchemaColumn(String name, String type) {
             this.name = name;
             this.typeName = type;
@@ -146,11 +139,18 @@ public class Schema {
             this.name = name;
             return this;
         }
-        public String typeName() {
+        public String getType() {
             return typeName;
         }
-        public void typeName(String typeName) {
-            this.typeName = typeName;
+        public void setType(String type) {
+            this.typeName = type;
+        }
+        
+        public String getComment() {
+            return comment;
+        }
+        public void setComment(String comment) {
+            this.comment = comment;
         }
         public boolean includeInOutput() {
             return includeInOutput;
@@ -162,6 +162,7 @@ public class Schema {
         private String name;
         private boolean includeInOutput;
         private String typeName;
+        private String comment;
     }
 
     public List<SchemaColumn> columns = new ArrayList<SchemaColumn>();
