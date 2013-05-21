@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jline.internal.InputStreamReader;
+import java.io.InputStreamReader;
 
 import org.apache.log4j.Logger;
 
