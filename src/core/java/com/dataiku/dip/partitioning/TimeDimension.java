@@ -9,15 +9,7 @@ public class TimeDimension extends Dimension {
     }
 
     public String formatValue(TimeDimensionValue tdv, String glob) {
-        TimeDimension td = this;
-        switch (td.mappedPeriod) {
-        case YEAR: glob = glob.replace("%Y", String.format("%04d", tdv.year)); break;
-        case MONTH: glob = glob.replace("%Y", String.format("%04d", tdv.year)).replace("%M", String.format("%02d", tdv.month)); break;
-        case DAY:glob = glob.replace("%Y", String.format("%04d", tdv.year)).replace("%M", String.format("%02d", tdv.month)).replace("%D", String.format("%02d", tdv.day)); break;
-        case HOUR:glob = glob.replace("%Y", String.format("%04d", tdv.year)).replace("%M", String.format("%02d", tdv.month)).replace("%D", String.format("%02d", tdv.day)).replace("%H", String.format("%02d", tdv.hour)); break;
-        default: throw new Error("");
-        }
-        return glob;
+        return tdv.formatGlob(glob);
     }
 
     public enum Period {

@@ -4,7 +4,10 @@ import com.dataiku.dip.partitioning.TimeDimension.Period;
 import com.google.common.base.Preconditions;
 
 public class TimeDimensionValue extends DimensionValue {
-
+    // Constructors
+    public TimeDimensionValue(TimeDimension dimension) {
+        this.dimension = dimension;
+    }
     public TimeDimensionValue(TimeDimension dimension, int year) {
         Preconditions.checkArgument(dimension.mappedPeriod == Period.YEAR);
         this.dimension = dimension;
@@ -34,17 +37,33 @@ public class TimeDimensionValue extends DimensionValue {
 
     private TimeDimensionValue() {
     }
-
     public TimeDimension getDimension() {
         return dimension;
     }
-
-    private TimeDimension dimension;
-    public int year;
-    public int month;
-    public int day;
-    public int hour;
-
+    public int getYear() {
+        return year;
+    }
+    public int getMonth() {
+        return month;
+    }
+    public int getDay() {
+        return day;
+    }
+    public int getHour() {
+        return hour;
+    }
+    public void setYear(int year) {
+        this.year = year;
+    }
+    public void setMonth(int month) {
+        this.month = month;
+    }
+    public void setDay(int day) {
+        this.day = day;
+    }
+    public void setHour(int hour) {
+        this.hour = hour;
+    }
     @Override
     public DimensionValue clone() {
         TimeDimensionValue clone = new TimeDimensionValue();
@@ -55,7 +74,6 @@ public class TimeDimensionValue extends DimensionValue {
         clone.hour = hour;
         return clone;
     }
-
     @Override
     public String id() {
         switch (dimension.mappedPeriod) {
@@ -66,4 +84,43 @@ public class TimeDimensionValue extends DimensionValue {
         default: throw new Error("impossible happened");
         }
     }
+    public String toPrettyString() {
+        switch (dimension.mappedPeriod) {
+        case HOUR:
+            return String.format("%04d-%02d-%02d-%02d", year, month, day, hour);
+        case DAY:
+            return String.format("%04d-%02d-%02d", year, month, day);
+        case MONTH:
+            return String.format("%04d-%02d", year, month);
+        case YEAR:
+            return String.format("%04d", year);
+        default:
+            assert false : "Must not be reached.";
+            return null;
+        }
+    }
+    public String formatGlob(String glob) {
+        switch (dimension.mappedPeriod) {
+        case HOUR:
+            glob = glob.replace("%H", String.format("%02d", hour));
+        case DAY:
+            glob = glob.replace("D", String.format("%02d", day));
+        case MONTH:
+            glob = glob.replace("D", String.format("%02d", month));
+        case YEAR:
+            glob = glob.replace("D", String.format("%04d", day));
+            break;
+        default:
+            assert false : "Must not be reached.";
+            return null;
+        }
+        return glob;
+    }
+
+    // Attributes
+    private TimeDimension dimension;
+    private int year;
+    private int month;
+    private int day;
+    private int hour;
 }
