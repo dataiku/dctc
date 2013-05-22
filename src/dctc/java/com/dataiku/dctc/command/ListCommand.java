@@ -28,10 +28,10 @@ public abstract class ListCommand extends Command {
     protected abstract boolean deleteSource();
     public abstract void execute(List<CopyTask> tasks, int exitCode) throws IOException;
     protected abstract boolean recursion(GeneralizedFile dir);
-    protected abstract boolean shouldAdd(GeneralizedFile src,
-            GeneralizedFile dst,
-            String root) throws IOException;
+    protected abstract boolean shouldAdd(GeneralizedFile src, GeneralizedFile dst,
+                                         String root) throws IOException;
     protected abstract void dstRoot(GeneralizedFile dst) throws IOException;
+    protected abstract boolean includeLastPathElementInTarget();
     // Tell to the implementation that ListCommand leave `sourceDir'
     // directory.
     protected abstract void leave(GeneralizedFile sourceDir);
@@ -86,8 +86,6 @@ public abstract class ListCommand extends Command {
     public boolean unarchive() {
         return hasOption(GlobalConstants.UNARCHIVE_OPT);
     }
-
-    protected abstract boolean includeLastPathElementInTarget();
 
     private void computeTasksList(List<GeneralizedFile> args) throws IOException {
         GeneralizedFile[] sources = new GeneralizedFile[args.size() - 1];

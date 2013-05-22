@@ -7,7 +7,7 @@ public class TimeDimension extends Dimension {
         super(name);
         this.mappedPeriod = mappedPeriod;
     }
-    
+
     public String formatValue(TimeDimensionValue tdv, String glob) {
         TimeDimension td = this;
         switch (td.mappedPeriod) {
@@ -25,7 +25,7 @@ public class TimeDimension extends Dimension {
         MONTH,
         DAY,
         HOUR;
-        
+
         public static Period parse(String in) {
             for (Period p : values()) {
                 if (p.toString().toLowerCase().equalsIgnoreCase(in)) return p;
@@ -33,8 +33,8 @@ public class TimeDimension extends Dimension {
             throw ErrorContext.iae("Invalid time period " + in);
         }
     }
-    
-    
+
+
     public boolean hasYear(){
         return true;
     }

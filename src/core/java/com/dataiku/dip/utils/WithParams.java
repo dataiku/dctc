@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class WithParams {
 	protected Params internalParams;
-	
+
 	public WithParams(Map<String, String> p, String id) {
 	    internalParams = new Params(p);
 	}
@@ -16,10 +16,10 @@ public class WithParams {
 	public Params getParams() {
 	    return internalParams;
 	}
-	
+
 	public void addParam(String name, String value) { internalParams.add(name, value); }
 	public void addParam(String name, int value) { internalParams.add(name, value); }
-    
+
     /* Get as string */
 
     public String getParam(String name) { return internalParams.getParam(name); }
@@ -28,20 +28,20 @@ public class WithParams {
     public String getNonEmptyMandParam(String name) { return internalParams.getNonEmptyMandParam(name); }
 
     /* Get as bool */
-    
+
     public boolean getBoolParam(String name, boolean defaultValue) { return internalParams.getBoolParam(name, defaultValue); }
-    
+
     /* Get as numerical */
-   
+
     public int getIntParam(String name, Integer defaultValue) { return internalParams.getIntParam(name, defaultValue); }
     public int getIntParam(String name) { return internalParams.getIntParam(name); }
-    
+
     public long getLongParam(String name, long defaultValue) { return internalParams.getLongParam(name, defaultValue); }
     public long getLongParam(String name) { return internalParams.getLongParam(name); }
-  
+
     public double getDoubleParam(String name, long defaultValue) { return internalParams.getDoubleParam(name, defaultValue); }
     public double getDoubleParam(String name) { return internalParams.getDoubleParam(name); }
-    
+
     /* Get as char */
     public char getCharParam(String name) { return internalParams.getCharParam(name); }
 
