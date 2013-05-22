@@ -532,9 +532,6 @@ public class SshFile extends AbstractGFile {
             throw new IOException("Permission denied.");
         }
     }
-    private String getPath() {
-        return FileManipulation.concat(connData.host, path, fileSeparator());
-    }
 
     private String path;
     private Boolean exists;
