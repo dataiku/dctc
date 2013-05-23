@@ -12,32 +12,35 @@ public class Alias {
             alias.put(setting.getKey(), setting.getValue());
         }
     }
-    public String[] resolve(String[] cmdargs) {
-        List<String> args = new ArrayList<String>();
-        if(cmdargs.length == 0) {
-            return cmdargs;
+    public void resolve(List<String> cmdargs, Map<String, String> unusedAlias) {
+        if (cmdargs.size() == 0) {
+            return;
         }
 
-        if (alias.containsKey(cmdargs[0])) {
-            for (String space: alias.get(cmdargs[0]).split(" ")) {
+        String cmd = cmdargs.get(0);
+        if (unusedAlias.containsKey(cmd)) {
+            cmdargs.remove(0);
+            int idx = 0;
+            for (String space: alias.get(cmd).split(" ")) {
                 for (String tab: space.split("	")) {
-                    args.add(tab);
+                    cmdargs.add(idx, tab);
+                    ++idx;
                 }
             }
-            for (int i = 1; i < cmdargs.length; ++i) {
-                args.add(cmdargs[i]);
-            }
-        } else {
-            for (int i = 0; i < cmdargs.length; ++i) {
-                args.add(cmdargs[i]);
-            }
+            unusedAlias.remove(cmd);
+            resolve(cmdargs, unusedAlias);
         }
-
+    }
+    public String[] resolve(String[] cmdargs) {
+        List<String> args = new ArrayList<String>();
+        for (String cmdarg: cmdargs) {
+            args.add(cmdarg);
+        }
+        resolve(args, alias);
         String[] res = new String[args.size()];
         for (int i = 0; i < args.size(); ++i) {
             res[i] = args.get(i);
         }
-
         return res;
     }
     private Map<String, String> alias = new HashMap<String, String>();
