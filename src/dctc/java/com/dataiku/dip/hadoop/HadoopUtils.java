@@ -8,11 +8,16 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
+import com.dataiku.dctc.HadoopDistributionClassLoader;
+
 public class HadoopUtils {
     public static String getHadoopHome() {
         String hadoopHome = System.getenv("HADOOP_HOME");
         if (hadoopHome == null) {
             hadoopHome = System.getenv("HADOOP_PREFIX");
+        }
+        if (hadoopHome == null) {
+            hadoopHome = HadoopDistributionClassLoader.guessHadoopHome();
         }
         if (hadoopHome == null) {
             throw new IllegalArgumentException("Missing HADOOP_HOME or HADOOP_PREFIX environment variable");

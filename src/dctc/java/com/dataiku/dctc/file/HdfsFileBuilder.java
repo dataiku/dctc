@@ -3,6 +3,7 @@ package com.dataiku.dctc.file;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 
+import com.dataiku.dctc.HadoopDistributionClassLoader;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.dataiku.dip.hadoop.HadoopUtils;
 import com.dataiku.dip.utils.ErrorContext;
@@ -31,7 +32,7 @@ public class HdfsFileBuilder extends ProtocolFileBuilder {
 
             if (p == null) {
                 /* I can still try to build using HADOOP_HOME */
-                if (System.getenv("HADOOP_HOME") == null && System.getenv("HADOOP_PREFIX") == null) {
+                if (System.getenv("HADOOP_HOME") == null && System.getenv("HADOOP_PREFIX") == null && HadoopDistributionClassLoader.guessHadoopHome() == null) {
                     throw ErrorContext.iaef("Neither configured credential nor HADOOP_HOME nor HADOOP_PREFIX variable found, can't configure HDFS access");
                 }
             }

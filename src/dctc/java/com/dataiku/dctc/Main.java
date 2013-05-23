@@ -123,6 +123,8 @@ public class Main {
             setLogger();
             fillCommand();
             DCTCLog.setMode(Mode.STDERR);
+            
+            HadoopDistributionClassLoader.run();
 
             StructuredConf conf;
             try {

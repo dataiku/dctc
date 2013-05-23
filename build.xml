@@ -130,6 +130,7 @@
                 <include name="com/google/common/primitives/**/*" />
                 <include name="com/google/common/hash/**/*" />
             </zipfileset>
+<!--
             <zipfileset src="lib/ivy/core/hadoop-core-1.0.3.jar">
                 <include name="org/apache/hadoop/fs/**/*" />
                 <include name="org/apache/hadoop/conf/**/*" />
@@ -143,6 +144,7 @@
                 <include name="org/apache/hadoop/net/**/*" />
                 <include name="core-default.xml" />
             </zipfileset>
+	    -->
             <zipfileset src="${dctc-jar.file}" />
             <zipfileset src="${core-jar.file}" />
             <manifest>
