@@ -15,7 +15,7 @@ public class Size {
         String unit = " kMGTP"; // octect, kilo, giga…
         String res = unit.substring(indic, indic + 1);
         if (indic == 0) {
-            res = "";
+            return "" + size;
         }
         return formatter.format(s) + res;
     }
