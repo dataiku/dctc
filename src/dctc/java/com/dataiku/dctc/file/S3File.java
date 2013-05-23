@@ -72,6 +72,14 @@ public class S3File extends BucketBasedFile {
         this.bucket = split[0];
         this.path = split[1];
     }
+    protected S3File(String directoryPath, AmazonS3 s3, S3ObjectSummary objectSummary) {
+        this.s3 = s3;
+        this.type = Type.FILE;
+        this.objectSummary = objectSummary;
+        String[] split = FileManipulation.split(directoryPath, fileSeparator(), 2);
+        this.bucket = split[0];
+        this.path = split[1];
+    }
 
     /** Create a new S3File for which we already know it does not exist */
     private static S3File newNotFound(S3File parent, String absolutePathWithBucket) {
@@ -143,7 +151,13 @@ public class S3File extends BucketBasedFile {
                         }
                     }
                     if (!br) {
-                        glist.add(new S3File(son, s3, getChildrenOf(son)));
+                        List<S3File> sons = getChildrenOf(son);
+                        if (sons.size() != 0) {
+                            glist.add(new S3File(son, s3, getChildrenOf(son)));
+                        }
+                        else {
+                            glist.add(new S3File(son, s3, f));
+                        }
                     }
                 }
             }
