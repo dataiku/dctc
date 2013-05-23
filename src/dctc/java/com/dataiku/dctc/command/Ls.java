@@ -241,7 +241,7 @@ public class Ls extends Command {
             if (!hideTotal) {
                 System.out.print("total size ");
                 if (humanReadable()) {
-                    System.out.println(Size.getReadableSize(size, "#0"));
+                    System.out.println(Size.getReadableSize(size, "#0.0"));
                 }
                 else {
                     System.out.println(size);
@@ -284,7 +284,7 @@ public class Ls extends Command {
                 try {
                     long size = file.getSize();
                     if (humanReadable()) {
-                        System.out.print(Size.getReadableSize(size, "#0"));
+                        System.out.print(Size.getReadableSize(size, "#0.0"));
                     } else {
                         System.out.print(size);
                     }
