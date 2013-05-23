@@ -18,6 +18,10 @@ public class Alias {
         }
 
         String cmd = cmdargs.get(0);
+        if (cmd.startsWith(".")) {
+            cmdargs.set(0, cmd.substring(1));
+            return;
+        }
         if (unusedAlias.containsKey(cmd)) {
             cmdargs.remove(0);
             int idx = 0;
