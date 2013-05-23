@@ -24,6 +24,20 @@ public class TimeDimension extends Dimension {
             }
             throw ErrorContext.iae("Invalid time period " + in);
         }
+        public String pattern() {
+            switch (this) {
+            case YEAR:
+                return "%Y";
+            case MONTH:
+                return "%M";
+            case DAY:
+                return "%D";
+            case HOUR:
+                return "%H";
+            default:
+                throw new Error("Never reached.");
+            }
+        }
     }
 
 
@@ -51,12 +65,22 @@ public class TimeDimension extends Dimension {
     @Override
     public DimensionValue getValueFromId(String id) {
         String[] chunks = id.split("-");
+        TimeDimensionValue  timeDim = new TimeDimensionValue(this);
+
         switch (mappedPeriod) {
-        case YEAR: return new TimeDimensionValue(this, Integer.parseInt(id));
-        case MONTH: return new TimeDimensionValue(this, Integer.parseInt(chunks[0]), Integer.parseInt(chunks[1]));
-        case DAY: return new TimeDimensionValue(this,Integer.parseInt(chunks[0]), Integer.parseInt(chunks[1]), Integer.parseInt(chunks[2]));
-        case HOUR: return new TimeDimensionValue(this, Integer.parseInt(chunks[0]), Integer.parseInt(chunks[1]), Integer.parseInt(chunks[2]), Integer.parseInt(chunks[3]));
-        default: throw new Error("impossible");
+        case HOUR:
+            timeDim.setHour(Integer.parseInt(chunks[3]));
+        case DAY:
+            timeDim.setDay(Integer.parseInt(chunks[2]));
+        case MONTH:
+            timeDim.setMonth(Integer.parseInt(chunks[1]));
+        case YEAR:
+            timeDim.setYear(Integer.parseInt(chunks[0]));
+
+            break;
+        default:
+            throw new Error("Never reached.");
         }
+        return timeDim;
     }
 }
