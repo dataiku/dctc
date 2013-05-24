@@ -79,8 +79,9 @@ public class FixedWidthFormatExtractor extends AbstractFormatExtractor {
                             String s = line.substring(begin, end).trim();
                             r.put(c, s);
                         }
-                        if (nlines > skipBefore + skipAfter);
-                        out.emitRow(r);
+                        if (nlines > skipBefore + skipAfter) {
+                            out.emitRow(r);
+                        }
                         if (listener != null && nlines++ % 50 == 0) {
                             synchronized (listener) {
                                 listener.setErrorRecords(0);
