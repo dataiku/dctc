@@ -24,7 +24,7 @@ import com.dataiku.dctc.file.GeneralizedFile;
 
 public abstract class Command {
     // The goal of this exception is to abort a command by bubbling up to main
-    public static class EndOfCommandException extends Error {
+    public static class EndOfCommand extends Error {
         private static final long serialVersionUID = 1L;
     }
 
@@ -104,12 +104,12 @@ public abstract class Command {
         } catch (ParseException exp) {
             error(exp.getMessage(), 1);
             usage();
-            throw new EndOfCommandException();
+            throw new EndOfCommand();
 
         }
         if (line.hasOption("help")) {
             Main.commandHelp(this);
-            throw new EndOfCommandException();
+            throw new EndOfCommand();
         }
         if (line.hasOption("v")) {
             Logger.getRootLogger().setLevel(Level.INFO);

@@ -159,7 +159,7 @@ public class Main {
                     cmd.setFileBuilder(conf.getFileBuilder());
                     try {
                         cmd.perform(cmdargs);
-                    } catch (Command.EndOfCommandException e) {}
+                    } catch (Command.EndOfCommand e) {}
                     System.exit(cmd.getExitCode());
                 }
                 System.err.println("Unknown command : " + usercmd);
