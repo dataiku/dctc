@@ -2,13 +2,13 @@ package com.dataiku.dctc;
 
 public class PrettyString {
     public static String quoted(Object msg) {
-        return "\"" + msg.toString + "\"";
+        return "\"" + msg.toString() + "\"";
     }
     public static String squoted(Object msg) {
-        return "'" + msg.toString + "'";
+        return "'" + msg.toString() + "'";
     }
     public static String pquoted(Object msg) {
-        return "`" + msg.toString + "'";
+        return "`" + msg.toString() + "'";
     }
     public static String nl(String... msgs) {
         String res = "";

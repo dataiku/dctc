@@ -3,7 +3,7 @@ import java.io.IOException;
 
 import com.dataiku.dip.input.InputSplit;
 
-/** 
+/**
  * One split of a stream input.
  * Each split is actually made of several streams, which can be concatenated
  */

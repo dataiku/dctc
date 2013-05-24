@@ -24,12 +24,12 @@ public class Partition {
 
         return clone;
     }
-    
+
     public String toString(){
         return "<partition:" + id() + ">";
     }
-    
-   
+
+
     public String id() {
         if (scheme == null || dimensionValues.size() == 0) {
             assert(dimensionValues.size() == 0);
