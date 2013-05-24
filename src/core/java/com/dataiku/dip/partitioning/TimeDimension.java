@@ -62,6 +62,7 @@ public class TimeDimension extends Dimension {
         return tother.mappedPeriod.equals(mappedPeriod);
     }
 
+    @SuppressWarnings("fallthrough")
     @Override
     public DimensionValue getValueFromId(String id) {
         String[] chunks = id.split("-");

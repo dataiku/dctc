@@ -99,6 +99,7 @@ public class TimeDimensionValue extends DimensionValue {
             return null;
         }
     }
+    @SuppressWarnings("fallthrough")
     public String formatGlob(String glob) {
         switch (dimension.mappedPeriod) {
         case HOUR:
