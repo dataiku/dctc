@@ -13,10 +13,12 @@ import org.apache.hadoop.fs.Path;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.dataiku.dip.hadoop.HadoopUtils;
 
+@Ignore("Can't run this test as a unit test at the moment, as it requires a Hadoop cluster")
 public class HDFSFileTest {
     @Before
     public void setUp() {
