@@ -25,6 +25,10 @@ public abstract class AbstractGFile implements GeneralizedFile {
             return null;
         }
     }
+    @Override
+    public final GeneralizedFile createSubFile(String path) throws IOException {
+        return createSubFile(path, fileSeparator());
+    }
 
     @Override
     public final boolean isHidden() throws IOException {

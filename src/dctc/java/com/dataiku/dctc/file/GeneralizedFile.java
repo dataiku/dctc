@@ -8,6 +8,7 @@ import java.util.List;
 public interface GeneralizedFile extends Comparable<GeneralizedFile> {
     public GeneralizedFile createInstanceFor(String path);
     public List<? extends GeneralizedFile> createInstanceFor(List<String> paths);
+    public GeneralizedFile createSubFile(String path) throws IOException;
     public GeneralizedFile createSubFile(String path, String fileSeparator) throws IOException;
 
     // MetaData and Naming.
