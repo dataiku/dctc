@@ -83,7 +83,7 @@ public class SyncComputer {
     }
 
     public boolean includeLastPathElementInTarget;
-    public boolean recurseInSources;
+    public boolean recurseInSources = true;
     public boolean compressTargets;
     public boolean uncompressSources;
     public boolean deleteSources;
