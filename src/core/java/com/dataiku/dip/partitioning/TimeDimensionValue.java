@@ -104,11 +104,11 @@ public class TimeDimensionValue extends DimensionValue {
         case HOUR:
             glob = glob.replace("%H", String.format("%02d", hour));
         case DAY:
-            glob = glob.replace("D", String.format("%02d", day));
+            glob = glob.replace("%D", String.format("%02d", day));
         case MONTH:
-            glob = glob.replace("D", String.format("%02d", month));
+            glob = glob.replace("%M", String.format("%02d", month));
         case YEAR:
-            glob = glob.replace("D", String.format("%04d", day));
+            glob = glob.replace("%Y", String.format("%04d", year));
             break;
         default:
             assert false : "Must not be reached.";
