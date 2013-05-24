@@ -26,4 +26,10 @@ public class DKUFileUtils {
     public static void writeFileUTF8(File file, String content) throws IOException {
         FileUtils.write(file, content, "utf8");
     }
+    public static void writeFileUTF8(File file, String content, boolean mkdirs) throws IOException {
+        if (mkdirs) {
+            mkdirsParent(file);
+        }
+        FileUtils.write(file, content, "utf8");
+    }
 }
