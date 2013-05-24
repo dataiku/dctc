@@ -11,12 +11,13 @@ public class PrettyString {
         return "`" + msg.toString() + "'";
     }
     public static String nl(String... msgs) {
-        String res = "";
+        StringBuilder sb = new StringBuilder();
         for(String msg: msgs) {
-            res += msg + eol();
+            sb.append(msg);
+            sb.append(eol());
         }
 
-        return res;
+        return sb.toString();
     }
     public static String eol() {
         return System.getProperty("line.separator");
