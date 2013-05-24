@@ -51,16 +51,23 @@ public class FileBuilder {
         }
 
         Protocol protocol = Protocol.forName(uri.substring(0, protocolSeparator));
-        String protocolData  = uri.substring(protocolSeparator + 3, uri.length());
-        String accountData = null;
+        String path  = uri.substring(protocolSeparator + 3, uri.length());
 
-        int atIndex = protocolData.indexOf("@");
+        return buildFile(protocol, path);
+    }
+    public GeneralizedFile buildFile(String proto, String path) {
+        return buildFile(Protocol.forName(proto), path);
+    }
+    public GeneralizedFile buildFile(Protocol proto, String path) {
+        String account = null;
+        int atIndex = path.indexOf("@");
         if (atIndex > 0) {
-            accountData = protocolData.substring(0, atIndex);
-            protocolData = protocolData.substring(atIndex + 1, protocolData.length());
+            account = path.substring(0, atIndex);
+            path = path.substring(atIndex + 1);
         }
-        protocol.builder.setBank(bank);
-        return protocol.builder.buildFile(accountData, protocolData);
+        proto.builder.setBank(bank);
+        return proto.builder.buildFile(account, path);
+
     }
 
     public GeneralizedFile[] buildFile(String[] paths) {
