@@ -274,7 +274,7 @@ public class GSFile extends BucketBasedFile {
             throw new IOException("Can't hash " + getAbsoluteAddress() + ": not a file");
         } else {
             assert(fileStorageObject != null);
-            return fileStorageObject.getMedia().getHash();
+            return fileStorageObject.getMd5Hash();
         }
     }
     @Override
@@ -288,7 +288,7 @@ public class GSFile extends BucketBasedFile {
             throw new IOException("Can't get date of " + getAbsoluteAddress() + ": not a file");
         } else {
             assert(fileStorageObject != null);
-            return fileStorageObject.getMedia().getTimeCreated().getValue();
+            return fileStorageObject.getUpdated().getValue();
         }
     }
     @Override
@@ -298,7 +298,7 @@ public class GSFile extends BucketBasedFile {
             return GlobalConstants.FOUR_KIO; // Directory size
         } else {
             assert(fileStorageObject != null);
-            return fileStorageObject.getMedia().getLength();
+            return fileStorageObject.getSize().longValue();
         }
     }
 
@@ -325,7 +325,7 @@ public class GSFile extends BucketBasedFile {
                 /* List the buckets */
                 String projectId = userMail.substring(0, Math.min(userMail.indexOf("@"), userMail.indexOf("-") > 0 ? userMail.indexOf("-") : Integer.MAX_VALUE));
                 UnsignedLong ul = UnsignedLong.asUnsigned(Long.parseLong(projectId));
-                Buckets bucketsObj = storage.buckets().list(ul).execute();
+                Buckets bucketsObj = storage.buckets().list(projectId).execute();
                 bucketsList = new ArrayList<String>();
                 for (Bucket bucket : bucketsObj.getItems()) {
                     bucketsList.add(bucket.getId());

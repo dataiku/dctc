@@ -33,6 +33,12 @@
             <exclude org="org.eclipse.jdt" />
         </dependency>
         <dependency org="commons-httpclient" name="commons-httpclient" rev="3.1"/>
+        <dependency org="com.baulsupp.kolja" name="jcurses" rev="0.9.5.3"/>
+        <dependency org="org.jsoup" name="jsoup" rev="1.6.3" />
+        <dependency org="com.google.api-client" name="google-api-client" rev="1.15.0-rc" />
+        <dependency org="com.google.apis" name="google-api-services-storage" rev="v1beta2-rev2-1.15.0-rc"/>
+
+        <dependency org="com.google.http-client" name="google-http-client-jackson2" rev="1.15.0-rc"/>
 
         <!-- Tests -->
         <dependency org="junit" name="junit" rev="4.8.1"/>
