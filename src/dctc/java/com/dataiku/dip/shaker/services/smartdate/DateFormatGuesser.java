@@ -80,7 +80,7 @@ public class DateFormatGuesser {
         String c = chunks.get(curIdx);
 
         if (c.length() <= 1) {
-            if (StringUtils.isNumeric(c)) {
+            if (c.length() > 0 && StringUtils.isNumeric(c)) {
                 // Could be month, day, hour, minute, second
                 int ic = Integer.parseInt(c);
                 if (!monthDone && ic > 0 && ic <= 12) recurse(oCandidates, "MM", chunks, curIdx, true, dayDone, hoursDone, minutesDone, secondDone);
