@@ -124,8 +124,6 @@ public class Main {
             fillCommand();
             DCTCLog.setMode(Mode.STDERR);
             
-            HadoopDistributionClassLoader.run();
-
             StructuredConf conf;
             try {
                 conf = new StructuredConf();

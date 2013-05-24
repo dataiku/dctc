@@ -24,6 +24,7 @@ public class HdfsFileBuilder extends ProtocolFileBuilder {
 
     @Override
     public GeneralizedFile buildFile(String accountSettings, String rawPath) {
+        HadoopDistributionClassLoader.addLibraries();
         Params p = null;
         if (accountSettings != null) {
             p = bank.getAccountParams("hdfs", accountSettings);

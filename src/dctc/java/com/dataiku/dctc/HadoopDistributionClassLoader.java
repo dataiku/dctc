@@ -5,8 +5,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -52,8 +50,7 @@ public class HadoopDistributionClassLoader {
 
     public static boolean isCDH4() {
         if (new File("/usr/lib/hadoop/cloudera").isDirectory()) {
-            logger.info("Detected CLoudera distribution");
-
+            logger.info("Detected Cloudera distribution");
             try {
                 String content = FileUtils.readFileToString(new File("/usr/lib/hadoop/cloudera/cdh_version.properties"));
                 if (content.indexOf("cdh4") > 0 ) {
@@ -63,11 +60,18 @@ public class HadoopDistributionClassLoader {
         }
         return false;
     }
+   
+    private static boolean librariesAdded = false;
 
-    public static void run() {
+
+    public static void addLibraries() {
+        if (librariesAdded) return;
+        librariesAdded = true;
+        
+        logger.info("Loading Hadoop libraries");
         try {
             if (isCDH4()) {
-                logger.info("Detected CDH4");
+                logger.info("Detected CDH4 distribution");
                 for (String path : new String[]{
                         "/usr/lib/hadoop/lib/protobuf-java-2.4.0a.jar",
                         "/usr/lib/hadoop/lib/guava-11.0.2.jar",
@@ -83,7 +87,7 @@ public class HadoopDistributionClassLoader {
                     }
                 }
             } else if (isMAPR()) {
-                logger.info("Detected MAPR");
+                logger.info("Detected MAPR distribution");
                 System.setProperty("java.library.path", "/opt/mapr/lib");
                 /* Force Java to reload library path .*/
                 // From : http://blog.cedarsoft.com/2010/11/setting-java-library-path-programmatically/
@@ -95,7 +99,7 @@ public class HadoopDistributionClassLoader {
                 addSoftwareLibrary(new File("/opt/mapr/hadoop/hadoop-0.20.2/lib"), "maprfs-.*.jar");
                 addSoftwareLibrary(new File("/opt/mapr/hadoop/hadoop-0.20.2/lib/hadoop-0.20.2-dev-core.jar"));
             } else {
-                logger.info("Generic Hadoop");
+                logger.info("Generic generic Hadoop distribution");
                 addSoftwareLibrary(new File(HadoopUtils.getHadoopHome()), "hadoop-core-.*.jar");
             }
         } catch (Exception e) {
