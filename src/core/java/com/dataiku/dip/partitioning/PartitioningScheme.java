@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class PartitioningScheme {
     public String filePathPattern;
+    public boolean ignoreNonMatchingFile = false;
     private List<String> dimensionNames = new ArrayList<String>();
     private Map<String, Dimension> dimensions = new HashMap<String, Dimension>();
     public Bucketing bucketing;
