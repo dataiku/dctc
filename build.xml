@@ -1,5 +1,5 @@
  <project xmlns:ivy="antlib:org.apache.ivy.ant" name="dctc" default="tooljar">
-    <property name="ivy.install.version" value="2.0.0-beta1"/>
+    <property name="ivy.install.version" value="2.3.0"/>
     <property name="ivy.jar.dir" value="${basedir}/ivy"/>
     <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar"/>
  
@@ -18,7 +18,8 @@
     <target name="clean">
         <delete dir="dist" />
         <delete dir="build" />
-        <delete dir="ivy/lib" />
+        <delete dir="ivy" />
+        <delete dir="lib/ivy" />
     </target>
 
     <target name="download-ivy" unless="skip.download">
