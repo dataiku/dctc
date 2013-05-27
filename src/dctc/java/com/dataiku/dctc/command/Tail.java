@@ -85,7 +85,7 @@ public class Tail extends Command {
             } else {
                 String[] buf = new String[(int) nbLine()];
                 int idx = 0;
-                BufferedReader in;
+                BufferedReader in = null;
                 try {
                     in = new BufferedReader(new InputStreamReader(arg.inputStream()));
                     String line = null;
@@ -94,8 +94,14 @@ public class Tail extends Command {
                         buf[idx] = line;
                         idx = (idx + 1) % (int) nbLine();
                     }
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     error(arg.givenName(), "error", e, 2);
+                }
+                finally {
+                    if (in == null) {
+                        IOUtils.closeQuietly(in);
+                    }
                 }
                 for (long i = 0; i < nbLine(); ++i) {
                     System.out.println(buf[(int) (idx + i) % (int) nbLine]);
