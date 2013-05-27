@@ -78,14 +78,14 @@ public class RegexpFieldsBuilder {
 		Matcher m = compiled.matcher(line);
 		boolean matches = m.matches();
 		if (!matches) {
-			System.out.println("M=false F=" + m.find()); 
+//			System.out.println("M=false F=" + m.find()); 
 			return null;
 		}
 		List<String> out = new ArrayList<String>();
-		System.out.println(org.apache.commons.lang.StringUtils.join(getColumnNames(), "--"));
-		System.out.println("Groups= " + m.groupCount() + " cols= " + getColumnNames().size());
+//		System.out.println(org.apache.commons.lang.StringUtils.join(getColumnNames(), "--"));
+//		System.out.println("Groups= " + m.groupCount() + " cols= " + getColumnNames().size());
 		for (int i = 1; i <= m.groupCount(); i++) {
-			System.out.println("GROUP " + i + " " + m.group(i));
+//			System.out.println("GROUP " + i + " " + m.group(i));
 			out.add(m.group(i));
 		}
 		return out;
