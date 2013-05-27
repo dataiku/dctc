@@ -472,6 +472,13 @@ public class Ls extends Command {
         public int compareTo(PrintTask r) {
             return second.toLowerCase().replaceAll("[^a-z]", "").compareTo(r.second.toLowerCase().replaceAll("[^a-z]", ""));
         }
+        public boolean equals(Object o) {
+            if (!(o instanceof PrintTask)) {
+                return false;
+            }
+            PrintTask task = (PrintTask) o;
+            return task.second.equals(this.second);
+        }
 
         public GeneralizedFile first;
         public String second;
