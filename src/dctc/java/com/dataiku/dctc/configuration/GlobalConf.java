@@ -10,7 +10,6 @@ import com.dataiku.dctc.display.ThreadedDisplay;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dip.utils.DKUtils;
 
-
 public class GlobalConf {
     public static File confFile() {
         return new File(confPath());
@@ -30,16 +29,12 @@ public class GlobalConf {
                 threadLimit = Integer.parseInt(value);
             }
             else if (key.equals("globbing")) {
-                resolveGlobbing = getBoolean(value);
-                if (resolveGlobbing == null) {
-                    System.err.println("Unknown value (" + value + ") for globbing settings");
-                }
+                resolveGlobbing = getBoolean(value, false);
+                System.err.println("Unknown value (" + value + ") for globbing settings");
             }
             else if (key.equals("show_git_hash")) {
-                showGitHash = getBoolean(value);
-                if (showGitHash == null) {
-                    System.err.println("Unknown value (" + value + ") for show git hash settings");
-                }
+                showGitHash = getBoolean(value, false);
+                System.err.println("Unknown value (" + value + ") for show git hash settings");
             }
             else {
                 throw new UserException("In configuration file: invalid option '" + key + "' in [global] section");
@@ -112,6 +107,13 @@ public class GlobalConf {
         } else {
             return null;
         }
+    }
+    private static Boolean getBoolean(String value, Boolean defaultValue) {
+        Boolean ofTheJedi = getBoolean(value);
+        if (ofTheJedi == null) {
+            ofTheJedi = defaultValue;
+        }
+        return ofTheJedi;
     }
     // Attributes
     static private int colNumber;
