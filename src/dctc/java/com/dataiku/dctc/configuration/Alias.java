@@ -36,11 +36,16 @@ public class Alias {
         for (String cmdarg: cmdargs) {
             args.add(cmdarg);
         }
-        resolve(args, alias);
+        resolve(args, cloneAlias());
         String[] res = new String[args.size()];
         for (int i = 0; i < args.size(); ++i) {
             res[i] = args.get(i);
         }
+        return res;
+    }
+    private Map<String, String> cloneAlias() {
+        Map<String, String> res = new HashMap<String, String>();
+        res.putAll(alias);
         return res;
     }
     private Map<String, String> alias = new HashMap<String, String>();
