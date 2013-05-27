@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import com.dataiku.dip.datalayer.Column;
 import com.dataiku.dip.utils.ErrorContext;
 
 public class Schema {
@@ -120,7 +119,7 @@ public class Schema {
         this.columns = other;
     }
 
-    public static class SchemaColumn extends Column {
+    public static class SchemaColumn {
         public SchemaColumn() {}
         public SchemaColumn(SchemaColumn other) {
             this.name = other.name;
