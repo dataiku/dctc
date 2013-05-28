@@ -23,6 +23,10 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.format.ISODateTimeFormat;
 
 public class DKUtils {
+    public static <T> T lastElement(T[] array) {
+        return array[array.length - 1];
+    }
+    
     public static void unsafeSleep(long ms) {
         try { Thread.sleep(ms); } catch (InterruptedException e) {}
     }
