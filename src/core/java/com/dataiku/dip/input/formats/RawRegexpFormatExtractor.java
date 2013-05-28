@@ -54,6 +54,7 @@ public class RawRegexpFormatExtractor extends AbstractFormatExtractor  {
             CountingInputStream cis = new CountingInputStream(is);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(cis, charset));
+            boolean broken = false;
             try {
                 long nlines = 0;
                 Matcher m = pattern.matcher(""); 
@@ -67,7 +68,7 @@ public class RawRegexpFormatExtractor extends AbstractFormatExtractor  {
                     m.reset(line);
                     
                     if (m.find()) {
-                        System.out.println("DID PARSE" + line);
+//                        System.out.println("DID PARSE" + line);
                         Row r = rf.row();
                         for (int i = 0; i < m.groupCount(); i++) {
                             String group = m.group(i+1);
@@ -80,7 +81,13 @@ public class RawRegexpFormatExtractor extends AbstractFormatExtractor  {
                         r.put(cf.column("reject"), line);
                         err.emitRow(r);
                     }
-                    if (listener != null && nlines++ % 50 == 0) {
+                    nlines++;
+                    if (limit != null && nlines >= limit.maxRecords) {
+                        broken = true;
+                        break;
+                    }
+                    
+                    if (listener != null && nlines % 50 == 0) {
                         synchronized (listener) {
                             listener.setErrorRecords(0);
                             listener.setReadBytes(cis.getCount());
@@ -98,6 +105,10 @@ public class RawRegexpFormatExtractor extends AbstractFormatExtractor  {
                 }
             } finally {
                 br.close();
+            }
+            if (broken) {
+                out.lastRowEmitted();
+                return false;
             }
         }
         out.lastRowEmitted();
