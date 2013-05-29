@@ -121,15 +121,12 @@ public abstract class ListCommand extends Command {
                         if (subfile.givenName().equals(source.givenName())) {
                             continue;
                         }
+                        dstRoot = FileManipulation.getSonPath(source.givenName(),
+                                                              subfile.givenName(),
+                                                              source.fileSeparator());
                         if (includeLastPathElementInTarget()
                             || dst.exists() || sources.length > 1) {
-                            dstRoot = FileManipulation.getSonSubPath(source.givenName(),
-                                    subfile.givenName(),
-                                    source.fileSeparator());
-                        } else {
-                            dstRoot = FileManipulation.getSonPath(source.givenName(),
-                                    subfile.givenName(),
-                                    source.fileSeparator());
+                            dstRoot = FileManipulation.concat(source.getFileName(), dstRoot, source.fileSeparator());
                         }
                         addQueue(subfile, dst, dstRoot);
                     }

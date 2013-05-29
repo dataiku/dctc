@@ -129,14 +129,5 @@ public class FileManipulationTest {
     public void isDirectSon() {
         assertTrue(FileManipulation.isDirectSon("/oo", "/oo/bar", "/"));
     }
-    @org.junit.Test
-    public void getSonSubPath() {
-        eq("foo", FileManipulation.getSonSubPath("/baz/bar", "/baz/bar/foo", "/"));
-        eq("foo", FileManipulation.getSonSubPath("/", "/foo", "/"));
-        eq("baz", FileManipulation.getSonSubPath("foo/bar", "foo/bar/baz", "/"));
-        eq("", FileManipulation.getSonSubPath("foo/bar", "foo/bar/", "/"));
-        eq("foo/bar", FileManipulation.getSonSubPath("/baz", "/baz/foo/bar", "/"));
-    }
-
     // eq("", ());
 }

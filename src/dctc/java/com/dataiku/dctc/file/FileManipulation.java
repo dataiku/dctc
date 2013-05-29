@@ -143,15 +143,6 @@ public class FileManipulation {
 
         return son.substring(len, son.length());
     }
-    public static String getSonSubPath(String parent, String son, String separator) {
-        assert isSon(parent, son, separator);
-        assert hasParent(son, separator);
-
-        parent = trimEnd(parent, separator) + separator;
-        int lastIndex = parent.lastIndexOf(separator);
-
-        return son.substring(lastIndex + separator.length());
-    }
     public static boolean isHidden(String path, String separator) {
         return getFileName(path, separator).startsWith(".");
     }

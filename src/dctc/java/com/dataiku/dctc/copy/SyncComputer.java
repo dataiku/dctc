@@ -113,18 +113,15 @@ public class SyncComputer {
                         if (subfile.givenName().equals(source.givenName())) {
                             continue;
                         }
-                        String dstRoot;
+                        String dstRoot = FileManipulation.getSonPath(source.givenName(),
+                                                                     subfile.givenName(),
+                                                                     source.fileSeparator());
                         if (includeLastPathElementInTarget &&
-                                (target.exists() || sources.size() > 1)) {
-                            dstRoot = FileManipulation.getSonSubPath(source.givenName(),
-                                    subfile.givenName(),
-                                    source.fileSeparator());
-                        } else {
-                            dstRoot = FileManipulation.getSonPath(source.givenName(),
-                                    subfile.givenName(),
-                                    source.fileSeparator());
+                            (target.exists() || sources.size() > 1)) {
+                            dstRoot = FileManipulation.concat(source.getFileName(),
+                                                              dstRoot, source.fileSeparator());
+                            addCandidate(subfile, target, dstRoot);
                         }
-                        addCandidate(subfile, target, dstRoot);
                     }
                 }
             } else if (source.isFile()) {
