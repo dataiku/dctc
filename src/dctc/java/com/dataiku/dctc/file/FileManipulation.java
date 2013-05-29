@@ -147,10 +147,10 @@ public class FileManipulation {
         assert isSon(parent, son, separator);
         assert hasParent(son, separator);
 
-        parent = trimEnd(parent, separator);
+        parent = trimEnd(parent, separator) + separator;
         int lastIndex = parent.lastIndexOf(separator);
-        if (lastIndex == -1) return son;
-        return son.substring(lastIndex);
+
+        return son.substring(lastIndex + separator.length());
     }
     public static boolean isHidden(String path, String separator) {
         return getFileName(path, separator).startsWith(".");
