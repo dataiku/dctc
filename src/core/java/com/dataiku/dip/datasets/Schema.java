@@ -163,6 +163,18 @@ public class Schema {
         private String typeName;
         private String comment;
     }
+    
+    public boolean isUserModified() {
+        return userModified;
+    }
+    public void setUserModified(boolean userModified) {
+        this.userModified = userModified;
+    }
+   
+    public List<SchemaColumn> getColumns() {
+        return columns;
+    }
 
-    public List<SchemaColumn> columns = new ArrayList<SchemaColumn>();
+    private boolean userModified;
+    private List<SchemaColumn> columns = new ArrayList<SchemaColumn>();
 }
