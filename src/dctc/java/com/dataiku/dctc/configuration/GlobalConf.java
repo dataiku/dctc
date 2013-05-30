@@ -30,11 +30,9 @@ public class GlobalConf {
             }
             else if (key.equals("globbing")) {
                 resolveGlobbing = getBoolean(value, false);
-                System.err.println("Unknown value (" + value + ") for globbing settings");
             }
             else if (key.equals("show_git_hash")) {
                 showGitHash = getBoolean(value, false);
-                System.err.println("Unknown value (" + value + ") for show git hash settings");
             }
             else {
                 throw new UserException("In configuration file: invalid option '" + key + "' in [global] section");
