@@ -202,7 +202,7 @@ public class Ls extends Command {
                     GeneralizedFile subfile = list.get(j);
                     print(subfile, subfile.getFileName(), false);
                     if (j + 1 > list.size()) {
-                        new_line();
+                        System.out.println();
                     }
                 }
                 cleanPrint(false);
@@ -465,9 +465,6 @@ public class Ls extends Command {
         if (ct != 0) {
             System.out.println();
         }
-    }
-    private void new_line() {
-        System.out.println();
     }
     private boolean color() {
         if (colorize == null) {
