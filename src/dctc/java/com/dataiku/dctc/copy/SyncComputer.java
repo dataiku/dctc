@@ -120,8 +120,8 @@ public class SyncComputer {
                             (target.exists() || sources.size() > 1)) {
                             dstRoot = FileManipulation.concat(source.getFileName(),
                                                               dstRoot, source.fileSeparator());
-                            addCandidate(subfile, target, dstRoot);
                         }
+                        addCandidate(subfile, target, dstRoot);
                     }
                 }
             } else if (source.isFile()) {
