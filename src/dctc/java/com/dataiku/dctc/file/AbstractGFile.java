@@ -47,7 +47,7 @@ public abstract class AbstractGFile implements GeneralizedFile {
     }
     @Override
     public final String getFileName() {
-        return FileManipulation.getFileName(getAbsolutePath(), fileSeparator());
+        return FileManipulation.getFileName(givenPath(), fileSeparator());
     }
     @Override
     public String getAbsoluteAddress() {
