@@ -97,7 +97,7 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                     }
 
                     if (columns.size() > 0 && line.length != columns.size()) {
-                        logger.info("Line has a changing number of columns, line has " + line.length + " columns, but I have " + columns.size());
+//                        logger.info("Line has a changing number of columns, line has " + line.length + " columns, but I have " + columns.size());
                     }
 
                     if (line.length > columns.size()) {
