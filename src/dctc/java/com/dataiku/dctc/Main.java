@@ -120,7 +120,7 @@ public class Main {
             setLogger();
             fillCommand();
             DCTCLog.setMode(Mode.STDERR);
-            
+
             StructuredConf conf;
             try {
                 conf = new StructuredConf();
@@ -157,7 +157,7 @@ public class Main {
                     } catch (Command.EndOfCommand e) {}
                     System.exit(cmd.getExitCode());
                 }
-                System.err.println("Unknown command : " + usercmd);
+                System.err.println("Unknown command: " + usercmd);
             }
             globalUsage(1);
         } catch (UserException e) {

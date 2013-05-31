@@ -31,11 +31,11 @@ public class BasicFormatExtractorFactory {
                     ErrorContext.pop();
                 }
             }
-            return new FixedWidthFormatExtractor(offsets, 
+            return new FixedWidthFormatExtractor(offsets,
                        fmt.getParams().getIntParam(AbstractFormatExtractor.PARAM_skipRowsBeforeHeader, 0),
                        fmt.getParams().getBoolParam(AbstractFormatExtractor.PARAM_parseHeaderRow, true),
                        fmt.getParams().getIntParam(AbstractFormatExtractor.PARAM_skipRowsAfterHeader, 0));
-                       
+
         } else if (fmt.getType().equals("regexp_fields")) {
             RegexpFieldsBuilder rfb = RegexpFieldsBuilderFactory.build(fmt);
             SmartRegexpFormatExtractor extractor = new SmartRegexpFormatExtractor(rfb);

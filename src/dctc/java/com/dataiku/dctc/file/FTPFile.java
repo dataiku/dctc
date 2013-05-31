@@ -44,9 +44,10 @@ public class FTPFile extends AbstractGFile {
     }
     public FTPFile(Params p, String path) {
         this(p.getMandParam("host"),
-                p.getMandParam("username"),
-                p.getMandParam("password"),
-                path, p.getShortParam("port", GlobalConstants.FTP_PORT));
+             p.getMandParam("username"),
+             p.getMandParam("password"),
+             path, p.getShortParam("port", GlobalConstants.FTP_PORT));
+
     }
 
     @Override // Should be override for no type lost.

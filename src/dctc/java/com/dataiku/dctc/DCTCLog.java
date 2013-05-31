@@ -77,7 +77,7 @@ public class DCTCLog {
             Logger.getLogger("dctc." + module).warn(message, t);
         }
     }
-    
+
     private static String buildCompleteExceptionMessage(Throwable t) {
         StringBuilder sb = new StringBuilder();
         while (true) {
@@ -91,7 +91,7 @@ public class DCTCLog {
         }
         return sb.toString();
     }
-    
+
     public static void error(String module, String message, Throwable t) {
         if (mode == Mode.STDERR) {
             if (lvl == Level.DEBUG) {

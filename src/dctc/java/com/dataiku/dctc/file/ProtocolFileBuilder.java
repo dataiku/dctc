@@ -19,7 +19,7 @@ public abstract class ProtocolFileBuilder {
                 throw new UserException(String.format("For protocol %s and %s, parameter '%s' is not recognized." +
                                                       " Valid parameters are: %s", getProtocol().getCanonicalName(),
                                                       account == null ? "default account" : "account " + account, key,
-                                                      StringUtils.join(allowed, ",")));
+                                                      StringUtils.join(allowed, ", ")));
             }
         }
     }

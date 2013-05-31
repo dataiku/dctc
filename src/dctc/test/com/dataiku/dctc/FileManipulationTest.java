@@ -129,5 +129,4 @@ public class FileManipulationTest {
     public void isDirectSon() {
         assertTrue(FileManipulation.isDirectSon("/oo", "/oo/bar", "/"));
     }
-    // eq("", ());
 }

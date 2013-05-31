@@ -2,7 +2,7 @@
     <property name="ivy.install.version" value="2.3.0"/>
     <property name="ivy.jar.dir" value="${basedir}/ivy"/>
     <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar"/>
- 
+
     <property name="build.dir" value="build"/>
     <property name="ivylib.dir" value="lib/ivy"/>
     <property name="extlib.dir" value="lib/third"/>
