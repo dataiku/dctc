@@ -249,6 +249,7 @@ public class Ls extends Command {
             }
         }
     }
+    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private void printDate(GeneralizedFile f) {
         Date date = new Date();
         try {
@@ -257,7 +258,7 @@ public class Ls extends Command {
             System.out.print("                   ");
             return;
         }
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        
         System.out.print(dateFormat.format(date));
     }
 
@@ -304,6 +305,7 @@ public class Ls extends Command {
         if (color == null) {
             color = new HashMap<String, String>();
             colorSpe = new HashMap<String, String>();
+            extensionColor = new HashMap<String, String>();
             String envColor = System.getenv("LS_COLORS");
             if (envColor == null) {
                 envColor = GlobalConstants.envColor;
@@ -312,7 +314,11 @@ public class Ls extends Command {
             for (String c: colorSplit) {
                 String[] split = FileManipulation.split(c, "=", 2);
                 if (split[0].startsWith("*.")) {
-                    color.put(split[0], split[1]);
+                    if (split[0].matches("\\*.[A-z0-9]*")) {
+                        extensionColor.put(split[0].substring(2), split[1]);
+                    } else {
+                        color.put(split[0], split[1]);
+                    }
                 } else {
                     colorSpe.put(split[0], split[1]);
                 }
@@ -332,6 +338,12 @@ public class Ls extends Command {
         if (color()) {
             initColor();
             try {
+                for (Map.Entry<String, String> c: extensionColor.entrySet()) {
+                    if (g.getFileName().endsWith(c.getKey())) {
+                        colorName(c.getValue(), f);
+                        return;
+                    }
+                }
                 for (Map.Entry<String, String> c: color.entrySet()) {
                     if (Globbing.match(c.getKey(), g.getFileName())) {
                         colorName(c.getValue(), f);
@@ -492,6 +504,7 @@ public class Ls extends Command {
     private Boolean temp = null;
     private Boolean colorize = null;
     private Boolean columnPrint = null;
+    private Map<String, String> extensionColor;
     private Map<String, String> color;
     private Map<String, String> colorSpe;
     private List<PrintTask> fileList = new ArrayList<PrintTask>();
