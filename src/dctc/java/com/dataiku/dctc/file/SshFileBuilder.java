@@ -64,6 +64,9 @@ public class SshFileBuilder extends ProtocolFileBuilder {
             if (FileManipulation.contains(path[0], "[")) {
                 throw new IllegalArgumentException("Doesn't manage ipv6 address");
             }
+            if (path[0].length() == 0) {
+                throw new IllegalArgumentException("Missing host. Maybe you meant '" +account + "' as an account, but it doesn't exist.");
+            }
 
             return new SshFile(path[0], user[0], user[1], path[1], GlobalConstants.SSH_PORT, false);
         }
