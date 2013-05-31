@@ -1,5 +1,6 @@
 package com.dataiku.dctc;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
 public class DCTCLog {
@@ -65,19 +66,40 @@ public class DCTCLog {
 
     public static void warn(String module, String message, Throwable t) {
         if (mode == Mode.STDERR) {
-            System.err.println("dctc " + module + ": WARNING: " + message);
             if (lvl == Level.DEBUG) {
+                System.err.println("dctc " + module + ": WARNING: " + message);
                 t.printStackTrace();
+            } else {
+                System.err.println("dctc " + module + ": WARNING: " + message + ": " + buildCompleteExceptionMessage(t));
+                System.err.println("  For more information, rerun with -V");
             }
         } else if (mode == Mode.LOG4J) {
             Logger.getLogger("dctc." + module).warn(message, t);
         }
     }
+    
+    private static String buildCompleteExceptionMessage(Throwable t) {
+        StringBuilder sb = new StringBuilder();
+        while (true) {
+            sb.append(t.getClass().getCanonicalName() + ": " + t.getMessage());
+            if (t.getCause() != null) {
+                sb.append(", caused by: ");
+            } else {
+                break;
+            }
+            t = t.getCause();
+        }
+        return sb.toString();
+    }
+    
     public static void error(String module, String message, Throwable t) {
         if (mode == Mode.STDERR) {
-            System.err.println("dctc " + module + ": ERROR: " + message);
             if (lvl == Level.DEBUG) {
+                System.err.println("dctc " + module + ": ERROR: " + message);
                 t.printStackTrace();
+            } else {
+                System.err.println("dctc " + module + ": ERROR: " + message + ": " + buildCompleteExceptionMessage(t));
+                System.err.println("  For more information, rerun with -V");
             }
         } else if (mode == Mode.LOG4J) {
             Logger.getLogger("dctc." + module).error(message, t);
