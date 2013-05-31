@@ -26,9 +26,9 @@ import com.dataiku.dctc.command.Rm;
 import com.dataiku.dctc.command.Rmdir;
 import com.dataiku.dctc.command.Sync;
 import com.dataiku.dctc.command.Tail;
+import com.dataiku.dctc.command.Version;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.configuration.StructuredConf;
-import com.dataiku.dctc.configuration.Version;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dip.utils.StdOut;
 
@@ -95,6 +95,7 @@ public class Main {
         addCmd(new Rm());
         addCmd(new Sync());
         addCmd(new Tail());
+        addCmd(new Version());
     }
     public static void atExit() {
         Runtime.getRuntime().addShutdownHook
@@ -111,11 +112,7 @@ public class Main {
        System.setOut(new StdOut(System.out));
        System.setErr(new StdOut(System.err));
     }
-    public static void warn(StructuredConf conf) {
-        if (GlobalConf.showGitHash() && !Version.isStable) {
-            System.err.println(Version.pretty());
-        }
-    }
+
     public static void main(String[] args) {
         atExit();
         atBegin();
@@ -127,12 +124,11 @@ public class Main {
             StructuredConf conf;
             try {
                 conf = new StructuredConf();
-            conf.parse(GlobalConf.confPath());
+                conf.parse(GlobalConf.confPath());
             } catch (IOException e) {
                 System.err.println("dctc fail: " + e.getMessage());
                 return;
             }
-            warn(conf);
 
             if (args.length >= 1) {
                 args = conf.getAlias().resolve(args);
