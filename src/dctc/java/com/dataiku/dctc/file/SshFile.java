@@ -448,12 +448,12 @@ public class SshFile extends AbstractGFile {
             }
         }
 
-        String file = exec("file '" + path + "' | cut -d':' -f2 | tr -d ' '");
-        if (file.equals("ERROR\n")) {
+        String file = exec("file '" + path + "' | cut -d':' -f2 | tr -d ' ' | tr -d '\n'");
+        if (file.equals("ERROR")) {
             exists = false;
         } else {
             exists = true;
-            if (file.equals("directory\n") || file.equals("stickydirectory\n")) {
+            if (file.equals("directory") || file.equals("stickydirectory")) {
                 directory = true;
                 this.file = false;
             } else {
@@ -471,7 +471,8 @@ public class SshFile extends AbstractGFile {
             disconnect(channel);
             int errorStatut = channel.getExitStatus();
             if (errorStatut != 0) {
-                throw new IOException("Unknown error on: " + getAbsoluteAddress() + eol() + "receive: " + channel.getExitStatus() + eol() + str);
+                throw new IOException("Unknown error on: " + getAbsoluteAddress() + eol()
+                                      + "receive: " + channel.getExitStatus() + eol() + str);
             }
             return str;
         } catch (JSchException e) {
