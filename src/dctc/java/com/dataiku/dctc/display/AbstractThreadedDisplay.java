@@ -51,6 +51,7 @@ abstract public class AbstractThreadedDisplay implements ThreadedDisplay {
             System.out.print(" ");
         }
         lastLength = msg.length();
+        System.out.flush();
     }
     private int lastLength;
 }

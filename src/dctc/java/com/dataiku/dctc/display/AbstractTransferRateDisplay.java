@@ -131,6 +131,7 @@ abstract public class AbstractTransferRateDisplay implements ThreadedDisplay {
             System.out.print(" ");
         }
         lastLength = msg.length();
+        System.out.flush();
     }
     protected long getStartTime() {
         return start;
