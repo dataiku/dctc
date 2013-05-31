@@ -526,14 +526,19 @@ public class SshFile extends AbstractGFile {
     }
     private void list(List<SshFile> l, String cmd) throws IOException {
         String[] split = exec(cmd).split("\n");
+        boolean permissionDenied = true;
 
         for (String s: split) {
-            if (!s.isEmpty() && !(s.equals(".") || s.equals(".."))) {
-                l.add(parseAndBuild(s));
+            permissionDenied = false;
+            if (!s.isEmpty()) {
+                SshFile son = parseAndBuild(s);
+                if (!(son.getFileName().equals(".") || son.getFileName().equals(".."))) {
+                    l.add(parseAndBuild(s));
+                }
             }
         }
-        if (l.size() == 0) {
-            throw new IOException("Permission denied.");
+        if (permissionDenied) {
+            throw new IOException("Permission denied: " + givenName());
         }
     }
 
