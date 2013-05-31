@@ -65,7 +65,7 @@ public class CatTest {
         }
         Cat c = new Cat();
         CredentialProviderBank bank = new CredentialProviderBank();
-        c.setFileBuilder(new FileBuilder(bank));
+        c.setFileBuilder(new FileBuilder(bank, null));
         String[] s =  { fileName };
         c.perform(s);
 

@@ -125,6 +125,7 @@ public class Main {
             try {
                 conf = new StructuredConf();
                 conf.parse(GlobalConf.confPath());
+                conf.parseSsh(GlobalConf.sshConfigFile());
             } catch (IOException e) {
                 System.err.println("dctc fail: " + e.getMessage());
                 return;

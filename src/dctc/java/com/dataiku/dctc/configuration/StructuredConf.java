@@ -10,6 +10,12 @@ import com.dataiku.dctc.file.FileBuilder;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
 
 public class StructuredConf {
+    public void parseSsh(File file) throws IOException {
+        ssh.parse(file);
+    }
+    public void parseSsh(String path) throws IOException {
+        ssh.parse(path);
+    }
 
     public void parse(File file) throws IOException {
         conf.parse(file);
@@ -38,7 +44,7 @@ public class StructuredConf {
     }
     public FileBuilder getFileBuilder() {
         if (builder == null) {
-            builder = new FileBuilder(bank);
+            builder = new FileBuilder(bank, ssh);
         }
         return builder;
     }
@@ -72,4 +78,5 @@ public class StructuredConf {
     private Configuration conf = new Configuration();
     private Configuration confAppenders;
     private FileBuilder builder;
+    private SshConfig ssh = new SshConfig();
 }

@@ -1,6 +1,7 @@
 package com.dataiku.dctc.file;
 
 import com.dataiku.dctc.configuration.CredentialProviderBank;
+import com.dataiku.dctc.configuration.SshConfig;
 import com.dataiku.dctc.exception.UserException;
 
 public class FileBuilder {
@@ -39,9 +40,10 @@ public class FileBuilder {
         }
     }
 
-    public FileBuilder(CredentialProviderBank bank) {
+    public FileBuilder(CredentialProviderBank bank, SshConfig sshConfig) {
         this.bank = bank;
         bank = new CredentialProviderBank();
+        this.sshConfig = sshConfig;
     }
 
     public GeneralizedFile buildFile(String uri) {
@@ -66,6 +68,9 @@ public class FileBuilder {
             path = path.substring(atIndex + 1);
         }
         proto.builder.setBank(bank);
+        if (proto == Protocol.SSH) {
+            ((SshFileBuilder) proto.builder).setSshConfig(sshConfig);
+        }
         return proto.builder.buildFile(account, path);
 
     }
@@ -79,4 +84,5 @@ public class FileBuilder {
     }
 
     private CredentialProviderBank bank;
+    private SshConfig sshConfig;
 }

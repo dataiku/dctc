@@ -1,6 +1,7 @@
 package com.dataiku.dctc.file;
 
 import com.dataiku.dctc.GlobalConstants;
+import com.dataiku.dctc.configuration.SshConfig;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.dataiku.dip.utils.Params;
@@ -28,6 +29,7 @@ public class SshFileBuilder extends ProtocolFileBuilder {
 
     @Override
     public synchronized GeneralizedFile buildFile(String account, String rawPath) {
+        assert sshConfig != null;
         if (account == null) {
             throw new UserException("For SSH, you must specify either ssh://user@host/path or ssh://conf_account@/path");
         }
@@ -38,6 +40,9 @@ public class SshFileBuilder extends ProtocolFileBuilder {
             String[] path = FileManipulation.split(rawPath, ":", 2, false);
             if (path[0].isEmpty()) {
                 path[0] = p.getMandParam("host");
+            }
+            if (sshConfig.exists(path[0]) && sshConfig.getHostParam(path[0]).get("HostName") != null) {
+                path[0] = sshConfig.getHostParam(path[0]).get("HostName");
             }
             if (path[1] == null) {
                 path[1] = ".";
@@ -67,7 +72,7 @@ public class SshFileBuilder extends ProtocolFileBuilder {
             if (path[0].length() == 0) {
                 throw new IllegalArgumentException("Missing host. Maybe you meant '" +account + "' as an account, but it doesn't exist.");
             }
-
+            // ICI: path[0]
             return new SshFile(path[0], user[0], user[1], path[1], GlobalConstants.SSH_PORT, false);
         }
     }
@@ -78,4 +83,9 @@ public class SshFileBuilder extends ProtocolFileBuilder {
     public final String fileSeparator() {
         return "/";
     }
+    public void setSshConfig(SshConfig sshConfig) {
+        this.sshConfig = sshConfig;
+    }
+
+    private SshConfig sshConfig;
 }

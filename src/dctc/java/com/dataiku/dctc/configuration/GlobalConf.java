@@ -14,8 +14,14 @@ public class GlobalConf {
     public static File confFile() {
         return new File(confPath());
     }
+    public static File sshConfigFile() {
+        return new File(sshConfigPath());
+    }
     public static String confPath() {
         return GlobalConstants.userHome + (GlobalConstants.isWindows ? "/dctcrc" : "/.dctcrc");
+    }
+    public static String sshConfigPath() {
+        return GlobalConstants.userHome + "/.ssh/config";
     }
     public static void setGlobalSettings(Map<String, String> settings) {
         for (Entry<String, String> elt: settings.entrySet()) {
