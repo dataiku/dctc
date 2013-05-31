@@ -148,13 +148,13 @@ public abstract class Command {
         setExitCode(exitCode);
     }
     protected void error(String fileName, String msg, Throwable exception, int exitCode) {
-        error("`" + fileName + "' failed: " + msg, exception, exitCode);
+        error("`" + fileName + "': " + msg, exception, exitCode);
     }
     protected void setExitCode(int exitCode) {
         this.exitCode = Math.max(exitCode, this.exitCode);
     }
     protected void error(String fileName, String msg, int errorCode) {
-        error("`" + fileName + "' failed: " + msg, errorCode);
+        error("`" + fileName + "': " + msg, errorCode);
     }
     protected void warn(String msg) {
         error(msg, 0);
