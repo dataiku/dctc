@@ -36,6 +36,7 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
         checkMandatory(account, p, "host");
         checkMandatory(account, p, "username");
         checkMandatory(account, p, "password");
+        getCheckedPort(p.getMandParam("port"));
     }
 
     @Override
@@ -59,6 +60,7 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
             Params p = bank.getAccountParams(getProtocol().getCanonicalName(), accountSettings);
             // validateAccountParams(accountSettings, p);
 
+
             return new FTPFile(p, translateDefaultPath(p, rawPath));
         }
     }
@@ -67,21 +69,10 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
     }
 
     private FTPFile build(String host, String username, String password, String path) {
-        int port  = GlobalConstants.FTP_PORT;
+        int port = GlobalConstants.FTP_PORT;
         if (host.indexOf(":") != -1) {
             String[/*port/host*/] splittedHost = FileManipulation.invSplit(host, ":", 2);
-
-            try {
-                port = Integer.parseInt(splittedHost[0]);
-            } catch (NumberFormatException e) {
-                DCTCLog.error("FTP file builder", "`"
-                        + splittedHost[0]
-                                + "' is not a Number. Need a number between 1 and 65536 (included) for the ftp port.");
-                throw new EndOfCommand();
-            }
-            if (port < 1 || port > 65535) {
-                throw new UserException("A port must be between 1 and 65535 (included).");
-            }
+            port = getCheckedPort(splittedHost[0]);
             host = splittedHost[1];
         }
         return new FTPFile(host, username, password, path, port);
@@ -89,6 +80,23 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
     @Override
     public final String fileSeparator() {
         return "/";
+    }
+
+    // Private
+    private int getCheckedPort(String strPort) {
+        int port;
+        try {
+            port = Integer.parseInt(strPort);
+        } catch (NumberFormatException e) {
+            DCTCLog.error("FTP file builder", "`"
+                          + strPort
+                          + "' is not a Number. Need a number between 1 and 65536 (included) for the ftp port.");
+            throw new EndOfCommand();
+        }
+        if (port < 1 || port > 65535) {
+            throw new UserException("A port must be between 1 and 65535 (included).");
+        }
+        return port;
     }
 
 }
