@@ -104,7 +104,10 @@ public class Tail extends Command {
                     }
                 }
                 for (long i = 0; i < nbLine(); ++i) {
-                    System.out.println(buf[(int) (idx + i) % (int) nbLine]);
+                    int index = (int) (idx + i) % (int) nbLine;
+                    if (buf[index] != null) {
+                        System.out.println(buf[index]);
+                    }
                 }
             }
         }
