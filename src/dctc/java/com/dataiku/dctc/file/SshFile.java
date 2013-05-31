@@ -440,7 +440,11 @@ public class SshFile extends AbstractGFile {
             try {
                 openSessionAndResolveHome();
             } catch (JSchException e) {
-                throw new IOException("Failed to connect", e);
+                String msg = e.getMessage();
+                if (msg.contains(":")) {
+                    msg = msg.substring(msg.indexOf(":"));
+                }
+                throw new IOException(msg, e);
             }
         }
 
