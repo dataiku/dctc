@@ -12,11 +12,11 @@ public class DisplayFactory {
         if (type == null) type = "auto";
         if (type.equals("simple")) {
             return new SimpleDisplay();
-        } else if (type.equals("list")) {
+        } else if (type.equals("list") || type.equals("auto")) {
             return new ListDisplay();
         } else if (type.equals("tty-pretty")) {
             return new LessSimpleDisplay();
-        } else if (type.equals("pretty") || type.equals("auto")) {
+        } else if (type.equals("pretty")) {
             try {
                 // NCurses is not always available
                 return new NCursesDisplay();
