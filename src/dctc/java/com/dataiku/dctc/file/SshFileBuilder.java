@@ -36,12 +36,11 @@ public class SshFileBuilder extends ProtocolFileBuilder {
         if (p != null) {
             validateAccountParams(account, p);
             String[] path = FileManipulation.split(rawPath, ":", 2, false);
-            if (path[1] == null) {
-                path[1] = path[0];
-                path[0] = "";
-            }
             if (path[0].isEmpty()) {
                 path[0] = p.getMandParam("host");
+            }
+            if (path[1] == null) {
+                path[1] = ".";
             }
             if (p.hasParam("password")) {
                 return new SshFile(path[0],
