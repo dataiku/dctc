@@ -36,7 +36,7 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
         checkMandatory(account, p, "host");
         checkMandatory(account, p, "username");
         checkMandatory(account, p, "password");
-        getCheckedPort(p.getMandParam("port"));
+        getCheckedPort(p.getParam("port", "22"));
     }
 
     @Override
