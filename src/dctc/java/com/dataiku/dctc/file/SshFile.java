@@ -440,7 +440,7 @@ public class SshFile extends AbstractGFile {
             try {
                 openSessionAndResolveHome();
             } catch (JSchException e) {
-                throw new IOException(e);
+                throw new IOException("Failed to connect", e);
             }
         }
 
@@ -471,7 +471,7 @@ public class SshFile extends AbstractGFile {
             }
             return str;
         } catch (JSchException e) {
-            throw new IOException("dctc Sshfile: failed: " + path, e);
+            throw new IOException("Failed to execute SSH command on '" + path +"'", e);
         }
     }
     private Acl getAclFrom(String describ) {
