@@ -27,7 +27,7 @@ public class SyncComputer {
         public Type type = Type.SIZE_ONLY;
 
         private void createDst(GeneralizedFile src, GeneralizedFile dst) throws IOException {
-            if (src.isDirectory() && !dst.isDirectory()) {
+            if (src.isDirectory() && !(dst.exists() && dst.isFile())) {
                 dst.mkdirs();
             }
         }
