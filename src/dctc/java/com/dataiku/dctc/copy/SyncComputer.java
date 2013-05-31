@@ -49,24 +49,26 @@ public class SyncComputer {
             }
 
             if (dst.exists()) {
-                if (type == Type.EXISTS_ONLY) {
-                    return false;
-                } else if (type == Type.HASH_BASED) {
-                    if (!hashIsDifferent(src, dst)) return false;
-                } else if (type == Type.TIME_ONLY) {
+                switch (type) {
+                case EXISTS_ONLY:
+                    return  false;
+                case HASH_BASED:
+                    if (!hashIsDifferent(src, dst)) {
+                        return false;
+                    }
+                    break;
+                case TIME_ONLY:
                     if (src.hasDate() && dst.hasDate() &&  src.getDate() <= dst.getDate()) {
                         return false;
                     }
-                } else if (type == Type.SIZE_ONLY) {
-                    if (dst.getSize() == src.getSize()) {
-                        return false;
-                    }
-                } else  if (type == Type.TIME_AND_SIZE){
+                    break;
+                case TIME_AND_SIZE:
                     if (dst.getSize() == src.getSize() && !dateIsDifferent(src, dst)) {
                         return false;
                     }
-                } else {
-                    throw new Error("Unknown incremental type " + type);
+                    break;
+                default:
+                    throw new Error("Shouldn't append.");
                 }
                 logger.debug("dst already exists but required s1=" + src.getSize() + " ds=" + dst.getSize());
             } else {
