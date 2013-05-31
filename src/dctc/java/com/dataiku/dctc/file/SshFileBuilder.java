@@ -34,6 +34,7 @@ public class SshFileBuilder extends ProtocolFileBuilder {
 
         Params p = bank.getAccountParamsIfExists(getProtocol().getCanonicalName(), account);
         if (p != null) {
+            validateAccountParams(account, p);
             String[] path = FileManipulation.split(rawPath, ":", 2, false);
             if (path[1] == null) {
                 path[1] = path[0];
