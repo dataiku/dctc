@@ -144,9 +144,8 @@ public class Main {
                         globalUsage(0);
                     }
                 }
-                if (cmds.containsKey(usercmd)) {
-                    Command cmd = cmds.get(usercmd);
-
+                Command cmd = cmds.get(usercmd);
+                if (cmd != null) {
                     if (cmd.cmdname().equals("add-account")) {
                         assert cmd instanceof AddAccount;
                         ((AddAccount) cmd).setConfiguration(conf.getConfAppenders());
