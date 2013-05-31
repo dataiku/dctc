@@ -29,7 +29,7 @@ java -jar \$TMPFILE "\$@"
 RET=\$?; rm -f \$TMPFILE; exit $RET
 .
 
-sed -e "s/$line_pattern/`wc -l <$TMP_DEST`/" $TMP_DEST > $DEST
+sed -e "s/$line_pattern/`wc -l <$TMP_DEST | sed 's/ *//'`/" $TMP_DEST > $DEST
 cat $JARFILE >> $DEST
 chmod u+x $DEST
 
