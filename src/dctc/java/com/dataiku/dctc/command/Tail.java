@@ -79,7 +79,7 @@ public class Tail extends Command {
 
                 }
                 String[] lines = line.split("\n");
-                for (int i = lines.length - (int) nbLine(); i < lines.length; ++i) {
+                for (int i = Math.max(0, lines.length - (int) nbLine()); i < lines.length; ++i) {
                     System.out.println(lines[i]);
                 }
             } else {
