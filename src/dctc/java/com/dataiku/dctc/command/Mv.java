@@ -32,7 +32,7 @@ public class Mv extends ListCommand {
         if (exitCode == 0) {
             SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(false, false, false);
             ThreadedDisplay display = GlobalConf.getDisplay();
-            CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, GlobalConf.getThreadLimit());
+            CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, getThreadLimit());
 
             exec.run(tasks, archive());
             if (exec.hasFail()) {
@@ -53,6 +53,10 @@ public class Mv extends ListCommand {
     @Override
     protected Options setOptions() {
         Options options = new Options();
+
+        options.addOption("s", "sequential", false, "Make the copy with only one thread.");
+        longOpt(options, "Set the number of thread.", "thread_number", "n", "number");
+
         return options;
     }
     @Override

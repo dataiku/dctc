@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.dataiku.dctc.GlobalConstants;
+import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.copy.CopyTask;
 import com.dataiku.dctc.file.FileManipulation;
 import com.dataiku.dctc.file.GeneralizedFile;
@@ -189,6 +190,18 @@ public abstract class ListCommand extends Command {
         } else {
             logger.info("Should not add");
         }
+    }
+
+    protected int getThreadLimit() {
+        int threadLimit = GlobalConf.getThreadLimit();
+        if (hasOption("n")) {
+            threadLimit = Integer.parseInt(getOptionValue("n"));
+        }
+        if (hasOption("s")) {
+            threadLimit = 1;
+        }
+
+        return threadLimit;
     }
 
     // Attributes

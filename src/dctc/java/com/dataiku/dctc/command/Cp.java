@@ -69,6 +69,8 @@ public class Cp extends ListCommand {
         opt.addOption("i", "interactive", false, "Prompt before overwrite");
         opt.addOption("a", "archive", false, "Archives all input files into a single destination file using the destination file extension as identifier for the archive method. Supported archive methods are 'zip'");
         opt.addOption("p", "preserve", false, "Preserve the time stamp");
+        opt.addOption("s", "sequential", false, "Make the copy with only one thread.");
+        longOpt(opt, "Set the number of thread.", "thread_number", "n", "number");
 
         return opt;
     }
@@ -78,7 +80,7 @@ public class Cp extends ListCommand {
                                                                                archive(),
                                                                                hasOption("p"));
         ThreadedDisplay display = GlobalConf.getDisplay();
-        CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, GlobalConf.getThreadLimit());
+        CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, getThreadLimit());
         exec.run(tasks, archive());
         if (exec.hasFail()) {
             setExitCode(2);

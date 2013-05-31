@@ -66,6 +66,8 @@ public class Sync extends Command {
         options.addOption("m", "hash", false, "Check whether sync is required using file hash (default: size only). Incompatible with -t");
         options.addOption("n", "dry-run", false, "Perform a trial run with no changes made.");
         options.addOption("c", "compress", false, "Compress the output files and appends .gz extension. Disables -t and -m");
+        options.addOption("s", "sequential", false, "Make the copy with only one thread.");
+        longOpt(options, "Set the number of thread.", "thread_number", "n", "number");
 
         return options;
     }
@@ -106,7 +108,8 @@ public class Sync extends Command {
         }
         SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(false /*uncompress*/, false /*compress*/, false /* preserve date*/);
         ThreadedDisplay display = GlobalConf.getDisplay();
-        CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, GlobalConf.getThreadLimit());
+
+        CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, getThreadLimit());
         exec.run(tasks, false);
         if (exec.hasFail()) {
             setExitCode(2);
@@ -117,4 +120,17 @@ public class Sync extends Command {
     protected String proto() {
         return "dctc sync [OPT...] INPUT... OUTPUT: synchronizes input folders into output";
     }
+
+    private int getThreadLimit() {
+        int threadLimit = GlobalConf.getThreadLimit();
+        if (hasOption("n")) {
+            threadLimit = Integer.parseInt(getOptionValue("n"));
+        }
+        if (hasOption("s")) {
+            threadLimit = 1;
+        }
+
+        return threadLimit;
+    }
+
 }
