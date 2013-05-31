@@ -52,7 +52,7 @@ public class SshFileBuilder extends ProtocolFileBuilder {
             } else {
                 return new SshFile(path[0],
                                    p.getMandParam("username"),
-                                   p.getMandParam("key"),
+                                   p.getParam("key"),
                                    p.getParam("passphrase"),
                                    path[1],
                                    p.getShortParam("port", GlobalConstants.SSH_PORT),

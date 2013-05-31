@@ -110,6 +110,15 @@ public class SshFile extends AbstractGFile {
                 } else {
                     connData.jsch.addIdentity(connData.sshKeyPath);
                 }
+            } else {
+                File dsa = new File(System.getProperty("user.home") + "/.ssh/id_dsa");
+                if (dsa.exists()) {
+                    connData.jsch.addIdentity(dsa.getAbsolutePath());
+                }
+                File rsa = new File(System.getProperty("user.home") + "/.ssh/id_rsa");
+                if (rsa.exists()) {
+                    connData.jsch.addIdentity(rsa.getAbsolutePath());
+                }
             }
 
             File knownHosts = new File(System.getProperties().get("user.home") + "/.ssh/known_hosts");
