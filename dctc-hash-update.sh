@@ -1,3 +1,9 @@
 #! /bin/sh
 
-sed -ie "s/XXX_GIT_HASH_XXX/`git log --pretty=format:'%h' -n1`/" $1
+if git describe; then
+    describe=`git describe`
+
+else
+    describe="0.0"
+fi
+    sed -ie "s/XXX_GIT_VERSION_XXX/$describe/" $1
