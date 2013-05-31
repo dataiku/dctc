@@ -141,16 +141,16 @@ public abstract class Command {
     }
     protected void error(String msg, int exitCode) {
         DCTCLog.error(cmdname(), msg);
-        exitCode(exitCode);
+        setExitCode(exitCode);
     }
     protected void error(String msg, Throwable exception, int exitCode) {
         DCTCLog.error(cmdname(), msg, exception);
-        exitCode(exitCode);
+        setExitCode(exitCode);
     }
     protected void error(String fileName, String msg, Throwable exception, int exitCode) {
         error("`" + fileName + "' failed: " + msg, exception, exitCode);
     }
-    protected void exitCode(int exitCode) {
+    protected void setExitCode(int exitCode) {
         this.exitCode = Math.max(exitCode, this.exitCode);
     }
     protected void error(String fileName, String msg, int errorCode) {

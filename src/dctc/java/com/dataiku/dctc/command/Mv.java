@@ -36,7 +36,7 @@ public class Mv extends ListCommand {
 
             exec.run(tasks, archive());
             if (exec.hasFail()) {
-                exitCode(2);
+                setExitCode(2);
                 exec.displayErrors();
             }
             else {

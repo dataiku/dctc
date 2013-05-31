@@ -81,7 +81,7 @@ public class Cp extends ListCommand {
         CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, GlobalConf.getThreadLimit());
         exec.run(tasks, archive());
         if (exec.hasFail()) {
-            exitCode(2);
+            setExitCode(2);
             exec.displayErrors();
         }
     }

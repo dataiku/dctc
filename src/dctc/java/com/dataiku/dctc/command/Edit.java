@@ -48,7 +48,7 @@ public class Edit extends Command {
         }
         if (files.size() == 0) {
             usage();
-            exitCode(1);
+            setExitCode(1);
             return;
         }
 

@@ -73,7 +73,7 @@ public class Sync extends Command {
     public void perform(List<GeneralizedFile> args) {
         if (args.size() < 2) {
             usage();
-            exitCode(1);
+            setExitCode(1);
             return;
         }
 
@@ -109,7 +109,7 @@ public class Sync extends Command {
         CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, GlobalConf.getThreadLimit());
         exec.run(tasks, false);
         if (exec.hasFail()) {
-            exitCode(2);
+            setExitCode(2);
             exec.displayErrors();
         }
     }

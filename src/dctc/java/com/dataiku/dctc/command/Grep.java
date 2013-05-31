@@ -55,7 +55,7 @@ public class Grep extends Command {
     public void perform(List<GeneralizedFile> args, String pattern) {
         if (args.size() < 1) {
             usage();
-            exitCode(2);
+            setExitCode(2);
         }
         pattern = formatPattern(pattern);
         if (ignoreCase()) {
