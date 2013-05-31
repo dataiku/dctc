@@ -45,7 +45,7 @@ public abstract class BucketBasedFile extends AbstractGFile {
     }
     @Override
     public String givenPath() {
-        return path;
+        return bucket + "/" + path;
     }
     @Override
     public String getAbsolutePath() {
