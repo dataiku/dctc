@@ -62,6 +62,12 @@
           Running <code>dctc</code> with no arguments lists the available commands.<br />
           All commands accept the <code>--help</code> option to get a detailed summary and list of options
         </p>
+        <h1 id="alias">Alias</h1>
+        <code>dctc</code> allows you to create command aliases. Simply add the following section in your <a href="protocols.html#configfile">configuration file</a>:
+        <pre><code>[alias]
+ls = ls -G
+ll = ls -lh
+la = ls -a</code></pre>
 
         <h1 id="ls">ls and find</h1>
 
