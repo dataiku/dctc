@@ -79,8 +79,3 @@ public class SshFileBuilder extends ProtocolFileBuilder {
         return "/";
     }
 }
-/*
-ssh://ssh@localhost:/home/vash
-ssh://ssh@/home/vash
-
-*/
