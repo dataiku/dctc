@@ -271,7 +271,9 @@ public class S3File extends BucketBasedFile {
     public void mkdirs() throws IOException {
         if (!exists() && type != Type.BUCKET_EXISTS) {
             try {
-                s3.createBucket(bucket);
+                synchronized(s3) {
+                    s3.createBucket(bucket);
+                }
                 type = Type.DIR;
             } catch (AmazonS3Exception e) {
                 throw wrapProperly("createBucket", e);
