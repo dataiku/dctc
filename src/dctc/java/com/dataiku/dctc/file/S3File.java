@@ -289,10 +289,13 @@ public class S3File extends BucketBasedFile {
         mkdirs();
     }
     @Override
-    public boolean delete() {
+    public boolean delete() throws IOException {
         if (FileManipulation.getDepth(getAbsolutePath(), fileSeparator()) == 1) {
             // We have just the bucket.
             try {
+                for (S3File content: grecursiveList()) {
+                    content.delete();
+                }
                 s3.deleteBucket(bucket);
             } catch (AmazonClientException e) {
                 return false;
