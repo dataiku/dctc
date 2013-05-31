@@ -189,7 +189,7 @@ public class FileManipulation {
         return subPath.substring(0, index);
     }
     public static int getDepth(String file, String separator) {
-        String[] split = file.split(separator);
+        String[] split = trimBegin(trimEnd(file, separator), separator).split(separator);
         return split.length;
     }
     public static boolean isAbsolute(String path, String fileSeparator) {
