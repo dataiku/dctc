@@ -16,11 +16,13 @@
     <property name="dctc-jar.build" value="${build.dir}/classes-dctc" />
 
     <target name="clean">
-        <delete dir="dist" />
         <delete dir="build" />
-        <delete dir="ivy" />
-        <delete dir="lib/ivy" />
+        <delete dir="dist" />
     </target>
+    <target name="distclean" depends="clean">
+              <delete dir="ivy" />
+              <delete dir="lib/ivy" />
+          </target>
 
     <target name="download-ivy" unless="skip.download">
         <mkdir dir="${ivy.jar.dir}"/>
