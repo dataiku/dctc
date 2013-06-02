@@ -14,11 +14,11 @@ public class DisplayFactory {
         if (type == null) type = "auto";
         if (type.equals("simple")) {
             return new SimpleDisplay();
-        } else if (type.equals("list") || type.equals("auto") || !GlobalConf.isInteractif()) {
+        } else if (type.equals("list")  || !GlobalConf.isInteractif()) {
             return new ListDisplay();
         } else if (type.equals("tty-pretty")) {
             return new LessSimpleDisplay();
-        } else if (type.equals("pretty")) {
+        } else if (type.equals("pretty") || type.equals("auto")) {
             try {
                 // NCurses is not always available
                 return new NCursesDisplay();
