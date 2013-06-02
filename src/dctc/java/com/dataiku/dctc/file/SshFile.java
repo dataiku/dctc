@@ -19,7 +19,7 @@ import org.apache.commons.io.IOUtils;
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.configuration.SshUserInfo;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
-import static com.dataiku.dctc.PrettyString.eol;
+import static com.dataiku.dip.output.PrettyString.eol;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.ChannelSftp;
