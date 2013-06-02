@@ -23,6 +23,7 @@ public class SplitStreamFactory {
             this.outputStream = outputStream;
             this.outputFormatter = outputFormatter;
         }
+        ColumnFactory cf;
         public OutputStream outputStream;
         public OutputFormatter outputFormatter;
     }
@@ -46,6 +47,7 @@ public class SplitStreamFactory {
         Output out = outputStreams.get(splitIndex);
         if (out == null) {
             out = newStream(splitIndex);
+            out.cf = sourceCF;
             outputStreams.put(splitIndex, out);
             out.outputFormatter.header(sourceCF, out.outputStream);
         }
@@ -75,8 +77,10 @@ public class SplitStreamFactory {
         o.outputFormatter.format(row, sourceCF, o.outputStream);
     }
 
-    public synchronized void close() {
+    public synchronized void close() throws IOException {
         for (Entry<String, Output> it: outputStreams.entrySet()) {
+            Output o = it.getValue();
+            o.outputFormatter.footer(o.cf, o.outputStream);
             IOUtils.closeQuietly(it.getValue().outputStream);
         }
     }

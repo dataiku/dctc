@@ -1,5 +1,7 @@
 package com.dataiku.dctc.split;
 
+import java.io.IOException;
+
 import com.dataiku.dctc.copy.CopyTask;
 import com.dataiku.dctc.copy.CopyTaskRunnable;
 import com.dataiku.dctc.copy.CopyTaskRunnableFactory;
@@ -18,10 +20,10 @@ public class SplitFactory implements CopyTaskRunnableFactory {
     public CopyTaskRunnable build(CopyTask task) {
         return new SplitTask(task.src, streamFact, format);
     }
-    public void close() {
+    public void close() throws IOException {
         streamFact.close();
     }
-    public void done() {
+    public void done() throws IOException {
         close();
     }
     private SplitStreamFactory streamFact;
