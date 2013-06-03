@@ -5,6 +5,8 @@ import com.dataiku.dctc.configuration.SshConfig;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.dataiku.dip.utils.Params;
+import static com.dataiku.dip.output.PrettyString.pquoted;
+import static com.dataiku.dip.output.PrettyString.scat;
 
 /** Builder for SSH files
  *
@@ -21,15 +23,14 @@ public class SshFileBuilder extends ProtocolFileBuilder {
     @Override
     public void validateAccountParams(String account, Params p) {
         checkAllowedOnly(account, p, new String[]{"host", "port", "username",
-                                                  "password", "key", "passphrase",
-                                                  "skip_host_key_check"});
+                                                  "password", "key", "skip_host_key_check",
+                                                  "identity"});
         checkMandatory(account, p, "host");
         checkMandatory(account, p, "username");
     }
 
     @Override
     public synchronized GeneralizedFile buildFile(String account, String rawPath) {
-        assert sshConfig != null;
         if (account == null) {
             throw new UserException("For SSH, you must specify either ssh://user@host/path or ssh://conf_account@/path");
         }
@@ -41,28 +42,10 @@ public class SshFileBuilder extends ProtocolFileBuilder {
             if (path[0].isEmpty()) {
                 path[0] = p.getMandParam("host");
             }
-            if (sshConfig.exists(path[0]) && sshConfig.getHostParam(path[0]).get("HostName") != null) {
-                path[0] = sshConfig.getHostParam(path[0]).get("HostName");
-            }
             if (path[1] == null) {
                 path[1] = ".";
             }
-            if (p.hasParam("password")) {
-                return new SshFile(path[0],
-                                   p.getMandParam("username"),
-                                   p.getParam("password"),
-                                   path[1],
-                                   p.getShortParam("port", GlobalConstants.SSH_PORT),
-                                   p.getBoolParam("skip_host_key_check", false));
-            } else {
-                return new SshFile(path[0],
-                                   p.getMandParam("username"),
-                                   p.getParam("key"),
-                                   p.getParam("passphrase"),
-                                   path[1],
-                                   p.getShortParam("port", GlobalConstants.SSH_PORT),
-                                   p.getBoolParam("skip_host_key_check", false));
-            }
+            return new SshFile(sshConfig, path[0], path[1], p);
         } else {
             String[] user = FileManipulation.split(account, ":", 2, false);
             String[] path = FileManipulation.split(rawPath, ":", 2);
@@ -70,10 +53,13 @@ public class SshFileBuilder extends ProtocolFileBuilder {
                 throw new IllegalArgumentException("Doesn't manage ipv6 address");
             }
             if (path[0].length() == 0) {
-                throw new IllegalArgumentException("Missing host. Maybe you meant '" +account + "' as an account, but it doesn't exist.");
+                throw new IllegalArgumentException(scat("Missing host. Maybe you meant",
+                                                        pquoted(account),
+                                                        "as an account, but it doesn't exist."));
             }
             // ICI: path[0]
-            return new SshFile(path[0], user[0], user[1], path[1], GlobalConstants.SSH_PORT, false);
+            return null;
+            // return new SshFile(path[0], user[0], user[1], path[1], GlobalConstants.SSH_PORT, false);
         }
     }
     public Protocol getProtocol() {

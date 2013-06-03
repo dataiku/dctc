@@ -21,8 +21,10 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 
 import com.dataiku.dctc.GlobalConstants;
+import com.dataiku.dctc.configuration.SshConfig;
 import com.dataiku.dctc.configuration.SshUserInfo;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
+import com.dataiku.dip.utils.Params;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.ChannelSftp;
@@ -32,37 +34,57 @@ import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 
 public class SshFile extends AbstractGFile {
+    enum ConnectionType {
+        IDENTITY,
+        PASSWORD,
+        PASSPHRASE
+    }
     static class ConnectionData {
         String host;
         String username;
         String password;
         String sshKeyPath;
         String sshKeyPassphrase;
-        short port;
+        int port;
         boolean skipHostKeyCheck;
         Session session;
         JSch jsch;
+        String identity;
+        int compressionLevel;
 
         String homePath;
     }
 
     private ConnectionData connData;
 
-    public SshFile(String host, String username, String password, String path, short port,
-                   boolean skipHostKeyCheck) {
+    private int parseInt(String port, int low, int high) {
+        return Integer.parseInt(port); // FIXME:
+    }
+    private boolean parseBool(String str) {
+        str = str.toLowerCase();
+        if (str.equals("yes") || str.equals("y") || str.equals("yeah") || str.equals("true") || str.equals("t")) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    public SshFile(SshConfig config, String host, String path, Params p) {
         if (path.isEmpty()) {
             this.path = ".";
         } else {
             this.path = path;
         }
         this.connData = new ConnectionData();
-        this.connData.host = host;
-        this.connData.port = port;
-        this.connData.username = username;
-        this.connData.password = password;
-        this.connData.skipHostKeyCheck = skipHostKeyCheck;
-
+        this.connData.host = config.get(host, "HostName", host);
+        this.connData.port = parseInt(config.get(host, "Port", "22"), 1, 65535);
+        this.connData.username = config.get(host, "UserName", p.getMandParam("username"));
+        this.connData.skipHostKeyCheck = p.getBoolParam("skip_host_key_check", false);
+        this.connData.identity = config.get(host, "IdentityFile", null);
+        this.connData.compressionLevel = parseInt(config.get(host, "CompressionLevel", "6"), 0, 9);
+        this.connData.password = p.getParam("password");
     }
+
     public SshFile(String host, String username, String keyPath,
                    String keyPassphrase, String path, short port, boolean skipHostKeyCheck) {
         this.connData = new ConnectionData();
@@ -114,13 +136,21 @@ public class SshFile extends AbstractGFile {
                     connData.jsch.addIdentity(connData.sshKeyPath);
                 }
             } else {
-                File dsa = new File(System.getProperty("user.home") + "/.ssh/id_dsa");
-                if (dsa.exists()) {
-                    connData.jsch.addIdentity(dsa.getAbsolutePath());
+                if (connData.identity != null) {
+                    File identity = new File(connData.identity);
+                    if (identity.exists()) {
+                        connData.jsch.addIdentity(identity.getAbsolutePath());
+                    }
                 }
-                File rsa = new File(System.getProperty("user.home") + "/.ssh/id_rsa");
-                if (rsa.exists()) {
-                    connData.jsch.addIdentity(rsa.getAbsolutePath());
+                else {
+                    File dsa = new File(System.getProperty("user.home") + "/.ssh/id_dsa");
+                    if (dsa.exists()) {
+                        connData.jsch.addIdentity(dsa.getAbsolutePath());
+                    }
+                    File rsa = new File(System.getProperty("user.home") + "/.ssh/id_rsa");
+                    if (rsa.exists()) {
+                        connData.jsch.addIdentity(rsa.getAbsolutePath());
+                    }
                 }
             }
 
@@ -128,19 +158,22 @@ public class SshFile extends AbstractGFile {
             if (knownHosts.exists()) {
                 connData.jsch.setKnownHosts(knownHosts.getAbsolutePath());
             }
-//             DON'T REMOVE THAT. IT'S USEFUL FOR DEBUGGING
-//                    Logger l = new Logger() {
-//                        @Override
-//                        public void log(int arg0, String arg1) {
-//                            System.out.println(arg1);
-//                        }
-//
-//                        @Override
-//                        public boolean isEnabled(int arg0) {
-//                            return true;
-//                        }
-//                    };
-//                    connData.jsch.setLogger(l);
+
+            connData.jsch.setConfig("CompressionLevel", Integer.toString(connData.compressionLevel));
+
+            //             DON'T REMOVE THAT. IT'S USEFUL FOR DEBUGGING
+            //                    Logger l = new Logger() {
+            //                        @Override
+            //                        public void log(int arg0, String arg1) {
+            //                            System.out.println(arg1);
+            //                        }
+            //
+            //                        @Override
+            //                        public boolean isEnabled(int arg0) {
+            //                            return true;
+            //                        }
+            //                    };
+            //                    connData.jsch.setLogger(l);
 
             connData.session = connData.jsch.getSession(connData.username,connData.host, connData.port);
             if (skipHostKeyCheck) {

@@ -1,5 +1,8 @@
 package com.dataiku.dctc.configuration;
 
+import static com.dataiku.dip.output.PrettyString.pquoted;
+import static com.dataiku.dip.output.PrettyString.scat;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,8 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import static com.dataiku.dip.output.PrettyString.scat;
-import static com.dataiku.dip.output.PrettyString.pquoted;
 
 import com.dataiku.dctc.file.FileManipulation;
 
@@ -37,20 +38,21 @@ public class SshConfig {
                 else {
                     if (currentHost == null) {
                         throw new IOException(scat("dctc ssh config:",
-                                "in",
-                                pquoted(file.getAbsolutePath()),
-                                "Parameter defined before any section."));
+                                                   "in",
+                                                   pquoted(file.getAbsolutePath()),
+                                                   "Parameter defined before any section."));
                     }
                     assert currentHost != null : "currentHost != null";
-                    String[/* param/value */] parameter = FileManipulation.split(line, " ", 2, false);
+                    String[/* param/value */] parameter = FileManipulation.split(line, " ", 2,
+                                                                                 false);
                     if (parameter[1] == null) {
                         parameter = FileManipulation.split(line, "	", 2, false);
                     }
                     if (parameter[1] == null) {
                         throw new IOException(scat("dctc ssh config:",
-                                "The parameter",
-                                pquoted(parameter[0]),
-                                "doesn't define any value."));
+                                                   "The parameter",
+                                                   pquoted(parameter[0]),
+                                                   "doesn't define any value."));
                     }
                     hostParam.put(parameter[0], parameter[1]);
                 }
@@ -68,6 +70,16 @@ public class SshConfig {
     }
     public Map<String, String> getHostParam(String host) {
         return config.get(host);
+    }
+    public String get(String host, String key, String defaultValue) {
+        Map<String, String> hostParam = getHostParam(host);
+        if (hostParam != null) {
+            String res = hostParam.get(key);
+            if (res != null) {
+                return res;
+            }
+        }
+        return defaultValue;
     }
 
     // private
