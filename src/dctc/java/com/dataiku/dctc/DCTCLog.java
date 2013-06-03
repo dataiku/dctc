@@ -69,26 +69,12 @@ public class DCTCLog {
                 System.err.println("dctc " + module + ": WARNING: " + message);
                 t.printStackTrace();
             } else {
-                System.err.println("dctc " + module + ": WARNING: " + message + ": " + buildCompleteExceptionMessage(t));
+                System.err.println("dctc " + module + ": WARNING: " + message);
                 System.err.println("  For more information, rerun with -V");
             }
         } else if (mode == Mode.LOG4J) {
             Logger.getLogger("dctc." + module).warn(message, t);
         }
-    }
-
-    private static String buildCompleteExceptionMessage(Throwable t) {
-        StringBuilder sb = new StringBuilder();
-        while (true) {
-            sb.append(t.getClass().getCanonicalName() + ": " + t.getMessage());
-            if (t.getCause() != null) {
-                sb.append(", caused by: ");
-            } else {
-                break;
-            }
-            t = t.getCause();
-        }
-        return sb.toString();
     }
 
     public static void error(String module, String message, Throwable t) {
