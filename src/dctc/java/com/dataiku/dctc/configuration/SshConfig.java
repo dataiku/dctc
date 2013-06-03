@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import static com.dataiku.dip.output.PrettyString.scat;
+import static com.dataiku.dip.output.PrettyString.pquoted;
 
 import com.dataiku.dctc.file.FileManipulation;
 
@@ -32,7 +34,10 @@ public class SshConfig {
             }
             else {
                 if (currentHost == null) {
-                    assert false : "FIXME1";
+                    throw new IOException(scat("dctc ssh config:",
+                                               "in",
+                                               pquoted(file.getAbsolutePath()),
+                                               "Parameter defined before any section."));
                 }
                 assert currentHost != null : "currentHost != null";
                 String[/* param/value */] parameter = FileManipulation.split(line, " ", 2, false);
@@ -40,7 +45,10 @@ public class SshConfig {
                     parameter = FileManipulation.split(line, "	", 2, false);
                 }
                 if (parameter[1] == null) {
-                    assert false : "FIXME2";
+                    throw new IOException(scat("dctc ssh config:",
+                                               "The parameter",
+                                               pquoted(parameter[0]),
+                                               "doesn't define any value."));
                 }
                 hostParam.put(parameter[0], parameter[1]);
             }
