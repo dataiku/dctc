@@ -1,6 +1,15 @@
 #! /bin/sh
 
-MYDIR=`dirname $0`
-MYDIR=`cd $MYDIR && pwd -P`
-cd $MYDIR
-java -Dcom.sun.net.ssl.checkRevocation=false -ea -classpath "lib/ivy/core/*:lib/third/*:bin" com.dataiku.dctc.Main "$@"
+if echo $0 | grep -E '^/' > /dev/null; then
+    path=$0
+else
+    path=`pwd`/$0
+fi
+
+path="`readlink -e $path`"
+basedir=`dirname $path`
+
+java -Dcom.sun.net.ssl.checkRevocation=false \
+    -ea \
+    -classpath "$basedir/lib/ivy/core/*:$basedir/lib/third/*:$basedir/bin" \
+    com.dataiku.dctc.Main "$@"
