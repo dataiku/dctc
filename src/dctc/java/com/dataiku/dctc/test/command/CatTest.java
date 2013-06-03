@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import com.dataiku.dctc.configuration.SshConfig;
 import com.dataiku.dctc.command.Cat;
 import com.dataiku.dctc.configuration.CredentialProviderBank;
 import com.dataiku.dctc.file.FileBuilder;

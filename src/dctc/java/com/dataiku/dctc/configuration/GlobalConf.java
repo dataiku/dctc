@@ -37,9 +37,6 @@ public class GlobalConf {
             else if (key.equals("globbing")) {
                 resolveGlobbing = getBoolean(value, false);
             }
-            else if (key.equals("show_git_hash")) {
-                showGitHash = getBoolean(value, false);
-            }
             else {
                 throw new UserException("In configuration file: invalid option '" + key + "' in [global] section");
             }
@@ -96,9 +93,6 @@ public class GlobalConf {
             return ":";
         }
     }
-    public static boolean showGitHash() {
-        return showGitHash;
-    }
 
     // Privates
     private static Boolean getBoolean(String value) {
@@ -124,5 +118,4 @@ public class GlobalConf {
     static private DisplayFactory display = new DisplayFactory("auto");
     static private int threadLimit = Runtime.getRuntime().availableProcessors();
     static private Boolean resolveGlobbing = true;
-    static private Boolean showGitHash = true;
 }
