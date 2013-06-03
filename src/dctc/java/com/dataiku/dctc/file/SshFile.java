@@ -94,7 +94,7 @@ public class SshFile extends AbstractGFile {
         this.connData.port = parseInt(config.get(host, "Port", "22"), 1, 65535);
         this.connData.username = config.get(host, "UserName", p.getMandParam("username"));
         this.connData.skipHostKeyCheck = p.getBoolParam("skip_host_key_check", false);
-        this.connData.identity = config.get(host, "IdentityFile", null);
+        this.connData.identity = config.get(host, "IdentityFile", p.getParam("identity"));
         this.connData.compressionLevel = parseInt(config.get(host, "CompressionLevel", "6"), 0, 9);
         this.connData.password = p.getParam("password");
     }
