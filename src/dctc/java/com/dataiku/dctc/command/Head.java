@@ -13,13 +13,14 @@ import org.apache.commons.lang.StringUtils;
 import com.dataiku.dctc.AutoGZip;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dip.output.Usage;
 
 public class Head extends Command {
     public String tagline() {
         return "Output the beginning of files";
     }
-    public String longDescription() {
-        return "Output the first N lines of the input files";
+    public void longDescription(Usage printer) {
+        printer.print("Output the first N lines of the input files");
     }
     protected Options setOptions() {
         Options options = new Options();

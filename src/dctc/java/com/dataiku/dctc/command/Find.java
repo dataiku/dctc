@@ -8,13 +8,14 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
 import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dip.output.Usage;
 
 public class Find extends Command {
     public String tagline() {
         return "Recursively list the content of a location";
     }
-    public String longDescription() {
-        return "Output contains one line per file, with its absolute address";
+    public void longDescription(Usage printer) {
+        printer.print("Output contains one line per file, with its absolute address");
     }
     // Public
     @Override

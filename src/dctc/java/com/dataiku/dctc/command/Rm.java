@@ -1,19 +1,23 @@
 package com.dataiku.dctc.command;
 
-import java.util.List;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.cli.Options;
 
 import com.dataiku.dctc.display.Interactive;
 import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dip.output.Usage;
+
+import static com.dataiku.dip.output.PrettyString.scat;
 
 public class Rm extends Command {
     public String tagline() {
         return "Remove files and folders";
     }
-    public String longDescription() {
-        return "Remove files and folders. By default, it will refuse to remove folders. Use -r";
+    public void longDescription(Usage printer) {
+        printer.print(scat("Remove files and folders. By default, it will refuse to remove"
+                           ,"folders. Use -r"));
     }
     // Public
     @Override

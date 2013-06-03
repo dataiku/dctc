@@ -12,6 +12,8 @@ import com.dataiku.dctc.copy.SimpleCopyTaskRunnableFactory;
 import com.dataiku.dctc.display.Interactive;
 import com.dataiku.dctc.display.ThreadedDisplay;
 import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dip.output.Usage;
+import static com.dataiku.dip.output.PrettyString.scat;
 
 /**
  * Cp algorithm based on GeneralizedFile.
@@ -22,13 +24,11 @@ public class Cp extends ListCommand {
     public String tagline() {
         return "Copy files and directories";
     }
-    public String longDescription() {
-        return "Copy all sources to the target. Target is created as a folder if it does not exist and \n"+
-                "* there are several sources\n" +
-                "* or the source is a folder\n"  +
-                "\n"+
-                "dctc cp can uncompress and compress GZip-compressed inputs and outputs\n" +
-                "dctc cp can also be used to create or expand ZIP archives";
+    public void longDescription(Usage printer) {
+        printer.print(scat("Copy all sources to the target. Target is create as"
+                           ," a folder if the are several sources or the source is a folder."));
+        printer.print(scat("Dctc cp can compress or uncompress GZip-compressed inputs and outputs."
+                           ,"Dctc cp can also be used to create or expand Zip archives."));
     }
 
     // Public

@@ -1,19 +1,19 @@
 package com.dataiku.dctc.command;
 
-import java.util.List;
-
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.cli.Options;
 
 import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dip.output.Usage;
 
 public class Mkdir extends Command {
     public String tagline() {
         return "Create directories";
     }
-    public String longDescription() {
-        return "Create directories. Parent directories must exist";
+    public void longDescription(Usage printer) {
+        printer.print("Create directories. Parent directories must exist");
     }
 
     // Public

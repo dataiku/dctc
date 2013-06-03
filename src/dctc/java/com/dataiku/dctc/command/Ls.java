@@ -19,13 +19,14 @@ import com.dataiku.dctc.display.Size;
 import com.dataiku.dctc.file.Acl;
 import com.dataiku.dctc.file.FileManipulation;
 import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dip.output.Usage;
 
 public class Ls extends Command {
     public String tagline() {
         return "List the contents of folders";
     }
-    public String longDescription() {
-        return "List the contents of folders, with detailed attributes if requested";
+    public void longDescription(Usage printer) {
+        printer.print("List the contents of folders, with detailed attributes if requested");
     }
 
     // Public

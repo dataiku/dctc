@@ -2,12 +2,14 @@ package com.dataiku.dctc.command;
 
 import org.apache.commons.cli.Options;
 
+import com.dataiku.dip.output.Usage;
+
 public class Version extends Command {
     public String tagline() {
         return "Show DCTC version";
     }
-    public String longDescription() {
-        return "Show the version of DCTC";
+    public void longDescription(Usage printer) {
+        printer.print("Show the version of DCTC");
     }
 
     @Override

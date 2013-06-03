@@ -12,13 +12,14 @@ import org.apache.commons.io.IOUtils;
 
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dip.output.Usage;
 
 public class Tail extends Command {
     public String tagline() {
         return "Output the end of files";
     }
-    public String longDescription() {
-        return "Output the last N lines or bytes of the input files";
+    public void longDescription(Usage printer) {
+        printer.print("Output the last N lines or bytes of the input files");
     }
 
     @Override

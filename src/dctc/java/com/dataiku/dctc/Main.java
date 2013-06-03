@@ -30,6 +30,7 @@ import com.dataiku.dctc.command.Version;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.configuration.StructuredConf;
 import com.dataiku.dctc.exception.UserException;
+import com.dataiku.dip.output.Usage;
 import com.dataiku.dip.utils.StdOut;
 
 import static com.dataiku.dip.output.PrettyString.nlcat;
@@ -66,19 +67,23 @@ public class Main {
         if (exitCode != 0) {
             System.setOut(System.err);
         }
+        Usage printer = new Usage();
+        printer.setFirstLineIndentsize(2);
+        printer.setIndentSize(0);
+        printer.setTermSize(Math.min(GlobalConf.getColNumber(), 120));
         for (Command cmd: cmds.values()) {
             if (cmd.cmdname().equals(command)) {
-                commandHelp(cmd);
+                commandHelp(cmd, printer);
                 System.exit(exitCode);
             }
         }
         System.out.println("Command not found: " + command);
         globalUsage(1);
     }
-    public static void commandHelp(Command cmd) {
+    public static void commandHelp(Command cmd, Usage printer) {
         System.out.println("dctc " + cmd.cmdname() + " -- " + cmd.tagline());
         System.out.println();
-        System.out.println("  " + cmd.longDescription().replace("\n", "\n  "));
+        cmd.longDescription(printer);
         System.out.println();
         cmd.usage();
     }

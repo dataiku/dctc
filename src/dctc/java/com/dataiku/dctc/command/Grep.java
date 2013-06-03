@@ -3,7 +3,6 @@ package com.dataiku.dctc.command;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,18 +12,20 @@ import org.apache.commons.io.IOUtils;
 
 import com.dataiku.dctc.AutoGZip;
 import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dip.output.Usage;
+import static com.dataiku.dip.output.PrettyString.scat;
 
 public class Grep extends Command {
     public String tagline() {
         return "Match content within files.";
     }
-    public String longDescription() {
-        return "Search the pattern in input files and outputs the lines that match.\n" +
-                "The pattern is handled as a non-anchored regular expression.\n" +
-                "\n" +
-                "dctc grep only offers a tiny subset of the capabilities of POSIX or GNU grep.\n" +
-                "It is intended as a fallback for systems that do not offer a native grep \n"+
-                "(eg, Microsoft Windows). For UNIX systems, use dctc cat|grep";
+    public void longDescription(Usage printer) {
+        printer.print(scat("Search the pattern in input files and outputs the lines that match."
+                           ,"The pattern is handled as a non-anchored regular expression."));
+        printer.print(scat("dctc grep only offers a tiny subset of the capabilities of"
+                           ,"POSIX or GNU grep. It is intended as a fallback for systems that"
+                           ,"do not offer a native grep (eg, Microsoft Windows). For UNIX"
+                           ,"systems, use dctc cat|grep"));
     }
 
     protected Options setOptions() {

@@ -1,18 +1,22 @@
 package com.dataiku.dctc.command;
 
-import java.util.List;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.cli.Options;
 
 import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dip.output.Usage;
+
+import static com.dataiku.dip.output.PrettyString.scat;
 
 public class Rmdir extends Command {
     public String tagline() {
         return "Remove empty folders";
     }
-    public String longDescription() {
-        return "Remove empty folders. If the target folder is not empty, rmdir will error out.";
+    public void longDescription(Usage printer) {
+        printer.print(scat("Remove empty folders. If the target folder is not empty,"
+                           ,"rmdir will error out."));
     }
     @Override
     public void perform(List<GeneralizedFile> args) {

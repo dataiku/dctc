@@ -7,20 +7,23 @@ import org.apache.commons.cli.Options;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.dataiku.dctc.configuration.Configuration;
 import com.dataiku.dctc.configuration.CredentialProviderBank;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.display.Interactive;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.GSFile;
 import com.dataiku.dctc.file.S3File;
-import com.dataiku.dctc.configuration.Configuration;
+import com.dataiku.dip.output.Usage;
+import static com.dataiku.dip.output.PrettyString.scat;
 
 public class AddAccount extends Command {
     public String tagline() {
         return "Add an account to the DCTC configuration";
     }
-    public String longDescription() {
-        return "Add an account to the DCTC file configuration using a command-line wizard. Supported protocols are 's3' and 'gs'";
+    public void longDescription(Usage printer) {
+        printer.print(scat("Add an account to the DCTC file configuration using a command-line wizard."
+                           ,"Supported protocols are 's3' and 'gs'"));
     }
 
     @Override

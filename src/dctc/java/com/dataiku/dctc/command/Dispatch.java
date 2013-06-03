@@ -23,6 +23,9 @@ import com.dataiku.dip.input.Format;
 import com.dataiku.dip.input.formats.BasicFormatExtractorFactory;
 import com.dataiku.dip.partitioning.TimeDimension;
 
+import static com.dataiku.dip.output.PrettyString.scat;
+import com.dataiku.dip.output.Usage;
+
 /**
  * Dispatch algorithm based on GeneralizedFile.
  *
@@ -35,19 +38,17 @@ public class Dispatch extends ListCommand {
     public String tagline() {
         return "Dispatches the content of input files to output files";
     }
-    public String longDescription() {
-        return
-                "This command split the input files to output files. Input files are split\n"
-                + "in records based on the specified format.\n"
-                + "For each record, the target output file is computed according to a dispatch\n"
-                + "function, and the record is appended to the computed output.\n"
-                + "\n"
-                + "For example this uses the value of the first column of each line of each\n"
-                + "file in 'input/'. This value becomes the target file name within\n"
-                + "the 'dispatched/' folders:\n"
-                + "  dctc dispatch inputs/ dispatched/ -function value -column col_0\n"
-                + "\n"
-                + "Dispatch supports delimited files (CSV, TSV).";
+    public void longDescription(Usage printer) {
+        printer.print(scat("This command split the input files to output files. Input files are"
+                           ,"split in records based on the specified format."
+                           ,"For each record, the target output file is computed according to"
+                           ,"a dispatch function, and the record is appended to the computed"
+                           ,"output."));
+        printer.print(scat("For example this uses the value of the first column of each line of"
+                           ,"each file in 'input/'. This value becomes the target file name within"
+                           ,"the 'dispatched/' folders:"
+                           ," dctc dispatch inputs/ dispatched/ -function value -column col_0"));
+        printer.print(scat("Dispatch supports delimited files (CSV, TSV)."));
     }
     @Override
     protected Options setOptions() {
