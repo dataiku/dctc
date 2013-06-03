@@ -94,7 +94,7 @@ public class DCTCLog {
     public static void error(String module, String message, Throwable t) {
         if (mode == Mode.STDERR) {
             if (lvl == Level.DEBUG) {
-                System.err.println("dctc " + module + ": ERROR: " + message + ": " + buildCompleteExceptionMessage(t));
+                System.err.println("dctc " + module + ": ERROR: " + message + ":");
                 t.printStackTrace();
             } else {
                 System.err.println("dctc " + module + ": ERROR: " + message);
