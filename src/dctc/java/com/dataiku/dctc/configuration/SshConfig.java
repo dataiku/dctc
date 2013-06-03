@@ -18,39 +18,46 @@ public class SshConfig {
         parse(f);
     }
     public void parse(File file) throws IOException {
-        BufferedReader stream =  new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-        String line;
-        String currentHost = null;
-        Map<String, String> hostParam = null;
-        while ((line = stream.readLine()) != null) {
-            line = line.trim();
-            if (line.isEmpty()) {
-                continue;
+        BufferedReader stream = null;
+        try {
+            stream =  new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            String line;
+            String currentHost = null;
+            Map<String, String> hostParam = null;
+            while ((line = stream.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) {
+                    continue;
+                }
+                if (line.startsWith("Host") && !line.startsWith("HostName")) {
+                    currentHost = line.substring(4).trim();
+                    hostParam  = new HashMap<String, String>();
+                    config.put(currentHost, hostParam);
+                }
+                else {
+                    if (currentHost == null) {
+                        throw new IOException(scat("dctc ssh config:",
+                                "in",
+                                pquoted(file.getAbsolutePath()),
+                                "Parameter defined before any section."));
+                    }
+                    assert currentHost != null : "currentHost != null";
+                    String[/* param/value */] parameter = FileManipulation.split(line, " ", 2, false);
+                    if (parameter[1] == null) {
+                        parameter = FileManipulation.split(line, "	", 2, false);
+                    }
+                    if (parameter[1] == null) {
+                        throw new IOException(scat("dctc ssh config:",
+                                "The parameter",
+                                pquoted(parameter[0]),
+                                "doesn't define any value."));
+                    }
+                    hostParam.put(parameter[0], parameter[1]);
+                }
             }
-            if (line.startsWith("Host") && !line.startsWith("HostName")) {
-                currentHost = line.substring(4).trim();
-                hostParam  = new HashMap<String, String>();
-                config.put(currentHost, hostParam);
-            }
-            else {
-                if (currentHost == null) {
-                    throw new IOException(scat("dctc ssh config:",
-                                               "in",
-                                               pquoted(file.getAbsolutePath()),
-                                               "Parameter defined before any section."));
-                }
-                assert currentHost != null : "currentHost != null";
-                String[/* param/value */] parameter = FileManipulation.split(line, " ", 2, false);
-                if (parameter[1] == null) {
-                    parameter = FileManipulation.split(line, "	", 2, false);
-                }
-                if (parameter[1] == null) {
-                    throw new IOException(scat("dctc ssh config:",
-                                               "The parameter",
-                                               pquoted(parameter[0]),
-                                               "doesn't define any value."));
-                }
-                hostParam.put(parameter[0], parameter[1]);
+        } finally {
+            if (stream != null) {
+                stream.close();
             }
         }
     }
