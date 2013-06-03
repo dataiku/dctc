@@ -32,7 +32,14 @@ import com.dataiku.dctc.configuration.StructuredConf;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dip.utils.StdOut;
 
+import static com.dataiku.dip.output.PrettyString.scat;
+
 public class Main {
+    private static void indent(String str, int size) {
+        for (int i = 0; i < size; ++i) {
+            System.out.print(str);
+        }
+    }
     private static void globalUsage(int exitCode) {
         if (exitCode != 0) {
             System.setOut(System.err);
@@ -40,8 +47,15 @@ public class Main {
         System.out.println("usage: dctc command [OPTIONS...] [ARGUMENTS...]");
         System.out.println();
         System.out.println("Available commands are:");
+        int len = 0;
         for (Command cmd: cmds.values()) {
-            System.out.println("- dctc " + cmd.cmdname() + " -- " + cmd.tagline());
+            len = Math.max(len, cmd.cmdname().length());
+        }
+        len += 2;
+        for (Command cmd: cmds.values()) {
+            System.out.print(scat("  -", "dctc", cmd.cmdname()));
+            indent(" ", len - cmd.cmdname().length());
+            System.out.println(cmd.tagline());
         }
         System.exit(exitCode);
     }
