@@ -494,7 +494,7 @@ public class SshFile extends AbstractGFile {
             }
             return str;
         } catch (JSchException e) {
-            throw new IOException("Failed to execute SSH command on '" + path +"'", e);
+            throw new IOException("Failed to execute SSH command on '" + path + "'", e);
         }
     }
     private Acl getAclFrom(String describ) {

@@ -30,12 +30,8 @@ public class AmazonS3OutputStream extends OutputStream {
         }
     }
     @Override
-    public final void close() {
-        try {
-            send(true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public final void close() throws IOException {
+        send(true);
     }
     private void send(boolean isLast) throws IOException {
         try {
@@ -55,8 +51,7 @@ public class AmazonS3OutputStream extends OutputStream {
             }
         } catch (Exception e) {
             s3.abortMultipartUpload(new AbortMultipartUploadRequest(bucket, path, multiPartInit.getUploadId()));
-            e.printStackTrace();
-            throw new IOException();
+            throw new IOException(e);
         }
     }
 

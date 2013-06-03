@@ -75,8 +75,7 @@ public class GlobalConf {
                     String s = new String(DKUtils.execAndGetOutput(new String[]{"sh", "-c", "stty size < /dev/tty"}, null), "utf8");
                     colNumber =  Integer.parseInt(s.replace("\n", "").split(" ")[1]);
                 } catch (Exception e) {
-                    System.err.println("Can't compute terminal width");
-                    e.printStackTrace();
+                    System.err.println("dctc global conf: Can't compute terminal width (set it to 80).");
                     colNumber =  80;
                 }
             }

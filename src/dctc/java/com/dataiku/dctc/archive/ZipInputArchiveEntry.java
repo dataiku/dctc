@@ -37,12 +37,8 @@ public class ZipInputArchiveEntry implements InputArchiveEntry {
     public String getHash() {
         return Long.toString(entry.getCrc());
     }
-    public void closeEntry() {
-        try {
-            stream.closeEntry();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    public void closeEntry() throws IOException {
+        stream.closeEntry();
     }
 
     private ZipEntry entry;

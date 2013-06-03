@@ -11,13 +11,9 @@ public class ZipOutputArchiveEntry implements OutputArchiveEntry {
     }
 
     @Override
-    public void create(String name) {
+    public void create(String name) throws IOException {
         this.entry = new ZipEntry(name);
-        try {
-            stream.putNextEntry(entry);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        stream.putNextEntry(entry);
     }
 
     @Override
@@ -46,12 +42,8 @@ public class ZipOutputArchiveEntry implements OutputArchiveEntry {
     }
 
     @Override
-    public void closeEntry() {
-        try {
-            stream.closeEntry();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void closeEntry() throws IOException {
+        stream.closeEntry();
     }
 
     private ZipEntry entry;

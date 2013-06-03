@@ -1,5 +1,6 @@
 package com.dataiku.dctc.archive;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 public interface InputArchiveEntry extends ArchiveEntry {
@@ -12,5 +13,5 @@ public interface InputArchiveEntry extends ArchiveEntry {
     public boolean hasHash();
     public String getHashMethod();
     public String getHash();
-    public void closeEntry();
+    public void closeEntry() throws IOException;
 }
