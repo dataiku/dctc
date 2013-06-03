@@ -1,5 +1,9 @@
 package com.dataiku.dctc.file;
 
+import static com.dataiku.dip.output.PrettyString.eol;
+import static com.dataiku.dip.output.PrettyString.pquoted;
+import static com.dataiku.dip.output.PrettyString.scat;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +23,6 @@ import org.apache.commons.io.IOUtils;
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.configuration.SshUserInfo;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
-import static com.dataiku.dip.output.PrettyString.eol;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.ChannelSftp;
@@ -451,9 +454,9 @@ public class SshFile extends AbstractGFile {
             } catch (JSchException e) {
                 String msg = e.getMessage();
                 if (msg.contains(":")) {
-                    msg = msg.substring(msg.indexOf(":"));
+                    msg = msg.substring(msg.lastIndexOf(":") + 1).trim();
                 }
-                throw new IOException(msg, e);
+                throw new IOException(scat("Unknown host", pquoted(msg) + "."), e);
             }
         }
 
