@@ -1,9 +1,9 @@
 #! /bin/sh
-
-if git describe; then
-    describe=`git describe`
+git describe --tags
+if git describe --tags > /dev/null 2>&1; then
+    describe="`git describe --tags`"
 
 else
-    describe="0.2.1-`git log --pretty=format:'%h' -n1`"
+    describe="0.0"
 fi
-    sed -ie "s/XXX_GIT_VERSION_XXX/$describe/" $1
+sed -ie "s/XXX_GIT_VERSION_XXX/$describe/" $1
