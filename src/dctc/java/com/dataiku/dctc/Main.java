@@ -32,6 +32,7 @@ import com.dataiku.dctc.configuration.StructuredConf;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dip.utils.StdOut;
 
+import static com.dataiku.dip.output.PrettyString.nlcat;
 import static com.dataiku.dip.output.PrettyString.scat;
 
 public class Main {
@@ -57,6 +58,8 @@ public class Main {
             indent(" ", len - cmd.cmdname().length());
             System.out.println(cmd.tagline());
         }
+        System.out.println(nlcat("For more informations see the project homepage:",
+                              "http://dctc.io"));
         System.exit(exitCode);
     }
     private static void commandHelp(int exitCode, String command) {
