@@ -20,9 +20,12 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 
+import com.dataiku.dctc.DCTCLog;
 import com.dataiku.dctc.GlobalConstants;
+import com.dataiku.dctc.command.Command.EndOfCommand;
 import com.dataiku.dctc.configuration.SshConfig;
 import com.dataiku.dctc.configuration.SshUserInfo;
+import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.dataiku.dip.utils.Params;
 import com.jcraft.jsch.Channel;
@@ -57,8 +60,19 @@ public class SshFile extends AbstractGFile {
 
     private ConnectionData connData;
 
-    private int parseInt(String port, int low, int high) {
-        return Integer.parseInt(port); // FIXME:
+    private int parseInt(String integer, int low, int high) {
+        int i = 0;
+        try {
+            i = Integer.parseInt(integer);
+        } catch (NumberFormatException e) {
+            DCTCLog.error("ssh file", scat(pquoted(integer), "is not a number."));
+            throw new EndOfCommand();
+        }
+        if (low > i || i > high) {
+            throw new UserException(scat("The number", integer, "is not between", low, "and", high));
+        }
+        return i;
+
     }
     private boolean parseBool(String str) {
         str = str.toLowerCase();
