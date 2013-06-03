@@ -148,6 +148,10 @@ public class Main {
                 conf = new StructuredConf();
                 conf.parse(GlobalConf.confPath());
                 conf.parseSsh(GlobalConf.sshConfigFile());
+                if (conf.getFileBuilder().check()) {
+                    System.err.println("One or more errors are present in the configuration file. Please, fix it.");
+                    System.exit(42);
+                }
             } catch (IOException e) {
                 System.err.println("dctc fail: " + e.getMessage());
                 return;

@@ -1,8 +1,12 @@
 package com.dataiku.dctc.file;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import com.dataiku.dctc.configuration.CredentialProviderBank;
 import com.dataiku.dctc.configuration.SshConfig;
 import com.dataiku.dctc.exception.UserException;
+import com.dataiku.dip.utils.Params;
 
 public class FileBuilder {
     public enum Protocol {
@@ -44,6 +48,19 @@ public class FileBuilder {
         this.bank = bank;
         bank = new CredentialProviderBank();
         this.sshConfig = sshConfig;
+    }
+
+    public boolean check() {
+        boolean failed = false;
+        for (Protocol proto: Protocol.values()) {
+            Map<String, Params> map = bank.getProtocolCredentials(proto.getCanonicalName());
+            if (map != null) {
+                for (Entry<String, Params> e: map.entrySet()) {
+                    failed = proto.builder.validateAccountParams(e.getKey(), e.getValue(), false) || failed;
+                }
+            }
+        }
+        return failed;
     }
 
     public GeneralizedFile buildFile(String uri) {

@@ -31,12 +31,13 @@ import com.dataiku.dip.utils.Params;
 public class FTPFileBuilder extends ProtocolFileBuilder {
 
     @Override
-    public void validateAccountParams(String account, Params p) {
-        checkAllowedOnly(account, p, new String[]{"host", "port", "username", "password", "default_path"});
-        checkMandatory(account, p, "host");
-        checkMandatory(account, p, "username");
-        checkMandatory(account, p, "password");
+    public boolean validateAccountParams(String account, Params p, boolean fatal) {
         getCheckedPort(p.getParam("port", "22"));
+        return checkAllowedOnly(account, p, new String[]{"host", "port", "username", "password",
+                                                         "default_path"}, fatal)
+            || checkMandatory(account, p, "host", fatal)
+            || checkMandatory(account, p, "username", fatal)
+            || checkMandatory(account, p, "password", fatal);
     }
 
     @Override

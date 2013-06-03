@@ -21,12 +21,12 @@ import static com.dataiku.dip.output.PrettyString.scat;
  */
 public class SshFileBuilder extends ProtocolFileBuilder {
     @Override
-    public void validateAccountParams(String account, Params p) {
-        checkAllowedOnly(account, p, new String[]{"host", "port", "username",
-                                                  "password", "key", "skip_host_key_check",
-                                                  "identity"});
-        checkMandatory(account, p, "host");
-        checkMandatory(account, p, "username");
+    public boolean validateAccountParams(String account, Params p, boolean fatal) {
+        return checkAllowedOnly(account, p, new String[]{"host", "port", "username",
+                                                         "password", "key", "skip_host_key_check",
+                                                         "identity"}, fatal)
+            || checkMandatory(account, p, "host", fatal)
+            || checkMandatory(account, p, "username", fatal);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class SshFileBuilder extends ProtocolFileBuilder {
 
         Params p = bank.getAccountParamsIfExists(getProtocol().getCanonicalName(), account);
         if (p != null) {
-            validateAccountParams(account, p);
+            validateAccountParams(account, p, true);
             String[] path = FileManipulation.split(rawPath, ":", 2, false);
             if (path[0].isEmpty()) {
                 path[0] = p.getMandParam("host");
