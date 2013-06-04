@@ -19,6 +19,9 @@ public class SshConfig {
         parse(f);
     }
     public void parse(File file) throws IOException {
+        if (!file.exists()) {
+            return;
+        }
         BufferedReader stream = null;
         try {
             stream =  new BufferedReader(new InputStreamReader(new FileInputStream(file)));
