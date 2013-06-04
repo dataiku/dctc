@@ -259,7 +259,7 @@ public class Ls extends Command {
             System.out.print("                   ");
             return;
         }
-        
+
         System.out.print(dateFormat.format(date));
     }
 
@@ -316,7 +316,7 @@ public class Ls extends Command {
                 String[] split = FileManipulation.split(c, "=", 2);
                 if (split[0].startsWith("*.")) {
                     if (split[0].matches("\\*.[A-z0-9]*")) {
-                        extensionColor.put(split[0].substring(2), split[1]);
+                        extensionColor.put(split[0], split[1]);
                     } else {
                         color.put(split[0], split[1]);
                     }
@@ -340,7 +340,7 @@ public class Ls extends Command {
             initColor();
             try {
                 for (Map.Entry<String, String> c: extensionColor.entrySet()) {
-                    if (g.getFileName().endsWith(c.getKey())) {
+                    if (Globbing.match(c.getKey(), g.getFileName())) {
                         colorName(c.getValue(), f);
                         return;
                     }
