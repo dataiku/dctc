@@ -518,10 +518,14 @@ public class SshFile extends AbstractGFile {
                 if (msg.contains(":")) {
                     msg = msg.substring(msg.lastIndexOf(":") + 1).trim();
                 }
-                if (msg.contains("Too many authentication")) {
-                    throw new IOException(msg.substring(2).trim(), e);
+                if (e.getCause() == null) {
+                    if (msg.contains("Too many authentication")) {
+                        throw new IOException(msg.substring(2).trim(), e);
+                    } else {
+                        throw new IOException(e);
+                    }
                 }
-                else {
+                if (e.getCause().getClass().getCanonicalName().equals("java.net.UnknownHostException")) {
                     throw new IOException(scat("Unknown host", pquoted(msg) + "."), e);
                 }
             }
