@@ -58,8 +58,7 @@ public class SshFileBuilder extends ProtocolFileBuilder {
                                                         "as an account, but it doesn't exist."));
             }
             // ICI: path[0]
-            return null;
-            // return new SshFile(path[0], user[0], user[1], path[1], GlobalConstants.SSH_PORT, false);
+            return new SshFile(path[0], user[0], user[1], path[1], GlobalConstants.SSH_PORT, false);
         }
     }
     public Protocol getProtocol() {
