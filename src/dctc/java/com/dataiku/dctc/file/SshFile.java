@@ -319,7 +319,7 @@ public class SshFile extends AbstractGFile {
         if (!path.startsWith("/")) {
             System.err.println("Weird path encountered: " + path);
         }
-        return connData.host + path;
+        return path;
     }
     @Override
     public String getAbsoluteAddress() {
