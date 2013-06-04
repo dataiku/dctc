@@ -481,7 +481,7 @@ public class SshFile extends AbstractGFile {
             String[] split;
             try {
                 split = exec("ls -dl '" + path + "' | sed -re 's/  */ /g'").split(" ");
-            } catch(IOException e) {
+            } catch (IOException e) {
                 return acl;
             }
 
@@ -522,7 +522,7 @@ public class SshFile extends AbstractGFile {
                     if (msg.contains("Too many authentication")) {
                         throw new IOException(msg.substring(2).trim(), e);
                     } else {
-                        throw new IOException(e);
+                        throw new IOException(scat("Unable to connect to", connData.host), e);
                     }
                 }
                 if (e.getCause().getClass().getCanonicalName().equals("java.net.UnknownHostException")) {
