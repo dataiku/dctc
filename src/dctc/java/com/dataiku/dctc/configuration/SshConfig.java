@@ -26,8 +26,9 @@ public class SshConfig {
         try {
             stream =  new BufferedReader(new InputStreamReader(new FileInputStream(file)));
             String line;
-            String currentHost = null;
-            Map<String, String> hostParam = null;
+            String currentHost = "*";
+            Map<String, String> hostParam = get(currentHost);
+
             while ((line = stream.readLine()) != null) {
                 line = line.trim();
                 if (line.isEmpty()) {
@@ -35,17 +36,9 @@ public class SshConfig {
                 }
                 if (line.startsWith("Host") && !line.startsWith("HostName")) {
                     currentHost = line.substring(4).trim();
-                    hostParam  = new HashMap<String, String>();
-                    config.put(currentHost, hostParam);
+                    hostParam = get(currentHost);
                 }
                 else {
-                    if (currentHost == null) {
-                        throw new IOException(scat("dctc ssh config:",
-                                                   "in",
-                                                   pquoted(file.getAbsolutePath()),
-                                                   "Parameter defined before any section."));
-                    }
-                    assert currentHost != null : "currentHost != null";
                     String[/* param/value */] parameter = FileManipulation.split(line, " ", 2,
                                                                                  false);
                     if (parameter[1] == null) {
@@ -86,6 +79,16 @@ public class SshConfig {
     }
 
     // private
+    private Map<String, String> get(String host) {
+        Map<String, String> sectionValues = config.get(host);
+        if (sectionValues == null) {
+            sectionValues = new HashMap<String, String>();
+            config.put(host, sectionValues);
+        }
+        return sectionValues;
+    }
+
+    // Attributes
     private Map<String, Map<String, String>> config = new HashMap<String, Map<String, String>>();
     //          Host        Param   Value
 
