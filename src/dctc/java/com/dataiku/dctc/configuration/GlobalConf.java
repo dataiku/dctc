@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.dataiku.dctc.DCTCLog;
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.display.DisplayFactory;
 import com.dataiku.dctc.display.ThreadedDisplay;
@@ -73,7 +74,7 @@ public class GlobalConf {
                     colNumber =  Integer.parseInt(s.replace("\n", "").split(" ")[1]);
                 } catch (Exception e) {
                     System.err.println("dctc global conf: Can't compute terminal width (set it to 80).");
-                    e.printStackTrace();
+                    DCTCLog.warn("Cannot compute terminal width", e);
                     colNumber =  80;
                 }
             }
