@@ -531,7 +531,7 @@ public class SshFile extends AbstractGFile {
             }
         }
 
-        String file = exec("file '" + path + "' | cut -d':' -f2 | tr -d ' ' | tr -d '\n'");
+        String file = exec("file '" + path + "' | cut -d':' -f2 | tr -d ' ,' | tr -d '\n'");
         if (file.equals("ERROR")) {
             exists = false;
         } else {
