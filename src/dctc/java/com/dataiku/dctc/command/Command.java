@@ -1,6 +1,7 @@
 package com.dataiku.dctc.command;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -158,6 +159,15 @@ public abstract class Command {
     }
     protected void error(String fileName, String msg, int errorCode) {
         error("`" + fileName + "': " + msg, errorCode);
+    }
+    
+    protected void errorWithHandlingOfKnownExceptions(String fileName, String msg, Throwable exception, int exitCode) {
+        msg = (fileName == null ? msg :  ("`" + fileName + "': " + msg));
+        if (exception instanceof UnknownHostException) {
+            error(msg + ": Unknown host '" + exception.getMessage() + "'", exitCode);
+        } else {
+            error(msg, exception, exitCode);
+        }
     }
     
     protected void warn(String msg) {

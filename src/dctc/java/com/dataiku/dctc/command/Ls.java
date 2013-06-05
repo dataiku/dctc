@@ -64,7 +64,7 @@ public class Ls extends Command {
                 nonRecursivePerform(args);
             }
         } catch (IOException e) {
-            error("Unknow exception", e, 2);
+            errorWithHandlingOfKnownExceptions(null, "Unknown exception", e, 2);
         }
     }
 
