@@ -19,28 +19,6 @@ public class DCTCLog {
         lvl = newLvl;
     }
 
-    public static void info(String module, String message) {
-        if (mode == Mode.STDERR) {
-            System.err.println("dctc " + module + ": " + message);
-        } else if (mode == Mode.LOG4J) {
-            Logger.getLogger("dctc." + module).info(message);
-        }
-    }
-    public static void warn(String module, String message) {
-        if (mode == Mode.STDERR) {
-            System.err.println("dctc " + module + ": WARNING: " + message);
-        } else if (mode == Mode.LOG4J) {
-            Logger.getLogger("dctc." + module).warn(message);
-        }
-    }
-    public static void error(String module, String message) {
-        if (mode == Mode.STDERR) {
-            System.err.println("dctc " + module + ": ERROR: " + message);
-        } else if (mode == Mode.LOG4J) {
-            Logger.getLogger("dctc." + module).error(message);
-        }
-    }
-
     public static void info(String module, String fmt, Object...data) {
         if (mode == Mode.STDERR) {
             System.err.println("dctc " + module + ": " + String.format(fmt, data));
