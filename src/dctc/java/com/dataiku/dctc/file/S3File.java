@@ -202,15 +202,7 @@ public class S3File extends BucketBasedFile {
                 if (!parent.startsWith(path)) {
                     break;
                 }
-
-                boolean added = false;
-                for (S3File addedFile: grecursiveList) {
-                    if (addedFile.path.equals(parent)) {
-                        added = true;
-                        break;
-                    }
-                }
-                if (!added) {
+                if (contains(grecursiveList, parent)) {
                     grecursiveList.add(new S3File(bucket + "/" + parent, s3,
                                                   getChildrenOf(bucket + "/" + parent)));
                 }

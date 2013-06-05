@@ -1,6 +1,7 @@
 package com.dataiku.dctc.file;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * A small abstraction for file systems that have a notion of buckets and paths within a bucket;
@@ -56,14 +57,24 @@ public abstract class BucketBasedFile extends AbstractGFile {
         return true;
     }
 
+    // protected
+    protected boolean contains(List<? extends BucketBasedFile> l, String path) {
+        for (BucketBasedFile file: l) {
+            if (file.path.equals(path)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected enum Type {
-        UNRESOLVED,
-        FAILURE,
-        NOT_FOUND,
-        FILE,
-        DIR,
-        BUCKET_EXISTS, // Is a valid path, and the bucket exists
-        ROOT
+        BUCKET_EXISTS // Is a valid path, and the bucket exists
+        ,DIR
+        ,FAILURE
+        ,FILE
+        ,NOT_FOUND
+        ,ROOT
+        ,UNRESOLVED
     };
 
     protected Type type = Type.UNRESOLVED;
