@@ -204,20 +204,35 @@ public class GSFile extends BucketBasedFile {
             for (String bucket: bucketsList) {
                 GSFile l = createInstanceFor(bucket);
                 l.resolve();
-                for (StorageObject so: l.recursiveFileList) {
-                    grecursiveList.add(new GSFile(this, so));
-                }
+                fill(l.recursiveFileList);
+
             }
         }
         else if (isDirectory()) {
-            for (StorageObject so: recursiveFileList) {
-                grecursiveList.add(new GSFile(this, so));
-            }
+            fill(recursiveFileList);
         }
         else if (isFile()) {
             throw new IOException("can't list " + getAbsoluteAddress() + ": is a file");
         }
         return grecursiveList;
+    }
+    private void fill(List<StorageObject> sos) throws IOException {
+        grecursiveList = new ArrayList<GSFile>();
+        grecursiveList.add(this);
+        for (StorageObject so: sos) {
+            grecursiveList.add(new GSFile(this, so));
+            String parent = so.getName();
+            while (parent.contains(fileSeparator())) {
+                parent = parent.substring(0, parent.lastIndexOf(fileSeparator()));
+                if(!parent.startsWith(path)) {
+                    break;
+                }
+                if (!contains(grecursiveList, parent)) {
+                    grecursiveList.add(new GSFile(this, bucket, parent));
+                    break;
+                }
+            }
+        }
     }
     @Override
     public void mkdirs() throws IOException {
