@@ -53,8 +53,8 @@ public class S3File extends BucketBasedFile {
                 glist.add(s);
             } else {
                 String son = FileManipulation.getDirectSon(directoryPath,
-                        s.getAbsolutePath(),
-                        fileSeparator());
+                                                           s.getAbsolutePath(),
+                                                           fileSeparator());
                 boolean br = false;
                 for (S3File elt: glist) {
                     if (elt.getAbsolutePath().equals(son)) {
@@ -174,22 +174,49 @@ public class S3File extends BucketBasedFile {
         if (grecursiveList != null) {
             return grecursiveList;
         }
-        grecursiveList = new ArrayList<S3File>();
+
         if (type == Type.ROOT) {
             for (String bucket: bucketList) {
                 S3File l = createInstanceFor(bucket);
                 l.resolve();
-                for (S3ObjectSummary so: l.recursiveFileList) {
-                    grecursiveList.add(new S3File(so, s3));
-                }
+                fill(l.recursiveFileList);
             }
         }
         else {
-            for (S3ObjectSummary so : recursiveFileList) {
-                grecursiveList.add(new S3File(so, s3));
-            }
+            fill(recursiveFileList);
         }
         return grecursiveList;
+    }
+    private void fill(List<S3ObjectSummary> recursiveFileList) {
+        grecursiveList = new ArrayList<S3File>();
+        grecursiveList.add(this);
+        for (S3ObjectSummary so: recursiveFileList) {
+            String parent = so.getKey();
+            if (parent.contains(fileSeparator())) {
+                parent = parent.substring(parent.indexOf(fileSeparator()));
+            }
+            grecursiveList.add(new S3File(so, s3));
+
+            while (parent.contains(fileSeparator())) {
+                parent = parent.substring(0, parent.lastIndexOf(fileSeparator()));
+                if (!parent.startsWith(path)) {
+                    break;
+                }
+
+                boolean added = false;
+                for (S3File addedFile: grecursiveList) {
+                    if (addedFile.path.equals(parent)) {
+                        added = true;
+                        break;
+                    }
+                }
+                if (!added) {
+                    grecursiveList.add(new S3File(bucket + "/" + parent, s3,
+                                                  getChildrenOf(bucket + "/" + parent)));
+                }
+            }
+
+        }
     }
     @Override
     public InputStream getRange(long begin, long length) throws IOException {
