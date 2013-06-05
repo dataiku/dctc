@@ -490,7 +490,6 @@ public class S3File extends BucketBasedFile {
                 for (S3File e: grecursiveList) {
                     if (FileManipulation.isSon(path, e.getAbsolutePath(), fileSeparator())) {
                         res.add(e);
-                    } else {
                     }
                 }
             }
