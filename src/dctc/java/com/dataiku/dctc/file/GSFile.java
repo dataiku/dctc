@@ -81,6 +81,19 @@ public class GSFile extends BucketBasedFile {
         fileStorageObject = object;
         assert (exists());
     }
+    private GSFile(GSFile parent, String bucketName, String path) {
+        this.cred = parent.cred;
+        this.storage = parent.storage;
+        this.httpTransport = parent.httpTransport;
+        this.path = path;
+        this.bucket = parent.bucket;
+        type = Type.DIR;
+        try {
+            assert(exists() && isDirectory());
+        } catch (IOException e) {
+            throw new Error(e);
+        }
+    }
 
     private static GSFile newNotFound(GSFile parent, String absolutePath) {
         GSFile ret = new GSFile(parent.cred, parent.storage, parent.httpTransport, parent.userMail, parent.keyPath,
@@ -108,9 +121,9 @@ public class GSFile extends BucketBasedFile {
     public GSFile createSubFile(String path, String separator) throws IOException {
         /* If this file is resolved, and we already have the list, then maybe we can reuse a storage object / type */
         String subName = FileManipulation.concat(getAbsolutePath(),
-                path,
-                fileSeparator(),
-                separator);
+                                                 path,
+                                                 fileSeparator(),
+                                                 separator);
 
         if (type == Type.NOT_FOUND && bucket.length() > 0) {
             /* I am a non-existing path in a bucket, so a child of mine is also a non existing path */
@@ -139,38 +152,50 @@ public class GSFile extends BucketBasedFile {
     public String getProtocol() {
          return Protocol.GS.getCanonicalName();
     }
-    private List<String> list() throws IOException {
+    @Override
+    public List<GSFile> glist() throws IOException {
+        if (list != null) {
+            return list;
+        }
+        list = new ArrayList<GSFile>();
+
         resolve();
-        if (type == Type.NOT_FOUND) {
+        if (!exists()) {
             throw new NotFoundException(getAbsoluteAddress());
-        } else if (type == Type.ROOT) {
-            /* Return the list of buckets */
-            return bucketsList;
-        } else if (type == Type.DIR) {
-            if (list == null) {
-                list = new ArrayList<String>();
-                for (StorageObject f: recursiveFileList) {
-                    if (FileManipulation.isDirectSon(path, f.getName(), fileSeparator())) {
-                        list.add(f.getId());
-                    } else {
-                        String directSon = bucket + "/" + FileManipulation.getDirectSon(path, f.getName(), fileSeparator());
-                        if (!list.contains(directSon)) {
-                            list.add(directSon);
-                        }
+        }
+        else if (type == Type.ROOT) {
+            for (String bucket: bucketsList) {
+                list.add(createBucket(bucket));
+            }
+        }
+        else if (isDirectory()) {
+            for (StorageObject f: recursiveFileList) {
+                if (FileManipulation.isDirectSon(path, f.getName(), fileSeparator())) {
+                    list.add(file(f));
+                } else {
+                    String directSon = FileManipulation.getDirectSon(path, f.getName(), fileSeparator());
+                    if (!contains(list, directSon)) {
+                        list.add(createPath(directSon));
                     }
                 }
             }
-            return list;
-        } else if (type == Type.FILE) {
+        }
+        else if (isFile()) {
             throw new IOException("can't list " + getAbsoluteAddress() + ": is a file");
         }
-        throw new Error("not reached");
-    }
-    @Override
-    public List<GSFile> glist() throws IOException {
-        return createInstanceFor(list());
+
+        return list;
     }
 
+    private GSFile createBucket(String name) {
+        return new GSFile(this, name, "");
+    }
+    private GSFile createPath(String path) {
+        return new GSFile(this, bucket, path);
+    }
+    private GSFile file(StorageObject name) throws IOException {
+        return new GSFile(this, name);
+    }
     @Override
     public List<GSFile> grecursiveList() throws IOException {
         resolve();
@@ -185,7 +210,7 @@ public class GSFile extends BucketBasedFile {
             }
         }
         else {
-            for (StorageObject so : recursiveFileList) {
+            for (StorageObject so: recursiveFileList) {
                 grecursiveList.add(new GSFile(this, so));
             }
         }
@@ -435,23 +460,6 @@ public class GSFile extends BucketBasedFile {
         return acl;
     }
 
-    // Attributes
-    private String userMail;
-    private String keyPath;
-    private GoogleCredential cred;
-    private Storage storage;
-
-    // Resolved stuff
-    private StorageObject fileStorageObject;
-    private List<StorageObject> recursiveFileList;
-    private List<String> bucketsList;
-    private List<GSFile> grecursiveList;
-    private List<String> list;
-
-    // Backend stuff
-    private HttpTransport httpTransport;
-    private HttpRequestFactory requestFactory = null;
-
     private static final String STORAGE_SCOPE = "https://www.googleapis.com/auth/devstorage.read_write";
 
     @Override
@@ -469,6 +477,23 @@ public class GSFile extends BucketBasedFile {
         // TODO Auto-generated method stub
         return null;
     }
+
+    // Attributes
+    private String userMail;
+    private String keyPath;
+    private GoogleCredential cred;
+    private Storage storage;
+
+    // Resolved stuff
+    private StorageObject fileStorageObject;
+    private List<StorageObject> recursiveFileList;
+    private List<String> bucketsList;
+    private List<GSFile> grecursiveList;
+    private List<GSFile> list;
+
+    // Backend stuff
+    private HttpTransport httpTransport;
+    private HttpRequestFactory requestFactory = null;
 
     private static Logger logger = Logger.getLogger("dctc.file.google");
 }
