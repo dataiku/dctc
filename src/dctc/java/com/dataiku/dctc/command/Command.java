@@ -140,6 +140,11 @@ public abstract class Command {
         }
         return args;
     }
+    protected void setExitCode(int exitCode) {
+        this.exitCode = Math.max(exitCode, this.exitCode);
+    }
+    
+    
     protected void error(String msg, int exitCode) {
         DCTCLog.error(cmdname(), msg);
         setExitCode(exitCode);
@@ -151,18 +156,17 @@ public abstract class Command {
     protected void error(String fileName, String msg, Throwable exception, int exitCode) {
         error("`" + fileName + "': " + msg, exception, exitCode);
     }
-    protected void setExitCode(int exitCode) {
-        this.exitCode = Math.max(exitCode, this.exitCode);
-    }
     protected void error(String fileName, String msg, int errorCode) {
         error("`" + fileName + "': " + msg, errorCode);
     }
+    
     protected void warn(String msg) {
         error(msg, 0);
     }
     protected void warn(String msg, Throwable exception) {
         error(msg, exception, 0);
     }
+    
     protected GeneralizedFile build(String path) {
         return getFileBuilder().buildFile(path);
     }
