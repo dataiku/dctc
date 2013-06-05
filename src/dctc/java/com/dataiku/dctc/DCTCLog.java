@@ -41,13 +41,35 @@ public class DCTCLog {
         }
     }
 
+    /** Builds a one-liner representing the chain of causes, up to the root cause */
+    private static String buildCompleteExceptionMessage(Throwable t) {
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        while (true) {
+            sb.append(t.getClass().getSimpleName() + ": " + t.getMessage());
+            if (t.getCause() != null) {
+                i++;
+                if (i == 1) {
+                    sb.append(" (caused by ");
+                } else {
+                    sb.append(", caused by: ");
+                }
+            } else {
+                break;
+            }
+            t = t.getCause();
+        }
+        if (i> 0) sb.append(")");
+        return sb.toString();
+    }
+
     public static void warn(String module, String message, Throwable t) {
         if (mode == Mode.STDERR) {
             if (lvl == Level.DEBUG) {
                 System.err.println("dctc " + module + ": WARNING: " + message);
                 t.printStackTrace();
             } else {
-                System.err.println("dctc " + module + ": WARNING: " + message);
+                System.err.println("dctc " + module + ": WARNING: " + message + ": " + buildCompleteExceptionMessage(t));
                 System.err.println("  For more information, rerun with -V");
             }
         } else if (mode == Mode.LOG4J) {
@@ -61,8 +83,7 @@ public class DCTCLog {
                 System.err.println("dctc " + module + ": ERROR: " + message + ":");
                 t.printStackTrace();
             } else {
-                System.err.println("dctc " + module + ": ERROR: " + message);
-
+                System.err.println("dctc " + module + ": ERROR: " + message + ": " + buildCompleteExceptionMessage(t));
                 System.err.println("  For more information, rerun with -V");
             }
         } else if (mode == Mode.LOG4J) {
