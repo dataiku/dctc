@@ -51,20 +51,6 @@ public class S3File extends BucketBasedFile {
         for (S3File s: sons) {
             if (FileManipulation.isDirectSon(directoryPath, s.getAbsolutePath(), fileSeparator())) {
                 glist.add(s);
-            } else {
-                String son = FileManipulation.getDirectSon(directoryPath,
-                                                           s.getAbsolutePath(),
-                                                           fileSeparator());
-                boolean br = false;
-                for (S3File elt: glist) {
-                    if (elt.getAbsolutePath().equals(son)) {
-                        br = true;
-                        break;
-                    }
-                }
-                if (!br) {
-                    glist.add(new S3File(son, s3, getChildrenOf(son)));
-                }
             }
         }
         directoryPath = FileManipulation.trimBegin(directoryPath, "/");
