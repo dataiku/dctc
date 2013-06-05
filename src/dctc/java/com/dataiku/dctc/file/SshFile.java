@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -527,6 +528,8 @@ public class SshFile extends AbstractGFile {
                     }
                 } else if (e.getCause() instanceof UnknownHostException) {
                     throw (UnknownHostException)e.getCause();
+                } else if (e.getCause() instanceof ConnectException) {
+                    throw (ConnectException)e.getCause();
                 } else {
                     throw new IOException(scat("Unable to connect to", connData.host), e);
                 }
