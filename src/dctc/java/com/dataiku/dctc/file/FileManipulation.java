@@ -161,7 +161,7 @@ public class FileManipulation {
         }
 
         return son.startsWith(parent) // has the same prefix?
-            && !(son.indexOf(separator, parent.length() + separator.length()) != -1); // Just one more separator?
+            && getDepth(son, separator) == getDepth(parent, separator) + 1;
     }
     public static boolean isSon(String parent, String son, String separator) {
         parent = trimEnd(parent, separator);
