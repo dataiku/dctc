@@ -63,7 +63,7 @@ public class GSFile extends BucketBasedFile {
     }
 
     private GSFile(GoogleCredential cred, Storage storage, HttpTransport httpTransport,
-                String userMail, String keyPath, String path) {
+                   String userMail, String keyPath, String path) {
         __init(userMail, keyPath, path);
         this.cred = cred;
         this.storage = storage;
@@ -81,18 +81,33 @@ public class GSFile extends BucketBasedFile {
         fileStorageObject = object;
         assert (exists());
     }
-    private GSFile(GSFile parent, String bucketName, String path) {
+    private GSFile(GSFile parent, String bucketName, String path, List<GSFile> children) {
         this.cred = parent.cred;
         this.storage = parent.storage;
         this.httpTransport = parent.httpTransport;
         this.path = path;
         this.bucket = parent.bucket;
         type = Type.DIR;
+        this.grecursiveList = children;
+        this.list = new ArrayList<GSFile>();
+        for (GSFile child: children) {
+            if (FileManipulation.isDirectSon(path, child.path, fileSeparator())) {
+                list.add(child);
+            }
+        }
         try {
             assert(exists() && isDirectory());
         } catch (IOException e) {
             throw new Error(e);
         }
+    }
+    private GSFile(GSFile parent, String bucketName, String path) {
+        this.cred = parent.cred;
+        this.storage = parent.storage;
+        this.httpTransport = parent.httpTransport;
+        this.path = path;
+        this.bucket = parent.bucket;
+        type = Type.UNRESOLVED;
     }
 
     private static GSFile newNotFound(GSFile parent, String absolutePath) {
@@ -228,7 +243,7 @@ public class GSFile extends BucketBasedFile {
                     break;
                 }
                 if (!contains(grecursiveList, parent)) {
-                    grecursiveList.add(new GSFile(this, bucket, parent));
+                    grecursiveList.add(new GSFile(this, bucket, parent, getChildrenOf(parent)));
                     break;
                 }
             }
@@ -494,6 +509,25 @@ public class GSFile extends BucketBasedFile {
     public InputStream getRange(long begin, long length) throws IOException {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    // Private
+    public List<GSFile> getChildrenOf(String path) {
+        List<GSFile> res = new ArrayList<GSFile>();
+        try {
+            if (!isDirectory()) {
+                return res;
+            }
+            if (grecursiveList != null) {
+                for (GSFile e: grecursiveList) {
+                    if (FileManipulation.isSon(path, e.getAbsolutePath(), fileSeparator())) {
+                        res.add(e);
+                    }
+                }
+            }
+        } catch (IOException e) {
+        }
+        return res;
     }
 
     // Attributes
