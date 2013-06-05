@@ -209,10 +209,13 @@ public class GSFile extends BucketBasedFile {
                 }
             }
         }
-        else {
+        else if (isDirectory()) {
             for (StorageObject so: recursiveFileList) {
                 grecursiveList.add(new GSFile(this, so));
             }
+        }
+        else if (isFile()) {
+            throw new IOException("can't list " + getAbsoluteAddress() + ": is a file");
         }
         return grecursiveList;
     }
