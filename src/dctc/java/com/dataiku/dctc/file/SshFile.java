@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -100,7 +101,7 @@ public class SshFile extends AbstractGFile {
     }
 
     public SshFile(String host, String username, String password, String path, int port,
-                   boolean skipHostKeyCheck) {
+            boolean skipHostKeyCheck) {
         this.connData = new ConnectionData();
         this.connData.host = host;
         this.connData.port = port;
@@ -114,7 +115,7 @@ public class SshFile extends AbstractGFile {
         }
     }
     public SshFile(String host, String username, String keyPath,
-                   String keyPassphrase, String path, int port, boolean skipHostKeyCheck) {
+            String keyPassphrase, String path, int port, boolean skipHostKeyCheck) {
         this.connData = new ConnectionData();
         this.connData.host = host;
         this.connData.port = port;
@@ -290,7 +291,7 @@ public class SshFile extends AbstractGFile {
             return newNotFound(this, childPathWithoutHost);
         }
         return new SshFile(FileManipulation.concat(path, subpath,
-                                                   fileSeparator(), fileSeparator), this);
+                fileSeparator(), fileSeparator), this);
     }
     @Override
     public boolean exists() throws IOException {
@@ -324,7 +325,7 @@ public class SshFile extends AbstractGFile {
     @Override
     public String getAbsoluteAddress() {
         return getProtocol() + "://" + this.connData.username
-            + "@" + this.connData.host + ":" + path;
+                + "@" + this.connData.host + ":" + path;
     }
     @Override
     public String givenName() {
@@ -514,19 +515,20 @@ public class SshFile extends AbstractGFile {
                 openSessionAndResolveHome();
             }
             catch (JSchException e) {
-                String msg = e.getMessage();
-                if (msg.contains(":")) {
-                    msg = msg.substring(msg.lastIndexOf(":") + 1).trim();
-                }
                 if (e.getCause() == null) {
+                    String msg = e.getMessage();
+                    if (msg.contains(":")) {
+                        msg = msg.substring(msg.lastIndexOf(":") + 1).trim();
+                    }
                     if (msg.contains("Too many authentication")) {
                         throw new IOException(msg.substring(2).trim(), e);
                     } else {
                         throw new IOException(scat("Unable to connect to", connData.host), e);
                     }
-                }
-                if (e.getCause().getClass().getCanonicalName().equals("java.net.UnknownHostException")) {
-                    throw new IOException(scat("Unknown host", pquoted(msg) + "."), e);
+                } else if (e.getCause() instanceof UnknownHostException) {
+                    throw (UnknownHostException)e.getCause();
+                } else {
+                    throw new IOException(scat("Unable to connect to", connData.host), e);
                 }
             }
         }
@@ -555,7 +557,7 @@ public class SshFile extends AbstractGFile {
             int errorStatut = channel.getExitStatus();
             if (errorStatut != 0) {
                 throw new IOException("Unknown error on: " + getAbsoluteAddress() + eol()
-                                      + "receive: " + channel.getExitStatus() + eol() + str);
+                        + "receive: " + channel.getExitStatus() + eol() + str);
             }
             return str;
         } catch (JSchException e) {
@@ -642,6 +644,6 @@ public class SshFile extends AbstractGFile {
     private static String realpath = "dctc_real_path_() { path=$1; if [ -f $path ]; then echo `pwd`/$path; else echo `cd -P -- \"${path:-.}\" && pwd`; fi; }";
     private static String deleteDotSlash = "if echo $line | grep \"^./\" > /dev/null; then line=`echo $line | sed -e 's#^\\./##'`; fi";
     private static String format = "while read line; do " + deleteDotSlash + "; echo `stat -"
-        + statOpt
-        + " ' %A %Z %s %F \"%n\"' -- \"$line\"` \\\"`dctc_real_path_ \"$line\"`\\\"; done";
+            + statOpt
+            + " ' %A %Z %s %F \"%n\"' -- \"$line\"` \\\"`dctc_real_path_ \"$line\"`\\\"; done";
 }
