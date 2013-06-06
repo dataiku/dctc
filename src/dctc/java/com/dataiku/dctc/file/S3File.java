@@ -178,9 +178,6 @@ public class S3File extends BucketBasedFile {
         grecursiveList.add(this);
         for (S3ObjectSummary so: recursiveFileList) {
             String parent = so.getKey();
-            if (parent.contains(fileSeparator())) {
-                parent = parent.substring(parent.indexOf(fileSeparator()));
-            }
             grecursiveList.add(new S3File(so, s3));
 
             while (parent.contains(fileSeparator())) {
@@ -188,12 +185,15 @@ public class S3File extends BucketBasedFile {
                 if (!parent.startsWith(path)) {
                     break;
                 }
-                if (contains(grecursiveList, parent)) {
-                    grecursiveList.add(new S3File(bucket + "/" + parent, s3,
-                                                  getChildrenOf(bucket + "/" + parent)));
+                if (!contains(grecursiveList, parent)) {
+                    grecursiveList.add(new S3File(FileManipulation.concat(bucket,
+                                                                          parent,
+                                                                          fileSeparator()), s3,
+                                                  getChildrenOf(FileManipulation.concat(bucket,
+                                                                                        parent,
+                                                                                        fileSeparator()))));
                 }
             }
-
         }
     }
     @Override
