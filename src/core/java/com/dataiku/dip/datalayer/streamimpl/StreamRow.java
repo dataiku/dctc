@@ -15,13 +15,13 @@ public class StreamRow implements Row{
         if (value == null || value.length() == 0) {
             delete(key);
         } else { 
-            data.put(key.getName(), value);
+            data.put(((StreamColumn)key).name, value);
         }
     }
 
     @Override
     public void delete(Column key) {
-        data.remove(key.getName());
+        data.remove(((StreamColumn)key).name);
     }
     public Row with(ColumnFactory cf, String key, String value) {
         put(cf.column(key), value);
@@ -50,7 +50,7 @@ public class StreamRow implements Row{
 
     @Override
     public String get(Column cd) {
-        return data.get(cd.getName());
+        return data.get(((StreamColumn)cd).name);
     }
     
     @Override
