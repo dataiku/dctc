@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 
+import com.dataiku.dctc.AuthenticationFailedException;
 import com.dataiku.dctc.DCTCLog;
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.command.Command.EndOfCommand;
@@ -522,7 +523,7 @@ public class SshFile extends AbstractGFile {
                         msg = msg.substring(msg.lastIndexOf(":") + 1).trim();
                     }
                     if (msg.contains("Too many authentication")) {
-                        throw new IOException(msg.substring(2).trim(), e);
+                        throw new AuthenticationFailedException(msg.substring(2).trim());
                     } else {
                         throw new IOException(scat("Unable to connect to", connData.host), e);
                     }
