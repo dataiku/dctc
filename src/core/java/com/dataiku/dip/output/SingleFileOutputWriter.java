@@ -37,6 +37,7 @@ public class SingleFileOutputWriter extends OutputWriter{
     public void emitRow(Row row) throws Exception {
         if (!headerEmitted) {
             formatter.header(cf, finalOutputStream);
+            headerEmitted = true;
         }
         formatter.format(row, cf, finalOutputStream);
     }
