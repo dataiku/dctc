@@ -12,13 +12,13 @@ import com.dataiku.dctc.copy.CopyTasksExecutor;
 import com.dataiku.dctc.copy.SimpleCopyTaskRunnableFactory;
 import com.dataiku.dctc.display.ThreadedDisplay;
 import com.dataiku.dctc.file.GeneralizedFile;
-import com.dataiku.dip.output.Usage;
+import com.dataiku.dip.utils.IndentedWriter;
 
 public class Mv extends ListCommand {
     public String tagline() {
         return "Move files and folders";
     }
-    public void longDescription(Usage printer) {
+    public void longDescription(IndentedWriter printer) {
         printer.print("Move files and folders to another location.");
     }
     // Public

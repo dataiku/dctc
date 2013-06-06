@@ -22,9 +22,10 @@ import com.dataiku.dctc.split.ValueFunction;
 import com.dataiku.dip.input.Format;
 import com.dataiku.dip.input.formats.BasicFormatExtractorFactory;
 import com.dataiku.dip.partitioning.TimeDimension;
+import com.dataiku.dip.utils.IndentedWriter;
 
-import static com.dataiku.dip.output.PrettyString.scat;
-import com.dataiku.dip.output.Usage;
+import static com.dataiku.dip.utils.PrettyString.scat;
+
 
 /**
  * Dispatch algorithm based on GeneralizedFile.
@@ -38,7 +39,7 @@ public class Dispatch extends ListCommand {
     public String tagline() {
         return "Dispatches the content of input files to output files";
     }
-    public void longDescription(Usage printer) {
+    public void longDescription(IndentedWriter printer) {
         printer.print(scat("This command split the input files to output files. Input files are"
                            ,"split in records based on the specified format."
                            ,"For each record, the target output file is computed according to"

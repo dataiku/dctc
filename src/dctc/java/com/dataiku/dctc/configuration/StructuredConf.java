@@ -1,6 +1,6 @@
 package com.dataiku.dctc.configuration;
 
-import static com.dataiku.dip.output.PrettyString.eol;
+import static com.dataiku.dip.utils.PrettyString.eol;
 
 import java.io.File;
 import java.io.IOException;

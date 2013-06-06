@@ -15,14 +15,15 @@ import com.dataiku.dctc.copy.SyncComputer;
 import com.dataiku.dctc.copy.SyncComputer.IncrementalFilter.Type;
 import com.dataiku.dctc.display.ThreadedDisplay;
 import com.dataiku.dctc.file.GeneralizedFile;
-import com.dataiku.dip.output.Usage;
-import static com.dataiku.dip.output.PrettyString.scat;
+import com.dataiku.dip.utils.IndentedWriter;
+
+import static com.dataiku.dip.utils.PrettyString.scat;
 
 public class Sync extends Command {
     public String tagline() {
         return "Synchronize incrementally the content of locations";
     }
-    public void longDescription(Usage printer) {
+    public void longDescription(IndentedWriter printer) {
         printer.print(scat("Synchronize locations. This command will copy all files from"
                            ,"source to destination in order to have the destination contain"
                            ,"all source files."));

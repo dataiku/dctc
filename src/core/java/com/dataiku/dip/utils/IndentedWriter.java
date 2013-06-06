@@ -1,8 +1,8 @@
-package com.dataiku.dip.output;
+package com.dataiku.dip.utils;
 
-import static com.dataiku.dip.output.PrettyString.eol;
+import static com.dataiku.dip.utils.PrettyString.eol;
 
-public class Usage {
+public class IndentedWriter {
     public void print(String command, String msg) {
     }
 

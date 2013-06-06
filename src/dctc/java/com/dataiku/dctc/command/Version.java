@@ -2,13 +2,13 @@ package com.dataiku.dctc.command;
 
 import org.apache.commons.cli.Options;
 
-import com.dataiku.dip.output.Usage;
+import com.dataiku.dip.utils.IndentedWriter;
 
 public class Version extends Command {
     public String tagline() {
         return "Show DCTC version";
     }
-    public void longDescription(Usage printer) {
+    public void longDescription(IndentedWriter printer) {
         printer.print("Show the version of DCTC");
     }
 

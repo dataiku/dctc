@@ -12,14 +12,15 @@ import org.apache.commons.io.IOUtils;
 
 import com.dataiku.dctc.AutoGZip;
 import com.dataiku.dctc.file.GeneralizedFile;
-import com.dataiku.dip.output.Usage;
-import static com.dataiku.dip.output.PrettyString.scat;
+import com.dataiku.dip.utils.IndentedWriter;
+
+import static com.dataiku.dip.utils.PrettyString.scat;
 
 public class Grep extends Command {
     public String tagline() {
         return "Match content within files.";
     }
-    public void longDescription(Usage printer) {
+    public void longDescription(IndentedWriter printer) {
         printer.print(scat("Search the pattern in input files and outputs the lines that match."
                            ,"The pattern is handled as a non-anchored regular expression."));
         printer.print(scat("dctc grep only offers a tiny subset of the capabilities of"

@@ -1,4 +1,4 @@
-package com.dataiku.dip.output;
+package com.dataiku.dip.utils;
 
 public class PrettyString {
     public static String quoted(Object msg) {

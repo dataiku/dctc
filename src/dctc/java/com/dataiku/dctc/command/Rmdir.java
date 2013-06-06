@@ -6,15 +6,15 @@ import java.util.List;
 import org.apache.commons.cli.Options;
 
 import com.dataiku.dctc.file.GeneralizedFile;
-import com.dataiku.dip.output.Usage;
+import com.dataiku.dip.utils.IndentedWriter;
 
-import static com.dataiku.dip.output.PrettyString.scat;
+import static com.dataiku.dip.utils.PrettyString.scat;
 
 public class Rmdir extends Command {
     public String tagline() {
         return "Remove empty folders";
     }
-    public void longDescription(Usage printer) {
+    public void longDescription(IndentedWriter printer) {
         printer.print(scat("Remove empty folders. If the target folder is not empty,"
                            ,"rmdir will error out."));
     }

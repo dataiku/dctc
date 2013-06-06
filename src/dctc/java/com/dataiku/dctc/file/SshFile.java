@@ -1,8 +1,8 @@
 package com.dataiku.dctc.file;
 
-import static com.dataiku.dip.output.PrettyString.eol;
-import static com.dataiku.dip.output.PrettyString.pquoted;
-import static com.dataiku.dip.output.PrettyString.scat;
+import static com.dataiku.dip.utils.PrettyString.eol;
+import static com.dataiku.dip.utils.PrettyString.pquoted;
+import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.File;
 import java.io.IOException;

@@ -30,11 +30,11 @@ import com.dataiku.dctc.command.Version;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.configuration.StructuredConf;
 import com.dataiku.dctc.exception.UserException;
-import com.dataiku.dip.output.Usage;
 import com.dataiku.dip.utils.StdOut;
+import com.dataiku.dip.utils.IndentedWriter;
 
-import static com.dataiku.dip.output.PrettyString.nlcat;
-import static com.dataiku.dip.output.PrettyString.scat;
+import static com.dataiku.dip.utils.PrettyString.nlcat;
+import static com.dataiku.dip.utils.PrettyString.scat;
 
 public class Main {
     private static void indent(String str, int size) {
@@ -67,10 +67,10 @@ public class Main {
         if (exitCode != 0) {
             System.setOut(System.err);
         }
-        Usage printer = new Usage();
+        IndentedWriter printer = new IndentedWriter();
         printer.setFirstLineIndentsize(2);
-        printer.setIndentSize(0);
-        printer.setTermSize(Math.min(GlobalConf.getColNumber(), 120));
+        printer.setIndentSize(2);
+        printer.setTermSize(Math.min(GlobalConf.getColNumber(), 80));
         for (Command cmd: cmds.values()) {
             if (cmd.cmdname().equals(command)) {
                 commandHelp(cmd, printer);
@@ -80,7 +80,7 @@ public class Main {
         System.out.println("Command not found: " + command);
         globalUsage(1);
     }
-    public static void commandHelp(Command cmd, Usage printer) {
+    public static void commandHelp(Command cmd, IndentedWriter printer) {
         System.out.println("dctc " + cmd.cmdname() + " -- " + cmd.tagline());
         System.out.println();
         cmd.longDescription(printer);

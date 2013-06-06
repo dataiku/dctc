@@ -7,15 +7,15 @@ import org.apache.commons.cli.Options;
 
 import com.dataiku.dctc.display.Interactive;
 import com.dataiku.dctc.file.GeneralizedFile;
-import com.dataiku.dip.output.Usage;
+import com.dataiku.dip.utils.IndentedWriter;
 
-import static com.dataiku.dip.output.PrettyString.scat;
+import static com.dataiku.dip.utils.PrettyString.scat;
 
 public class Rm extends Command {
     public String tagline() {
         return "Remove files and folders";
     }
-    public void longDescription(Usage printer) {
+    public void longDescription(IndentedWriter printer) {
         printer.print(scat("Remove files and folders. By default, it will refuse to remove"
                            ,"folders. Use -r"));
     }

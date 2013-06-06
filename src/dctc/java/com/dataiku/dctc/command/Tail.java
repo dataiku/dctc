@@ -12,13 +12,13 @@ import org.apache.commons.io.IOUtils;
 
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.file.GeneralizedFile;
-import com.dataiku.dip.output.Usage;
+import com.dataiku.dip.utils.IndentedWriter;
 
 public class Tail extends Command {
     public String tagline() {
         return "Output the end of files";
     }
-    public void longDescription(Usage printer) {
+    public void longDescription(IndentedWriter printer) {
         printer.print("Output the last N lines or bytes of the input files");
     }
 

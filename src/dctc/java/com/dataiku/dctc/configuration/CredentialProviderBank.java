@@ -5,8 +5,10 @@ import java.util.Map;
 
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.FileManipulation;
-import static com.dataiku.dip.output.PrettyString.pquoted;
-import static com.dataiku.dip.output.PrettyString.scat;
+
+import static com.dataiku.dip.utils.PrettyString.pquoted;
+import static com.dataiku.dip.utils.PrettyString.scat;
+
 import com.dataiku.dip.utils.ErrorContext;
 import com.dataiku.dip.utils.Params;
 

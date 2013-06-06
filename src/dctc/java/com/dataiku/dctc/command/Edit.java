@@ -14,16 +14,16 @@ import com.dataiku.dctc.copy.SimpleCopyTaskRunnableFactory;
 import com.dataiku.dctc.file.FileManipulation;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dctc.file.LocalFile;
-import com.dataiku.dip.output.Usage;
 import com.dataiku.dip.utils.DKUtils;
+import com.dataiku.dip.utils.IndentedWriter;
 
-import static com.dataiku.dip.output.PrettyString.scat;
+import static com.dataiku.dip.utils.PrettyString.scat;
 
 public class Edit extends Command {
     public String tagline() {
         return "Edit a remote file";
     }
-    public void longDescription(Usage printer) {
+    public void longDescription(IndentedWriter printer) {
         printer.print(scat("The file is downloaded, an editor is opened, and if the file was"
                            ,"modified, it's uploaded back to its original location"));
     }

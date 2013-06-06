@@ -22,7 +22,7 @@ import com.dataiku.dctc.Main;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.file.FileBuilder;
 import com.dataiku.dctc.file.GeneralizedFile;
-import com.dataiku.dip.output.Usage;
+import com.dataiku.dip.utils.IndentedWriter;
 
 public abstract class Command {
     // The goal of this exception is to abort a command by bubbling up to main
@@ -34,7 +34,7 @@ public abstract class Command {
     public abstract String cmdname();
     public abstract String tagline();
     protected abstract String proto();
-    public abstract void longDescription(Usage printer);
+    public abstract void longDescription(IndentedWriter printer);
 
     // Abstract methods
     protected abstract Options setOptions();
@@ -110,7 +110,7 @@ public abstract class Command {
 
         }
         if (line.hasOption("help")) {
-            Main.commandHelp(this, new Usage());
+            Main.commandHelp(this, new IndentedWriter());
             throw new EndOfCommand();
         }
         if (line.hasOption("v")) {

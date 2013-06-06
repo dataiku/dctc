@@ -19,13 +19,13 @@ import com.dataiku.dctc.display.Size;
 import com.dataiku.dctc.file.Acl;
 import com.dataiku.dctc.file.FileManipulation;
 import com.dataiku.dctc.file.GeneralizedFile;
-import com.dataiku.dip.output.Usage;
+import com.dataiku.dip.utils.IndentedWriter;
 
 public class Ls extends Command {
     public String tagline() {
         return "List the contents of folders";
     }
-    public void longDescription(Usage printer) {
+    public void longDescription(IndentedWriter printer) {
         printer.print("List the contents of folders, with detailed attributes if requested");
     }
     // Public

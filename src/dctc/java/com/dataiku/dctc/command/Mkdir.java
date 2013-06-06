@@ -6,13 +6,13 @@ import java.util.List;
 import org.apache.commons.cli.Options;
 
 import com.dataiku.dctc.file.GeneralizedFile;
-import com.dataiku.dip.output.Usage;
+import com.dataiku.dip.utils.IndentedWriter;
 
 public class Mkdir extends Command {
     public String tagline() {
         return "Create directories";
     }
-    public void longDescription(Usage printer) {
+    public void longDescription(IndentedWriter printer) {
         printer.print("Create directories. Parent directories must exist");
     }
 

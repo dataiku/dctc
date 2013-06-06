@@ -21,7 +21,9 @@ import org.apache.commons.io.IOUtils;
 
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.FileManipulation;
-import static com.dataiku.dip.output.PrettyString.nl;
+
+import static com.dataiku.dip.utils.PrettyString.nl;
+
 import com.dataiku.dip.utils.Params;
 
 public class Configuration {

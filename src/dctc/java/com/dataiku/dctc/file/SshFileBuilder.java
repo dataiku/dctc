@@ -5,8 +5,9 @@ import com.dataiku.dctc.configuration.SshConfig;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.dataiku.dip.utils.Params;
-import static com.dataiku.dip.output.PrettyString.pquoted;
-import static com.dataiku.dip.output.PrettyString.scat;
+
+import static com.dataiku.dip.utils.PrettyString.pquoted;
+import static com.dataiku.dip.utils.PrettyString.scat;
 
 /** Builder for SSH files
  *

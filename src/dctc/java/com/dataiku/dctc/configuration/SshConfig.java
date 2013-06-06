@@ -1,7 +1,7 @@
 package com.dataiku.dctc.configuration;
 
-import static com.dataiku.dip.output.PrettyString.pquoted;
-import static com.dataiku.dip.output.PrettyString.scat;
+import static com.dataiku.dip.utils.PrettyString.pquoted;
+import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.BufferedReader;
 import java.io.File;

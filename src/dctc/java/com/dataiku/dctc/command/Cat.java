@@ -11,8 +11,9 @@ import org.apache.commons.io.IOUtils;
 
 import com.dataiku.dctc.AutoGZip;
 import com.dataiku.dctc.file.GeneralizedFile;
-import com.dataiku.dip.output.Usage;
-import static com.dataiku.dip.output.PrettyString.scat;
+import com.dataiku.dip.utils.IndentedWriter;
+
+import static com.dataiku.dip.utils.PrettyString.scat;
 
 /**
  * Cat algorithm based on GeneralizedFile.
@@ -23,7 +24,7 @@ public class Cat extends Command {
     public String tagline() {
         return "Display the content of one or several files";
     }
-    public void longDescription(Usage printer) {
+    public void longDescription(IndentedWriter printer) {
         printer.print(scat("Concatenates the content of all input files to standard output."
                            ,"GZip compressed files are automatically uncompressed"));
     }

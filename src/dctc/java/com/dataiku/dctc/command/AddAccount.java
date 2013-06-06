@@ -14,14 +14,15 @@ import com.dataiku.dctc.display.Interactive;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.GSFile;
 import com.dataiku.dctc.file.S3File;
-import com.dataiku.dip.output.Usage;
-import static com.dataiku.dip.output.PrettyString.scat;
+import com.dataiku.dip.utils.IndentedWriter;
+
+import static com.dataiku.dip.utils.PrettyString.scat;
 
 public class AddAccount extends Command {
     public String tagline() {
         return "Add an account to the DCTC configuration";
     }
-    public void longDescription(Usage printer) {
+    public void longDescription(IndentedWriter printer) {
         printer.print(scat("Add an account to the DCTC file configuration using a command-line wizard."
                            ,"Supported protocols are 's3' and 'gs'"));
     }
