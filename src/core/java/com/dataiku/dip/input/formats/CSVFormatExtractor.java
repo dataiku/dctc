@@ -31,6 +31,8 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
             ColumnFactory cf, RowFactory rf, StreamInputSplitProgressListener listener,
             ExtractionLimit limit) throws Exception {
         logger.info("CSV running with separator : '" + conf.separator + "'");
+        
+        long totalBytes = 0, nlines = 0;
         while (true) {
             EnrichedInputStream stream = in.nextStream();
 
@@ -87,7 +89,7 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                     }
                 }
 
-                long nlines = 0, nintern = 0;
+                long nintern = 0;
                 while (true) {
                     String[] line = reader.readNext();
                     if (line == null) break;
@@ -139,10 +141,11 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                                 + p + "%");
                     }
 
-                    if (listener != null && nlines++ % 50 == 0) {
+                    if (listener != null && nlines % 500 == 0) {
                         synchronized (listener) {
+                            //logger.info("Setting listener " + (totalBytes + cis.getCount()));
                             listener.setErrorRecords(0);
-                            listener.setReadBytes(cis.getCount());
+                            listener.setReadBytes(totalBytes + cis.getCount());
                             listener.setReadRecords(nlines);
                         }
                     }
@@ -151,9 +154,10 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                 if (listener != null) {
                     synchronized (listener) {
                         listener.setErrorRecords(0);
-                        listener.setReadBytes(cis.getCount());
+                        listener.setReadBytes(totalBytes + cis.getCount());
                         listener.setReadRecords(nlines);
                     }
+                    totalBytes += cis.getCount();
                 }
             } finally {
                 reader.close();
