@@ -41,4 +41,16 @@ public class PrettyString {
         return cat(eol(), msg);
     }
 
+    // Color method
+    public static String format(String str, String color) {
+        if (displayWithColor()) {
+            return "\u001B[" + color + "m" + str + "\u001B[0m";
+        }
+        else {
+            return str;
+        }
+    }
+    public static String red(String str) {
+        return format(str, "31");
+    }
 }

@@ -87,6 +87,9 @@ public class GlobalConf {
     public static boolean isInteractif() {
         return System.console() != null;
     }
+    public static boolean displayWithColor() {
+        return isInteractif() || System.getenv("CLICOLOR_FORCE") != null;
+    }
     public static String pathSeparator() {
         if (GlobalConstants.isWindows) {
             return ";";
