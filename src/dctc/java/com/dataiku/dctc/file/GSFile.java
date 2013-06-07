@@ -46,6 +46,7 @@ public class GSFile extends BucketBasedFile {
         this.path = split[1];
     }
     public GSFile(String userMail, String keyPath, String path) {
+        super(false);
         __init(userMail, keyPath, path);
 
         httpTransport = new NetHttpTransport();
@@ -64,6 +65,7 @@ public class GSFile extends BucketBasedFile {
 
     private GSFile(GoogleCredential cred, Storage storage, HttpTransport httpTransport,
                    String userMail, String keyPath, String path) {
+        super(false);
         __init(userMail, keyPath, path);
         this.cred = cred;
         this.storage = storage;
@@ -72,6 +74,7 @@ public class GSFile extends BucketBasedFile {
 
     /** Internal constructor that takes a fully-resolved file. */
     private GSFile(GSFile parent, StorageObject object) throws IOException {
+        super(false);
         __init(parent.userMail, parent.keyPath, parent.bucket + "/" + object.getName());
         this.cred = parent.cred;
         this.storage = parent.storage;
@@ -82,6 +85,7 @@ public class GSFile extends BucketBasedFile {
         assert (exists());
     }
     private GSFile(GSFile parent, String bucketName, String path, List<GSFile> children) {
+        super(false);
         this.cred = parent.cred;
         this.storage = parent.storage;
         this.httpTransport = parent.httpTransport;
@@ -102,6 +106,7 @@ public class GSFile extends BucketBasedFile {
         }
     }
     private GSFile(GSFile parent, String bucketName, String path) {
+        super(false);
         this.cred = parent.cred;
         this.storage = parent.storage;
         this.httpTransport = parent.httpTransport;

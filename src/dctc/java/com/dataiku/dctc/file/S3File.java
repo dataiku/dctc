@@ -27,6 +27,7 @@ import com.dataiku.dctc.file.FileBuilder.Protocol;
 
 public class S3File extends BucketBasedFile {
     public S3File(String path, AmazonS3 s3) {
+        super(false);
         path = FileManipulation.trimBegin(path, fileSeparator());
         this.s3 = s3;
         String[] split = FileManipulation.split(path, fileSeparator(), 2);
@@ -36,6 +37,7 @@ public class S3File extends BucketBasedFile {
 
     /** Create a new S3File for which we already have the meta (ie, it's guaranteed to be a file) */
     public S3File(S3ObjectSummary sum, AmazonS3 s3) {
+        super(false);
         this.s3 = s3;
         this.type = Type.FILE;
         this.objectSummary = sum;
@@ -43,7 +45,8 @@ public class S3File extends BucketBasedFile {
         this.path = sum.getKey();
     }
 
-    protected S3File(String directoryPath, AmazonS3 s3, List<S3File> sons) {
+    protected S3File(String directoryPath, AmazonS3 s3, List<S3File> sons, boolean autoRecur) {
+        super(autoRecur);
         this.s3 = s3;
         this.type = Type.DIR;
         grecursiveList = sons;
@@ -58,7 +61,8 @@ public class S3File extends BucketBasedFile {
         this.bucket = split[0];
         this.path = split[1];
     }
-    protected S3File(String directoryPath, AmazonS3 s3, S3ObjectSummary objectSummary) {
+    protected S3File(String directoryPath, AmazonS3 s3, S3ObjectSummary objectSummary, boolean autoRecur) {
+        super(autoRecur);
         this.s3 = s3;
         this.type = Type.FILE;
         this.objectSummary = objectSummary;
@@ -139,17 +143,17 @@ public class S3File extends BucketBasedFile {
                     if (!br) {
                         List<S3File> sons = getChildrenOf(son);
                         if (sons.size() != 0) {
-                            glist.add(new S3File(son, s3, getChildrenOf(son)));
+                            glist.add(new S3File(son, s3, getChildrenOf(son), autoRecur));
                         }
                         else {
-                            glist.add(new S3File(son, s3, f));
+                            glist.add(new S3File(son, s3, f, autoRecur));
                         }
                     }
                 }
             }
-            if (dirs != null) {
+            if (dirs != null) { // autoRecur == false
                 for (String dir: dirs) {
-                    glist.add((S3File) createSubFile(dir));
+                    glist.add(new S3File(dir, s3, new ArrayList<S3File>(), false));
                 }
             }
             return glist;
@@ -191,12 +195,14 @@ public class S3File extends BucketBasedFile {
                     break;
                 }
                 if (!contains(grecursiveList, parent)) {
-                    grecursiveList.add(new S3File(FileManipulation.concat(bucket,
-                                                                          parent,
-                                                                          fileSeparator()), s3,
-                                                  getChildrenOf(FileManipulation.concat(bucket,
-                                                                                        parent,
-                                                                                        fileSeparator()))));
+                    grecursiveList.add(new S3File(FileManipulation.concat(bucket
+                                                                          , parent
+                                                                          , fileSeparator())
+                                                  , s3
+                                                  , getChildrenOf(FileManipulation.concat(bucket
+                                                                                        , parent
+                                                                                        , fileSeparator()))
+                                                  , autoRecur));
                 }
             }
         }

@@ -8,6 +8,9 @@ import java.util.List;
  * Each file object has a "state", depending on whether we have stat() this file or not.
  */
 public abstract class BucketBasedFile extends AbstractGFile {
+    BucketBasedFile(boolean autoRecur) {
+        this.autoRecur = autoRecur;
+    }
     /**
      * Computes the type of this file and relevant info:
      *   - If type is ROOT, should cache the list of buckets
@@ -57,7 +60,7 @@ public abstract class BucketBasedFile extends AbstractGFile {
         return true;
     }
 
-    public static void autoRecursion(boolean autoRecursion) {
+    public void setAutoRecursion(boolean autoRecursion) {
         // If false, the implementation should limit the listing to the
         // current depth of the directory hierarchy.
         autoRecur = autoRecursion;
@@ -86,5 +89,5 @@ public abstract class BucketBasedFile extends AbstractGFile {
     protected Type type = Type.UNRESOLVED;
     protected String bucket;
     protected String path;
-    protected static boolean autoRecur = true;
+    protected boolean autoRecur = true;
 }

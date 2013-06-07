@@ -47,7 +47,7 @@ public class Ls extends Command {
     }
     @Override
     public void perform(List<GeneralizedFile> args) {
-        optimizeBucketRecursion(recursion());
+        optimizeBucketRecursion(args, recursion());
         try {
             for (int i = 0; i < args.size(); ++i) {
                 if (!args.get(i).exists()) {
@@ -72,8 +72,12 @@ public class Ls extends Command {
             errorWithHandlingOfKnownExceptions(null, "", e, 2);
         }
     }
-    private void optimizeBucketRecursion(boolean recursion) {
-        BucketBasedFile.autoRecursion(recursion);
+    private void optimizeBucketRecursion(List<GeneralizedFile> args, boolean recursion) {
+        for (GeneralizedFile arg: args) {
+            if (arg instanceof BucketBasedFile) {
+                ((BucketBasedFile) arg).setAutoRecursion(recursion);
+            }
+        }
     }
 
     public void recursivePerform(List<GeneralizedFile> args) throws IOException {
