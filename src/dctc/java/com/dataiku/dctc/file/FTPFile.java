@@ -144,6 +144,7 @@ public class FTPFile extends AbstractGFile {
     }
     @Override
     public List<FTPFile> glist() throws IOException {
+        System.out.println("glist");
         if (list != null) {
             return list;
         }
@@ -165,24 +166,28 @@ public class FTPFile extends AbstractGFile {
         }
         return list;
     }
-    public List<FTPFile> grecursiveList() throws IOException {
+    private List<FTPFile> grecursiveListRecur() throws IOException {
         if (recurList != null) {
             return recurList;
         }
         recurList = new ArrayList<FTPFile>(0);
-        recurList.add(this);
         if (isDirectory()) {
             for (FTPFile f: glist()) {
                 recurList.add(f);
 
                 if (f.isDirectory()) {
-                    List<FTPFile> rec = f.grecursiveList();
+                    List<FTPFile> rec = f.grecursiveListRecur();
                     for (FTPFile sub: rec) {
                         recurList.add(sub);
                     }
                 }
             }
         }
+        return recurList;
+    }
+    public List<FTPFile> grecursiveList() throws IOException {
+        grecursiveListRecur();
+        recurList.add(0, this);
         return recurList;
     }
     @Override
