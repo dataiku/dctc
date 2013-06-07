@@ -79,7 +79,7 @@ public class GSFile extends BucketBasedFile {
         this.cred = parent.cred;
         this.storage = parent.storage;
         this.httpTransport = parent.httpTransport;
-        this.path = object.getName();
+        this.bucket = parent.bucket;
         type = Type.FILE;
         fileStorageObject = object;
         assert (exists());
@@ -111,7 +111,7 @@ public class GSFile extends BucketBasedFile {
         this.storage = parent.storage;
         this.httpTransport = parent.httpTransport;
         this.path = path;
-        this.bucket = parent.bucket;
+        this.bucket = bucketName;
         type = Type.UNRESOLVED;
     }
 
