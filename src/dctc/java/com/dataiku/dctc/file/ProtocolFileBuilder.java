@@ -64,10 +64,12 @@ public abstract class ProtocolFileBuilder {
         return FileManipulation.concat(defaultPath, protocolData, fileSeparator());
     }
 
-    protected CredentialProviderBank bank;
-
+    // Abstract
     public abstract Protocol getProtocol();
     public abstract GeneralizedFile buildFile(String accountData, String protocolData);
     public abstract boolean validateAccountParams(String account, Params p, boolean fatal);
     public abstract String fileSeparator();
+
+    // Attributes
+    protected CredentialProviderBank bank;
 }
