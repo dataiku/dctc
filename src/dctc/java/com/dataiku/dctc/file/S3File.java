@@ -27,7 +27,7 @@ import com.dataiku.dctc.file.FileBuilder.Protocol;
 
 public class S3File extends BucketBasedFile {
     public S3File(String path, AmazonS3 s3) {
-        super(false);
+        super(true);
         path = FileManipulation.trimBegin(path, fileSeparator());
         this.s3 = s3;
         String[] split = FileManipulation.split(path, fileSeparator(), 2);
