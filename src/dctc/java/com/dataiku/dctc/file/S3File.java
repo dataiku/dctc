@@ -398,7 +398,7 @@ public class S3File extends BucketBasedFile {
     protected void resolve() throws IOException {
         if (type != Type.UNRESOLVED) return;
 
-        if (bucket.length() == 0) {
+        if (bucket.isEmpty()) {
             type = Type.ROOT;
             List<Bucket> buckets = null;
             try {
