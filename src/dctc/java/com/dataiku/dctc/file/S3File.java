@@ -147,6 +147,11 @@ public class S3File extends BucketBasedFile {
                     }
                 }
             }
+            if (dirs != null) {
+                for (String dir: dirs) {
+                    glist.add((S3File) createSubFile(dir));
+                }
+            }
             return glist;
         }
         else if (isFile()) {
@@ -414,11 +419,21 @@ public class S3File extends BucketBasedFile {
 
                 recursiveFileList = new ArrayList<S3ObjectSummary>();
                 try {
-                    ObjectListing list = s3.listObjects(new ListObjectsRequest()
-                                                        .withBucketName(bucket).withPrefix(path.length() > 0  ? path : null));
+                    ListObjectsRequest listRequest = new ListObjectsRequest()
+                        .withBucketName(bucket).withPrefix(path.isEmpty() ? null : path);
+                    if (!autoRecur) {
+                        listRequest.setDelimiter(fileSeparator());
+                        dirs = new ArrayList<String>();
+                    }
+                    ObjectListing list = s3.listObjects(listRequest);
                     while (true) {
                         for (S3ObjectSummary sum : list.getObjectSummaries()) {
                             recursiveFileList.add(sum);
+                        }
+                        if (!autoRecur) {
+                            for (String dir: list.getCommonPrefixes()) {
+                                dirs.add(dir);
+                            }
                         }
                         if (list.isTruncated()) {
                             list = s3.listNextBatchOfObjects(list);
@@ -510,6 +525,7 @@ public class S3File extends BucketBasedFile {
     ObjectMetadata objectMeta; // For FILE only
     S3ObjectSummary objectSummary; // For FILE only
     List<S3ObjectSummary> recursiveFileList; // For PATH_IN_BUCKET type only
+    List<String> dirs;
     long allocate;
     List<S3File> glist;
     List<String> bucketList;
