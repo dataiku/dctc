@@ -31,13 +31,13 @@ import com.dataiku.dip.utils.Params;
 public class FTPFileBuilder extends ProtocolFileBuilder {
 
     @Override
-    public boolean validateAccountParams(String account, Params p, boolean fatal) {
+    public boolean validateAccountParams(String account, Params p) {
         getCheckedPort(p.getParam("port", "22"));
         return checkAllowedOnly(account, p, new String[]{"host", "port", "username", "password",
-                                                         "default_path"}, fatal)
-            || checkMandatory(account, p, "host", fatal)
-            || checkMandatory(account, p, "username", fatal)
-            || checkMandatory(account, p, "password", fatal);
+                                                         "default_path"})
+            || checkMandatory(account, p, "host")
+            || checkMandatory(account, p, "username")
+            || checkMandatory(account, p, "password");
     }
 
     @Override
@@ -59,8 +59,9 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
             return build(path[0], accountChunks[0], accountChunks[1], path[1]);
         } else {
             Params p = bank.getAccountParams(getProtocol().getCanonicalName(), accountSettings);
-            // validateAccountParams(accountSettings, p);
-
+            if (validateAccountParams(accountSettings, p)) {
+                throw invalidAccountSettings(accountSettings);
+            }
 
             return new FTPFile(p, translateDefaultPath(p, rawPath));
         }

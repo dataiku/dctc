@@ -11,8 +11,8 @@ public class HttpFileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public boolean validateAccountParams(String accountSettings, Params p, boolean fatal) {
-        return checkAllowedOnly(accountSettings, p, new String[]{}, fatal);
+    public boolean validateAccountParams(String accountSettings, Params p) {
+        return checkAllowedOnly(accountSettings, p, new String[]{});
     }
 
     @Override

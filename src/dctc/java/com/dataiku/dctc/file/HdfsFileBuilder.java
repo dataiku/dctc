@@ -17,9 +17,9 @@ public class HdfsFileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public boolean validateAccountParams(String accountSettings, Params p, boolean fatal) {
-        return checkAllowedOnly(accountSettings, p, new String[]{"hadoopConfDir"}, fatal)
-            || checkMandatory(accountSettings, p, "hadoopConfDir", fatal);
+    public boolean validateAccountParams(String accountSettings, Params p) {
+        return checkAllowedOnly(accountSettings, p, new String[]{"hadoopConfDir"})
+            || checkMandatory(accountSettings, p, "hadoopConfDir");
     }
 
     @Override
@@ -42,7 +42,9 @@ public class HdfsFileBuilder extends ProtocolFileBuilder {
         if (p == null) {
             conf.addResource(new Path(HadoopUtils.getCoreSiteLocation()));
         } else {
-            validateAccountParams(accountSettings, p, true);
+            if (validateAccountParams(accountSettings, p)) {
+                throw invalidAccountSettings(accountSettings);
+            }
             conf.addResource(new Path(p.getNonEmptyMandParam("hadoopConfDir")));
         }
 

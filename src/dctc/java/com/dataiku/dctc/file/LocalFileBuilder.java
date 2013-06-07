@@ -8,7 +8,7 @@ public class LocalFileBuilder extends ProtocolFileBuilder {
     public Protocol getProtocol() { return Protocol.FILE; }
 
     @Override
-    public boolean validateAccountParams(String account, Params p, boolean fatal) {
+    public boolean validateAccountParams(String account, Params p) {
         return false;
     }
 

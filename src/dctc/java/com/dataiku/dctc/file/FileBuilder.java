@@ -56,7 +56,7 @@ public class FileBuilder {
             Map<String, Params> map = bank.getProtocolCredentials(proto.getCanonicalName());
             if (map != null) {
                 for (Entry<String, Params> e: map.entrySet()) {
-                    failed = proto.builder.validateAccountParams(e.getKey(), e.getValue(), false) || failed;
+                    failed = proto.builder.validateAccountParams(e.getKey(), e.getValue()) || failed;
                 }
             }
         }

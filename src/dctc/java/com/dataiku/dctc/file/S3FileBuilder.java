@@ -18,17 +18,19 @@ public class S3FileBuilder extends ProtocolFileBuilder {
     private Map<String, AmazonS3> builtConnections = new HashMap<String, AmazonS3>();
 
     @Override
-    public boolean validateAccountParams(String account, Params p, boolean fatal) {
-        return checkAllowedOnly(account, p, new String[]{"access_key", "secret_key", "default_path"}, fatal)
-            ||     checkMandatory(account, p, "access_key", fatal)
-            ||checkMandatory(account, p, "secret_key", fatal);
+    public boolean validateAccountParams(String account, Params p) {
+        return checkAllowedOnly(account, p, new String[]{"access_key", "secret_key", "default_path"})
+            ||     checkMandatory(account, p, "access_key")
+            ||checkMandatory(account, p, "secret_key");
     }
 
     @Override
     public synchronized GeneralizedFile buildFile(String accountSettings, String rawPath) {
         String accountName = bank.getResolvedAccountName(getProtocol().getCanonicalName(), accountSettings);
         Params p = bank.getAccountParams(getProtocol().getCanonicalName(), accountSettings);
-        validateAccountParams(accountSettings, p, true);
+        if (validateAccountParams(accountSettings, p)) {
+            throw invalidAccountSettings(accountSettings);
+        }
 
         AmazonS3 s3 = builtConnections.get(accountName);
         if (s3 == null) {
