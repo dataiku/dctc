@@ -1,6 +1,14 @@
 package com.dataiku.dip.utils;
 
 public class PrettyString {
+    // Helper for display
+    public static boolean isInteractif() {
+        return System.console() != null;
+    }
+    public static boolean displayWithColor() {
+        return isInteractif() || System.getenv("CLICOLOR_FORCE") != null;
+    }
+
     public static String quoted(Object msg) {
         return "\"" + msg.toString() + "\"";
     }

@@ -1,6 +1,6 @@
 package com.dataiku.dctc.display;
 
-import com.dataiku.dctc.configuration.GlobalConf;
+import com.dataiku.dip.utils.PrettyString;
 
 public class DisplayFactory {
     public DisplayFactory(String type) {
@@ -14,7 +14,7 @@ public class DisplayFactory {
         if (type == null) type = "auto";
         if (type.equals("simple")) {
             return new SimpleDisplay();
-        } else if (type.equals("list")  || !GlobalConf.isInteractif()) {
+        } else if (type.equals("list")  || !PrettyString.isInteractif()) {
             return new ListDisplay();
         } else if (type.equals("tty-pretty")) {
             return new LessSimpleDisplay();

@@ -20,6 +20,7 @@ import com.dataiku.dctc.file.Acl;
 import com.dataiku.dctc.file.FileManipulation;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
+import com.dataiku.dip.utils.PrettyString;
 
 public class Ls extends Command {
     public String tagline() {
@@ -400,7 +401,7 @@ public class Ls extends Command {
     }
     public boolean columnPrint() {
         if (columnPrint == null) {
-            columnPrint = hasOption("1") || !GlobalConf.isInteractif();
+            columnPrint = hasOption("1") || !PrettyString.isInteractif();
         }
         return columnPrint;
     }
@@ -540,7 +541,7 @@ public class Ls extends Command {
     }
     private boolean color() {
         if (colorize == null) {
-            colorize = (GlobalConf.isInteractif() || System.getenv("CLICOLOR_FORCE") != null) &&
+            colorize = (PrettyString.isInteractif() || System.getenv("CLICOLOR_FORCE") != null) &&
                 (hasOption("G"));
         }
         return colorize;

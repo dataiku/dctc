@@ -1,5 +1,6 @@
 package com.dataiku.dctc.configuration;
 
+import com.dataiku.dip.utils.PrettyString;
 import com.jcraft.jsch.UserInfo;
 
 public class SshUserInfo implements UserInfo {
@@ -39,7 +40,7 @@ public class SshUserInfo implements UserInfo {
     }
     @Override
     public boolean promptYesNo(String arg0) {
-        if (GlobalConf.isInteractif()) {
+        if (PrettyString.isInteractif()) {
             System.out.print(arg0.substring(0, arg0.length() - 1) + " (yes/no)? ");
             System.out.flush();
             while (true) {

@@ -1,5 +1,7 @@
 package com.dataiku.dctc.command;
 
+import static com.dataiku.dip.utils.PrettyString.scat;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -15,8 +17,7 @@ import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.GSFile;
 import com.dataiku.dctc.file.S3File;
 import com.dataiku.dip.utils.IndentedWriter;
-
-import static com.dataiku.dip.utils.PrettyString.scat;
+import com.dataiku.dip.utils.PrettyString;
 
 public class AddAccount extends Command {
     public String tagline() {
@@ -35,7 +36,7 @@ public class AddAccount extends Command {
             error("Missing argument: protocol (one of 's3' or 'gs')", 2);
             return;
         }
-        if (!GlobalConf.isInteractif()) {
+        if (!PrettyString.isInteractif()) {
             throw new UserException("add-account requires dctc to run in interactive mode");
         }
 
