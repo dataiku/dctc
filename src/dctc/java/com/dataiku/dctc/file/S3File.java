@@ -426,7 +426,7 @@ public class S3File extends BucketBasedFile {
                 recursiveFileList = new ArrayList<S3ObjectSummary>();
                 try {
                     ListObjectsRequest listRequest = new ListObjectsRequest()
-                        .withBucketName(bucket).withPrefix(path.isEmpty() ? null : path);
+                        .withBucketName(bucket).withPrefix(path.isEmpty() ? path : null);
                     if (!autoRecur) {
                         listRequest.setDelimiter(fileSeparator());
                         dirs = new ArrayList<String>();
