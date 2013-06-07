@@ -400,7 +400,7 @@ public class S3File extends BucketBasedFile {
                 bucketList.add(b.getName());
             }
         } else {
-            if (path.length() > 0) {
+            if (!path.isEmpty()) {
                 // Check if it's a file
                 try {
                     objectMeta = s3.getObjectMetadata(bucket, path);
