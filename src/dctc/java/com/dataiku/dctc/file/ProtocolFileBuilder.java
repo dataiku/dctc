@@ -1,11 +1,10 @@
 package com.dataiku.dctc.file;
 
 import static com.dataiku.dip.utils.PrettyString.eol;
+import static com.dataiku.dip.utils.PrettyString.quoted;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
 
 import com.dataiku.dctc.configuration.CredentialProviderBank;
 import com.dataiku.dctc.exception.UserException;
@@ -21,11 +20,14 @@ public abstract class ProtocolFileBuilder {
         Set<String> allowedSet = Sets.newHashSet(allowed);
         for (String key : p.getAll().keySet()) {
             if (!allowedSet.contains(key)) {
-                sb.append(String.format("For protocol %s and %s, parameter '%s' is not recognized." +
-                                        " Valid parameters are: %s", getProtocol().getCanonicalName(),
-                                        account == null ? "default account" : "account " + account, key,
-                                        StringUtils.join(allowed, ", ")));
-                sb.append(eol());
+                sb.append(scat("For protocol"
+                               , getProtocol().getCanonicalName()
+                               , "and"
+                               , (account == null ? "default account" : "account " + account) + ","
+                               , "parameter"
+                               , quoted(key)
+                               , "is not recognized."
+                               , eol()));
                 failed = true;
             }
         }
@@ -35,9 +37,9 @@ public abstract class ProtocolFileBuilder {
     }
     protected boolean checkMandatory(String account, Params p, String key) {
         if (!p.hasParam(key) || p.getParamOrEmpty(key).isEmpty()) {
-            System.err.println(scat("For protocol", getProtocol().getCanonicalName(),
-                                    "and", (account == null ? "default account" : "account" + account),
-                                    "parameter", key, "is mandatory"));
+            System.err.println(scat("For protocol", getProtocol().getCanonicalName()
+                                    , "and", (account == null ? "default account" : "account" + account)
+                                    , "parameter", key, "is mandatory"));
             return true;
         }
         return false;
@@ -58,10 +60,10 @@ public abstract class ProtocolFileBuilder {
         return FileManipulation.concat(defaultPath, protocolData, fileSeparator());
     }
     protected UserException invalidAccountSettings(String account) {
-        return new UserException(scat("For the protocol", getProtocol(),
-                                      "and the",
-                                      (account == null ? "default account" : account + "account"),
-                                      "one or more parameters are incorrect"));
+        return new UserException(scat("For the protocol", getProtocol()
+                                      , "and the"
+                                      , (account == null ? "default account" : account + "account")
+                                      , "one or more parameters are incorrect"));
     }
 
     // Abstract
