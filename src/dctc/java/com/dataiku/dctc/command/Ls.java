@@ -17,6 +17,7 @@ import com.dataiku.dctc.Globbing;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.display.Size;
 import com.dataiku.dctc.file.Acl;
+import com.dataiku.dctc.file.BucketBasedFile;
 import com.dataiku.dctc.file.FileManipulation;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
@@ -46,6 +47,7 @@ public class Ls extends Command {
     }
     @Override
     public void perform(List<GeneralizedFile> args) {
+        optimizeBucketRecursion(recursion());
         try {
             for (int i = 0; i < args.size(); ++i) {
                 if (!args.get(i).exists()) {
@@ -59,14 +61,19 @@ public class Ls extends Command {
             if (sort()) {
                 Collections.sort(args);
             }
+
             if (recursion()) {
                 recursivePerform(args);
-            } else {
+            }
+            else {
                 nonRecursivePerform(args);
             }
         } catch (IOException e) {
             errorWithHandlingOfKnownExceptions(null, "", e, 2);
         }
+    }
+    private void optimizeBucketRecursion(boolean recursion) {
+        BucketBasedFile.autoRecursion(recursion);
     }
 
     public void recursivePerform(List<GeneralizedFile> args) throws IOException {
