@@ -57,6 +57,12 @@ public abstract class BucketBasedFile extends AbstractGFile {
         return true;
     }
 
+    public static void autoRecursion(boolean autoRecursion) {
+        // If false, the implementation should limit the listing to the
+        // current depth of the directory hierarchy.
+        autoRecur = autoRecursion;
+    }
+
     // protected
     protected boolean contains(List<? extends BucketBasedFile> l, String path) {
         for (BucketBasedFile file: l) {
@@ -80,4 +86,5 @@ public abstract class BucketBasedFile extends AbstractGFile {
     protected Type type = Type.UNRESOLVED;
     protected String bucket;
     protected String path;
+    protected static boolean autoRecur = true;
 }
