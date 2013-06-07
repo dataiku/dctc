@@ -130,7 +130,8 @@ public class S3File extends BucketBasedFile {
             for (S3ObjectSummary f: recursiveFileList) {
                 if (FileManipulation.isDirectSon(path, f.getKey(), fileSeparator())) {
                     glist.add(new S3File(f, s3));
-                } else {
+                }
+                else {
                     String directSon = FileManipulation.getDirectSon(path, f.getKey(), fileSeparator());
                     String son = "/" + bucket + "/" + directSon;
                     boolean br = false;
@@ -448,7 +449,7 @@ public class S3File extends BucketBasedFile {
                             break;
                         }
                     }
-                    if (recursiveFileList.size() == 0) {
+                    if (recursiveFileList.size() == 0 && (dirs == null && dirs.size() == 0)) {
                         type = Type.NOT_FOUND;
                         S3File root = new S3File("", s3);
                         for (S3File s3Bucket: root.glist()) {
