@@ -21,12 +21,12 @@ public class Grep extends Command {
         return "Match content within files.";
     }
     public void longDescription(IndentedWriter printer) {
-        printer.print(scat("Search the pattern in input files and outputs the lines that match."
-                           ,"The pattern is handled as a non-anchored regular expression."));
-        printer.print(scat("dctc grep only offers a tiny subset of the capabilities of"
-                           ,"POSIX or GNU grep. It is intended as a fallback for systems that"
-                           ,"do not offer a native grep (eg, Microsoft Windows). For UNIX"
-                           ,"systems, use dctc cat|grep"));
+        printer.paragraph(scat("Search the pattern in input files and outputs the lines that match."
+                               ,"The pattern is handled as a non-anchored regular expression.")
+                          ,scat("dctc grep only offers a tiny subset of the capabilities of"
+                                ,"POSIX or GNU grep. It is intended as a fallback for systems that"
+                                ,"do not offer a native grep (eg, Microsoft Windows). For UNIX"
+                                ,"systems, use dctc cat|grep"));
     }
 
     protected Options setOptions() {

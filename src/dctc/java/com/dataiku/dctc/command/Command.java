@@ -144,8 +144,8 @@ public abstract class Command {
     protected void setExitCode(int exitCode) {
         this.exitCode = Math.max(exitCode, this.exitCode);
     }
-    
-    
+
+
     protected void error(String msg, int exitCode) {
         DCTCLog.error(cmdname(), msg);
         setExitCode(exitCode);
@@ -160,7 +160,7 @@ public abstract class Command {
     protected void error(String fileName, String msg, int errorCode) {
         error("`" + fileName + "': " + msg, errorCode);
     }
-    
+
     protected void errorWithHandlingOfKnownExceptions(String fileName, String msg, Throwable exception, int exitCode) {
         msg = (fileName == null ? msg :  ("`" + fileName + "': " + msg));
         if (exception instanceof UnknownHostException) {
@@ -169,14 +169,14 @@ public abstract class Command {
             error(msg, exception, exitCode);
         }
     }
-    
+
     protected void warn(String msg) {
         error(msg, 0);
     }
     protected void warn(String msg, Throwable exception) {
         error(msg, exception, 0);
     }
-    
+
     protected GeneralizedFile build(String path) {
         return getFileBuilder().buildFile(path);
     }

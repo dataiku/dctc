@@ -26,10 +26,10 @@ public class Cp extends ListCommand {
         return "Copy files and directories";
     }
     public void longDescription(IndentedWriter printer) {
-        printer.print(scat("Copy all sources to the target. Target is create as"
-                           ," a folder if the are several sources or the source is a folder."));
-        printer.print(scat("Dctc cp can compress or uncompress GZip-compressed inputs and outputs."
-                           ,"Dctc cp can also be used to create or expand Zip archives."));
+        printer.paragraph(scat("Copy all sources to the target. Target is create as"
+                               ," a folder if the are several sources or the source is a folder.")
+                          ,scat("Dctc cp can compress or uncompress GZip-compressed inputs and outputs."
+                                ,"Dctc cp can also be used to create or expand Zip archives."));
     }
 
     // Public

@@ -40,16 +40,16 @@ public class Dispatch extends ListCommand {
         return "Dispatches the content of input files to output files";
     }
     public void longDescription(IndentedWriter printer) {
-        printer.print(scat("This command split the input files to output files. Input files are"
-                           ,"split in records based on the specified format."
-                           ,"For each record, the target output file is computed according to"
-                           ,"a dispatch function, and the record is appended to the computed"
-                           ,"output."));
-        printer.print(scat("For example this uses the value of the first column of each line of"
-                           ,"each file in 'input/'. This value becomes the target file name within"
-                           ,"the 'dispatched/' folders:"
-                           ," dctc dispatch inputs/ dispatched/ -function value -column col_0"));
-        printer.print(scat("Dispatch supports delimited files (CSV, TSV)."));
+        printer.paragraph(scat("This command split the input files to output files. Input files are"
+                               ,"split in records based on the specified format."
+                               ,"For each record, the target output file is computed according to"
+                               ,"a dispatch function, and the record is appended to the computed"
+                               ,"output.")
+                          ,scat("For example this uses the value of the first column of each line of"
+                                ,"each file in 'input/'. This value becomes the target file name within"
+                                ,"the 'dispatched/' folders:"
+                                ," dctc dispatch inputs/ dispatched/ -function value -column col_0")
+                          ,scat("Dispatch supports delimited files (CSV, TSV)."));
     }
     @Override
     protected Options setOptions() {

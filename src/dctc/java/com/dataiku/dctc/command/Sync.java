@@ -24,19 +24,19 @@ public class Sync extends Command {
         return "Synchronize incrementally the content of locations";
     }
     public void longDescription(IndentedWriter printer) {
-        printer.print(scat("Synchronize locations. This command will copy all files from"
-                           ,"source to destination in order to have the destination contain"
-                           ,"all source files."));
+        printer.paragraph(scat("Synchronize locations. This command will copy all files from"
+                               ,"source to destination in order to have the destination contain"
+                               ,"all source files.")
 
-        printer.print(scat("Files that are non-existing in destination are always copied. For"
-                           ,"files that already exist in the destination, behaviour depends on the"
-                           ,"-m and -t flags. Without them, files are copied if their size have"
-                           ,"changed"));
-        printer.print(scat("With -t, the modification time is taken into account. WARNING: dctc"
-                           ,"sync does not currently preserve mtimes, so you cannot use -t to"
-                           ,"re-sync already synced folders, it would always recopy all."
-                           ,"With -m, the MD5 hash is computed and files are copied if the MD5 hash"
-                           ,"does not match."));
+                          ,scat("Files that are non-existing in destination are always copied. For"
+                                ,"files that already exist in the destination, behaviour depends on the"
+                                ,"-m and -t flags. Without them, files are copied if their size have"
+                                ,"changed")
+                          ,scat("With -t, the modification time is taken into account. WARNING: dctc"
+                                ,"sync does not currently preserve mtimes, so you cannot use -t to"
+                                ,"re-sync already synced folders, it would always recopy all."
+                                ,"With -m, the MD5 hash is computed and files are copied if the MD5 hash"
+                                ,"does not match."));
     }
 
     // Public
