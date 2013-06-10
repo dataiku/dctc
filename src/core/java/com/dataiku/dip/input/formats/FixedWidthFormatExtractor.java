@@ -37,6 +37,7 @@ public class FixedWidthFormatExtractor extends AbstractFormatExtractor {
             ColumnFactory cf, RowFactory rf, StreamInputSplitProgressListener listener,
             ExtractionLimit limit) throws Exception {
 
+        long totalBytes = 0, nlines = 0;
         while (true) {
             EnrichedInputStream stream = in.nextStream();
             if (stream == null) break;
@@ -49,10 +50,13 @@ public class FixedWidthFormatExtractor extends AbstractFormatExtractor {
             List<Column> headerColumns = null;
 
             try {
-                long nlines = 0;
                 while (true) {
                     String line = br.readLine();
                     if (line == null) break;
+                    if (limit != null) {
+                        if (limit.maxBytes > 0 && limit.maxBytes < totalBytes + cis.getCount()) return false;
+                        if (limit.maxRecords > 0 && limit.maxRecords <= nlines) return false;
+                    }
 
                     if (nlines == skipBefore && parseHeader) {
                         headerColumns = new ArrayList<Column>();
@@ -82,32 +86,32 @@ public class FixedWidthFormatExtractor extends AbstractFormatExtractor {
                         if (nlines > skipBefore + skipAfter) {
                             out.emitRow(r);
                         }
+
                         if (listener != null && nlines++ % 50 == 0) {
                             synchronized (listener) {
                                 listener.setErrorRecords(0);
-                                listener.setReadBytes(cis.getCount());
+                                listener.setReadBytes(totalBytes + cis.getCount());
                                 listener.setReadRecords(nlines);
                             }
                         }
                     }
-
-
                 }
-                out.lastRowEmitted();
                 /* Set the final listener data */
                 if (listener != null) {
                     synchronized (listener) {
                         listener.setErrorRecords(0);
-                        listener.setReadBytes(cis.getCount());
+                        listener.setReadBytes(totalBytes + cis.getCount());
                         listener.setReadRecords(nlines);
                     }
+                    totalBytes += cis.getCount();
                 }
             } finally {
                 br.close();
             }
         }
+        out.lastRowEmitted();
         return true;
     }
 
-    Logger logger = Logger.getLogger("format.fixed");
+    private static Logger logger = Logger.getLogger("dku.format.fixed");
 }

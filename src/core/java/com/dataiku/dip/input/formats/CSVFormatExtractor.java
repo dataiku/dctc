@@ -42,13 +42,6 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
             InputStream is = stream.stream();
             CountingInputStream cis = new CountingInputStream(is);
 
-            /* INCREDIBLY CRUDE HACK TO SET A STATIC FINAL FIELD !! HAHAHA ! */
-            //            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            //            modifiersField.setAccessible(true);
-            //            Field irsField = CSVParser.class.getField("INITIAL_READ_SIZE");
-            //            modifiersField.setInt(irsField, irsField.getModifiers() & ~Modifier.FINAL);
-            //            irsField.set(null, 2048);
-
             CSVReader reader = null;
             if (conf.escapeChar != null) {
                 reader = new CSVReader(new InputStreamReader(cis, conf.charset), conf.separator,
@@ -94,8 +87,8 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                     String[] line = reader.readNext();
                     if (line == null) break;
                     if (limit != null) {
-                        if (limit.maxBytes > 0 && limit.maxBytes < cis.getCount()) return false;
-                        if (limit.maxRecords > 0 && limit.maxRecords < nlines) return false;
+                        if (limit.maxBytes > 0 && limit.maxBytes < totalBytes + cis.getCount()) return false;
+                        if (limit.maxRecords > 0 && limit.maxRecords <= nlines) return false;
                     }
 
                     if (columns.size() > 0 && line.length != columns.size()) {
@@ -134,7 +127,7 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                     }
                     out.emitRow(r);
 
-                    if (nlines++ % 2000 == 0) {
+                    if (nlines++ % 10000 == 0) {
                         Runtime runtime = Runtime.getRuntime();
                         double p = ((double) runtime.totalMemory()) / runtime.maxMemory() * 100;
                         logger.info("CSV Emitted " + nlines + " lines-  " + columns.size() + " columns - interned: " + nintern + " MEM: "
@@ -167,5 +160,5 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
         return true;
     }
 
-    Logger logger = Logger.getLogger("csv");
+    private static Logger logger = Logger.getLogger("dku.format.csv");
 }

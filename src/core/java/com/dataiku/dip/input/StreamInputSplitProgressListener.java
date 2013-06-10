@@ -12,4 +12,10 @@ public class StreamInputSplitProgressListener extends InputSplitProgressListener
     public synchronized long getReadBytes() {
         return readBytes;
     }
+    
+    public synchronized void setData(long readBytes, long readRecords, long errorRecords) {
+        this.readBytes = readBytes;
+        this.readRecords = readRecords;
+        this.errorRecords = errorRecords;
+    }
 }
