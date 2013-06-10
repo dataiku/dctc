@@ -172,26 +172,48 @@ public class DateFormatGuesser {
         for (FormatChunk root : roots) {
             collect(candidates, "", root);
         }
+        
+        /* Manually add some unsplitted formats */
+        if (observation.length() == 8 && StringUtils.isNumeric(observation)) {
+            int first= Integer.parseInt(observation.substring(0, 4));
+            int second = Integer.parseInt(observation.substring(4, 6));
+            int third = Integer.parseInt(observation.substring(6, 8));
+            
+            if (first < 3000 && second <= 12 && third <= 31) {
+                candidates.add("yyyyMMdd");
+            }
+            if (first < 3000 && second <= 31 && third <= 12) {
+                candidates.add("yyyyddMM");
+            }
+        }
+        
+        
         for (String candidate : candidates) {
             DetectedFormat df = formats.get(candidate);
             if (df == null) {
-                df = new DetectedFormat();
-                df.format = candidate;
-                System.out.println(candidate.indexOf("dd"));
-                System.out.println(candidate.indexOf("HH"));
-
-                if (candidate.equals("EEE, dd MMM yyyy HH:mm:ss Z")) {
-                    df.trust = 2;
-                } else if (isBefore(candidate, "HH", "dd") || hasAAndNotB(candidate, "HH", "dd")) {
-                    df.trust = 0;
-                } else {
-                    df.trust = 1;
-                }
+                df = createDetectedFormat(candidate);
                 formats.put(candidate, df);
             }
             df.nbOK++;
             System.out.println("CAND " + candidate);
         }
+    }
+
+    private DetectedFormat createDetectedFormat(String candidate) {
+        DetectedFormat df = new DetectedFormat();
+        df.format = candidate;
+        System.out.println(candidate.indexOf("dd"));
+        System.out.println(candidate.indexOf("HH"));
+
+        if (candidate.equals("EEE, dd MMM yyyy HH:mm:ss Z")) {
+            df.trust = 2;
+        } else if (isBefore(candidate, "HH", "dd") || hasAAndNotB(candidate, "HH", "dd") ||
+                  hasAAndNotB(candidate, "yyyy", "dd") || hasAAndNotB(candidate, "yyyy", "MM")) {
+            df.trust = 0;
+        } else {
+            df.trust = 1;
+        }
+        return df;
     }
 
     private static boolean isBefore(String candidate, String a, String b) {
