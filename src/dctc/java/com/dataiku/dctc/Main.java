@@ -55,7 +55,7 @@ public class Main {
         }
         len += 2;
         for (Command cmd: cmds.values()) {
-            System.out.print(scat("  -", "dctc", cmd.cmdname()));
+            System.out.print(scat("  -", cmd.cmdname()));
             indent(" ", len - cmd.cmdname().length());
             System.out.println(cmd.tagline());
         }
