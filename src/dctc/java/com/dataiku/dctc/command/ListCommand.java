@@ -110,9 +110,9 @@ public abstract class ListCommand extends Command {
 
             if (source.isDirectory()) {
                 if (recursion(source)) {
-                    List<? extends GeneralizedFile> subfiles;
+                    List<GeneralizedFile> subfiles;
                     try {
-                        subfiles = source.grecursiveList();
+                        subfiles = (List<GeneralizedFile>) source.grecursiveList();
                     } catch (IOException e) {
                         error(e.getMessage(), 1);
                         continue;
