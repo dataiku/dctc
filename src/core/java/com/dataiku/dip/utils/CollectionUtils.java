@@ -1,7 +1,9 @@
 package com.dataiku.dip.utils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class CollectionUtils {
     public static <T> T getMapOnlyValue(Map<? extends Object, T> map) {
@@ -27,5 +29,12 @@ public class CollectionUtils {
         public Map<String, String> get() {
             return map;
         }
+    }
+    
+    public static <T> void setAddAll(Set<T> set, T[] array) {
+        for (T t : array) set.add(t);
+    }
+    public static <T> void listAddAll(List<T> list, T[] array) {
+        for (T t : array) list.add(t);
     }
 }
