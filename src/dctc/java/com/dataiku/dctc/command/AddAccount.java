@@ -59,6 +59,10 @@ public class AddAccount extends Command {
             }
         }
         if (account == null) {
+            System.err.println("You haven't enter an account name.");
+            account = Interactive.askString("Please enter the account name: ");
+        }
+        if (account == null) {
             account = "default_account";
         }
 
