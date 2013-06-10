@@ -260,6 +260,7 @@ public class SshFile extends AbstractGFile {
     public List<SshFile> grecursiveList() throws IOException {
         if (recursiveList == null) {
             recursiveList = new ArrayList<SshFile>();
+            recursiveList.add(this);
             String path = this.path.replaceAll("'", "\\'");
             path = FileManipulation.trimEnd(path, "/");
             path = path.replaceAll("#", "\\#");
