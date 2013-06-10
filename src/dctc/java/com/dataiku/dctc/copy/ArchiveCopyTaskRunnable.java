@@ -16,7 +16,6 @@ public class ArchiveCopyTaskRunnable extends CopyTaskRunnable {
         this.entry = entry;
     }
     public void work() throws IOException {
-        assert !task.dstDir.isDirectory();
         if (task.src.isDirectory()) {
             return;
         }
