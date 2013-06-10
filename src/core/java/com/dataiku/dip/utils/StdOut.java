@@ -21,14 +21,8 @@ public class StdOut extends PrintStream {
     }
     @Override
     public void print(String msg) {
-        int index = msg.indexOf("\n");
-
-        if (index != -1) {
-            sb.append(msg);
-            flush();
-        } else {
-            sb.append(msg);
-        }
+        sb.append(msg);
+        flushIfNeeded();
     }
     @Override
     public void flush() {
@@ -92,18 +86,22 @@ public class StdOut extends PrintStream {
     @Override
     public void print(double d) {
         sb.append(d);
+        flushIfNeeded();
     }
     @Override
     public void print(float f) {
         sb.append(f);
+        flushIfNeeded();
     }
     @Override
     public void print(int i) {
         sb.append(i);
+        flushIfNeeded();
     }
     @Override
     public void print(long l) {
         sb.append(l);
+        flushIfNeeded();
     }
     @Override
     public void print(Object obj) {
@@ -152,7 +150,7 @@ public class StdOut extends PrintStream {
     }
     @Override
     public void write(byte[] buf, int off, int len) {
-        boolean flush = false;
+        boolean flush = autoFlush;
         for (int i = 0; i < len; ++i) {
             sb.append((char) buf[i + off]);
             flush = flush || buf[i + off] == '\n';
@@ -167,12 +165,20 @@ public class StdOut extends PrintStream {
         flushIfNeeded();
     }
     public void flushIfNeeded() {
-        if (sb.toString().indexOf(System.getProperty("line.separator")) != -1) {
+        if (autoFlush || sb.toString().indexOf(System.getProperty("line.separator")) != -1) {
             flush();
         }
+    }
+
+    public void setAutoFlush(boolean autoFlush) {
+        this.autoFlush = autoFlush;
+    }
+    public boolean getAutoFlush() {
+        return autoFlush;
     }
 
     // Attributes
     private StringBuilder sb = new StringBuilder();
     private PrintStream out;
+    private boolean autoFlush = false;
 }
