@@ -32,6 +32,18 @@ public class IndentedWriter {
         }
         System.out.flush();
     }
+    public void paragraph(String... messages) {
+        boolean nl = false;
+        for (String msg: messages) {
+            if (nl) {
+                System.err.println();
+            }
+            else {
+                nl = true;
+            }
+            print(msg);
+        }
+    }
 
 
     // Getterrs/Setters
