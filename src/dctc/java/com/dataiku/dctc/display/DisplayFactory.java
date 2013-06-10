@@ -14,18 +14,25 @@ public class DisplayFactory {
         if (type == null) type = "auto";
         if (type.equals("simple")) {
             return new SimpleDisplay();
-        } else if (type.equals("list")  || !PrettyString.isInteractif()) {
+        }
+        else if (type.equals("list")  || !PrettyString.isInteractif()) {
             return new ListDisplay();
-        } else if (type.equals("tty-pretty")) {
+        }
+        else if (type.equals("tty-pretty")) {
             return new LessSimpleDisplay();
-        } else if (type.equals("pretty") || type.equals("auto")) {
+        }
+        else if (type.equals("pretty") || type.equals("auto")) {
             try {
                 // NCurses is not always available
                 return new NCursesDisplay();
-            } catch (Throwable t) {
+            }
+            catch (Throwable t) {
+                t.printStackTrace();
+                System.err.println(t.getMessage());
                 return new LessSimpleDisplay();
             }
-        } else {
+        }
+        else {
             return new EmptyDisplay();
         }
     }
