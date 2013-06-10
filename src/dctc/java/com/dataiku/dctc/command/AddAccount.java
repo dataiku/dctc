@@ -1,5 +1,6 @@
 package com.dataiku.dctc.command;
 
+import static com.dataiku.dip.utils.PrettyString.eol;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.File;
@@ -18,6 +19,7 @@ import com.dataiku.dctc.file.GSFile;
 import com.dataiku.dctc.file.S3File;
 import com.dataiku.dip.utils.IndentedWriter;
 import com.dataiku.dip.utils.PrettyString;
+import com.dataiku.dip.utils.StdOut;
 
 public class AddAccount extends Command {
     public String tagline() {
@@ -32,8 +34,8 @@ public class AddAccount extends Command {
     public void perform(String[] args) {
         parseCommandLine(args);
         if (args.length == 0) {
+            error("Missing argument: protocol (one of 's3' or 'gs')" + eol(), 2);
             usage();
-            error("Missing argument: protocol (one of 's3' or 'gs')", 2);
             return;
         }
         if (!PrettyString.isInteractif()) {
