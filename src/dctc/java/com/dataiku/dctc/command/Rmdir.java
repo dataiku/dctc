@@ -12,7 +12,7 @@ import static com.dataiku.dip.utils.PrettyString.scat;
 
 public class Rmdir extends Command {
     public String tagline() {
-        return "Remove empty folders";
+        return "Remove empty folders.";
     }
     public void longDescription(IndentedWriter printer) {
         printer.print(scat("Remove empty folders. If the target folder is not empty,"

@@ -37,7 +37,7 @@ import static com.dataiku.dip.utils.PrettyString.scat;
  */
 public class Dispatch extends ListCommand {
     public String tagline() {
-        return "Dispatches the content of input files to output files";
+        return "Dispatches the content of input files to output files.";
     }
     public void longDescription(IndentedWriter printer) {
         printer.paragraph(scat("This command split the input files to output files. Input files are"

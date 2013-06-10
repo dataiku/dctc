@@ -12,7 +12,7 @@ import com.dataiku.dip.utils.IndentedWriter;
 
 public class Find extends Command {
     public String tagline() {
-        return "Recursively list the content of a location";
+        return "Recursively list the content of a location.";
     }
     public void longDescription(IndentedWriter printer) {
         printer.print("Output contains one line per file, with its absolute address");

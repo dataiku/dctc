@@ -23,7 +23,7 @@ import static com.dataiku.dip.utils.PrettyString.scat;
  */
 public class Cp extends ListCommand {
     public String tagline() {
-        return "Copy files and directories";
+        return "Copy files and directories.";
     }
     public void longDescription(IndentedWriter printer) {
         printer.paragraph(scat("Copy all sources to the target. Target is create as"

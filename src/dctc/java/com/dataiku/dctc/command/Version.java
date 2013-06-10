@@ -6,7 +6,7 @@ import com.dataiku.dip.utils.IndentedWriter;
 
 public class Version extends Command {
     public String tagline() {
-        return "Show DCTC version";
+        return "Show DCTC version.";
     }
     public void longDescription(IndentedWriter printer) {
         printer.print("Show the version of DCTC");

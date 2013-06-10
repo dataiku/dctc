@@ -13,7 +13,7 @@ import static com.dataiku.dip.utils.PrettyString.scat;
 
 public class Rm extends Command {
     public String tagline() {
-        return "Remove files and folders";
+        return "Remove files and folders.";
     }
     public void longDescription(IndentedWriter printer) {
         printer.print(scat("Remove files and folders. By default, it will refuse to remove"

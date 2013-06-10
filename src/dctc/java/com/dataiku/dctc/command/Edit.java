@@ -21,7 +21,7 @@ import static com.dataiku.dip.utils.PrettyString.scat;
 
 public class Edit extends Command {
     public String tagline() {
-        return "Edit a remote file";
+        return "Edit a remote file.";
     }
     public void longDescription(IndentedWriter printer) {
         printer.print(scat("The file is downloaded, an editor is opened, and if the file was"

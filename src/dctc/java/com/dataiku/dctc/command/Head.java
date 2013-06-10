@@ -17,7 +17,7 @@ import com.dataiku.dip.utils.IndentedWriter;
 
 public class Head extends Command {
     public String tagline() {
-        return "Output the beginning of files";
+        return "Output the beginning of files.";
     }
     public void longDescription(IndentedWriter printer) {
         printer.print("Output the first N lines of the input files");

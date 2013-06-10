@@ -25,7 +25,7 @@ import com.dataiku.dip.utils.PrettyString;
 
 public class Ls extends Command {
     public String tagline() {
-        return "List the contents of folders";
+        return "List the contents of folders.";
     }
     public void longDescription(IndentedWriter printer) {
         printer.print("List the contents of folders, with detailed attributes if requested");

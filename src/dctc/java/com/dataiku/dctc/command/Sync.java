@@ -21,7 +21,7 @@ import static com.dataiku.dip.utils.PrettyString.scat;
 
 public class Sync extends Command {
     public String tagline() {
-        return "Synchronize incrementally the content of locations";
+        return "Synchronize incrementally the content of locations.";
     }
     public void longDescription(IndentedWriter printer) {
         printer.paragraph(scat("Synchronize locations. This command will copy all files from"

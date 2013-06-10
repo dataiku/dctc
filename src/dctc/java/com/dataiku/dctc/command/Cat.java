@@ -22,7 +22,7 @@ import static com.dataiku.dip.utils.PrettyString.scat;
  */
 public class Cat extends Command {
     public String tagline() {
-        return "Display the content of one or several files";
+        return "Display the content of one or several files.";
     }
     public void longDescription(IndentedWriter printer) {
         printer.print(scat("Concatenates the content of all input files to standard output."

@@ -16,7 +16,7 @@ import com.dataiku.dip.utils.IndentedWriter;
 
 public class Tail extends Command {
     public String tagline() {
-        return "Output the end of files";
+        return "Output the end of files.";
     }
     public void longDescription(IndentedWriter printer) {
         printer.print("Output the last N lines or bytes of the input files");

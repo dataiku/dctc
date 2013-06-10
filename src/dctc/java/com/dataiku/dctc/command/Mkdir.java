@@ -10,7 +10,7 @@ import com.dataiku.dip.utils.IndentedWriter;
 
 public class Mkdir extends Command {
     public String tagline() {
-        return "Create directories";
+        return "Create directories.";
     }
     public void longDescription(IndentedWriter printer) {
         printer.print("Create directories. Parent directories must exist");

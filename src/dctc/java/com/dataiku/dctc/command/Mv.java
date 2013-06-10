@@ -16,7 +16,7 @@ import com.dataiku.dip.utils.IndentedWriter;
 
 public class Mv extends ListCommand {
     public String tagline() {
-        return "Move files and folders";
+        return "Move files and folders.";
     }
     public void longDescription(IndentedWriter printer) {
         printer.print("Move files and folders to another location.");

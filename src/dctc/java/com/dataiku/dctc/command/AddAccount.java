@@ -23,7 +23,7 @@ import com.dataiku.dip.utils.StdOut;
 
 public class AddAccount extends Command {
     public String tagline() {
-        return "Add an account to the DCTC configuration";
+        return "Add an account to the DCTC configuration.";
     }
     public void longDescription(IndentedWriter printer) {
         printer.print(scat("Add an account to the DCTC file configuration using a command-line wizard."
