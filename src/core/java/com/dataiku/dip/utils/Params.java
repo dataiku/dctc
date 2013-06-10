@@ -70,8 +70,6 @@ public class Params {
         }
     }
 
-    protected String getDescForError() { return ""; }
-
     public Params() {
     }
 
@@ -148,23 +146,33 @@ public class Params {
     }
 
     public String getParam(String name, String defaultValue) {
+       return getParam(name, defaultValue, false);
+    }
+    
+    public String getParam(String name, String defaultValue, boolean translateEmptyToNull) {
         String s = params.get(name);
         if (s == null) return defaultValue;
+        if (translateEmptyToNull && s.isEmpty()) return defaultValue;
         return s;
     }
+    
     public String getParamOrEmpty(String name) {
         return getParam(name, "");
     }
-    // Get a mandatory parameter. Throw an illegal argument exception
-    // if the paramater is non define.
+
+    
+    /**
+     * Get a mandatory parameter. Throws an illegal argument exception
+     * if the parameter is not defined. 
+     */
     public String getMandParam(String name) {
         String s = params.get(name);
-        if (s == null) throw new IllegalArgumentException("Missing param '" + name + " " + getDescForError());
+        if (s == null) throw ErrorContext.iae("Missing param '" + name + "'");
         return s;
     }
     public String getNonEmptyMandParam(String name) {
         String s = getMandParam(name);
-        if (s.isEmpty()) throw new IllegalArgumentException("Empty param '" + name + " " + getDescForError());
+        if (s.isEmpty()) throw ErrorContext.iae("Empty param '" + name + "'");
         return s;
     }
 
@@ -259,8 +267,8 @@ public class Params {
         }
         return s.charAt(0);
     }
-    private IllegalArgumentException exceptSingleChar(String param) {
-        return new IllegalArgumentException("Expected single char in param '" + param + "' for " + getDescForError());
+    private static IllegalArgumentException exceptSingleChar(String param) {
+        return ErrorContext.iae("Expected single char in param '" + param + "'");
     }
 
     /* Get as CSV */
