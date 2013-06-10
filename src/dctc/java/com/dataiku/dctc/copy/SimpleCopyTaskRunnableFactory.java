@@ -23,22 +23,28 @@ public class SimpleCopyTaskRunnableFactory implements CopyTaskRunnableFactory {
                 GeneralizedFile dst = task.dstDir.createSubFile("", task.dstDir.fileSeparator());
                 return new UnarchiveCopyTask(task.src, dst);
             }
-        } else if (archive) {
+        }
+        else if (archive) {
             if (archiveIterable == null) {
-                try {
-                    archiveIterable = ArchiveFactory.buildOutput(task.dstDir);
-                } catch (IOException e) {
-                    System.err.println("dctc DirectCopyFactory: " + e.getMessage());
+                if (task.dstDir.exists() && task.dstDir.isDirectory()) {
+                    archiveIterable = ArchiveFactory.buildOutput(task
+                                                                 .dstDir
+                                                                 .createSubFile(task.dstDir.getFileName()));
                 }
+                else {
+                    archiveIterable = ArchiveFactory.buildOutput(task.dstDir);
+                }
+
                 ite = archiveIterable.iterator();
             }
             return new ArchiveCopyTaskRunnable(task, ite.next());
-        } else {
-            return new DirectCopyTaskRunnable(task.src,
-                                              task.dstDir.createSubFile(task.dstFileName,
-                                                                        task.src.fileSeparator()),
-                                              task.deleteSrc,
-                                              preserveDate);
+        }
+        else {
+            return new DirectCopyTaskRunnable(task.src
+                                              , task.dstDir.createSubFile(task.dstFileName
+                                                                          , task.src.fileSeparator())
+                                              , task.deleteSrc
+                                              , preserveDate);
         }
     }
 
