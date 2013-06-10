@@ -9,6 +9,7 @@ public class Interactive {
         BufferedReader i = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             System.err.print(question);
+            System.err.flush();
             String line;
             try {
                 line = i.readLine();
@@ -28,6 +29,7 @@ public class Interactive {
         BufferedReader i = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             System.err.print(question);
+            System.err.flush();
             String line;
             try {
                 line = i.readLine();
