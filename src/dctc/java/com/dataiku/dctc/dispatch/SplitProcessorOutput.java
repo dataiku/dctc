@@ -1,4 +1,4 @@
-package com.dataiku.dctc.split;
+package com.dataiku.dctc.dispatch;
 
 import com.dataiku.dip.datalayer.ProcessorOutput;
 import com.dataiku.dip.datalayer.Row;

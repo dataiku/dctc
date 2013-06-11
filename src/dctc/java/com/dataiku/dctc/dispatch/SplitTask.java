@@ -1,4 +1,4 @@
-package com.dataiku.dctc.split;
+package com.dataiku.dctc.dispatch;
 
 import java.io.IOException;
 import java.io.InputStream;
