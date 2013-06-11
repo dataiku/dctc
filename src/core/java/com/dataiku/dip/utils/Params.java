@@ -306,7 +306,9 @@ public class Params {
         String[] chunks = v.split(",");
         List<Integer> out = new ArrayList<Integer>();
         for (String s : chunks) {
-            out.add(Integer.parseInt(s));
+            if (!s.isEmpty()) {
+                out.add(Integer.parseInt(s));
+            }
         }
         return out;
     }
