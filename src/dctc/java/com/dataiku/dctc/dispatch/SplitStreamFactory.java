@@ -57,6 +57,7 @@ public class SplitStreamFactory {
     // Called when we see a new file
     protected Output newStream(String splitIndex) throws IOException {
         String fileName = prefix + splitIndex + suffix + (compress ? ".gz" : "");
+        fileName.replaceAll("/", "`_");
         GeneralizedFile out = dir.createSubFile(fileName, dir.fileSeparator());
         out.mkpath();
         System.out.println("CREATE OUT " + out.getAbsoluteAddress());
