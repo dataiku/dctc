@@ -46,10 +46,16 @@ public class FileManipulation {
                       prefixSeparator);
     }
     public static String trimEnd(String str, String c) {
-         return str.replaceAll(c + "+$", "");
+        while (str.endsWith(c)) {
+            str = str.substring(0, str.length() - c.length());
+        }
+        return str;
     }
     public static String trimBegin(String str, String c) {
-        return str.replaceAll("^" + c + "+", "");
+        while (str.startsWith(c)) {
+            str = str.substring(c.length());
+        }
+        return str;
     }
     // This function split the @str string in n parts.
     public static String[] split(String str,
