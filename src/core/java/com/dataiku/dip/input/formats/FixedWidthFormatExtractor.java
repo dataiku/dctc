@@ -19,35 +19,37 @@ import com.dataiku.dip.input.stream.StreamsInputSplit;
 import com.google.common.io.CountingInputStream;
 
 public class FixedWidthFormatExtractor extends AbstractFormatExtractor {
-    public FixedWidthFormatExtractor(List<Integer> columnOffsets, int skipBefore, boolean parseHeader, int skipAfter) {
+    public FixedWidthFormatExtractor(List<Integer> columnOffsets, int skipBefore, boolean parseHeader, int skipAfter, String charset) {
         this.columnOffsets = new int[columnOffsets.size()];
         for (int i = 0; i < columnOffsets.size(); i++) this.columnOffsets[i] = columnOffsets.get(i);
         this.skipBefore = skipBefore;
         this.parseHeader = parseHeader;
         this.skipAfter = skipAfter;
+        this.charset = charset;
     }
 
     private int skipBefore;
     private boolean parseHeader;
     private int skipAfter;
-    int[] columnOffsets;
+    private int[] columnOffsets;
+    private String charset;
 
     @Override
     public boolean run(StreamsInputSplit in, ProcessorOutput out, ProcessorOutput err,
             ColumnFactory cf, RowFactory rf, StreamInputSplitProgressListener listener,
             ExtractionLimit limit) throws Exception {
 
-        long totalBytes = 0, nlines = 0;
+        long totalBytes = 0, totalRecords = 0;
         while (true) {
             EnrichedInputStream stream = in.nextStream();
             if (stream == null) break;
 
             InputStream is = stream.stream();
             CountingInputStream cis = new CountingInputStream(is);
-            // TODO Encoding
-            BufferedReader br  = new BufferedReader(new InputStreamReader(cis, "utf8"));
+            BufferedReader br  = new BufferedReader(new InputStreamReader(cis, charset));
 
             List<Column> headerColumns = null;
+            long fileLines = 0;
 
             try {
                 while (true) {
@@ -55,10 +57,12 @@ public class FixedWidthFormatExtractor extends AbstractFormatExtractor {
                     if (line == null) break;
                     if (limit != null) {
                         if (limit.maxBytes > 0 && limit.maxBytes < totalBytes + cis.getCount()) return false;
-                        if (limit.maxRecords > 0 && limit.maxRecords <= nlines) return false;
+                        if (limit.maxRecords > 0 && limit.maxRecords <= totalRecords) return false;
                     }
 
-                    if (nlines == skipBefore && parseHeader) {
+                    if (fileLines < skipBefore) {
+                        // Skip
+                    } else if (fileLines == skipBefore && parseHeader) {
                         headerColumns = new ArrayList<Column>();
                         for (int colIdx = 0; colIdx < columnOffsets.length; colIdx++) {
                             int begin = columnOffsets[colIdx];
@@ -67,7 +71,6 @@ public class FixedWidthFormatExtractor extends AbstractFormatExtractor {
                             String s = line.substring(begin, end).trim();
                             headerColumns.add(cf.column(s));
                         }
-                        nlines++;
                     } else {
                         Row r = rf.row();
                         for (int colIdx = 0; colIdx < columnOffsets.length; colIdx++) {
@@ -83,30 +86,24 @@ public class FixedWidthFormatExtractor extends AbstractFormatExtractor {
                             String s = line.substring(begin, end).trim();
                             r.put(c, s);
                         }
-                        if (nlines > skipBefore + skipAfter) {
+                        if (fileLines >= skipBefore + skipAfter + (parseHeader?1:0)) {
+                            totalRecords++;
                             out.emitRow(r);
                         }
+                    }
+                    fileLines++;
 
-                        if (listener != null && nlines++ % 50 == 0) {
-                            synchronized (listener) {
-                                listener.setErrorRecords(0);
-                                listener.setReadBytes(totalBytes + cis.getCount());
-                                listener.setReadRecords(nlines);
-                            }
-                        }
+                    if (listener != null && totalRecords++ % 500 == 0) {
+                        listener.setData(totalBytes + cis.getCount(), totalRecords, 0);
                     }
                 }
-                /* Set the final listener data */
+                totalBytes += cis.getCount();
                 if (listener != null) {
-                    synchronized (listener) {
-                        listener.setErrorRecords(0);
-                        listener.setReadBytes(totalBytes + cis.getCount());
-                        listener.setReadRecords(nlines);
-                    }
-                    totalBytes += cis.getCount();
+                    listener.setData(totalBytes, totalRecords, 0);
                 }
             } finally {
                 br.close();
+                cis.close();
             }
         }
         out.lastRowEmitted();

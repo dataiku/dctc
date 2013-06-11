@@ -34,7 +34,8 @@ public class BasicFormatExtractorFactory {
             return new FixedWidthFormatExtractor(offsets,
                        fmt.getParams().getIntParam(AbstractFormatExtractor.PARAM_skipRowsBeforeHeader, 0),
                        fmt.getParams().getBoolParam(AbstractFormatExtractor.PARAM_parseHeaderRow, true),
-                       fmt.getParams().getIntParam(AbstractFormatExtractor.PARAM_skipRowsAfterHeader, 0));
+                       fmt.getParams().getIntParam(AbstractFormatExtractor.PARAM_skipRowsAfterHeader, 0),
+                       fmt.getParams().getParam("charset"));
 
         } else if (fmt.getType().equals("regexp_fields")) {
             RegexpFieldsBuilder rfb = RegexpFieldsBuilderFactory.build(fmt);
@@ -42,7 +43,7 @@ public class BasicFormatExtractorFactory {
             return extractor;
         }
         else if (fmt.getType().equals("line")) {
-            return new LineFormatExtractor();
+            return new LineFormatExtractor(fmt.getParam("charset"));
         }
         else {
             ErrorContext.throwIAE("Unknown format type "+ fmt.getType());
