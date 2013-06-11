@@ -11,7 +11,7 @@ import org.apache.commons.io.IOUtils;
 public abstract class AbstractGFile implements GeneralizedFile {
     @Override
     public final int compareTo(GeneralizedFile arg) {
-        return getAbsoluteAddress().toLowerCase().compareTo(arg.getAbsoluteAddress().toLowerCase());
+        return getAbsoluteAddress().toLowerCase().replaceAll("[^a-z]", "").compareTo(arg.getAbsoluteAddress().toLowerCase().replaceAll("[^a-z]", ""));
     }
     @Override // Should be override for no type lost.
     public List<? extends GeneralizedFile> createInstanceFor(List<String> paths) {
