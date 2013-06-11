@@ -1,5 +1,8 @@
 package com.dataiku.dctc;
 
+import static com.dataiku.dip.utils.PrettyString.nlcat;
+import static com.dataiku.dip.utils.PrettyString.scat;
+
 import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
@@ -19,6 +22,7 @@ import com.dataiku.dctc.command.Edit;
 import com.dataiku.dctc.command.Find;
 import com.dataiku.dctc.command.Grep;
 import com.dataiku.dctc.command.Head;
+import com.dataiku.dctc.command.ListColumns;
 import com.dataiku.dctc.command.Ls;
 import com.dataiku.dctc.command.Mkdir;
 import com.dataiku.dctc.command.Mv;
@@ -30,11 +34,8 @@ import com.dataiku.dctc.command.Version;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.configuration.StructuredConf;
 import com.dataiku.dctc.exception.UserException;
-import com.dataiku.dip.utils.StdOut;
 import com.dataiku.dip.utils.IndentedWriter;
-
-import static com.dataiku.dip.utils.PrettyString.nlcat;
-import static com.dataiku.dip.utils.PrettyString.scat;
+import com.dataiku.dip.utils.StdOut;
 
 public class Main {
     private static void indent(String str, int size) {
@@ -110,6 +111,7 @@ public class Main {
         addCmd(new Find());
         addCmd(new Grep());
         addCmd(new Head());
+        addCmd(new ListColumns());
         addCmd(new Ls());
         addCmd(new Mkdir());
         addCmd(new Mv());
