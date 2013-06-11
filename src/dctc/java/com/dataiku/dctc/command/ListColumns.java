@@ -6,10 +6,10 @@ import java.util.List;
 
 import org.apache.commons.cli.Options;
 
-import com.dataiku.dctc.DevNullProcessorOutput;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dctc.file.GeneralizedFileInputSplit;
 import com.dataiku.dip.datalayer.Column;
+import com.dataiku.dip.datalayer.DevNullProcessorOutput;
 import com.dataiku.dip.datalayer.streamimpl.StreamColumnFactory;
 import com.dataiku.dip.datalayer.streamimpl.StreamRowFactory;
 import com.dataiku.dip.input.Format;
