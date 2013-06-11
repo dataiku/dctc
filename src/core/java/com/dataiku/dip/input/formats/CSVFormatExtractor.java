@@ -30,13 +30,12 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
     public boolean run(StreamsInputSplit in, ProcessorOutput out, ProcessorOutput err,
             ColumnFactory cf, RowFactory rf, StreamInputSplitProgressListener listener,
             ExtractionLimit limit) throws Exception {
-        logger.info("CSV running with separator : '" + conf.separator + "'");
-        
-        long totalBytes = 0, nlines = 0;
+
+        long totalBytes = 0, totalRecords = 0;
         while (true) {
             EnrichedInputStream stream = in.nextStream();
-
             if (stream == null) break;
+
             logger.info("CSV starting to process one stream: " + stream.size());
 
             InputStream is = stream.stream();
@@ -45,112 +44,90 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
             CSVReader reader = null;
             if (conf.escapeChar != null) {
                 reader = new CSVReader(new InputStreamReader(cis, conf.charset), conf.separator,
-                    conf.quoteChar, conf.escapeChar);
+                        conf.quoteChar, conf.escapeChar);
             } else {
                 reader = new CSVReader(new InputStreamReader(cis, conf.charset), conf.separator,
                         conf.quoteChar);
-                
             }
             try {
                 List<Column> columns = new ArrayList<Column>();
-                for (int i = 0; i < conf.skipRowsBeforeHeader; i++) {
-                    String[] line = reader.readNext();
-                    if (line == null) {
-                        out.lastRowEmitted();
-                        break;
-                    }
-                }
-                if (conf.parseHeaderRow) {
-                    String[] line = reader.readNext();
-                    if (line == null) {
-                        out.lastRowEmitted();
-                    }
-                    if (line[0].startsWith("#")) {
-                        line[0] = line[0].substring(1);
-                    }
-                    for (String ch : line) {
-                        ch = ch.trim();
-                        Column cd = cf.column(ch);
-                        columns.add(cd);
-                    }
-                }
-                for (int i = 0; i < conf.skipRowsAfterHeader; i++) {
-                    String[] line = reader.readNext();
-                    if (line == null) {
-                        out.lastRowEmitted();
-                        break;
-                    }
-                }
+                long fileLines = 0, nintern = 0;
 
-                long nintern = 0;
-                while (true) {
+                while (true){
                     String[] line = reader.readNext();
                     if (line == null) break;
                     if (limit != null) {
                         if (limit.maxBytes > 0 && limit.maxBytes < totalBytes + cis.getCount()) return false;
-                        if (limit.maxRecords > 0 && limit.maxRecords <= nlines) return false;
+                        if (limit.maxRecords > 0 && limit.maxRecords <= totalRecords) return false;
                     }
 
-                    if (columns.size() > 0 && line.length != columns.size()) {
-//                        logger.info("Line has a changing number of columns, line has " + line.length + " columns, but I have " + columns.size());
-                    }
-
-                    if (line.length > columns.size()) {
-                        for (int i = columns.size() ; i < line.length; i++) {
-                            String name = null;
-                            if (schema() != null && schema().getColumns().size() > i) {
-                                name = schema().getColumns().get(i).getName();
-                            } else {
-                                name = "col_" + i;
-                            }
-                            Column cd = cf.column(name);
+                    if (fileLines < conf.skipRowsBeforeHeader) {
+                        // Do nothing
+                    } else if (fileLines == conf.skipRowsBeforeHeader && conf.parseHeaderRow) {
+                        if (line[0].startsWith("#")) {
+                            line[0] = line[0].substring(1);
+                        }
+                        for (String ch : line) {
+                            ch = ch.trim();
+                            Column cd = cf.column(ch);
                             columns.add(cd);
                         }
-                    }
-                    Row r = rf.row();
-                    for (int i = 0; i < line.length; i++) {
-                        line[i] = line[i].trim();  // trim returns a reference and does not reallocate if there is no whitespace to trim
-                        if (line[i].length() > 1000) {
-                            System.out.println("LARGE :" + line[i]);
+                    } else {
+                        if (columns.size() > 0 && line.length != columns.size() && Math.abs(line.length - columns.size()) > 2) {
+                            logger.info("Line has an unexpected number of columns, line has " + line.length +
+                                    " columns, extractor has " + columns.size());
                         }
-                        String s = line[i];
 
-                        /* Replace common strings by their intern versions */
-                        if (s.equals("null")) { s = "null"; ++nintern; }
-                        else if (s.equals("true")) { s = "true"; ++nintern; }
-                        else if (s.equals("false")) { s = "false"; ++nintern; }
-                        else if (s.equals("Y")) { s = "Y"; ++nintern; }
-                        else if (s.equals("N")) { s = "N"; ++nintern; }
-                        else if (s.equals("0")) { s = "0"; ++nintern; }
-
-                        r.put(columns.get(i), s);
-                    }
-                    out.emitRow(r);
-
-                    if (nlines++ % 10000 == 0) {
-                        Runtime runtime = Runtime.getRuntime();
-                        double p = ((double) runtime.totalMemory()) / runtime.maxMemory() * 100;
-                        logger.info("CSV Emitted " + nlines + " lines-  " + columns.size() + " columns - interned: " + nintern + " MEM: "
-                                + p + "%");
-                    }
-
-                    if (listener != null && nlines % 500 == 0) {
-                        synchronized (listener) {
-                            //logger.info("Setting listener " + (totalBytes + cis.getCount()));
-                            listener.setErrorRecords(0);
-                            listener.setReadBytes(totalBytes + cis.getCount());
-                            listener.setReadRecords(nlines);
+                        if (line.length > columns.size()) {
+                            for (int i = columns.size() ; i < line.length; i++) {
+                                String name = null;
+                                if (schema() != null && schema().getColumns().size() > i) {
+                                    name = schema().getColumns().get(i).getName();
+                                } else {
+                                    name = "col_" + i;
+                                }
+                                Column cd = cf.column(name);
+                                columns.add(cd);
+                            }
                         }
+                        Row r = rf.row();
+                        for (int i = 0; i < line.length; i++) {
+                            line[i] = line[i].trim();  // trim returns a reference and does not reallocate if there is no whitespace to trim
+                            if (line[i].length() > 3000) {
+                                logger.info("Unusually large column (quoting issue ?) : " + line[i]);
+                            }
+                            String s = line[i];
+
+                            /* Replace common strings by their intern versions */
+                            if (s.equals("null")) { s = "null"; ++nintern; }
+                            else if (s.equals("true")) { s = "true"; ++nintern; }
+                            else if (s.equals("false")) { s = "false"; ++nintern; }
+                            else if (s.equals("Y")) { s = "Y"; ++nintern; }
+                            else if (s.equals("N")) { s = "N"; ++nintern; }
+                            else if (s.equals("0")) { s = "0"; ++nintern; }
+
+                            r.put(columns.get(i), s);
+                        }
+                        if (fileLines >= conf.skipRowsBeforeHeader + conf.skipRowsAfterHeader+ (conf.parseHeaderRow?1:0)) {
+                            totalRecords++;
+                            out.emitRow(r);
+                        }
+                    }
+                    fileLines++;
+
+                    if (listener != null && totalRecords % 500 == 0) {
+                        if (totalRecords % 5000 == 0) {
+                            Runtime runtime = Runtime.getRuntime();
+                            double p = ((double) runtime.totalMemory()) / runtime.maxMemory() * 100;
+                            logger.info("CSV Emitted " + fileLines + " lines from file, " + totalRecords + " total, " +
+                                    columns.size() + " columns - interned: " + nintern + " MEM: " + p + "%");
+                        }
+                        listener.setData(totalBytes + cis.getCount(), totalRecords, 0);
                     }
                 }
-                /* Set the final listener data */
+                totalBytes += cis.getCount();
                 if (listener != null) {
-                    synchronized (listener) {
-                        listener.setErrorRecords(0);
-                        listener.setReadBytes(totalBytes + cis.getCount());
-                        listener.setReadRecords(nlines);
-                    }
-                    totalBytes += cis.getCount();
+                    listener.setData(totalBytes, totalRecords, 0);
                 }
             } finally {
                 reader.close();

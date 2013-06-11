@@ -48,10 +48,9 @@ public class FixedWidthFormatExtractor extends AbstractFormatExtractor {
             CountingInputStream cis = new CountingInputStream(is);
             BufferedReader br  = new BufferedReader(new InputStreamReader(cis, charset));
 
-            List<Column> headerColumns = null;
-            long fileLines = 0;
-
             try {
+                List<Column> headerColumns = null;
+                long fileLines = 0;
                 while (true) {
                     String line = br.readLine();
                     if (line == null) break;
