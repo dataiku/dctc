@@ -198,8 +198,12 @@ public class LocalFile extends AbstractGFile {
     }
     @Override
     public boolean directMove(GeneralizedFile ginput) throws IOException {
-        // Possible, but hide the copy to the listener.
-        return false;
+        if (!(ginput instanceof LocalFile)) {
+            return false;
+        }
+        LocalFile input = (LocalFile) ginput;
+        f.renameTo(input.f);
+        return true;
     }
     @Override
     public boolean delete() {
