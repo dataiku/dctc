@@ -37,6 +37,10 @@ public class GlobbingTest {
         assertTrue(Globbing.match("[a-]", "a"));
         assertTrue(Globbing.match("[-a]", "a"));
         assertTrue(Globbing.match("[-a]", "-"));
+        assertTrue(Globbing.match("[][-]", "-"));
+        assertTrue(Globbing.match("[][-]", "]"));
+        assertTrue(Globbing.match("[][-]", "["));
+        assertFalse(Globbing.match("[][-]", "\\"));
         assertFalse(Globbing.match("[!a-c]", "a"));
         assertFalse(Globbing.match("[!a-c]", "b"));
         assertFalse(Globbing.match("[!a-c]", "c"));
