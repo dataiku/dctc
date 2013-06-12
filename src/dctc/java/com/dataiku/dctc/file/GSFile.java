@@ -34,7 +34,6 @@ import com.google.api.services.storage.model.Bucket;
 import com.google.api.services.storage.model.Buckets;
 import com.google.api.services.storage.model.Objects;
 import com.google.api.services.storage.model.StorageObject;
-import com.google.common.primitives.UnsignedLong;
 
 public class GSFile extends BucketBasedFile {
     // Constructors
@@ -45,6 +44,7 @@ public class GSFile extends BucketBasedFile {
         this.bucket = split[0];
         this.path = split[1];
     }
+    @SuppressWarnings("deprecation")
     public GSFile(String userMail, String keyPath, String path) {
         super(false);
         __init(userMail, keyPath, path);
@@ -387,7 +387,7 @@ public class GSFile extends BucketBasedFile {
                 type = Type.ROOT;
                 /* List the buckets */
                 String projectId = userMail.substring(0, Math.min(userMail.indexOf("@"), userMail.indexOf("-") > 0 ? userMail.indexOf("-") : Integer.MAX_VALUE));
-                UnsignedLong ul = UnsignedLong.asUnsigned(Long.parseLong(projectId));
+                // UnsignedLong ul = UnsignedLong.asUnsigned(Long.parseLong(projectId));
                 Buckets bucketsObj = storage.buckets().list(projectId).execute();
                 bucketsList = new ArrayList<String>();
                 for (Bucket bucket : bucketsObj.getItems()) {

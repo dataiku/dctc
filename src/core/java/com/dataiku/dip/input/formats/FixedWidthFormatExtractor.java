@@ -6,8 +6,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import com.dataiku.dip.datalayer.Column;
 import com.dataiku.dip.datalayer.ColumnFactory;
 import com.dataiku.dip.datalayer.ProcessorOutput;
@@ -109,5 +107,5 @@ public class FixedWidthFormatExtractor extends AbstractFormatExtractor {
         return true;
     }
 
-    private static Logger logger = Logger.getLogger("dku.format.fixed");
+    // private static Logger logger = Logger.getLogger("dku.format.fixed");
 }

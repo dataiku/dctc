@@ -97,6 +97,7 @@ public class DKULogger extends Logger {
         return delegate.getAppender(name);
     }
 
+    @SuppressWarnings("deprecation")
     public Priority getChainedPriority() {
         return delegate.getChainedPriority();
     }
@@ -105,6 +106,7 @@ public class DKULogger extends Logger {
         return delegate.getEffectiveLevel();
     }
 
+    @SuppressWarnings("deprecation")
     public LoggerRepository getHierarchy() {
         return delegate.getHierarchy();
     }
@@ -190,6 +192,7 @@ public class DKULogger extends Logger {
         delegate.setLevel(level);
     }
 
+    @SuppressWarnings("deprecation")
     public void setPriority(Priority priority) {
         delegate.setPriority(priority);
     }

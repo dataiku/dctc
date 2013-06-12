@@ -19,7 +19,6 @@ import com.dataiku.dctc.file.GSFile;
 import com.dataiku.dctc.file.S3File;
 import com.dataiku.dip.utils.IndentedWriter;
 import com.dataiku.dip.utils.PrettyString;
-import com.dataiku.dip.utils.StdOut;
 
 public class AddAccount extends Command {
     public String tagline() {

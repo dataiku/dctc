@@ -77,15 +77,6 @@ public class SshFile extends AbstractGFile {
         return i;
 
     }
-    private boolean parseBool(String str) {
-        str = str.toLowerCase();
-        if (str.equals("yes") || str.equals("y") || str.equals("yeah") || str.equals("true") || str.equals("t")) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
     public SshFile(SshConfig config, String host, String path, Params p) {
         if (path.isEmpty()) {
             this.path = ".";
@@ -190,7 +181,7 @@ public class SshFile extends AbstractGFile {
                 connData.jsch.setKnownHosts(knownHosts.getAbsolutePath());
             }
 
-            connData.jsch.setConfig("CompressionLevel", Integer.toString(connData.compressionLevel));
+            JSch.setConfig("CompressionLevel", Integer.toString(connData.compressionLevel));
 
             //             DON'T REMOVE THAT. IT'S USEFUL FOR DEBUGGING
             //                    Logger l = new Logger() {

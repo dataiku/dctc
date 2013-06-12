@@ -173,12 +173,6 @@ public class PrettyArray {
             }
         }
     }
-    private void indent(int size, String separator) {
-        indent(size, Align.LEFT);
-        if (size != -1) {
-            System.out.print(separator);
-        }
-    }
     private void print(String cell, int indentSize, String separator) {
         indent(indentSize, Align.LEFT);
         System.out.print(cell);

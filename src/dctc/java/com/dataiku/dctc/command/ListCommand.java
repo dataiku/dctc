@@ -88,6 +88,7 @@ public abstract class ListCommand extends Command {
         return hasOption(GlobalConstants.UNARCHIVE_OPT);
     }
 
+    @SuppressWarnings("unchecked")
     private void computeTasksList(List<GeneralizedFile> args) throws IOException {
         GeneralizedFile[] sources = new GeneralizedFile[args.size() - 1];
         System.arraycopy(args.toArray(new GeneralizedFile[0]), 0, sources, 0, args.size() - 1);
