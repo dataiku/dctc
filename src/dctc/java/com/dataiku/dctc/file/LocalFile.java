@@ -26,7 +26,7 @@ public class LocalFile extends AbstractGFile {
         f = new File(path);
         fileName = path;
     }
-    @Override // Should be override for no type lost.
+    @Override
     public List<LocalFile> createInstanceFor(List<String> paths) {
         if (paths != null) {
             List<LocalFile> res = new ArrayList<LocalFile>();
