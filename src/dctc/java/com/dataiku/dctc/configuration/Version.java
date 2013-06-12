@@ -1,7 +1,7 @@
 package com.dataiku.dctc.configuration;
 
 public class Version {
-    static public final String gitVersion = "v0.1.1-96-g31f22dd";
+    static public final String gitVersion = "XXX_GIT_VERSION_XXX";
 
     static public String pretty() {
         return gitVersion;
