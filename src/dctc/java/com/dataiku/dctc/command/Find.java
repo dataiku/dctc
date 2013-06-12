@@ -1,8 +1,8 @@
 package com.dataiku.dctc.command;
 
-import java.util.List;
-
 import java.io.IOException;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
@@ -55,15 +55,15 @@ public class Find extends Command {
         return "find";
     }
     /// Getters
-    public String pattern() {
-        if (name == null) {
-            name = getOptionValue("name");
+    public Pattern pattern() {
+        if (name == null && hasOption("name")) {
+            name = Pattern.compile(getOptionValue("name"));
         }
         return name;
     }
     /// Setters
     public Find pattern(String name) {
-        this.name = name;
+        this.name = Pattern.compile(name);
         return this;
     }
 
@@ -85,7 +85,7 @@ public class Find extends Command {
 
     // Private
     private void accept(GeneralizedFile path) throws IOException {
-        if (!hasName() || path.getFileName().indexOf(pattern()) != -1) {
+        if (!hasName() || name.matcher(path.getFileName()).matches()) {
             System.out.println(path.givenName());
         }
     }
@@ -93,9 +93,9 @@ public class Find extends Command {
         error(file, "No such file or directory", 2);
     }
     private boolean hasName() {
-        return getOptionValue("name") != null;
+        return pattern() != null;
     }
 
     // Attributes
-    private String name = null;
+    private Pattern name = null;
 }
