@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.dataiku.dctc.file.FileManipulation;
 
@@ -30,11 +31,11 @@ public class SshConfig {
             Map<String, String> hostParam = get(currentHost);
 
             while ((line = stream.readLine()) != null) {
-                line = line.trim();
+                line = line.trim().toLowerCase();
                 if (line.isEmpty()) {
                     continue;
                 }
-                if (line.startsWith("Host") && !line.startsWith("HostName")) {
+                if (line.startsWith("host") && !line.startsWith("hostname")) {
                     currentHost = line.substring(4).trim();
                     hostParam = get(currentHost);
                 }
@@ -65,12 +66,12 @@ public class SshConfig {
         return config.get(host) != null;
     }
     public Map<String, String> getHostParam(String host) {
-        return config.get(host);
+        return config.get(host.toLowerCase());
     }
     public String get(String host, String key, String defaultValue) {
         Map<String, String> hostParam = getHostParam(host);
         if (hostParam != null) {
-            String res = hostParam.get(key);
+            String res = hostParam.get(key.toLowerCase());
             if (res != null) {
                 return res;
             }
