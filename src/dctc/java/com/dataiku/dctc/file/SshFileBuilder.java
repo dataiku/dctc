@@ -60,7 +60,6 @@ public class SshFileBuilder extends ProtocolFileBuilder {
                                                         pquoted(account),
                                                         "as an account, but it doesn't exist."));
             }
-            // ICI: path[0]
             return new SshFile(path[0], user[0], user[1], path[1], GlobalConstants.SSH_PORT, false);
         }
     }
