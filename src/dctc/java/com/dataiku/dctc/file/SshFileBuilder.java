@@ -1,13 +1,12 @@
 package com.dataiku.dctc.file;
 
-import com.dataiku.dctc.GlobalConstants;
-import com.dataiku.dctc.configuration.SshConfig;
-import com.dataiku.dctc.exception.UserException;
-import com.dataiku.dctc.file.FileBuilder.Protocol;
-import com.dataiku.dip.utils.Params;
-
 import static com.dataiku.dip.utils.PrettyString.pquoted;
 import static com.dataiku.dip.utils.PrettyString.scat;
+
+import com.dataiku.dctc.GlobalConstants;
+import com.dataiku.dctc.configuration.SshConfig;
+import com.dataiku.dctc.file.FileBuilder.Protocol;
+import com.dataiku.dip.utils.Params;
 
 /** Builder for SSH files
  *
@@ -26,14 +25,15 @@ public class SshFileBuilder extends ProtocolFileBuilder {
         return checkAllowedOnly(account, p, new String[]{"host", "port", "username",
                                                          "password", "key", "skip_host_key_check",
                                                          "identity"})
-            || checkMandatory(account, p, "host")
-            || checkMandatory(account, p, "username");
+            || checkMandatory(account, p, "host");
     }
 
     @Override
     public synchronized GeneralizedFile buildFile(String account, String rawPath) {
         if (account == null) {
-            throw new UserException("For SSH, you must specify either ssh://user@host/path or ssh://conf_account@/path");
+            String[] hostPath = FileManipulation.split(rawPath, ":", 2);
+            Params p = bank.getAccountParamsIfExists(getProtocol().getCanonicalName(), account);
+            return new SshFile(sshConfig, hostPath[0], hostPath[1], p);
         }
 
         Params p = bank.getAccountParamsIfExists(getProtocol().getCanonicalName(), account);
