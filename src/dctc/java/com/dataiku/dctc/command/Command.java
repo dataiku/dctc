@@ -191,7 +191,9 @@ public abstract class Command {
     private void initOptions() {
         if (opt == null) {
             opt = setOptions();
-            opt.addOption("?", "help", false, "Display this help message");
+            OptionBuilder.withDescription("Display this help message.");
+            OptionBuilder.withLongOpt("help");
+            opt.addOption(OptionBuilder.create());
             opt.addOption("v", "verbose", false, "Enable verbose logging");
             opt.addOption("V", "VV", false, "Enable debug logging");
         }

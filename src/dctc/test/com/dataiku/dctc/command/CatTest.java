@@ -51,7 +51,7 @@ public class CatTest {
         String helpMessage = Settings.getOut();
         Settings.setOutputs();
 
-        String[] s = { "-?" };
+        String[] s = { "--help" };
         try
         {
             c.perform(s);
@@ -88,6 +88,6 @@ public class CatTest {
         checkOutputs(fileContent, "");
         File file = new File(fileName);
         if (!file.delete())
-            System.err.println("Warning: unable to delete test file : "+file.getCanonicalFile());
+            System.err.println("Warning: unable to delete test file: " + file.getCanonicalFile());
     }
 }
