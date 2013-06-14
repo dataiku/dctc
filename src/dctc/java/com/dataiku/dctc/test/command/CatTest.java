@@ -7,10 +7,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import com.dataiku.dctc.Main;
 import com.dataiku.dctc.command.Cat;
+import com.dataiku.dctc.command.Command;
 import com.dataiku.dctc.configuration.CredentialProviderBank;
 import com.dataiku.dctc.file.FileBuilder;
 import com.dataiku.dctc.test.Settings;
+import com.dataiku.dip.utils.IndentedWriter;
 
 public class CatTest {
     public void initializationError() {
@@ -31,19 +34,33 @@ public class CatTest {
         Settings.setOutputs();
         Cat c = new Cat();
         String[] s = { "-foo" };
-        c.perform(s);
+        try {
+            c.perform(s);
+        } catch (Command.EndOfCommand e) {
+            // ignore
+        }
 
         // Check the output.
         checkOutputs("", "dctc cat: Unrecognized option: -foo" + System.getProperty("line.separator"));
     }
     @org.junit.Test
     public void help() throws IOException {
+        // reset context
         Settings.setOutputs();
         Cat c = new Cat();
-        String[] s = { "-?" };
-        c.perform(s);
+        Main.commandHelp(c,new IndentedWriter());
+        String helpMessage = Settings.getOut();
+        Settings.setOutputs();
 
-        checkErr("");
+        String[] s = { "-?" };
+        try
+        {
+            c.perform(s);
+        } catch (Command.EndOfCommand e) {
+            // ignore
+        }
+
+        checkOutputs(helpMessage,"");
     }
     @org.junit.Test
     public void commandOutput() throws IOException {
