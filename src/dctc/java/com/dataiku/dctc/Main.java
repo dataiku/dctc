@@ -16,6 +16,7 @@ import com.dataiku.dctc.DCTCLog.Mode;
 import com.dataiku.dctc.command.AddAccount;
 import com.dataiku.dctc.command.Cat;
 import com.dataiku.dctc.command.Command;
+import com.dataiku.dctc.command.Cmp;
 import com.dataiku.dctc.command.Cp;
 import com.dataiku.dctc.command.Dispatch;
 import com.dataiku.dctc.command.Edit;
@@ -105,6 +106,7 @@ public class Main {
     private static void fillCommand() {
         addCmd(new AddAccount());
         addCmd(new Cat());
+        addCmd(new Cmp());
         addCmd(new Cp());
         addCmd(new Dispatch());
         addCmd(new Edit());
