@@ -88,7 +88,9 @@ public class Globbing {
     }
     static public boolean hasGlobbing(String f) {
         f = f.replaceAll("\\\\", "");
-        return f.indexOf(star) != -1;
+        return f.indexOf(star) != -1
+            || f.indexOf(question) != -1
+            || f.indexOf(openBracket) != -1;
     }
 
     // Private
