@@ -1,5 +1,7 @@
 package com.dataiku.dctc.command;
 
+import static com.dataiku.dip.utils.PrettyString.scat;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,8 +18,6 @@ import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dctc.file.LocalFile;
 import com.dataiku.dip.utils.DKUtils;
 import com.dataiku.dip.utils.IndentedWriter;
-
-import static com.dataiku.dip.utils.PrettyString.scat;
 
 public class Edit extends Command {
     public String tagline() {

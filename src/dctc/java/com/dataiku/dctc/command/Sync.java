@@ -1,5 +1,7 @@
 package com.dataiku.dctc.command;
 
+import static com.dataiku.dip.utils.PrettyString.scat;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -16,8 +18,6 @@ import com.dataiku.dctc.copy.SyncComputer.IncrementalFilter.Type;
 import com.dataiku.dctc.display.ThreadedDisplay;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
-
-import static com.dataiku.dip.utils.PrettyString.scat;
 
 public class Sync extends Command {
     public String tagline() {

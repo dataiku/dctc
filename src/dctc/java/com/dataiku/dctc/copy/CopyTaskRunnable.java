@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
-import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dctc.GlobalConstants;
+import com.dataiku.dctc.file.GeneralizedFile;
 
 public abstract class CopyTaskRunnable implements Runnable {
     protected CopyTaskRunnable(GeneralizedFile input) {

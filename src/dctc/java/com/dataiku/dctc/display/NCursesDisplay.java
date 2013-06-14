@@ -3,11 +3,11 @@ package com.dataiku.dctc.display;
 import java.io.IOException;
 import java.util.List;
 
-import com.dataiku.dctc.configuration.GlobalConf;
-import com.dataiku.dctc.copy.CopyTaskRunnable;
-
 import jcurses.system.CharColor;
 import jcurses.system.Toolkit;
+
+import com.dataiku.dctc.configuration.GlobalConf;
+import com.dataiku.dctc.copy.CopyTaskRunnable;
 
 public class NCursesDisplay extends AbstractTransferRateDisplay {
     @Override

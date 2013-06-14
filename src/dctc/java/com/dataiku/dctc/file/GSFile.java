@@ -15,8 +15,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import com.amazonaws.services.sns.model.NotFoundException;
-import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.GlobalConstants;
+import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;

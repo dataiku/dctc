@@ -1,8 +1,8 @@
 package com.dataiku.dctc.file;
 
-import org.apache.commons.lang.StringUtils;
-
 import static com.dataiku.dip.utils.PrettyString.quoted;
+
+import org.apache.commons.lang.StringUtils;
 
 public class FileManipulation {
     public static String extension(String file,
