@@ -1,4 +1,4 @@
-package com.dataiku.dctc.test;
+package com.dataiku.dctc;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

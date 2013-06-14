@@ -1,4 +1,4 @@
-package com.dataiku.dctc.test.command;
+package com.dataiku.dctc.command;
 
 import static org.junit.Assert.assertTrue;
 
@@ -12,7 +12,7 @@ import com.dataiku.dctc.command.Cat;
 import com.dataiku.dctc.command.Command;
 import com.dataiku.dctc.configuration.CredentialProviderBank;
 import com.dataiku.dctc.file.FileBuilder;
-import com.dataiku.dctc.test.Settings;
+import com.dataiku.dctc.Settings;
 import com.dataiku.dip.utils.IndentedWriter;
 
 public class CatTest {

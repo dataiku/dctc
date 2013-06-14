@@ -1,4 +1,4 @@
-package com.dataiku.dctc.test.command;
+package com.dataiku.dctc.command;
 
 public class CpTest {
     public void initializationError() {
