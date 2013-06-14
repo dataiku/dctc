@@ -56,14 +56,14 @@ public class Find extends Command {
     }
     /// Getters
     public Pattern pattern() {
-        if (name == null && hasOption("name")) {
-            name = Pattern.compile(getOptionValue("name"));
+        if (pattern == null && hasOption("name")) {
+            pattern = Pattern.compile(getOptionValue("name"));
         }
-        return name;
+        return pattern;
     }
     /// Setters
     public Find pattern(String name) {
-        this.name = Pattern.compile(name);
+        this.pattern = Pattern.compile(name);
         return this;
     }
 
@@ -85,7 +85,7 @@ public class Find extends Command {
 
     // Private
     private void accept(GeneralizedFile path) throws IOException {
-        if (!hasName() || name.matcher(path.getFileName()).matches()) {
+        if (!hasName() || pattern.matcher(path.getFileName()).matches()) {
             System.out.println(path.givenName());
         }
     }
@@ -97,5 +97,5 @@ public class Find extends Command {
     }
 
     // Attributes
-    private Pattern name = null;
+    private Pattern pattern = null;
 }
