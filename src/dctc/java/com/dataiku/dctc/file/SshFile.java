@@ -80,17 +80,20 @@ public class SshFile extends AbstractGFile {
     public SshFile(SshConfig config, String host, String path, Params p) {
         if (path.isEmpty()) {
             this.path = ".";
-        } else {
+        }
+        else {
             this.path = path;
         }
         this.connData = new ConnectionData();
         this.connData.host = config.get(host, "HostName", host);
         this.connData.port = parseInt(config.get(host, "Port", "22"), 1, 65535);
-        this.connData.username = config.get(host, "UserName", p.getMandParam("username"));
+        this.connData.username = config.get(host, "User", p.getMandParam("username"));
         this.connData.skipHostKeyCheck = p.getBoolParam("skip_host_key_check", false);
         this.connData.identity = config.get(host, "IdentityFile", p.getParam("identity"));
         this.connData.compressionLevel = parseInt(config.get(host, "CompressionLevel", "6"), 0, 9);
         this.connData.password = p.getParam("password");
+
+        this.host = host;
     }
 
     public SshFile(String host, String username, String password, String path, int port,
@@ -121,6 +124,7 @@ public class SshFile extends AbstractGFile {
 
     private SshFile(String path, SshFile copy) {
         this.connData = copy.connData;
+        this.host = copy.host;
         this.path = path;
     }
     private SshFile(SshFile copy, String fileName, Acl acl, long size, long date) {
@@ -319,7 +323,7 @@ public class SshFile extends AbstractGFile {
     @Override
     public String getAbsoluteAddress() {
         return getProtocol() + "://" + this.connData.username
-                + "@" + this.connData.host + ":" + path;
+                + "@" + this.host + ":" + path;
     }
     @Override
     public String givenName() {
@@ -635,6 +639,7 @@ public class SshFile extends AbstractGFile {
     private Acl acl;
     private static Map<String, Boolean> hasHash = new HashMap<String, Boolean>();
     private boolean skipHostKeyCheck;
+    private String host;
 
     private static String statOpt = "\\`if \"x$(uname)\" = \"xLinux\"; then echo f; else echo c; fi\\`";
     private static String realpath = "dctc_real_path_() { path=$1; if [ -f $path ]; then echo `pwd`/$path; else echo `cd -P -- \"${path:-.}\" && pwd`; fi; }";
