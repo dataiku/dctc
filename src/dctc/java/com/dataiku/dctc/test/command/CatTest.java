@@ -7,20 +7,21 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import com.dataiku.dctc.Main;
 import com.dataiku.dctc.command.Cat;
+import com.dataiku.dctc.command.Command;
 import com.dataiku.dctc.configuration.CredentialProviderBank;
 import com.dataiku.dctc.file.FileBuilder;
 import com.dataiku.dctc.test.Settings;
+import com.dataiku.dip.utils.IndentedWriter;
 
 public class CatTest {
-    public void initializationError() {
 
-    }
     private void checkErr(String str) {
-        assertTrue(str.equals(Settings.getErr().toString()));
+        assertTrue(str.equals(Settings.getErr()));
     }
     private void checkOut(String str) {
-        assertTrue(str.equals(Settings.getOut().toString()));
+        assertTrue(str.equals(Settings.getOut()));
     }
     private void checkOutputs(String out, String err) {
         checkOut(out);
@@ -31,19 +32,34 @@ public class CatTest {
         Settings.setOutputs();
         Cat c = new Cat();
         String[] s = { "-foo" };
-        c.perform(s);
+        try {
+            c.perform(s);
+        } catch (Command.EndOfCommand e) {
+            // ignore
+        }
 
         // Check the output.
-        checkOutputs("", "dctc cat: Unrecognized option: -foo" + System.getProperty("line.separator"));
+        checkOut("");
+        assertTrue(Settings.getErr().startsWith("dctc cat: ERROR: Unrecognized option: -foo" + System.getProperty("line.separator")));
     }
     @org.junit.Test
     public void help() throws IOException {
+        // reset context
         Settings.setOutputs();
         Cat c = new Cat();
-        String[] s = { "-?" };
-        c.perform(s);
+        Main.commandHelp(c,new IndentedWriter());
+        String helpMessage = Settings.getOut();
+        Settings.setOutputs();
 
-        checkErr("");
+        String[] s = { "-?" };
+        try
+        {
+            c.perform(s);
+        } catch (Command.EndOfCommand e) {
+            // ignore
+        }
+
+        checkOutputs(helpMessage,"");
     }
     @org.junit.Test
     public void commandOutput() throws IOException {
@@ -71,6 +87,7 @@ public class CatTest {
 
         checkOutputs(fileContent, "");
         File file = new File(fileName);
-        file.delete();
+        if (!file.delete())
+            System.err.println("Warning: unable to delete test file : "+file.getCanonicalFile());
     }
 }

@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.archive.ArchiveFactory;
 import com.dataiku.dctc.archive.InputArchiveEntry;
 import com.dataiku.dctc.archive.InputArchiveIterator;
 import com.dataiku.dctc.file.GeneralizedFile;
-import com.dataiku.dctc.GlobalConstants;
 
 public class UnarchiveCopyTask extends CopyTaskRunnable {
 

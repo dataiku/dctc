@@ -18,4 +18,4 @@ fi
 
 git checkout -- "$1" || echo -- $1 is not gitted # Reset the file.
 
-sed -ie "s/XXX_GIT_VERSION_XXX/$describe/" -- "$1"
+sed -e "s/XXX_GIT_VERSION_XXX/$describe/" < "$1" > "${1}e"

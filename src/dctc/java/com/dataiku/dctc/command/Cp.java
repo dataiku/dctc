@@ -1,5 +1,7 @@
 package com.dataiku.dctc.command;
 
+import static com.dataiku.dip.utils.PrettyString.scat;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -13,8 +15,6 @@ import com.dataiku.dctc.display.Interactive;
 import com.dataiku.dctc.display.ThreadedDisplay;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
-
-import static com.dataiku.dip.utils.PrettyString.scat;
 
 /**
  * Cp algorithm based on GeneralizedFile.

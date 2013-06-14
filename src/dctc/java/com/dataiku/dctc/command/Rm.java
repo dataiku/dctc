@@ -1,5 +1,7 @@
 package com.dataiku.dctc.command;
 
+import static com.dataiku.dip.utils.PrettyString.scat;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -8,8 +10,6 @@ import org.apache.commons.cli.Options;
 import com.dataiku.dctc.display.Interactive;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
-
-import static com.dataiku.dip.utils.PrettyString.scat;
 
 public class Rm extends Command {
     public String tagline() {

@@ -3,6 +3,7 @@ package com.dataiku.dctc.command;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
@@ -39,11 +40,7 @@ public abstract class Command {
     // Abstract methods
     protected abstract Options setOptions();
     protected List<String> getFileArguments(String[] list) {
-        List<String> res = new ArrayList<String>();
-        for (String l: list) {
-            res.add(l);
-        }
-        return res;
+        return Arrays.asList(list);
     }
     public void perform(String[] args) {
         // Default implementation could be override
@@ -86,11 +83,7 @@ public abstract class Command {
         return exitCode;
     }
     public void perform(GeneralizedFile[] args) {
-        List<GeneralizedFile> gargs = new ArrayList<GeneralizedFile>();
-        for (GeneralizedFile arg: args) {
-            gargs.add(arg);
-        }
-        perform(gargs);
+        perform(Arrays.asList(args));
     }
 
     // Protected methods
@@ -182,11 +175,7 @@ public abstract class Command {
     }
     protected List<GeneralizedFile> build(String[] paths) {
         GeneralizedFile[] array = getFileBuilder().buildFile(paths);
-        List<GeneralizedFile> res = new ArrayList<GeneralizedFile>();
-        for (GeneralizedFile a: array) {
-            res.add(a);
-        }
-        return res;
+        return Arrays.asList(array);
     }
     protected boolean hasOption(String opt) {
         return line != null && line.hasOption(opt);
@@ -202,9 +191,7 @@ public abstract class Command {
     private void initOptions() {
         if (opt == null) {
             opt = setOptions();
-            OptionBuilder.withDescription("Display this help message.");
-            OptionBuilder.withLongOpt("help");
-            opt.addOption(OptionBuilder.create());
+            opt.addOption("?", "help", false, "Display this help message");
             opt.addOption("v", "verbose", false, "Enable verbose logging");
             opt.addOption("V", "VV", false, "Enable debug logging");
         }

@@ -1,12 +1,10 @@
 package com.dataiku.dctc.file;
 
-import java.lang.NumberFormatException;
-
 import com.dataiku.dctc.DCTCLog;
 import com.dataiku.dctc.GlobalConstants;
+import com.dataiku.dctc.command.Command.EndOfCommand;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
-import com.dataiku.dctc.command.Command.EndOfCommand;
 import com.dataiku.dip.utils.Params;
 
 /**

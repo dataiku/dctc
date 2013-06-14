@@ -1,5 +1,7 @@
 package com.dataiku.dctc.configuration;
 
+import static com.dataiku.dip.utils.PrettyString.nl;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21,9 +23,6 @@ import org.apache.commons.io.IOUtils;
 
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.FileManipulation;
-
-import static com.dataiku.dip.utils.PrettyString.nl;
-
 import com.dataiku.dip.utils.Params;
 
 public class Configuration {
