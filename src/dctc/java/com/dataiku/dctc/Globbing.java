@@ -65,7 +65,8 @@ public class Globbing {
                             res.add(globResolve);
                             return res;
                         }
-                    } else {
+                    }
+                    else {
                         List<GeneralizedFile> prevList = res;
                         res = new ArrayList<GeneralizedFile>();
                         for (GeneralizedFile parentElt: prevList) {
@@ -80,7 +81,8 @@ public class Globbing {
                     }
                 }
             }
-        } else {
+        }
+        else {
             res.add(globbing);
         }
         return res;
