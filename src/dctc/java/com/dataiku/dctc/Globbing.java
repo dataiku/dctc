@@ -44,14 +44,15 @@ public class Globbing {
             String[] split = path.split(globbing.fileSeparator());
             String prevPath = "";
             for (int i = 0; i < split.length; ++i) {
-                if (split[i].isEmpty()) {
+                String splitElt = split[i];
+                if (splitElt.isEmpty()) {
                     continue;
                 }
-                if (hasGlobbing(split[i])) {
+                if (hasGlobbing(splitElt)) {
                     if (first) {
                         first = false;
                         GeneralizedFile globResolve = globbing.createInstanceFor(prevPath);
-                        prevPath += "/" + split[i];
+                        prevPath += "/" + splitElt;
                         for (GeneralizedFile f: globResolve.glist()) {
                             if (showHidden || !f.isHidden()) {
                                 if (matchPath(prevPath, f.getAbsolutePath(), "/")) {
@@ -64,7 +65,7 @@ public class Globbing {
                             return res;
                         }
                     } else {
-                        prevPath += "/" + split[i];
+                        prevPath += "/" + splitElt;
                         List<GeneralizedFile> prevList = res;
                         res = new ArrayList<GeneralizedFile>();
                         for (GeneralizedFile parentElt: prevList) {
@@ -78,7 +79,7 @@ public class Globbing {
                         }
                     }
                 } else {
-                    prevPath += "/" + split[i];
+                    prevPath += "/" + splitElt;
                 }
             }
         } else {
