@@ -48,11 +48,12 @@ public class Globbing {
                 if (splitElt.isEmpty()) {
                     continue;
                 }
+                prevPath += "/" + splitElt;
+
                 if (hasGlobbing(splitElt)) {
                     if (first) {
                         first = false;
                         GeneralizedFile globResolve = globbing.createInstanceFor(prevPath);
-                        prevPath += "/" + splitElt;
                         for (GeneralizedFile f: globResolve.glist()) {
                             if (showHidden || !f.isHidden()) {
                                 if (matchPath(prevPath, f.getAbsolutePath(), "/")) {
@@ -65,7 +66,6 @@ public class Globbing {
                             return res;
                         }
                     } else {
-                        prevPath += "/" + splitElt;
                         List<GeneralizedFile> prevList = res;
                         res = new ArrayList<GeneralizedFile>();
                         for (GeneralizedFile parentElt: prevList) {
@@ -78,8 +78,6 @@ public class Globbing {
                             }
                         }
                     }
-                } else {
-                    prevPath += "/" + splitElt;
                 }
             }
         } else {
