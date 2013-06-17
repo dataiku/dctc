@@ -143,97 +143,6 @@ public class SshFile extends AbstractGFile {
         }
     }
 
-    private static SshFile newNotFound(SshFile src, String path) {
-        SshFile copy = new SshFile(path, src);
-        copy.exists = false;
-        copy.directory = false;
-        copy.file = false;
-        return copy;
-    }
-
-    private void openSessionAndResolveHome() throws IOException, JSchException {
-        if (connData.session == null) {
-            connData.jsch = new JSch();
-
-            if (connData.sshKeyPath != null) {
-                if (connData.sshKeyPassphrase != null){
-                    connData.jsch.addIdentity(connData.sshKeyPath, connData.sshKeyPassphrase);
-                } else {
-                    connData.jsch.addIdentity(connData.sshKeyPath);
-                }
-            } else {
-                if (connData.identity != null) {
-                    File identity = new File(connData.identity);
-                    if (identity.exists()) {
-                        connData.jsch.addIdentity(identity.getAbsolutePath());
-                    }
-                }
-                else {
-                    File dsa = new File(System.getProperty("user.home") + "/.ssh/id_dsa");
-                    if (dsa.exists()) {
-                        connData.jsch.addIdentity(dsa.getAbsolutePath());
-                    }
-                    File rsa = new File(System.getProperty("user.home") + "/.ssh/id_rsa");
-                    if (rsa.exists()) {
-                        connData.jsch.addIdentity(rsa.getAbsolutePath());
-                    }
-                }
-            }
-
-            File knownHosts = new File(System.getProperties().get("user.home") + "/.ssh/known_hosts");
-            if (knownHosts.exists()) {
-                connData.jsch.setKnownHosts(knownHosts.getAbsolutePath());
-            }
-
-            JSch.setConfig("CompressionLevel", Integer.toString(connData.compressionLevel));
-
-            //             DON'T REMOVE THAT. IT'S USEFUL FOR DEBUGGING
-            //                    Logger l = new Logger() {
-            //                        @Override
-            //                        public void log(int arg0, String arg1) {
-            //                            System.out.println(arg1);
-            //                        }
-            //
-            //                        @Override
-            //                        public boolean isEnabled(int arg0) {
-            //                            return true;
-            //                        }
-            //                    };
-            //                    connData.jsch.setLogger(l);
-
-            connData.session = connData.jsch.getSession(connData.username,connData.host, connData.port);
-            if (skipHostKeyCheck) {
-                java.util.Properties config = new java.util.Properties();
-                config.put("StrictHostKeyChecking", "no");
-                connData.session.setConfig(config);
-            }
-            if (connData.password != null) {
-                connData.session.setUserInfo(new SshUserInfo(connData.password));
-            } else {
-                connData.session.setUserInfo(new SshUserInfo(connData.sshKeyPassphrase));
-            }
-            connData.session.connect();
-
-            if (!path.startsWith("/")) {
-                connData.homePath = exec("pwd").replace("\n", "");
-                path = connData.homePath + "/" + path;
-            }
-        }
-    }
-
-    private Channel connect(String cmd)  throws JSchException, IOException {
-        if (connData.session == null) {
-            openSessionAndResolveHome();
-        }
-        Channel channel = connData.session.openChannel("exec");
-        ((ChannelExec) channel).setCommand(cmd);
-        channel.connect();
-        return channel;
-    }
-    private void disconnect(Channel channel) {
-        channel.disconnect();
-    }
-
     @Override
     public SshFile createInstanceFor(String path) {
         return new SshFile(path, this);
@@ -626,6 +535,97 @@ public class SshFile extends AbstractGFile {
         if (permissionDenied) {
             throw new IOException("Permission denied: " + givenName());
         }
+    }
+
+    private static SshFile newNotFound(SshFile src, String path) {
+        SshFile copy = new SshFile(path, src);
+        copy.exists = false;
+        copy.directory = false;
+        copy.file = false;
+        return copy;
+    }
+
+    private void openSessionAndResolveHome() throws IOException, JSchException {
+        if (connData.session == null) {
+            connData.jsch = new JSch();
+
+            if (connData.sshKeyPath != null) {
+                if (connData.sshKeyPassphrase != null){
+                    connData.jsch.addIdentity(connData.sshKeyPath, connData.sshKeyPassphrase);
+                } else {
+                    connData.jsch.addIdentity(connData.sshKeyPath);
+                }
+            } else {
+                if (connData.identity != null) {
+                    File identity = new File(connData.identity);
+                    if (identity.exists()) {
+                        connData.jsch.addIdentity(identity.getAbsolutePath());
+                    }
+                }
+                else {
+                    File dsa = new File(System.getProperty("user.home") + "/.ssh/id_dsa");
+                    if (dsa.exists()) {
+                        connData.jsch.addIdentity(dsa.getAbsolutePath());
+                    }
+                    File rsa = new File(System.getProperty("user.home") + "/.ssh/id_rsa");
+                    if (rsa.exists()) {
+                        connData.jsch.addIdentity(rsa.getAbsolutePath());
+                    }
+                }
+            }
+
+            File knownHosts = new File(System.getProperties().get("user.home") + "/.ssh/known_hosts");
+            if (knownHosts.exists()) {
+                connData.jsch.setKnownHosts(knownHosts.getAbsolutePath());
+            }
+
+            JSch.setConfig("CompressionLevel", Integer.toString(connData.compressionLevel));
+
+            //             DON'T REMOVE THAT. IT'S USEFUL FOR DEBUGGING
+            //                    Logger l = new Logger() {
+            //                        @Override
+            //                        public void log(int arg0, String arg1) {
+            //                            System.out.println(arg1);
+            //                        }
+            //
+            //                        @Override
+            //                        public boolean isEnabled(int arg0) {
+            //                            return true;
+            //                        }
+            //                    };
+            //                    connData.jsch.setLogger(l);
+
+            connData.session = connData.jsch.getSession(connData.username,connData.host, connData.port);
+            if (skipHostKeyCheck) {
+                java.util.Properties config = new java.util.Properties();
+                config.put("StrictHostKeyChecking", "no");
+                connData.session.setConfig(config);
+            }
+            if (connData.password != null) {
+                connData.session.setUserInfo(new SshUserInfo(connData.password));
+            } else {
+                connData.session.setUserInfo(new SshUserInfo(connData.sshKeyPassphrase));
+            }
+            connData.session.connect();
+
+            if (!path.startsWith("/")) {
+                connData.homePath = exec("pwd").replace("\n", "");
+                path = connData.homePath + "/" + path;
+            }
+        }
+    }
+
+    private Channel connect(String cmd)  throws JSchException, IOException {
+        if (connData.session == null) {
+            openSessionAndResolveHome();
+        }
+        Channel channel = connData.session.openChannel("exec");
+        ((ChannelExec) channel).setCommand(cmd);
+        channel.connect();
+        return channel;
+    }
+    private void disconnect(Channel channel) {
+        channel.disconnect();
     }
 
     private String path;
