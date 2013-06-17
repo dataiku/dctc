@@ -616,9 +616,8 @@ public class SshFile extends AbstractGFile {
     }
 
     private Channel connect(String cmd)  throws JSchException, IOException {
-        if (connData.session == null) {
-            openSessionAndResolveHome();
-        }
+        openSessionAndResolveHome();
+
         Channel channel = connData.session.openChannel("exec");
         ((ChannelExec) channel).setCommand(cmd);
         channel.connect();
