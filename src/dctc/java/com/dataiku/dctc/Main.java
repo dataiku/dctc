@@ -48,7 +48,7 @@ public class Main {
         if (exitCode != 0) {
             System.setOut(System.err);
         }
-        System.out.println("usage: dctc command [OPTIONS...] [ARGUMENTS...]");
+        System.out.println("usage: dctc command [OPTIONS...] [ARGS...]");
         System.out.println();
         System.out.println("Available commands are:");
         int len = 0;
@@ -61,8 +61,8 @@ public class Main {
             indent(" ", len - cmd.cmdname().length());
             System.out.println(cmd.tagline());
         }
-        System.out.println(nlcat("For more informations see the project homepage:",
-                              "http://dctc.io"));
+        System.out.println(nlcat("", "For more informations see the project homepage:",
+                                 "http://dctc.io"));
         System.exit(exitCode);
     }
     private static void commandHelp(int exitCode, String command) {
@@ -90,7 +90,6 @@ public class Main {
         cmd.usage();
     }
 
-    static Logger logger = Logger.getLogger(Main.class);
     public static void setLogger() {
         Logger.getRootLogger().removeAllAppenders();
         ConsoleAppender ca = new ConsoleAppender(new PatternLayout("[%r] [%t] [%-5p] [%c] %x - %m%n"));
@@ -135,16 +134,17 @@ public class Main {
              } );
     }
     public static void atBegin() {
-       System.setOut(new StdOut(System.out));
-       System.setErr(new StdOut(System.err));
+        System.setOut(new StdOut(System.out));
+        System.setErr(new StdOut(System.err));
+        setLogger();
+        fillCommand();
+
     }
 
     public static void main(String[] args) {
         atExit();
         atBegin();
         try {
-            setLogger();
-            fillCommand();
             DCTCLog.setMode(Mode.STDERR);
 
             StructuredConf conf;
@@ -153,9 +153,10 @@ public class Main {
                 conf.parse(GlobalConf.confPath());
                 conf.parseSsh(GlobalConf.sshConfigFile());
                 if (conf.getFileBuilder().check()) {
-                    System.err.println("One or more errors are present in the configuration file.");
+                    System.err.println("dctc: One or more errors are present in the configuration file.");
                 }
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 System.err.println("dctc fail: " + e.getMessage());
                 return;
             }
@@ -190,11 +191,13 @@ public class Main {
                 System.err.println("Unknown command: " + usercmd);
             }
             globalUsage(1);
-        } catch (UserException e) {
+        }
+        catch (UserException e) {
             System.err.println("dctc: ERROR: " + e.getMessage());
             System.exit(1);
         }
     }
 
     private static Map<String, Command> cmds = new TreeMap<String, Command>();
+    static Logger logger = Logger.getLogger(Main.class);
 }
