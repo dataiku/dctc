@@ -13,7 +13,7 @@ public class GlobalConstants {
 
     // Opt
     public final static String ARCHIVE_OPT = "a";
-    public final static String UNARCHIVE_OPT = "ua";
+    public final static String UNARCHIVE_OPT = "t";
     public final static String COMPRESS_OPT = "c";
     public final static String UNCOMPRESS_OPT = "u";
     public final static String HELP_OPT = "h";

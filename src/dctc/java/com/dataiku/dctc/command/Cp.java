@@ -66,7 +66,7 @@ public class Cp extends ListCommand {
         opt.addOption("r", "recursive", false, "Copy directories recursively.");
         opt.addOption("c", "compress", false, "Compress all input files and add .gz extension.");
         opt.addOption("u", "uncompress", false, "Uncompress all compressed (ie, .gz) input files (strips .gz extension)");
-        opt.addOption("ua", "unarchive", false, "Uncompress all archives found in the command line.");
+        opt.addOption(GlobalConstants.UNARCHIVE_OPT, "unarchive", false, "Uncompress all archives found in the command line.");
         opt.addOption("i", "interactive", false, "Prompt before overwrite");
         opt.addOption("a", "archive", false, "Archives all input files into a single destination file using the destination file extension as identifier for the archive method. Supported archive methods are 'zip'");
         opt.addOption("p", "preserve", false, "Preserve the time stamp");
