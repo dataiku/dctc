@@ -89,9 +89,6 @@ public abstract class Command {
     // Protected methods
 
     protected void parseCommandLine(String[] shellargs) {
-        if (line != null) {
-            System.err.println("Double call to parseCommandLine");
-        }
         initOptions();
         CommandLineParser parser = new PosixParser();
         try {
