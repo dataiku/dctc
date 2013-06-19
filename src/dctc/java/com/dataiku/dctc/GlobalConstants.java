@@ -2,6 +2,7 @@ package com.dataiku.dctc;
 
 public class GlobalConstants {
     public final static String ZIP = "zip";
+    public final static String TAR = "tar";
 
     public final static String WINDOWS_ROOT_PATH_PATTERN = "[A-Z]:\\\\";
 

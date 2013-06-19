@@ -16,15 +16,21 @@ public class SimpleCopyTaskRunnableFactory implements CopyTaskRunnableFactory {
     }
     @Override
     public CopyTaskRunnable build(CopyTask task) throws IOException {
-        if (unarchive && task.src.givenName().endsWith(".zip")) {
-            if (task.dstDir.givenName().endsWith(task.dstDir.fileSeparator())) {
-                return new UnarchiveCopyTask(task.src, task.dstDir);
-            } else {
-                GeneralizedFile dst = task.dstDir.createSubFile("", task.dstDir.fileSeparator());
-                return new UnarchiveCopyTask(task.src, dst);
+        if (unarchive) {
+            String fileName = task.src.givenName();
+            if (fileName.endsWith(".zip")
+                || fileName.endsWith(".tar")
+                || fileName.endsWith(".tar.bz2")
+                || fileName.endsWith(".tar.gz")) {
+                if (task.dstDir.givenName().endsWith(task.dstDir.fileSeparator())) {
+                    return new UnarchiveCopyTask(task.src, task.dstDir);
+                } else {
+                    GeneralizedFile dst = task.dstDir.createSubFile("", task.dstDir.fileSeparator());
+                    return new UnarchiveCopyTask(task.src, dst);
+                }
             }
         }
-        else if (archive) {
+        if (archive) {
             if (archiveIterable == null) {
                 if (task.dstDir.exists() && task.dstDir.isDirectory()) {
                     archiveIterable = ArchiveFactory.buildOutput(task
