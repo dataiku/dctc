@@ -6,6 +6,7 @@ import java.io.Writer;
 import com.dataiku.dip.datalayer.Column;
 import com.dataiku.dip.datalayer.ColumnFactory;
 import com.dataiku.dip.datalayer.Row;
+import com.dataiku.dip.datasets.Schema;
 
 public class LineOutputFormatter extends StringOutputFormatter {
     public LineOutputFormatter() {
@@ -31,5 +32,9 @@ public class LineOutputFormatter extends StringOutputFormatter {
 
     @Override
     public void footer(ColumnFactory cf, Writer sb) throws IOException {
+    }
+
+    @Override
+    public void setOutputSchema(Schema schema) {
     }
 }

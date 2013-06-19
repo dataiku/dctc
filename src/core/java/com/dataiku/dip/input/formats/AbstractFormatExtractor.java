@@ -14,12 +14,12 @@ public abstract class AbstractFormatExtractor implements FormatExtractor {
     }
 
     @Override
-    public void forceSchema(Schema schema) {
+    public void setSchema(Schema schema) {
         this.schema = schema;
     }
-    public Schema schema() {
+    public Schema getSchema() {
         return schema;
     }
 
-    private Schema schema;
+    protected Schema schema;
 }

@@ -8,7 +8,7 @@ import com.dataiku.dip.input.StreamInputSplitProgressListener;
 import com.dataiku.dip.input.stream.StreamsInputSplit;
 
 public interface FormatExtractor {
-    public void forceSchema(Schema schema);
+    public void setSchema(Schema schema);
     /**
      * Returns true if extraction did not hit any limit, false if it did hit a limit
      */

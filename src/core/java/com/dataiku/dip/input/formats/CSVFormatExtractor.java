@@ -80,8 +80,8 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                         if (line.length > columns.size()) {
                             for (int i = columns.size() ; i < line.length; i++) {
                                 String name = null;
-                                if (schema() != null && schema().getColumns().size() > i) {
-                                    name = schema().getColumns().get(i).getName();
+                                if (getSchema() != null && getSchema().getColumns().size() > i) {
+                                    name = getSchema().getColumns().get(i).getName();
                                 } else {
                                     name = "col_" + i;
                                 }

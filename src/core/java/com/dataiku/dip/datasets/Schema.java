@@ -174,6 +174,11 @@ public class Schema {
     public List<SchemaColumn> getColumns() {
         return columns;
     }
+    
+    public void addColumn(String name, String type) {
+        SchemaColumn column = new SchemaColumn(name, type);
+        columns.add(column);
+    }
 
     private boolean userModified;
     private List<SchemaColumn> columns = new ArrayList<SchemaColumn>();
