@@ -19,3 +19,4 @@ fi
 git checkout -- "$1" || echo -- $1 is not gitted # Reset the file.
 
 sed -e "s/XXX_GIT_VERSION_XXX/$describe/" < "$1" > "${1}e"
+mv -- "${1}e" "$1"
