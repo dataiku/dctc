@@ -26,13 +26,15 @@
 
     <target name="download-ivy" unless="skip.download">
         <mkdir dir="${ivy.jar.dir}"/>
-        <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" dest="${ivy.jar.file}" usetimestamp="true"/>
+        <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+             dest="${ivy.jar.file}" usetimestamp="true"/>
     </target>
     <target name="install-ivy" depends="download-ivy" description="--> install ivy">
         <path id="ivy.lib.path">
             <fileset dir="${ivy.jar.dir}" includes="*.jar"/>
         </path>
-        <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+        <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant"
+                 classpathref="ivy.lib.path"/>
     </target>
 
     <target name="resolve"  depends="install-ivy" description="--> retrieve dependencies with ivy">
@@ -49,7 +51,9 @@
             <fileset dir="${extlib.dir}" />
         </path>
         <mkdir dir="${core-jar.build}" />
-        <javac target="1.6" source="1.6" debug="true" srcdir="${src.dir}/core/java" destdir="${core-jar.build}" classpathref="lib.path.id" encoding="iso-8859-1" includeantruntime="false">
+        <javac target="1.6" source="1.6" debug="true" srcdir="${src.dir}/core/java"
+               destdir="${core-jar.build}" classpathref="lib.path.id" encoding="iso-8859-1"
+               includeantruntime="false">
             <compilerarg value="-Xlint:all" />
             <compilerarg value="-Xlint:-path" />
             <compilerarg value="-Xlint:unchecked" />
@@ -76,7 +80,10 @@
             <fileset file="${core-jar.file}" />
         </path>
         <mkdir dir="${dctc-jar.build}" />
-        <javac target="1.6" source="1.6" debug="true" srcdir="${src.dir}/dctc/java" destdir="${dctc-jar.build}" classpathref="lib.path.id" encoding="iso-8859-1"  includeantruntime="false">
+        <javac target="1.6" source="1.6" debug="true" srcdir="${src.dir}/dctc/java"
+               destdir="${dctc-jar.build}" classpathref="lib.path.id"
+               encoding="iso-8859-1"  includeantruntime="false">
+
             <compilerarg value="-Xlint:all" />
             <compilerarg value="-Xlint:-path" />
             <compilerarg value="-Xlint:unchecked" />
