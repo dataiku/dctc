@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 
 import com.dataiku.dctc.file.FileManipulation;
 import com.dataiku.dctc.file.GeneralizedFile;
@@ -14,6 +16,10 @@ public class AutoGZip {
         if (fileName.endsWith(".gz")) {
             return new GZIPInputStream(stream);
         }
+        else if (fileName.endsWith(".gz2")) {
+            return new BZip2CompressorInputStream(stream);
+        }
+
         else {
             return stream;
         }
@@ -35,6 +41,10 @@ public class AutoGZip {
         if (fileName.endsWith(".gz")) {
             return new GZIPOutputStream(stream);
         }
+        else if (fileName.endsWith(".gz2")) {
+            return new BZip2CompressorOutputStream(stream);
+        }
+
         else {
             return stream;
         }

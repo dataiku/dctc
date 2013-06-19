@@ -28,6 +28,7 @@
         <!-- Addditionally required by dctc -->
         <dependency org="com.amazonaws" name="aws-java-sdk" rev="1.3.22"/>
         <dependency org="commons-net" name="commons-net" rev="3.2" />
+        <dependency org="org.apache.commons" name="commons-compress" rev="1.5"/>
         <dependency org="com.jcraft" name="jsch" rev="0.1.49" />
         <dependency org="org.apache.hadoop" name="hadoop-core" rev="1.0.3">
             <exclude org="org.eclipse.jdt" />
