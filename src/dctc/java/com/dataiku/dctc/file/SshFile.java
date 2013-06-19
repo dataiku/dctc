@@ -367,7 +367,12 @@ public class SshFile extends AbstractGFile {
                 size = GlobalConstants.FOUR_KIO;
             } else {
                 String size = exec("wc -c '" + path + "' | cut -d' ' -f1");
-                this.size = Long.parseLong(size.substring(0, size.length() - 1));
+                if (!size.isEmpty()) {
+                    this.size = Long.parseLong(size.substring(0, size.length() - 1));
+                }
+                else {
+                    throw new IOException("File not found.");
+                }
             }
         }
         return size;
