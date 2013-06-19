@@ -37,6 +37,8 @@
                  classpathref="ivy.lib.path"/>
     </target>
 
+    <target name="configure" depends="resolve">
+    </target>
     <target name="resolve"  depends="install-ivy" description="--> retrieve dependencies with ivy">
         <ivy:retrieve pattern="${ivylib.dir}/[conf]/[artifact]-[revision].[ext]" />
     </target>
@@ -45,7 +47,7 @@
         <ivy:resolve type="${ivy.resolve.types}"/>
         <ivy:report todir="report" />
     </target>
-    <target name="core-jar" depends="resolve">
+    <target name="core-jar" depends="">
         <path id="lib.path.id">
             <fileset dir="${clib.dir}" />
             <fileset dir="${extlib.dir}" />
@@ -70,7 +72,7 @@
         <jar destfile="${core-jar.file}" basedir="${core-jar.build}" />
     </target>
 
-    <target name="dctc-jar" depends="resolve, core-jar">
+    <target name="dctc-jar" depends="core-jar">
         <exec executable="./dctc-hash-update.sh">
             <arg value="./src/dctc/java/com/dataiku/dctc/configuration/Version.java" />
         </exec>
