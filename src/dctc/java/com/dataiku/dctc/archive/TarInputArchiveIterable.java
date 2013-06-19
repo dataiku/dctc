@@ -2,7 +2,6 @@ package com.dataiku.dctc.archive;
 
 import java.io.InputStream;
 
-import org.apache.tools.tar.TarInputStream;
 
 import com.dataiku.dctc.GlobalConstants;
 
