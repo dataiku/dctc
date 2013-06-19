@@ -12,8 +12,15 @@ public abstract class CopyTaskRunnable implements Runnable {
         this.in = input;
         try {
             if (!input.isDirectory()) {
-                this.inSize = input.getSize();
-            } else {
+                try {
+                    this.inSize = input.getSize();
+                }
+                catch (IOException e) {
+                    this.inSize = -1;
+                    exp = e;
+                }
+            }
+            else {
                 this.inSize = GlobalConstants.FOUR_KIO;
             }
         } catch (IOException e) {
