@@ -98,9 +98,10 @@
             <compilerarg value="-Xlint:varargs" />
         </javac>
         <jar destfile="${dctc-jar.file}" basedir="${dctc-jar.build}" />
-        <move file="./src/dctc/java/com/dataiku/dctc/configuration/Version.javae"
-              tofile="./src/dctc/java/com/dataiku/dctc/configuration/Version.java"/>
-
+        <exec executable="git">
+          <arg value="checkout" />
+          <arg value="./src/dctc/java/com/dataiku/dctc/configuration/Version.java"/>
+        </exec>
     </target>
 
     <target name="tooljar" depends="dctc-jar">
