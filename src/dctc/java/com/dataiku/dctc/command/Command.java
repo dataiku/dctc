@@ -43,6 +43,7 @@ public abstract class Command {
         return Arrays.asList(list);
     }
     public void perform(String[] args) {
+        exitCode = 0;
         // Default implementation could be override
         List<GeneralizedFile> arguments = getArgs(args);
         if (arguments != null) {
@@ -83,6 +84,7 @@ public abstract class Command {
         return exitCode;
     }
     public void perform(GeneralizedFile[] args) {
+        exitCode = 0;
         perform(Arrays.asList(args));
     }
 
