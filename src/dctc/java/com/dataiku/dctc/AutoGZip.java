@@ -10,27 +10,47 @@ import com.dataiku.dctc.file.FileManipulation;
 import com.dataiku.dctc.file.GeneralizedFile;
 
 public class AutoGZip {
+    public static InputStream buildInput(String fileName, InputStream stream) throws IOException {
+        if (fileName.endsWith(".gz")) {
+            return new GZIPInputStream(stream);
+        }
+        else {
+            return stream;
+        }
+    }
+
     public static InputStream buildInput(GeneralizedFile g) throws IOException {
-        if (FileManipulation.extension(g.getFileName(), ".").equals("gz")) {
-            try {
-                return new GZIPInputStream(g.inputStream());
-            } catch (IOException e) {
-                if (g.exists()) {
-                    return g.inputStream();
-                } else {
-                    throw e;
-                }
+        try {
+            return buildInput(g.getFileName(), g.inputStream());
+        }
+        catch (IOException e) {
+            if (g.exists()) {
+                return g.inputStream();
+            } else {
+                throw e;
             }
-        } else {
-            return g.inputStream();
+        }
+    }
+    public static OutputStream buildOutput(String fileName, OutputStream stream) throws IOException {
+        if (fileName.endsWith(".gz")) {
+            return new GZIPOutputStream(stream);
+        }
+        else {
+            return stream;
         }
     }
     public static OutputStream buildOutput(GeneralizedFile g) throws IOException {
         assert g.hasOutputStream();
-        if (g.getFileName().endsWith(".gz")) {
-            return new GZIPOutputStream(g.outputStream());
-        } else {
-            return g.outputStream();
+        try {
+            return buildOutput(g.getFileName(), g.outputStream());
+        }
+        catch (IOException e) {
+            if (g.exists()){
+                return g.outputStream();
+            }
+            else {
+                throw e;
+            }
         }
     }
 }
