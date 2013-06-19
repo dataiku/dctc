@@ -645,9 +645,12 @@ public class SshFile extends AbstractGFile {
     private boolean skipHostKeyCheck;
     private String host;
 
-    private static String statOpt = "\\`if \"x$(uname)\" = \"xLinux\"; then echo f; else echo c; fi\\`";
-    private static String realpath = "dctc_real_path_() { path=$1; if [ -f $path ]; then echo `pwd`/$path; else echo `cd -P -- \"${path:-.}\" && pwd`; fi; }";
-    private static String deleteDotSlash = "if echo $line | grep \"^./\" > /dev/null; then line=`echo $line | sed -e 's#^\\./##'`; fi";
+    private static String statOpt = "\\`if \"x$(uname)\" = \"xLinux\"; then echo f; "
+        + "else echo c; fi\\`";
+    private static String realpath = "dctc_real_path_() { path=$1; if [ -f $path ]; "
+        + "then echo `pwd`/$path; else echo `cd -P -- \"${path:-.}\" && pwd`; fi; }";
+    private static String deleteDotSlash = "if echo $line | grep \"^./\" > /dev/null; "
+        + "then line=`echo $line | sed -e 's#^\\./##'`; fi";
     private static String format = "while read line; do " + deleteDotSlash + "; echo `stat -"
             + statOpt
             + " ' %A %Z %s %F \"%n\"' -- \"$line\"` \\\"`dctc_real_path_ \"$line\"`\\\"; done";
