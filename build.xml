@@ -73,7 +73,7 @@
     </target>
 
     <target name="dctc-jar" depends="core-jar">
-        <exec executable="./dctc-hash-update.sh">
+        <exec executable="./script/update-pattern">
           <arg value="--checkout" />
           <arg value="--describe" />
           <arg value="--print" />
