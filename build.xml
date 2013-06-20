@@ -74,7 +74,10 @@
 
     <target name="dctc-jar" depends="core-jar">
         <exec executable="./dctc-hash-update.sh">
-            <arg value="./src/dctc/java/com/dataiku/dctc/configuration/Version.java" />
+          <arg value="--checkout" />
+          <arg value="--describe" />
+          <arg value="--print" />
+          <arg value="./src/dctc/java/com/dataiku/dctc/configuration/Version.java" />
         </exec>
         <path id="lib.path.id">
             <fileset dir="${clib.dir}" />

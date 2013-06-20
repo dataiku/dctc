@@ -1,22 +1,66 @@
 #! /bin/sh
 
 set -e
+me=`basename $0`
+stderr() {
+    local i
+    for i; do
+        echo >&2 "$me: $i"
+    done
+}
+error () {
+    local status=$1
+    shift
+    stderr "$@"
+    exit $status
+}
 
-echo The version is: `git describe --tags`
+usage() {
+    cat <<.
+usage: $0 [OPT...] PATH...
 
-if [ "x$1" = "x" ]; then
-    echo Need an input file.
-    exit 1
-fi
+Options:
+  -h, --help      Display this message and exit.
+  -c, --checkout  Make a git checkout before do the work.
+  -d, --describe  Change pattern with \`git describe\'.
+  -p, --print     Print the describe string.
+.
+    exit $1
+}
 
-if git describe --tags > /dev/null 2>&1; then
-    describe="`git describe --tags`"
+print() {
+    echo "version: $describe"
+}
 
-else
-    describe="0.0"
-fi
+work() {
+    if $checkout; then
+        git checkout -- "$1"
+    fi
+    if $print; then
+        print
+    fi
+    if [ ! -f "$1" ]; then
+        exit 42
+    fi
 
-git checkout -- "$1" || echo -- $1 is not gitted # Reset the file.
+    sed -e "s/$pattern/$describe/g" < "$1" > "${1}e"
+    mv -- "${1}e" "$1"
+}
 
-sed -e "s/XXX_GIT_VERSION_XXX/$describe/" < "$1" > "${1}e"
-mv -- "${1}e" "$1"
+set_git_describe() {
+    describe="`git describe`"
+}
+
+
+print=false
+checkout=false
+pattern="XXX_GIT_VERSION_XXX"
+for opt; do
+    case $opt in
+        (-h|--help) usage 0 ;;
+        (-c|--checkout) checkout=true ;;
+        (-d|--describe) set_git_describe ;;
+        (-p|--print) print=true ;;
+        (*) work $opt ;;
+    esac
+done
