@@ -64,12 +64,14 @@ public class StreamReplacementReader extends Reader {
             return res;
         }
 
-        //int available = inputStream.available();
-        int nbRead = inputStream.read(cbuf, off, len);
-        if (nbRead == -1) {
+        if (stop) {
+            stop = false;
             return -1;
         }
-        String buffer = replace.transform(new String(cbuf, off, len), true);
+        int nbRead = inputStream.read(cbuf, off, len);
+        stop = nbRead == -1;
+
+        String buffer = replace.transform(new String(cbuf, off, len), stop);
         char[] res = buffer.toCharArray();
         for (int i = 0; i < len && i < res.length; ++i) {
             cbuf[i + off] = res[i];
@@ -82,7 +84,11 @@ public class StreamReplacementReader extends Reader {
             }
             this.buffer = new String(cache);
         }
-        return Math.min(len, res.length);
+        int foo = Math.min(len, res.length);;
+        if (foo == 0) {
+            return -1;
+        }
+        return foo;
 
     }
     @Override
@@ -93,5 +99,5 @@ public class StreamReplacementReader extends Reader {
     private StreamReplacement replace;
     private Reader inputStream;
     private String buffer = new String();
-
+    private boolean stop = false;
 }
