@@ -10,12 +10,12 @@ public class CSVFormatConfig {
     public CSVFormatConfig(WithParams p) {
         charset = p.getParam("charset", "utf8");
         separator = p.getCharParam("separator");
-        if (p.getParam("quoteChar", "") != "") {
+        if (!p.getParam("quoteChar", "").isEmpty()) {
             quoteChar = p.getCharParam("quoteChar");
         } else {
             quoteChar = '"';
         }
-        if (p.getParam("escapeChar", "") != "") {
+        if (!p.getParam("escapeChar", "").isEmpty()) {
             escapeChar = p.getCharParam("escapeChar");
         }
 
