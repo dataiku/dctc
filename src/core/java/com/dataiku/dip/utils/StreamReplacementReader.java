@@ -6,8 +6,8 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.nio.CharBuffer;
 
-public class InputStreamReplacement extends Reader {
-    public InputStreamReplacement(StreamReplacement replace, Reader inputStream) {
+public class StreamReplacementReader extends Reader {
+    public StreamReplacementReader(StreamReplacement replace, Reader inputStream) {
         this.replace = replace;
         this.inputStream = inputStream;
     }
@@ -69,7 +69,7 @@ public class InputStreamReplacement extends Reader {
         if (nbRead == -1) {
             return -1;
         }
-        String buffer = replace.transform(new String(cbuf, off, len), inputStream.ready());
+        String buffer = replace.transform(new String(cbuf, off, len), true);
         char[] res = buffer.toCharArray();
         for (int i = 0; i < len && i < res.length; ++i) {
             cbuf[i + off] = res[i];
