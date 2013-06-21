@@ -28,8 +28,8 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
 
     @Override
     public boolean run(StreamsInputSplit in, ProcessorOutput out, ProcessorOutput err,
-                       ColumnFactory cf, RowFactory rf, StreamInputSplitProgressListener listener,
-                       ExtractionLimit limit) throws Exception {
+            ColumnFactory cf, RowFactory rf, StreamInputSplitProgressListener listener,
+            ExtractionLimit limit) throws Exception {
         long totalBytes = 0, totalRecords = 0;
         while (true) {
             EnrichedInputStream stream = in.nextStream();
@@ -43,10 +43,10 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
             CSVReader reader = null;
             if (conf.escapeChar != null) {
                 reader = new CSVReader(new InputStreamReader(cis, conf.charset), conf.separator,
-                                       conf.quoteChar, conf.escapeChar);
+                        conf.quoteChar, conf.escapeChar);
             } else {
                 reader = new CSVReader(new InputStreamReader(cis, conf.charset), conf.separator,
-                                       conf.quoteChar);
+                        conf.quoteChar);
             }
             try {
                 List<Column> columns = new ArrayList<Column>();
@@ -68,13 +68,17 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                         }
                         for (String ch : line) {
                             ch = ch.trim();
+                            // Sometimes, people leave holes in the header ...
+                            if (ch.isEmpty()) {
+                                ch = "col_" + columns.size();
+                            }
                             Column cd = cf.column(ch);
                             columns.add(cd);
                         }
                     } else {
                         if (columns.size() > 0 && line.length != columns.size() && Math.abs(line.length - columns.size()) > 2) {
                             logger.info("Line has an unexpected number of columns, line has " + line.length +
-                                        " columns, extractor has " + columns.size());
+                                    " columns, extractor has " + columns.size());
                         }
 
                         if (line.length > columns.size()) {
@@ -119,7 +123,7 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                             Runtime runtime = Runtime.getRuntime();
                             double p = ((double) runtime.totalMemory()) / runtime.maxMemory() * 100;
                             logger.info("CSV Emitted " + fileLines + " lines from file, " + totalRecords + " total, " +
-                                        columns.size() + " columns - interned: " + nintern + " MEM: " + p + "%");
+                                    columns.size() + " columns - interned: " + nintern + " MEM: " + p + "%");
                         }
                         listener.setData(totalBytes + cis.getCount(), totalRecords, 0);
                     }
