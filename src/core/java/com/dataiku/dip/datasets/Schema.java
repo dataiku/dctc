@@ -24,7 +24,8 @@ public class Schema {
         BOOLEAN("boolean"),
         /** No size limitation */
         STRING("string"),
-        ARRAY("array");
+        ARRAY("array"),
+        MAP("map");
 
         Type(String name) {
             this.name = name;
@@ -38,6 +39,9 @@ public class Schema {
         public static Type forName(String name) {
             if (ARRAY_PATTERN.matcher(name).matches()) {
                 return Type.ARRAY;
+            }
+            if (MAP_PATTERN.matcher(name).matches()) {
+                return Type.MAP;
             }
             for (Type t : Type.values()) {
                 if (t.name.equals(name)) {
@@ -106,6 +110,7 @@ public class Schema {
     }
 
     public final static Pattern ARRAY_PATTERN = Pattern.compile("array<([^,>]*)>");
+    public final static Pattern MAP_PATTERN = Pattern.compile("map<\\s*([^,>]*)\\s*,\\s*([^,>]*)\\s*>");
 
     public Schema() {
     }
