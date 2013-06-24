@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.apache.commons.cli.Options;
 
-import com.dataiku.dctc.command.abs.ListCommand;
+import com.dataiku.dctc.command.abs.ListFilesCommand;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.copy.CopyTask;
 import com.dataiku.dctc.copy.CopyTasksExecutor;
@@ -15,7 +15,7 @@ import com.dataiku.dctc.display.ThreadedDisplay;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
-public class Mv extends ListCommand {
+public class Mv extends ListFilesCommand {
     public String tagline() {
         return "Move files and folders.";
     }

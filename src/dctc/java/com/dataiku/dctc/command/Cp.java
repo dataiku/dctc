@@ -8,7 +8,7 @@ import java.util.List;
 import org.apache.commons.cli.Options;
 
 import com.dataiku.dctc.GlobalConstants;
-import com.dataiku.dctc.command.abs.ListCommand;
+import com.dataiku.dctc.command.abs.ListFilesCommand;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.copy.CopyTask;
 import com.dataiku.dctc.copy.CopyTasksExecutor;
@@ -23,7 +23,7 @@ import com.dataiku.dip.utils.IndentedWriter;
  *
  * @see GeneralizedFile
  */
-public class Cp extends ListCommand {
+public class Cp extends ListFilesCommand {
     public String tagline() {
         return "Copy files and directories.";
     }

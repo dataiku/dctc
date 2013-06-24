@@ -13,14 +13,7 @@ import com.dataiku.dctc.copy.CopyTask;
 import com.dataiku.dctc.file.FileManipulation;
 import com.dataiku.dctc.file.GeneralizedFile;
 
-/**
- * Abstract class for listing commands.
- *
- * This class is based on GeneralizedFile.
- *
- * @see GeneralizedFile
- */
-public abstract class ListCommand extends Command {
+public abstract class ListFilesCommand extends Command {
     // Abstract methods from Command class
     public abstract String cmdname();
     protected abstract String proto();

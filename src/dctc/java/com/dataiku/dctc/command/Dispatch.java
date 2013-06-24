@@ -8,7 +8,7 @@ import java.util.List;
 import org.apache.commons.cli.Options;
 import org.apache.commons.lang.NotImplementedException;
 
-import com.dataiku.dctc.command.abs.ListCommand;
+import com.dataiku.dctc.command.abs.ListFilesCommand;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.copy.CopyTask;
 import com.dataiku.dctc.copy.CopyTasksExecutor;
@@ -36,7 +36,7 @@ import com.dataiku.dip.utils.IndentedWriter;
  *
  * @see GeneralizedFile
  */
-public class Dispatch extends ListCommand {
+public class Dispatch extends ListFilesCommand {
     public String tagline() {
         return "Dispatches the content of input files to output files.";
     }
