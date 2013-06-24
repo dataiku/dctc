@@ -1,5 +1,5 @@
 #! /bin/sh
-if echo $0 | grep -E '^/' > /dev/null; then
+if echo $0 | grep -qE '^/'; then
     path=$0
 else
     path=`pwd`/$0
