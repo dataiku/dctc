@@ -28,14 +28,6 @@ import com.dataiku.dip.partitioning.TimeDimension;
 import com.dataiku.dip.utils.IndentedWriter;
 
 
-/**
- * Dispatch algorithm based on GeneralizedFile.
- *
- * This algorithm split each input file to n output files using a
- * split function.
- *
- * @see GeneralizedFile
- */
 public class Dispatch extends ListFilesCommand {
     public String tagline() {
         return "Dispatches the content of input files to output files.";

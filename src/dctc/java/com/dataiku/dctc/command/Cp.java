@@ -18,11 +18,6 @@ import com.dataiku.dctc.display.ThreadedDisplay;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
-/**
- * Cp algorithm based on GeneralizedFile.
- *
- * @see GeneralizedFile
- */
 public class Cp extends ListFilesCommand {
     public String tagline() {
         return "Copy files and directories.";

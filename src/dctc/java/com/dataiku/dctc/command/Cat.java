@@ -15,11 +15,6 @@ import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
-/**
- * Cat algorithm based on GeneralizedFile.
- *
- * @see GeneralizedFile
- */
 public class Cat extends Command {
     public String tagline() {
         return "Display the content of one or several files.";

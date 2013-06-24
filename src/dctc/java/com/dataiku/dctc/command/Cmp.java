@@ -12,11 +12,6 @@ import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
-/**
- * Cat algorithm based on GeneralizedFile.
- *
- * @see GeneralizedFile
- */
 public class Cmp extends Command {
     public String tagline() {
         return "Compare two files byte by byte.";
