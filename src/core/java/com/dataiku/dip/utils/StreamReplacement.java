@@ -56,7 +56,7 @@ public class StreamReplacement implements StreamFilter {
             return transform(str, availableBytes);
         }
         else {
-            int outputSize = availableBytes ? str.length() - minCache: str.length(); // FIXME: Check this.
+            int outputSize = availableBytes ? str.length() - minCache: str.length();
             assert outputSize >= 0;
             cache = str.substring(outputSize);
             return str.substring(0, outputSize);
