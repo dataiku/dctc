@@ -19,7 +19,6 @@ public class StreamReplacement implements StreamFilter {
         replacementString = new ArrayList<StringPair>();
         replacementString.add(new StringPair(source, destination));
         minCache = source.length() - 1;
-        System.err.println("debug: minCache: " + minCache);
     }
 
     @Override
