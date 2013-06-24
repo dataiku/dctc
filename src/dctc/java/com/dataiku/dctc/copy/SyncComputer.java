@@ -62,6 +62,11 @@ public class SyncComputer {
                         return false;
                     }
                     break;
+                case SIZE_ONLY:
+                    if (dst.getSize() == src.getSize()) {
+                        return false;
+                    }
+                    break;
                 case TIME_AND_SIZE:
                     if (dst.getSize() == src.getSize() && !dateIsDifferent(src, dst)) {
                         return false;
