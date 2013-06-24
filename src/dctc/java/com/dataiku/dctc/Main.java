@@ -15,7 +15,7 @@ import org.apache.log4j.PatternLayout;
 import com.dataiku.dctc.DCTCLog.Mode;
 import com.dataiku.dctc.command.AddAccount;
 import com.dataiku.dctc.command.Cat;
-import com.dataiku.dctc.command.Command;
+import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.command.Cmp;
 import com.dataiku.dctc.command.Cp;
 import com.dataiku.dctc.command.Dispatch;

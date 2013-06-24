@@ -1,4 +1,4 @@
-package com.dataiku.dctc.command;
+package com.dataiku.dctc.command.abs;
 
 import java.io.IOException;
 import java.net.UnknownHostException;

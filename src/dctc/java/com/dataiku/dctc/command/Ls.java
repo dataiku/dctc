@@ -14,6 +14,7 @@ import org.apache.commons.cli.Options;
 
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.Globbing;
+import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.display.Size;
 import com.dataiku.dctc.file.Acl;

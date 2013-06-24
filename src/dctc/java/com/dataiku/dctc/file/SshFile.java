@@ -25,7 +25,7 @@ import org.apache.commons.io.IOUtils;
 import com.dataiku.dctc.AuthenticationFailedException;
 import com.dataiku.dctc.DCTCLog;
 import com.dataiku.dctc.GlobalConstants;
-import com.dataiku.dctc.command.Command.EndOfCommand;
+import com.dataiku.dctc.command.abs.Command.EndOfCommand;
 import com.dataiku.dctc.configuration.SshConfig;
 import com.dataiku.dctc.configuration.SshUserInfo;
 import com.dataiku.dctc.exception.UserException;

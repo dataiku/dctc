@@ -2,6 +2,7 @@ package com.dataiku.dctc.command;
 
 import org.apache.commons.cli.Options;
 
+import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dip.utils.IndentedWriter;
 
 public class Version extends Command {

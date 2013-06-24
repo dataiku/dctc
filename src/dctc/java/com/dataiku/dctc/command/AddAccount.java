@@ -10,6 +10,7 @@ import org.apache.commons.cli.Options;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.configuration.Configuration;
 import com.dataiku.dctc.configuration.CredentialProviderBank;
 import com.dataiku.dctc.configuration.GlobalConf;

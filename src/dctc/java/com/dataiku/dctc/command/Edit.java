@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.commons.cli.Options;
 import org.apache.commons.lang.StringUtils;
 
+import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.copy.CopyTask;
 import com.dataiku.dctc.copy.SimpleCopyTaskRunnableFactory;
 import com.dataiku.dctc.file.FileManipulation;

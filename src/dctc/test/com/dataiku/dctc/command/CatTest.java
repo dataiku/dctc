@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import com.dataiku.dctc.Main;
 import com.dataiku.dctc.command.Cat;
-import com.dataiku.dctc.command.Command;
+import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.configuration.CredentialProviderBank;
 import com.dataiku.dctc.file.FileBuilder;
 import com.dataiku.dctc.Settings;

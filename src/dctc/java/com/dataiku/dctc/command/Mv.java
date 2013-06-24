@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.cli.Options;
 
+import com.dataiku.dctc.command.abs.ListCommand;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.copy.CopyTask;
 import com.dataiku.dctc.copy.CopyTasksExecutor;

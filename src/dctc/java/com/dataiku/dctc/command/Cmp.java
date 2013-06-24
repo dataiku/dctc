@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.cli.Options;
 
 import com.dataiku.dctc.AutoGZip;
+import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
