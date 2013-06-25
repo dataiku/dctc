@@ -76,7 +76,7 @@ public class Head extends Command {
 
     @Override
     protected String proto() {
-        return "dctc head [OPT...] PATHS...";
+        return "[OPT...] PATHS...";
     }
 
     // Private

@@ -49,7 +49,7 @@ public class Cmp extends Command {
     }
     @Override
     protected final String proto() {
-        return "dctc cmp [OPT...] FILES... [SKIP1 [SKIP2]]";
+        return "[OPT...] FILES... [SKIP1 [SKIP2]]";
     }
 
     // Private

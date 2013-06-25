@@ -19,7 +19,7 @@ public class Version extends Command {
     }
     @Override
     protected String proto() {
-        return "dctc version";
+        return "";
     }
     @Override
     protected Options setOptions() {

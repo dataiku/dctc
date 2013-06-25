@@ -95,7 +95,7 @@ public class Rm extends Command {
     }
     @Override
     protected String proto() {
-        return "dctc rm [OPT...] [FILE...]";
+        return "[OPT...] [FILE...]";
     }
 
     // Private

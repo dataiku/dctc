@@ -82,7 +82,7 @@ public class Find extends Command {
     }
     @Override
     protected String proto() {
-        return "dctc find [OPT...] [PATH]";
+        return "[OPT...] [PATH]";
     }
 
     // Private

@@ -25,6 +25,8 @@ import com.dataiku.dctc.file.FileBuilder;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
+import static com.dataiku.dip.utils.PrettyString.scat;
+
 public abstract class Command {
     // The goal of this exception is to abort a command by bubbling up to main
     public static class EndOfCommand extends Error {
@@ -69,7 +71,9 @@ public abstract class Command {
         }
         initOptions();
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp(proto(), opt);
+        formatter.printHelp(scat("dctc"
+                                 , cmdname()
+                                 , proto()), opt);
 
     }
     public FileBuilder getFileBuilder() {

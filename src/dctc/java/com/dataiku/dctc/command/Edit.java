@@ -134,7 +134,7 @@ public class Edit extends Command {
 
     @Override
     protected String proto() {
-        return "dctc edit PATH...";
+        return "PATH...";
     }
 
     // Private

@@ -82,7 +82,7 @@ public class ListColumns extends Command {
     }
     // protected
     protected String proto() {
-        return "dctc list-columns [OPT...] ARG...";
+        return "[OPT...] ARG...";
     }
 
     // private

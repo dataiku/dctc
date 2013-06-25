@@ -29,7 +29,7 @@ public class Tail extends Command {
     }
     @Override
     protected String proto() {
-        return "dctc tail [OPTIONS...] [FILE...]";
+        return "[OPTIONS...] [FILE...]";
     }
     @Override
     protected Options setOptions() {

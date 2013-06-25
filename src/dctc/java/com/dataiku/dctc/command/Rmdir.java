@@ -52,6 +52,6 @@ public class Rmdir extends Command {
     }
     @Override
     protected String proto() {
-        return "dctc rmdir [OPT...] [FILES...]";
+        return "[OPT...] [FILES...]";
     }
 }

@@ -143,7 +143,7 @@ public class Grep extends Command {
     // Protected
     @Override
     protected String proto() {
-        return "dctc grep [OPT...] PATTERN FILES...";
+        return "[OPT...] PATTERN FILES...";
     }
     @Override
     protected List<String> getFileArguments(String[] list) {

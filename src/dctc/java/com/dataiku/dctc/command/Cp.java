@@ -36,7 +36,7 @@ public class Cp extends ListFilesCommand {
     }
     @Override
     protected String proto() {
-        return "dctc cp [OPT...] SOURCE... DST";
+        return "[OPT...] SOURCE... DST";
     }
     /// Getters
     public boolean noClobber() {

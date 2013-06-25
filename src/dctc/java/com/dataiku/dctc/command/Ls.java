@@ -466,7 +466,7 @@ public class Ls extends Command {
     }
     @Override
     protected String proto() {
-        return "dctc ls [OPT...] [PATH...]";
+        return "[OPT...] [PATH...]";
     }
 
     // Private

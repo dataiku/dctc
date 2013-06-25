@@ -146,7 +146,7 @@ public class AddAccount extends Command {
     }
     @Override
     protected String proto() {
-        return "dctc add-account protocol [account-name]";
+        return "protocol [account-name]";
     }
     @Override
     protected Options setOptions() {

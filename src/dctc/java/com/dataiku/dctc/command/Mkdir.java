@@ -53,7 +53,7 @@ public class Mkdir extends Command {
     }
     @Override
     protected String proto() {
-        return "dctc mkdir [OPT...] [FILES...]";
+        return "[OPT...] [FILES...]";
     }
 
     private boolean verbose() {

@@ -44,7 +44,7 @@ public class Cat extends Command {
     }
     @Override
     protected final String proto() {
-        return "dctc cat [OPT...] FILES...";
+        return "[OPT...] FILES...";
     }
 
     // Private

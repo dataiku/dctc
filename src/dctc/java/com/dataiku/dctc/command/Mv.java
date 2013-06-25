@@ -67,7 +67,7 @@ public class Mv extends ListFilesCommand {
     }
     @Override
     protected String proto() {
-        return "dctc mv [OPT...] SOURCE... DST";
+        return "[OPT...] SOURCE... DST";
     }
     protected boolean recursion(GeneralizedFile dir) {
         return true;

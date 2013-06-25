@@ -122,7 +122,7 @@ public class Sync extends Command {
     }
     @Override
     protected String proto() {
-        return "dctc sync [OPT...] INPUT... OUTPUT: synchronizes input folders into output";
+        return "[OPT...] INPUT... OUTPUT";
     }
 
     private int getThreadLimit() {

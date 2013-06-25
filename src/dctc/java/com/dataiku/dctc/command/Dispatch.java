@@ -150,7 +150,7 @@ public class Dispatch extends ListFilesCommand {
     }
     @Override
     protected String proto() {
-        return "dctc dispatch [OPT...] InputPath... OutputPath";
+        return "[OPT...] InputPath... OutputPath";
     }
     @Override
     protected boolean deleteSource() {
