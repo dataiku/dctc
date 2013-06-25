@@ -3,7 +3,6 @@ package com.dataiku.dctc.command;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 import org.apache.commons.cli.Options;
 
@@ -21,12 +20,21 @@ public class Cmp extends Command {
 
     // Public
     @Override
-    public void perform(List<GeneralizedFile> args) {
-        if (args.size() != 2) {
+    public void perform(String[] args) {
+        if (args.length < 2) {
             error("Missing operands", 2);
+            return;
+        }
+        GeneralizedFile left = build(args[0]);
+        GeneralizedFile right = build(args[1]);
+        long lskip = parseSkip(args, 2);
+        long rskip = parseSkip(args, 3);
+
+        if (lskip < 0 || rskip < 0) {
+            return;
         }
 
-        compare(args.get(0), args.get(1));
+        compare(left, right, lskip, rskip);
     }
     @Override
     public final String cmdname() {
@@ -40,14 +48,17 @@ public class Cmp extends Command {
     }
     @Override
     protected final String proto() {
-        return "dctc cmp [OPT...] FILES...";
+        return "dctc cmp [OPT...] FILES... [SKIP1 [SKIP2]]";
     }
 
     // Private
-    private void compare(GeneralizedFile l, GeneralizedFile r) {
+    private void compare(GeneralizedFile l, GeneralizedFile r, long lskip, long rskip) {
         InputStream left = open(l);
         InputStream right = open(r);
         if (left == null || right == null) {
+            return;
+        }
+        if (skip(l, left, lskip) || skip(r, right, rskip)) {
             return;
         }
 
@@ -68,7 +79,40 @@ public class Cmp extends Command {
             }
 
         }
-
+    }
+    private long parseSkip(String[] args, int elt) {
+        if (args.length <= elt) {
+            return 0;
+        }
+        String l = args[elt].toLowerCase();
+        String unit = l.replaceAll("[0-9]", "");
+        String number = l.replaceAll("\\D", "");
+        if (!l.equals(number + unit)) {
+            error("`" + l + "' is not a number", 2);
+            return -1;
+        }
+        long exp = 1;
+        if (!unit.isEmpty()) {
+            exp = unit_index.indexOf(unit.substring(0, 1));
+            int len = unit.length();
+            if (len != 2) {
+                exp = 2 << (10 * exp - 1);
+            }
+            else {
+                exp = (long) Math.pow(10, 3 * exp);
+            }
+        }
+        return Long.parseLong(number) * exp;
+    }
+    private boolean skip(GeneralizedFile file, InputStream stream, long skip){
+        try {
+            stream.skip(skip);
+            return false;
+        }
+        catch (IOException e) {
+            error("Unexpected error while skiping " + file.givenName(), e, 2);
+            return true;
+        }
     }
     private void diff(GeneralizedFile l, GeneralizedFile r, long count) {
         System.out.println(l.givenName() + " " + r.givenName() + " differ: byte " + count);
@@ -102,4 +146,5 @@ public class Cmp extends Command {
 
         return stream;
     }
+    private static String unit_index = " kmgtpezy";
 }
