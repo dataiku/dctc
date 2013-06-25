@@ -20,6 +20,9 @@ public class StreamReplacement implements StreamFilter {
 
     @Override
     public String transform(String str, boolean availableBytes) {
+        return transform(str, availableBytes, -1);
+    }
+    private String transform(String str, boolean availableBytes, int start_idx) {
 
         // Restore the string as if we didn't have any buffer.
         str = buffer + str;
@@ -42,7 +45,7 @@ public class StreamReplacement implements StreamFilter {
         StringPair best_pair = null;
 
         for (StringPair pair: replacementString) {
-            int index = str.indexOf(pair.getSource());
+            int index = str.indexOf(pair.getSource(), start_idx);
             if (index != -1 && index < best_idx) {
                 best_idx = index;
                 best_pair = pair;
@@ -53,9 +56,8 @@ public class StreamReplacement implements StreamFilter {
             str = str.substring(0, best_idx)
                 + best_pair.getDestination()
                 + str.substring(best_idx + best_pair.getSource().length());
-            // Make the recursion. FIXME: Could make an infinite loop
-            // if 'new StringPair("foo", "foo")'
-            return transform(str, availableBytes);
+            // Make the recursion. Skip the modified characters.
+            return transform(str, availableBytes, start_idx + best_pair.getDestination().length());
         }
         else {
             // No available replacement, compute the buffer, and
