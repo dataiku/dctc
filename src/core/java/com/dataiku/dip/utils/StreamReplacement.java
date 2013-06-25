@@ -2,9 +2,6 @@ package com.dataiku.dip.utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 
 public class StreamReplacement implements StreamFilter {
     StreamReplacement(List<StringPair> replacementString) {
@@ -23,38 +20,46 @@ public class StreamReplacement implements StreamFilter {
 
     @Override
     public String transform(String str, boolean availableBytes) {
+
+        // Restore the string as if we didn't have any buffer.
         str = buffer + str;
         buffer = "";
+        // If we didn't enough string in str.
         if (str.length() < minCache) {
-            buffer = str;
             if (!availableBytes) {
-                return buffer;
+                // End of the stream, squash the buffer.
+                return str;
             }
             else {
+                // Keep the entire string as buffer.
+                buffer = str;
                 return "";
             }
         }
 
-        allowedReplacement.clear();
+        // Find the best replacement.
+        int best_idx = Integer.MAX_VALUE;
+        StringPair best_pair = null;
 
         for (StringPair pair: replacementString) {
             int index = str.indexOf(pair.getSource());
-            if (index != -1) {
-                addIfNeeded(index, pair, allowedReplacement);
+            if (index != -1 && index < best_idx) {
+                best_idx = index;
+                best_pair = pair;
             }
         }
-
-        if (!allowedReplacement.isEmpty()) {
-            Entry<Integer, StringPair> replacement = allowedReplacement.entrySet().iterator().next();
-            assert str.indexOf(replacement.getValue().getSource()) == replacement.getKey()
-                : "str.indexOf(replacement.getValue().getSource()) == replacement.getKey()";
-            str = buffer + str;
-            str = str.substring(0, replacement.getKey())
-                + replacement.getValue().getDestination()
-                + str.substring(replacement.getKey() + replacement.getValue().getSource().length());
+        if (best_idx != Integer.MAX_VALUE) {
+            // Find one replacement, apply it.
+            str = str.substring(0, best_idx)
+                + best_pair.getDestination()
+                + str.substring(best_idx + best_pair.getSource().length());
+            // Make the recursion. FIXME: Could make an infinite loop
+            // if 'new StringPair("foo", "foo")'
             return transform(str, availableBytes);
         }
         else {
+            // No available replacement, compute the buffer, and
+            // leave.
             int outputSize = availableBytes ? str.length() - minCache: str.length();
             assert outputSize >= 0;
             buffer = str.substring(outputSize);
@@ -109,15 +114,8 @@ public class StreamReplacement implements StreamFilter {
 
     }
 
-    // Privates
-    private void addIfNeeded(Integer index, StringPair pair, Map<Integer, StringPair> map) {
-        if (!map.containsKey(index)) {
-            map.put(index, pair);
-        }
-    }
     // Attributes
     private List<StringPair> replacementString;
     private int minCache;
     private String buffer = new String();
-    private Map<Integer, StringPair> allowedReplacement = new TreeMap<Integer, StringPair>();
 }
