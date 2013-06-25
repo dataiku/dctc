@@ -30,14 +30,14 @@ if ! [ -f $JARFILE ]; then
     cd -
 fi
 
-if [ x$1 = x ]; then
+if [ "x$1" = "x" ]; then
     DEST=dctc
 else
-    DEST=$1
+    DEST="$1"
 fi
 TMP_DEST=`mktemp /tmp/dctc.XXXX`
 
-cat >$TMP_DEST<<.
+cat >"$TMP_DEST"<<.
 #! /bin/sh
 TMPFILE=\`mktemp /tmp/temp.XXXX\`
 tail -n+$line_pattern \$0 > \$TMPFILE
@@ -45,8 +45,8 @@ java -jar \$TMPFILE "\$@"
 RET=\$?; rm -f \$TMPFILE; exit $RET
 .
 
-sed -e "s/$line_pattern/`wc -l <$TMP_DEST | sed 's/ *//'`/" $TMP_DEST > $DEST
-cat $JARFILE >> $DEST
-chmod u+x $DEST
+sed -e "s/$line_pattern/`wc -l <$TMP_DEST | sed 's/ *//'`/" < "$TMP_DEST" > "$DEST"
+cat "$JARFILE" >> "$DEST"
+chmod u+x -- "$DEST"
 
-rm $TMP_DEST
+rm -- "$TMP_DEST"
