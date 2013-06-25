@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.cli.Options;
 
+import com.dataiku.dctc.AutoGZip;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dctc.file.GeneralizedFileInputSplit;
@@ -56,7 +57,7 @@ public class ListColumns extends Command {
 
             { // Get the column names
                 try {
-                    inputStream = new GeneralizedFileInputSplit(arg, arg.inputStream());// FIXME: manage compress content.
+                    inputStream = new GeneralizedFileInputSplit(arg, AutoGZip.buildInput(arg));
                 }
                 catch (IOException e) {
                     e.printStackTrace();
