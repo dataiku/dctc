@@ -1,16 +1,32 @@
 #! /bin/sh
 
 set -e
-
+me=`basename $0`
 JARFILE=../dist/dctc-tool.jar
 
 line_pattern=XX_LINE_XX
+
+stderr ()
+{
+  local i
+  for i
+  do
+    echo >&2 "$me: $i"
+  done
+}
+
+run() {
+    stderr "$@"
+    "$@"
+}
 
 if ! [ -f $JARFILE ]; then
     echo Run ant
     sleep 1
     cd ..
-    ant clean tooljar
+    run ant distclean
+    run ant configure
+    run ant tooljar
     cd -
 fi
 
