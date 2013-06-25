@@ -54,9 +54,6 @@ public class Cmp extends Command {
 
     // Private
     private void compare(GeneralizedFile l, GeneralizedFile r, long lskip, long rskip) {
-        System.err.println("debug: lskip: " + lskip);
-        System.err.println("debug: rskip: " + rskip);
-        System.err.println("debug: getExitStatus(): " + getExitCode());
         InputStream left = open(l);
         InputStream right = open(r);
         if (left == null || right == null) {
@@ -110,7 +107,9 @@ public class Cmp extends Command {
     }
     private boolean skip(GeneralizedFile file, InputStream stream, long skip){
         try {
-            stream.skip(skip);
+            while (skip != 0) {
+                skip -= stream.skip(skip);
+            }
             return false;
         }
         catch (IOException e) {
