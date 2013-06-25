@@ -43,7 +43,7 @@ public abstract class Command {
         return Arrays.asList(list);
     }
     public void perform(String[] args) {
-        exitCode = 0;
+        resetExitCode();
         // Default implementation could be override
         List<GeneralizedFile> arguments = getArgs(args);
         if (arguments != null) {
@@ -84,7 +84,7 @@ public abstract class Command {
         return exitCode;
     }
     public void perform(GeneralizedFile[] args) {
-        exitCode = 0;
+        resetExitCode();
         perform(Arrays.asList(args));
     }
 
@@ -184,6 +184,9 @@ public abstract class Command {
     }
     protected String getOptionValue(String opt, String defaultValue) {
         return hasOption(opt) ? getOptionValue(opt) : defaultValue;
+    }
+    protected void resetExitCode() {
+        this.exitCode = 0;
     }
 
     // Private methods

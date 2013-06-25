@@ -21,6 +21,7 @@ public class Cmp extends Command {
     // Public
     @Override
     public void perform(String[] args) {
+        resetExitCode();
         if (args.length < 2) {
             error("Missing operands", 2);
             return;
@@ -53,6 +54,9 @@ public class Cmp extends Command {
 
     // Private
     private void compare(GeneralizedFile l, GeneralizedFile r, long lskip, long rskip) {
+        System.err.println("debug: lskip: " + lskip);
+        System.err.println("debug: rskip: " + rskip);
+        System.err.println("debug: getExitStatus(): " + getExitCode());
         InputStream left = open(l);
         InputStream right = open(r);
         if (left == null || right == null) {
