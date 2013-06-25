@@ -46,6 +46,7 @@ public class Grep extends Command {
     // Public
     @Override
     public void perform(String[] args) {
+        resetExitCode();
         List<GeneralizedFile> arguments = getArgs(args);
         if (arguments != null) {
             perform(arguments, pattern);

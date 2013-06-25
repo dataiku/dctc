@@ -32,6 +32,7 @@ public class AddAccount extends Command {
 
     @Override
     public void perform(String[] args) {
+        resetExitCode();
         parseCommandLine(args);
         if (args.length == 0) {
             error("Missing argument: protocol (one of 's3' or 'gs')" + eol(), 2);

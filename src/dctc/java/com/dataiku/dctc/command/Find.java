@@ -21,6 +21,7 @@ public class Find extends Command {
     // Public
     @Override
     public final void perform(String[] args) {
+        resetExitCode();
         List<GeneralizedFile> arguments = getArgs(args);
         if (arguments != null) {
             if (arguments.size() == 0) {
