@@ -23,12 +23,12 @@ public class StreamReplacement implements StreamFilter {
 
     @Override
     public String transform(String str, boolean availableBytes) {
-        str = cache + str;
-        cache = "";
+        str = buffer + str;
+        buffer = "";
         if (str.length() < minCache) {
-            cache = str;
+            buffer = str;
             if (!availableBytes) {
-                return cache;
+                return buffer;
             }
             else {
                 return "";
@@ -48,7 +48,7 @@ public class StreamReplacement implements StreamFilter {
             Entry<Integer, StringPair> replacement = allowedReplacement.entrySet().iterator().next();
             assert str.indexOf(replacement.getValue().getSource()) == replacement.getKey()
                 : "str.indexOf(replacement.getValue().getSource()) == replacement.getKey()";
-            str = cache + str;
+            str = buffer + str;
             str = str.substring(0, replacement.getKey())
                 + replacement.getValue().getDestination()
                 + str.substring(replacement.getKey() + replacement.getValue().getSource().length());
@@ -57,7 +57,7 @@ public class StreamReplacement implements StreamFilter {
         else {
             int outputSize = availableBytes ? str.length() - minCache: str.length();
             assert outputSize >= 0;
-            cache = str.substring(outputSize);
+            buffer = str.substring(outputSize);
             return str.substring(0, outputSize);
         }
     }
@@ -74,7 +74,7 @@ public class StreamReplacement implements StreamFilter {
         return this;
     }
     public int getCacheSize() {
-        return cache.length();
+        return buffer.length();
     }
 
     public class StringPair {
@@ -118,6 +118,6 @@ public class StreamReplacement implements StreamFilter {
     // Attributes
     private List<StringPair> replacementString;
     private int minCache;
-    private String cache = new String();
+    private String buffer = new String();
     private Map<Integer, StringPair> allowedReplacement = new TreeMap<Integer, StringPair>();
 }
