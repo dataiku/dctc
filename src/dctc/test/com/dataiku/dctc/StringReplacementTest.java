@@ -7,8 +7,12 @@ public class StringReplacementTest {
     @org.junit.Test
     public void test() {
         StreamReplacement sr = new StreamReplacement("fooo", "ba");
-        assertTrue("bar ".equals(sr.transform("bar foo", true))); // Check the buffer
-        assertTrue("bar".equals(sr.transform("or", false))); // Check overlap and the trannsformation
-        assertTrue("".equals(sr.transform("", false))); // Check if the buffer is empty
+        assertTrue(eq("bar ", sr.transform("bar foo", true))); // Check the buffer
+        assertTrue(eq("bar", sr.transform("or", false))); // Check overlap and the transformation
+        assertTrue(eq("", sr.transform("", false))); // Check if the buffer is empty
+    }
+
+    private boolean eq(String a, String b) {
+        return a.equals(b);
     }
 }
