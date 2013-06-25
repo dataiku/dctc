@@ -1,0 +1,16 @@
+# -*- mode: org eval: (auto-fill-mode) -*-
+
+* 0.3
+** Cmp command
+
+   Re-implement the 'cmp' command. Compare two files byte by byte.
+** Ls command
+
+   New implement. Optimize the recursive version. Make only two calls to the
+   Amazon S3 or Google GCS API
+
+** Ssh Configuration File
+   
+   Read =~/.ssh/config= for the host, username, and identity key configurations.
+
+** Bug fixes
