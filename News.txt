@@ -1,9 +1,15 @@
 # -*- mode: org eval: (auto-fill-mode) -*-
 
 * 0.3
+
+** List Columns command
+
+   List the columns name of a csv.
+
 ** Cmp command
 
    Re-implement the 'cmp' command. Compare two files byte by byte.
+
 ** Ls command
 
    New implement. Optimize the recursive version. Make only two calls to the
