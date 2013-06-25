@@ -32,6 +32,7 @@ public class ListColumns extends Command {
     public Options setOptions() {
         Options opt = new Options();
         opt.addOption("m", "minimal", false, "Set to minimal the display scheme.");
+        longOpt(opt, "Set the separator", "separator", "s", "sep");
         return opt;
     }
     public String cmdname() {
@@ -40,7 +41,7 @@ public class ListColumns extends Command {
 
     @Override
     public void perform(List<GeneralizedFile> args) {
-        Format csv = new Format("csv").withParam("separator", ",");
+        Format csv = new Format("csv").withParam("separator", getSeparator());
         FormatExtractor extractor = BasicFormatExtractorFactory.build(csv);
         StreamColumnFactory stream = null;
         ExtractionLimit limit = new ExtractionLimit();
@@ -87,6 +88,14 @@ public class ListColumns extends Command {
     }
 
     // private
+    private String getSeparator() {
+        if (hasOption("s")) {
+            return getOptionValue("s");
+        }
+        else {
+            return ",";
+        }
+    }
     private PrettyArray initArray() {
         PrettyArray array = new PrettyArray();
 
