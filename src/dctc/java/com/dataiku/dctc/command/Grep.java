@@ -65,9 +65,9 @@ public class Grep extends Command {
         if (ignoreCase()) {
             pattern = pattern.toLowerCase();
         }
-        try {
-            boolean header = args.size() > 1;
-            for (GeneralizedFile arg: args) {
+        boolean header = args.size() > 1;
+        for (GeneralizedFile arg: args) {
+            try {
                 if (!arg.exists()) {
                     error(arg.givenName(), "No such file or directory", 2);
                     continue;
@@ -101,9 +101,10 @@ public class Grep extends Command {
                     }
                 }
             }
-        } catch (IOException e) {
-            // FIXME TODO XXX: We need an error(string, exception) method that WRITES THE EXCEPTION
-            error("grep failed: " + e, 1);
+            catch (IOException e) {
+                error(arg.givenName(), "grep failed: " + e, 1);
+
+            }
         }
     }
     @Override
