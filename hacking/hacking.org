@@ -1,0 +1,11 @@
+# -*- mode: org -*-
+
+* How to make a release
+
+  #+BEGIN_EXAMPLE sh
+  git tag -a 'vX.X.X' # Add a comment if needed (release upgrade)
+  git push --tags # To the public server
+  cd package
+  ./create-dctc-selfextracting.sh
+  # End publish the `dctc' binary
+  #+END_EXAMPLE
