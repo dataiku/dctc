@@ -23,7 +23,7 @@ import com.dataiku.dip.utils.PrettyArray;
 public class ListColumns extends Command {
     // Public
     public void longDescription(IndentedWriter printer) {
-        printer.print("FIXME");
+        printer.print("List the name of the column, and pretty print it in a table.");
     }
     public String tagline() {
         return "List the name of the column.";
