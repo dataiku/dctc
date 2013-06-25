@@ -530,7 +530,7 @@ public class Ls extends Command {
             }
             else {
                 Acl acl = g.hasAcl() ? g.getAcl() : null;
-                if (acl.getExec("user") != null && acl.getExec("user")) {
+                if (acl != null && acl.getExec("user") != null && acl.getExec("user")) {
                     colorName(colorSpe.get("ex"), f);
                 }
                 else if (g.isFile()) {
