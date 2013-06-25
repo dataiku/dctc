@@ -2,6 +2,17 @@
 
 * 0.3
 
+** Find command
+
+   Manage the option `-type'.
+
+   -type c
+   File is of type c:
+
+   - d: directory
+   - f: file
+   - a: all
+
 ** List Columns command
 
    List the columns name of a csv.

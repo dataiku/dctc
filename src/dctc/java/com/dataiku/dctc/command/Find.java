@@ -78,6 +78,12 @@ public class Find extends Command {
         OptionBuilder.hasArg();
         OptionBuilder.withDescription("Print the file only if its name contains the specified pattern.");
         options.addOption(OptionBuilder.create("name"));
+
+        OptionBuilder.withArgName("c");
+        OptionBuilder.hasArg();
+        OptionBuilder.withDescription("Select the type of the file to print (d(irectory), f(ile), a(all)).");
+        options.addOption(OptionBuilder.create("type"));
+
         return options;
     }
     @Override
@@ -88,6 +94,22 @@ public class Find extends Command {
     // Private
     private void accept(GeneralizedFile path) throws IOException {
         if (!hasName() || pattern.matcher(path.getFileName()).matches()) {
+            switch (kind()) {
+            case ALL:
+                break;
+            case FILE:
+                if (!path.isFile()) {
+                    return;
+                }
+                break;
+            case DIRECTORY:
+                if (!path.isDirectory()) {
+                    return;
+                }
+                break;
+            default:
+                break;
+            }
             System.out.println(path.givenName());
         }
     }
@@ -98,6 +120,28 @@ public class Find extends Command {
         return pattern() != null;
     }
 
+    private enum Kind {
+        ALL
+        , FILE
+        , DIRECTORY
+    }
+    private Kind kind() {
+        if (kind == null) {
+            String value = getOptionValue("type");
+            if ("directory".startsWith(value)) {
+                kind = Kind.DIRECTORY;
+            }
+            else if ("file".startsWith(value)) {
+                kind = Kind.FILE;
+            }
+            else if ("all".startsWith(value)) {
+                kind = Kind.ALL;
+            }
+        }
+        return kind;
+    }
+
     // Attributes
     private Pattern pattern = null;
+    private Kind kind = null;
 }
