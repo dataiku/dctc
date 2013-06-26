@@ -123,6 +123,12 @@ public class Main {
         fillCommand();
 
     }
+    public static boolean help(String cmd) {
+        return (cmd.equals("help") || cmd.equals("-help")
+                || cmd.equals("--help") || cmd.equals("-h")
+                || cmd.equals("-?"));
+
+    }
 
     public static void main(String[] args) {
         atExit();
@@ -149,22 +155,22 @@ public class Main {
                 String usercmd = args[0];
                 String[] cmdargs = new String[args.length - 1];
                 System.arraycopy(args, 1, cmdargs, 0, args.length - 1);
-                if (usercmd.equals("help") || usercmd.equals("-help")
-                    || usercmd.equals("--help") || usercmd.equals("-h")
-                    || usercmd.equals("-?")) {
+
+                if (help(usercmd)) {
                     if (cmdargs.length > 0) {
                         commandHelp(0, cmdargs[0]);
-                    } else {
+                    }
+                    else {
                         globalUsage(0);
                     }
                 }
+
                 Command cmd = cmds.get(usercmd);
                 if (cmd != null) {
                     if (cmd.cmdname().equals("add-account")) {
                         assert cmd instanceof AddAccount;
                         ((AddAccount) cmd).setConfiguration(conf.getConfAppenders());
                     }
-                    //cmd.setConfiguration(conf);
                     cmd.setFileBuilder(conf.getFileBuilder());
                     try {
                         cmd.perform(cmdargs);
