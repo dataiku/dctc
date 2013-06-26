@@ -31,7 +31,8 @@ public class AutoGZip {
         catch (IOException e) {
             if (g.exists()) {
                 return g.inputStream();
-            } else {
+            }
+            else {
                 throw e;
             }
         }

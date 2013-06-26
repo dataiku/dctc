@@ -22,21 +22,24 @@ public class DCTCLog {
     public static void info(String module, String fmt, Object...data) {
         if (mode == Mode.STDERR) {
             System.err.println("dctc " + module + ": " + String.format(fmt, data));
-        } else if (mode == Mode.LOG4J) {
+        }
+        else if (mode == Mode.LOG4J) {
             Logger.getLogger("dctc." + module).info(String.format(fmt, data));
         }
     }
     public static void warn(String module, String fmt, Object...data) {
         if (mode == Mode.STDERR) {
             System.err.println("dctc " + module + ": WARNING: " + String.format(fmt, data));
-        } else if (mode == Mode.LOG4J) {
+        }
+        else if (mode == Mode.LOG4J) {
             Logger.getLogger("dctc." + module).warn(String.format(fmt, data));
         }
     }
     public static void error(String module, String fmt, Object...data) {
         if (mode == Mode.STDERR) {
             System.err.println("dctc " + module + ": ERROR: " + String.format(fmt, data));
-        } else if (mode == Mode.LOG4J) {
+        }
+        else if (mode == Mode.LOG4J) {
             Logger.getLogger("dctc." + module).error(String.format(fmt, data));
         }
     }
@@ -45,21 +48,27 @@ public class DCTCLog {
     private static String buildCompleteExceptionMessage(Throwable t) {
         StringBuilder sb = new StringBuilder();
         int i = 0;
+
         while (true) {
             sb.append(t.getClass().getSimpleName() + ": " + t.getMessage());
             if (t.getCause() != null) {
                 i++;
                 if (i == 1) {
                     sb.append(" (caused by ");
-                } else {
+                }
+                else {
                     sb.append(", caused by: ");
                 }
-            } else {
+            }
+            else {
                 break;
             }
+
             t = t.getCause();
         }
-        if (i> 0) sb.append(")");
+        if (i> 0) {
+            sb.append(")");
+        }
         return sb.toString();
     }
 
@@ -68,11 +77,14 @@ public class DCTCLog {
             if (lvl == Level.DEBUG) {
                 System.err.println("dctc " + module + ": WARNING: " + message);
                 t.printStackTrace();
-            } else {
-                System.err.println("dctc " + module + ": WARNING: " + message + ": " + buildCompleteExceptionMessage(t));
+            }
+            else {
+                System.err.println("dctc " + module + ": WARNING: " + message + ": "
+                                   + buildCompleteExceptionMessage(t));
                 System.err.println("  For more information, rerun with -V");
             }
-        } else if (mode == Mode.LOG4J) {
+        }
+        else if (mode == Mode.LOG4J) {
             Logger.getLogger("dctc." + module).warn(message, t);
         }
     }
@@ -82,11 +94,14 @@ public class DCTCLog {
             if (lvl == Level.DEBUG) {
                 System.err.println("dctc " + module + ": ERROR: " + message + ":");
                 t.printStackTrace();
-            } else {
-                System.err.println("dctc " + module + ": ERROR: " + message + ": " + buildCompleteExceptionMessage(t));
+            }
+            else {
+                System.err.println("dctc " + module + ": ERROR: " + message + ": "
+                                   + buildCompleteExceptionMessage(t));
                 System.err.println("  For more information, rerun with -V");
             }
-        } else if (mode == Mode.LOG4J) {
+        }
+        else if (mode == Mode.LOG4J) {
             Logger.getLogger("dctc." + module).error(message, t);
         }
     }

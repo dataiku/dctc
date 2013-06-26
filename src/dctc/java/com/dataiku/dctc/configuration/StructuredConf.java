@@ -23,10 +23,10 @@ public class StructuredConf {
         global();
         bank();
         Set<String> nonValidSection = conf.getNonValidSection();
-        if (nonValidSection.size() != 0) {
+        if (!nonValidSection.isEmpty()) {
             StringBuilder b = new StringBuilder();
             b.append("Invalid section detected:");
-            for (String key : nonValidSection) {
+            for (String key: nonValidSection) {
                 b.append(eol() + "dctc: error: Invalid section: " + key);
             }
             throw new IOException(b.toString());
@@ -35,7 +35,6 @@ public class StructuredConf {
     public void parse(String file) throws IOException {
         parse(new File(file));
     }
-
     public CredentialProviderBank getCredentialProviderBank() {
         return bank;
     }

@@ -39,8 +39,8 @@ public class SshConfig {
                     hostParam = get(currentHost);
                 }
                 else {
-                    String[/* param/value */] parameter = FileManipulation.split(line, " ", 2,
-                                                                                 false);
+                    String[/*param/value*/] parameter = FileManipulation.split(line, " ", 2,
+                                                                               false);
                     if (parameter[1] == null) {
                         parameter = FileManipulation.split(line, "	", 2, false);
                     }
@@ -53,7 +53,8 @@ public class SshConfig {
                     hostParam.put(parameter[0], parameter[1]);
                 }
             }
-        } finally {
+        }
+        finally {
             if (stream != null) {
                 stream.close();
             }
@@ -91,5 +92,4 @@ public class SshConfig {
     // Attributes
     private Map<String, Map<String, String>> config = new HashMap<String, Map<String, String>>();
     //          Host        Param   Value
-
 }
