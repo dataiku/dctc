@@ -24,6 +24,7 @@ import org.apache.commons.io.IOUtils;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.FileManipulation;
 import com.dataiku.dip.utils.Params;
+import static com.dataiku.dip.utils.PrettyString.eol;
 
 public class Configuration {
     public void appendConfTo(String file) throws IOException {
@@ -33,31 +34,22 @@ public class Configuration {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
 
-        String eol = System.getProperty("line.separator");
         StringBuilder sb = new StringBuilder();
 
-        sb.append(eol);
-        sb.append("# Added by dctc wizard (" + dateFormat.format(date) + ")." + eol);
-        Iterator<?> iterator = conf.entrySet().iterator();
-        iterator.hasNext();
-        while (true) {
-            @SuppressWarnings("unchecked")
-            Map.Entry<String, Map<String, String>> e = (Entry<String, Map<String, String>>) iterator.next();
-            sb.append("[" + e.getKey() + "]" + eol);
+        sb.append(eol());
+        sb.append("# Added by dctc wizard (" + dateFormat.format(date) + ").");
+        for (Map.Entry<String, Map<String, String>> e: conf.entrySet()) {
+            sb.append(eol());
+            sb.append("[" + e.getKey() + "]" + eol());
             for (Map.Entry<String, String> confEntry : e.getValue().entrySet()) {
-                sb.append(confEntry.getKey() + " = " + confEntry.getValue() + eol);
-            }
-            if (iterator.hasNext()) {
-                sb.append(eol);
-            } else {
-                break;
+                sb.append(confEntry.getKey() + " = " + confEntry.getValue() + eol());
             }
         }
 
-       FileWriter fw = new FileWriter(file,true);
-       fw.write(sb.toString());
-       fw.close();
-   }
+        FileWriter fw = new FileWriter(file,true);
+        fw.write(sb.toString());
+        fw.close();
+    }
     public void parse(File file) throws IOException {
         if (!file.exists()) {
             create(file);
