@@ -21,7 +21,8 @@ public abstract class AbstractGFile implements GeneralizedFile {
                 res.add(createInstanceFor(paths.get(i)));
             }
             return res;
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -29,7 +30,6 @@ public abstract class AbstractGFile implements GeneralizedFile {
     public final GeneralizedFile createSubFile(String path) throws IOException {
         return createSubFile(path, fileSeparator());
     }
-
     @Override
     public final boolean isHidden() throws IOException {
         return FileManipulation.isHidden(getAbsolutePath(), fileSeparator());
@@ -41,7 +41,7 @@ public abstract class AbstractGFile implements GeneralizedFile {
     @Override
     public boolean isEmpty() throws IOException {
         if (!isDirectory()) {
-            throw new IOException("Can't know if " + getAbsolutePath() + " is empty, not a directory");
+            throw new IOException("Not a directory");
         }
         return glist() == null || glist().size() == 0;
     }
@@ -89,7 +89,7 @@ public abstract class AbstractGFile implements GeneralizedFile {
     }
     @Override
     public boolean copy(InputStream contentStream,
-            long size) throws IOException {
+                        long size) throws IOException {
         IOUtils.copyLarge(contentStream, outputStream());
         return true;
     }
@@ -122,7 +122,8 @@ public abstract class AbstractGFile implements GeneralizedFile {
     }
     @Override // Should be override if hash is supported
     public String getHashAlgorithm() {
-        assert !hasHash();
+        assert !hasHash()
+            : "!hasHash()";
         return getProtocol();
     }
     @Override
@@ -131,6 +132,14 @@ public abstract class AbstractGFile implements GeneralizedFile {
     }
     @Override
     public void setDate(long date) {
+    }
+    @Override // Could be override.
+    public boolean allocate(long size) {
+        if (maxFileSize() == -1 || size < maxFileSize()) {
+            // Don't need to allocate
+            return true;
+        }
+        return false;
     }
 
     // Protected methods
@@ -166,13 +175,5 @@ public abstract class AbstractGFile implements GeneralizedFile {
 
     public abstract long getDate() throws IOException;
     public abstract long getSize() throws IOException;
-    @Override // Could be override.
-    public boolean allocate(long size) {
-        if (maxFileSize() == -1 || size < maxFileSize()) {
-            // Don't need to allocate
-            return true;
-        }
-        return false;
-    }
 
 }

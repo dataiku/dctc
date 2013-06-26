@@ -24,8 +24,10 @@ public class SimpleCopyTaskRunnableFactory implements CopyTaskRunnableFactory {
                 || fileName.endsWith(".tar.gz")) {
                 if (task.dstDir.givenName().endsWith(task.dstDir.fileSeparator())) {
                     return new UnarchiveCopyTask(task.src, task.dstDir);
+
                 } else {
-                    GeneralizedFile dst = task.dstDir.createSubFile("", task.dstDir.fileSeparator());
+                    GeneralizedFile dst = task.dstDir.createSubFile("",
+                                                                    task.dstDir.fileSeparator());
                     return new UnarchiveCopyTask(task.src, dst);
                 }
             }

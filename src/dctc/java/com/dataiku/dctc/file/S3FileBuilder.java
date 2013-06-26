@@ -19,9 +19,9 @@ public class S3FileBuilder extends ProtocolFileBuilder {
 
     @Override
     public boolean validateAccountParams(String account, Params p) {
-        return checkAllowedOnly(account, p, new String[]{"access_key", "secret_key", "default_path"})
+        return checkAllowedOnly(account, p, new String[] {"access_key", "secret_key", "default_path"})
             || checkMandatory(account, p, "access_key")
-            ||checkMandatory(account, p, "secret_key");
+            || checkMandatory(account, p, "secret_key");
     }
 
     @Override

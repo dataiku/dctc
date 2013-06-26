@@ -52,13 +52,14 @@ public class GSFile extends BucketBasedFile {
         httpTransport = new NetHttpTransport();
         try {
             cred = new GoogleCredential.Builder()
-            .setJsonFactory(new JacksonFactory())
-            .setTransport(httpTransport)
-            .setServiceAccountId(userMail)
-            .setServiceAccountScopes(STORAGE_SCOPE)
-            .setServiceAccountPrivateKeyFromP12File(new File(keyPath))
-            .build();
-        } catch (Exception e) {
+                .setJsonFactory(new JacksonFactory())
+                .setTransport(httpTransport)
+                .setServiceAccountId(userMail)
+                .setServiceAccountScopes(STORAGE_SCOPE)
+                .setServiceAccountPrivateKeyFromP12File(new File(keyPath))
+                .build();
+        }
+        catch (Exception e) {
             throw new IllegalArgumentException("Could not create credentials for GCS", e);
         }
     }
@@ -101,7 +102,8 @@ public class GSFile extends BucketBasedFile {
         }
         try {
             assert(exists() && isDirectory());
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new Error(e);
         }
     }
@@ -117,7 +119,7 @@ public class GSFile extends BucketBasedFile {
 
     private static GSFile newNotFound(GSFile parent, String absolutePath) {
         GSFile ret = new GSFile(parent.cred, parent.storage, parent.httpTransport, parent.userMail, parent.keyPath,
-                absolutePath);
+                                absolutePath);
         ret.type = Type.NOT_FOUND;
         return ret;
     }
@@ -129,7 +131,8 @@ public class GSFile extends BucketBasedFile {
                 res.add(createInstanceFor(paths.get(i)));
             }
             return res;
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -170,7 +173,7 @@ public class GSFile extends BucketBasedFile {
     }
     @Override
     public String getProtocol() {
-         return Protocol.GS.getCanonicalName();
+        return Protocol.GS.getCanonicalName();
     }
     @Override
     public List<GSFile> glist() throws IOException {
@@ -278,6 +281,7 @@ public class GSFile extends BucketBasedFile {
         initRequestFactory();
         HttpRequest request = requestFactory.buildGetRequest(url());
         HttpResponse response = request.execute();
+
         return response.getContent();
     }
     @Override
@@ -287,7 +291,7 @@ public class GSFile extends BucketBasedFile {
     @Override
     public boolean copy(InputStream contentStream, long size) throws IOException {
         InputStreamContent mediaContent = new InputStreamContent("text/plain",
-                new BufferedInputStream(contentStream));
+                                                                 new BufferedInputStream(contentStream));
 
         String url = "http://storage.googleapis.com/" + URLEncoder.encode(FileManipulation.concat(bucket, path, fileSeparator()), "UTF-8");
 
@@ -297,8 +301,8 @@ public class GSFile extends BucketBasedFile {
 
         if (!response.isSuccessStatusCode()) {
             throw new IOException("Failed to upload GCS file bucket=" + bucket + " path= "  + path + " with size " + size +
-                    " code is " + response.getStatusCode() + " message=" + response.getStatusMessage() +
-                    " body=" + IOUtils.toString(response.getContent()));
+                                  " code is " + response.getStatusCode() + " message=" + response.getStatusMessage() +
+                                  " body=" + IOUtils.toString(response.getContent()));
         }
         return true;
     }
@@ -317,7 +321,7 @@ public class GSFile extends BucketBasedFile {
         HttpResponse response = request.execute();
         if (response.getStatusCode() != 200) {
             throw new IOException("Deletion failed for " + getAbsoluteAddress() +
-                    ": code=" + response.getStatusCode() + " message=" + response.getStatusMessage());
+                                  ": code=" + response.getStatusCode() + " message=" + response.getStatusMessage());
         }
         return true;
     }
@@ -335,7 +339,8 @@ public class GSFile extends BucketBasedFile {
         resolve();
         if (type != Type.FILE) {
             throw new IOException("Can't hash " + getAbsoluteAddress() + ": not a file");
-        } else {
+        }
+        else {
             assert(fileStorageObject != null);
             return fileStorageObject.getMd5Hash();
         }
@@ -349,7 +354,8 @@ public class GSFile extends BucketBasedFile {
         resolve();
         if (type != Type.FILE) {
             throw new IOException("Can't get date of " + getAbsoluteAddress() + ": not a file");
-        } else {
+        }
+        else {
             assert(fileStorageObject != null);
             return fileStorageObject.getUpdated().getValue();
         }
@@ -359,7 +365,8 @@ public class GSFile extends BucketBasedFile {
         resolve();
         if (type != Type.FILE) {
             return GlobalConstants.FOUR_KIO; // Directory size
-        } else {
+        }
+        else {
             assert(fileStorageObject != null);
             return fileStorageObject.getSize().longValue();
         }
@@ -377,7 +384,9 @@ public class GSFile extends BucketBasedFile {
 
     @Override
     protected void resolve() throws IOException {
-        if (type != Type.UNRESOLVED) return;
+        if (type != Type.UNRESOLVED) {
+            return;
+        }
 
         try {
             logger.debug("Resolving data for " + getAbsoluteAddress());
@@ -394,7 +403,6 @@ public class GSFile extends BucketBasedFile {
                     bucketsList.add(bucket.getId());
                 }
             } else {
-
                 if (path.length() > 0) {
                     /* Check if I am a file */
                     try {
@@ -404,11 +412,12 @@ public class GSFile extends BucketBasedFile {
                          */
                         Objects objs = storage.objects().list(bucket).setPrefix(path).execute();
                         if (objs.getItems() != null && objs.getItems().size() > 0
-                                && objs.getItems().get(0).getName().equals(path)) {
+                            && objs.getItems().get(0).getName().equals(path)) {
                             type = Type.FILE;
                             fileStorageObject = objs.getItems().get(0);
                         }
-                    } catch (GoogleJsonResponseException e) {
+                    }
+                    catch (GoogleJsonResponseException e) {
                         // Ignore exceptions here ...
                     }
                 }
@@ -420,13 +429,16 @@ public class GSFile extends BucketBasedFile {
                         if (recursiveFileList.size() > 0) {
                             /* In GCS, a path only exists if it has children, by definition */
                             type = Type.DIR;
-                        } else if (path.length() == 0) {
+                        }
+                        else if (path.length() == 0) {
                             /* There is an exception : the root of a bucket always exists, if we did not have an error */
                             type = Type.DIR;
-                        } else {
+                        }
+                        else {
                             type = Type.NOT_FOUND;
                         }
-                    } catch (FileNotFoundException e) {
+                    }
+                    catch (FileNotFoundException e) {
                         type = Type.NOT_FOUND;
                     }
                 }
@@ -435,7 +447,8 @@ public class GSFile extends BucketBasedFile {
                     type = Type.NOT_FOUND;
                 }
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             type = Type.FAILURE;
             throw e;
         }
@@ -462,10 +475,12 @@ public class GSFile extends BucketBasedFile {
                     }
                 }
             } while (pageToken != null);
-        } catch (GoogleJsonResponseException e) {
+        }
+        catch (GoogleJsonResponseException e) {
             if (e.getStatusCode() == 404) {
                 throw new FileNotFoundException(getAbsoluteAddress());
-            } else {
+            }
+            else {
                 throw new IOException("Google Cloud Storage error code=" + e.getStatusCode() + ": " + e.getMessage(), e);
             }
         }
@@ -502,17 +517,14 @@ public class GSFile extends BucketBasedFile {
 
     @Override
     public InputStream getLastLines(long lineNumber) throws IOException {
-        // TODO Auto-generated method stub
         return null;
     }
     @Override
     public InputStream getLastBytes(long byteNumber) throws IOException {
-        // TODO Auto-generated method stub
         return null;
     }
     @Override
     public InputStream getRange(long begin, long length) throws IOException {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -530,8 +542,8 @@ public class GSFile extends BucketBasedFile {
                     }
                 }
             }
-        } catch (IOException e) {
         }
+        catch (IOException e) {}
         return res;
     }
 

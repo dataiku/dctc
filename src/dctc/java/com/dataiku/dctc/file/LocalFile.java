@@ -34,7 +34,8 @@ public class LocalFile extends AbstractGFile {
                 res.add(createInstanceFor(paths.get(i)));
             }
             return res;
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -47,7 +48,8 @@ public class LocalFile extends AbstractGFile {
         if (fileName.equals(".") ||
             fileName.equals("./")) {
             return createInstanceFor(path);
-        } else {
+        }
+        else {
             return createInstanceFor(FileManipulation.concat(fileName, path, fileSeparator()));
         }
     }
@@ -86,7 +88,8 @@ public class LocalFile extends AbstractGFile {
     public String forbiddenCharacter() {
         if (GlobalConstants.isWindows) {
             return "/\\?*:|\"<>";
-        } else {
+        }
+        else {
             return "/";
         }
     }
@@ -113,9 +116,11 @@ public class LocalFile extends AbstractGFile {
             for (String file: files) {
                 l.add(FileManipulation.concat(fileName, file, fileSeparator()));
             }
-        } else if (isFile()) {
+        }
+        else if (isFile()) {
             l.add(givenName());
-        } else {
+        }
+        else {
             throw new IOException(givenName() + ": File not found.");
         }
         return l;
@@ -131,7 +136,8 @@ public class LocalFile extends AbstractGFile {
         recurList = new ArrayList<String>();
         if (isFile()) {
             recurList.add(givenName());
-        } else if (isDirectory()) {
+        }
+        else if (isDirectory()) {
             recurList.add(givenName());
             for (String s: list()) {
                 LocalFile f = new LocalFile(s);
@@ -211,11 +217,13 @@ public class LocalFile extends AbstractGFile {
             try {
                 FileUtils.deleteDirectory(f);
                 return true;
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 System.err.println("dctc LocalFile: " + e.getMessage());
                 return false;
             }
-        } else {
+        }
+        else {
             return f.delete();
         }
     }
@@ -233,7 +241,8 @@ public class LocalFile extends AbstractGFile {
         try {
             fis = new FileInputStream(f);
             return org.apache.commons.codec.digest.DigestUtils.md5Hex(fis);
-        } finally {
+        }
+        finally {
             IOUtils.closeQuietly(fis);
         }
     }
@@ -278,25 +287,23 @@ public class LocalFile extends AbstractGFile {
 
         return acl;
     }
+    @Override
+    public InputStream getLastLines(long lineNumber) throws IOException {
+        return null;
+    }
+    @Override
+    public InputStream getLastBytes(long byteNumber) throws IOException {
+        return null;
+    }
+    @Override
+    public InputStream getRange(long begin, long length) throws IOException {
+        return null;
+    }
 
     // Attributes
     private File f;
     private String fileName;
     private List<String> l;
     private List<String> recurList;
-    @Override
-    public InputStream getLastLines(long lineNumber) throws IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    @Override
-    public InputStream getLastBytes(long byteNumber) throws IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    @Override
-    public InputStream getRange(long begin, long length) throws IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
+
 }

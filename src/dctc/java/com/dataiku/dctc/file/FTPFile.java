@@ -28,7 +28,7 @@ public class FTPFile extends AbstractGFile {
         }
     }
     public FTPFile(String server, String username, String password,
-            String path, int port, org.apache.commons.net.ftp.FTPFile file) {
+                   String path, int port, org.apache.commons.net.ftp.FTPFile file) {
         this.server = server;
         this.username = username;
         this.password = password;
@@ -47,7 +47,6 @@ public class FTPFile extends AbstractGFile {
              p.getMandParam("username"),
              p.getMandParam("password"),
              path, p.getShortParam("port", GlobalConstants.FTP_PORT));
-
     }
 
     @Override // Should be override for no type lost.
@@ -58,7 +57,8 @@ public class FTPFile extends AbstractGFile {
                 res.add(createInstanceFor(paths.get(i)));
             }
             return res;
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -69,13 +69,13 @@ public class FTPFile extends AbstractGFile {
     @Override
     public FTPFile createSubFile(String path, String separator) {
         return new FTPFile(server, username, password,
-                FileManipulation.concat(this.path, path, fileSeparator(), separator),
-                port);
+                           FileManipulation.concat(this.path, path, fileSeparator(), separator),
+                           port);
     }
     public FTPFile createSubFile(String path, String separator, org.apache.commons.net.ftp.FTPFile file) {
         return new FTPFile(server, username, password,
-                FileManipulation.concat(this.path, path, fileSeparator(), separator),
-                port, file);
+                           FileManipulation.concat(this.path, path, fileSeparator(), separator),
+                           port, file);
     }
 
     private void fastStat() throws IOException {
@@ -136,7 +136,7 @@ public class FTPFile extends AbstractGFile {
     @Override
     public String getAbsoluteAddress() {
         return FileManipulation.concat(getProtocol() + "://" + username + ":*****@"
-                + server, path, fileSeparator());
+                                       + server, path, fileSeparator());
     }
     @Override
     public String getProtocol() {
@@ -235,7 +235,8 @@ public class FTPFile extends AbstractGFile {
             }
 
             return res;
-        } catch (IllegalArgumentException e) {
+        }
+        catch (IllegalArgumentException e) {
             throw new IOException("No such file or directory " + getAbsoluteAddress());
         }
     }
@@ -263,7 +264,8 @@ public class FTPFile extends AbstractGFile {
         try {
             ftpInit();
             return isFile() ? ftp.deleteFile(path) : ftp.removeDirectory(path);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             return false;
         }
     }
@@ -301,17 +303,14 @@ public class FTPFile extends AbstractGFile {
     }
     @Override
     public InputStream getLastLines(long lineNumber) throws IOException {
-        // TODO Auto-generated method stub
         return null;
     }
     @Override
     public InputStream getLastBytes(long byteNumber) throws IOException {
-        // TODO Auto-generated method stub
         return null;
     }
     @Override
     public InputStream getRange(long begin, long length) throws IOException {
-        // TODO Auto-generated method stub
         return null;
     }
     @Override
@@ -330,7 +329,8 @@ public class FTPFile extends AbstractGFile {
     private void connect() throws IOException {
         try {
             ftp.connect(server, port);
-        } catch (UnknownHostException e) {
+        }
+        catch (UnknownHostException e) {
             throw new IOException ("Failed to connect to " + server, e);
         }
         if (!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
@@ -355,10 +355,11 @@ public class FTPFile extends AbstractGFile {
         ftp.cwd("/");
         if (path.equals(fileSeparator())) {
             return true;
-        } else {
+        }
+        else {
             ftp.cwd(path);
             return !ftp.printWorkingDirectory().equals("\"" + fileSeparator() + "\"")
-                    && !ftp.printWorkingDirectory().equals(fileSeparator());
+                && !ftp.printWorkingDirectory().equals(fileSeparator());
         }
     }
     private void resolve() throws IOException {

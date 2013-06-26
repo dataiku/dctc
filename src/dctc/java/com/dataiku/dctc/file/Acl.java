@@ -40,26 +40,32 @@ public class Acl {
         Boolean exec = getExec(group);
 
         if (read == null) {
-            res += "?";
-        } else if (read) {
+            res += "";
+        }
+        else if (read) {
             res += "r";
-        } else {
+        }
+        else {
             res += "-";
         }
 
         if (write == null) {
-            res += "?";
-        } else if (write) {
+            res += "";
+        }
+        else if (write) {
             res += "w";
-        } else {
+        }
+        else {
             res += "-";
         }
 
         if (exec == null) {
-            res += "?";
-        } else if (exec) {
+            res += "";
+        }
+        else if (exec) {
             res += "x";
-        } else {
+        }
+        else {
             res += "-";
         }
 

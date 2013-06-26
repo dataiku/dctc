@@ -13,7 +13,8 @@ import com.dataiku.dctc.file.GeneralizedFile;
 
 public class SyncComputer {
     public static abstract class Filter {
-        public abstract boolean accept(GeneralizedFile src, GeneralizedFile dst, String root) throws IOException;
+        public abstract boolean accept(GeneralizedFile src, GeneralizedFile dst,
+                                       String root) throws IOException;
     }
 
     public static class IncrementalFilter extends Filter {
@@ -31,18 +32,21 @@ public class SyncComputer {
                 dst.mkdirs();
             }
         }
-        private static boolean hashIsDifferent(GeneralizedFile src, GeneralizedFile dst) throws IOException {
+        private static boolean hashIsDifferent(GeneralizedFile src,
+                                               GeneralizedFile dst) throws IOException {
             return !(src.hasHash() && dst.hasHash()
                     && src.supportHashAlgorithm(dst.getHashAlgorithm())
                     && src.getHash().equals(dst.getHash()));
         }
-        private static boolean dateIsDifferent(GeneralizedFile src, GeneralizedFile dst) throws IOException {
+        private static boolean dateIsDifferent(GeneralizedFile src,
+                                               GeneralizedFile dst) throws IOException {
             return !(src.hasDate() && dst.hasDate()
                     && src.getDate() == dst.getDate());
         }
 
         @Override
-        public boolean accept(GeneralizedFile src, GeneralizedFile dstRoot, String destination) throws IOException {
+        public boolean accept(GeneralizedFile src, GeneralizedFile dstRoot,
+                              String destination) throws IOException {
             GeneralizedFile dst = dstRoot.createSubFile(destination, src.fileSeparator());
             if (dst.isDirectory()) {
                 return false;
@@ -75,7 +79,8 @@ public class SyncComputer {
                 default:
                     throw new Error("Shouldn't append.");
                 }
-                logger.debug("dst already exists but required s1=" + src.getSize() + " ds=" + dst.getSize());
+                logger.debug("dst already exists but required s1="
+                             + src.getSize() + " ds=" + dst.getSize());
             } else {
                 logger.debug("dst " + dst.getAbsoluteAddress() + " does not exist");
             }

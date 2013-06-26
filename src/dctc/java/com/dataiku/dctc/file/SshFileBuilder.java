@@ -22,9 +22,9 @@ import com.dataiku.dip.utils.Params;
 public class SshFileBuilder extends ProtocolFileBuilder {
     @Override
     public boolean validateAccountParams(String account, Params p) {
-        return checkAllowedOnly(account, p, new String[]{"host", "port", "username",
-                                                         "password", "key", "skip_host_key_check",
-                                                         "identity"})
+        return checkAllowedOnly(account, p, new String[]{"host", "port", "username"
+                                                         , "password", "key", "skip_host_key_check"
+                                                         , "identity"})
             || checkMandatory(account, p, "host");
     }
 
@@ -48,18 +48,21 @@ public class SshFileBuilder extends ProtocolFileBuilder {
             if (path[1] == null) {
                 path[1] = ".";
             }
+
             return new SshFile(sshConfig, path[0], path[1], p);
-        } else {
+        }
+        else {
             String[] user = FileManipulation.split(account, ":", 2, false);
             String[] path = FileManipulation.split(rawPath, ":", 2);
             if (FileManipulation.contains(path[0], "[")) {
                 throw new IllegalArgumentException("Doesn't manage ipv6 address");
             }
             if (path[0].length() == 0) {
-                throw new IllegalArgumentException(scat("Missing host. Maybe you meant",
-                                                        pquoted(account),
-                                                        "as an account, but it doesn't exist."));
+                throw new IllegalArgumentException(scat("Missing host. Maybe you meant"
+                                                        , pquoted(account)
+                                                        , "as an account, but it doesn't exist."));
             }
+
             return new SshFile(path[0], user[0], user[1], path[1], GlobalConstants.SSH_PORT, false);
         }
     }

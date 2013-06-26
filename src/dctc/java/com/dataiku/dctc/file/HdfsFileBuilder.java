@@ -18,7 +18,7 @@ public class HdfsFileBuilder extends ProtocolFileBuilder {
 
     @Override
     public boolean validateAccountParams(String accountSettings, Params p) {
-        return checkAllowedOnly(accountSettings, p, new String[]{"hadoopConfDir"})
+        return checkAllowedOnly(accountSettings, p, new String[] {"hadoopConfDir"})
             || checkMandatory(accountSettings, p, "hadoopConfDir");
     }
 
@@ -28,12 +28,15 @@ public class HdfsFileBuilder extends ProtocolFileBuilder {
         Params p = null;
         if (accountSettings != null) {
             p = bank.getAccountParams("hdfs", accountSettings);
-        } else {
+        }
+        else {
             p = bank.getAccountParamsIfExists("hdfs", accountSettings);
 
             if (p == null) {
                 /* I can still try to build using HADOOP_HOME */
-                if (System.getenv("HADOOP_HOME") == null && System.getenv("HADOOP_PREFIX") == null && HadoopDistributionClassLoader.guessHadoopHome() == null) {
+                if (System.getenv("HADOOP_HOME") == null
+                    && System.getenv("HADOOP_PREFIX") == null
+                    && HadoopDistributionClassLoader.guessHadoopHome() == null) {
                     throw ErrorContext.iaef("Neither configured credential nor HADOOP_HOME nor HADOOP_PREFIX variable found, can't configure HDFS access");
                 }
             }
@@ -41,7 +44,8 @@ public class HdfsFileBuilder extends ProtocolFileBuilder {
         Configuration conf = new Configuration();
         if (p == null) {
             conf.addResource(new Path(HadoopUtils.getCoreSiteLocation()));
-        } else {
+        }
+        else {
             if (validateAccountParams(accountSettings, p)) {
                 throw invalidAccountSettings(accountSettings);
             }

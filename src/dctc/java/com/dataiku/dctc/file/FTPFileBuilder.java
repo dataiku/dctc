@@ -44,19 +44,22 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
             if (rawPath.isEmpty() || rawPath.equals("/")) {
                 throw new UserException("No account given for FTP, host is mandatory");
             }
-
             String[/*host/path*/] path = FileManipulation.split(rawPath, "/", 2);
+
             return build(path[0], "anonymous", "anonymous", path[1]);
-        } else if (accountSettings.contains(":")) {
+        }
+        else if (accountSettings.contains(":")) {
             if (rawPath.isEmpty() || rawPath.equals("/")) {
                 throw new UserException("No account given for FTP, host is mandatory");
             }
-
             String[/*host/path*/] path = FileManipulation.split(rawPath, "/", 2);
             String[] accountChunks = FileManipulation.split(accountSettings, ":", 2);
+
             return build(path[0], accountChunks[0], accountChunks[1], path[1]);
-        } else {
+        }
+        else {
             Params p = bank.getAccountParams(getProtocol().getCanonicalName(), accountSettings);
+
             if (validateAccountParams(accountSettings, p)) {
                 throw invalidAccountSettings(accountSettings);
             }
@@ -87,7 +90,8 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
         int port;
         try {
             port = Integer.parseInt(strPort);
-        } catch (NumberFormatException e) {
+        }
+        catch (NumberFormatException e) {
             DCTCLog.error("FTP file builder", "`"
                           + strPort
                           + "' is not a Number. Need a number between 1 and 65536 (included) for the ftp port.");

@@ -46,7 +46,8 @@ public class HdfsFile extends AbstractGFile {
                 res.add(createInstanceFor(paths.get(i)));
             }
             return res;
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -57,9 +58,9 @@ public class HdfsFile extends AbstractGFile {
     @Override
     public HdfsFile createSubFile(String path, String separator) {
         return createInstanceFor(FileManipulation.concat(this.path,
-                path,
-                fileSeparator(),
-                separator));
+                                                         path,
+                                                         fileSeparator(),
+                                                         separator));
     }
 
     // Public
@@ -72,7 +73,8 @@ public class HdfsFile extends AbstractGFile {
     public boolean isDirectory() throws IOException {
         try {
             initStatus();
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             return false;
         }
         return status.isDir();
@@ -95,7 +97,8 @@ public class HdfsFile extends AbstractGFile {
         list = new ArrayList<String>();
         if (status == null) {
             return list;
-        } else {
+        }
+        else {
             for (FileStatus st: status) {
                 list.add(FileManipulation.concat(path, st.getPath().getName(), fileSeparator()));
             }
@@ -147,14 +150,15 @@ public class HdfsFile extends AbstractGFile {
     @Override
     public void mkdir() throws IOException {
         if (!createInstanceFor(pathToFile()).isDirectory()) {
-            throw new IOException("Can't mkdir, parent folder " + pathToFile() +" does not exist or is not a directory");
+            throw new IOException("Can't mkdir, parent folder "
+                                  + pathToFile() + " does not exist or is not a directory");
         }
         mkdirs();
     }
     @Override
     public void mkpath() throws IOException {
         initFileSystem();
-        if (! fileSystem.mkdirs(new Path(pathToFile()))) {
+        if (!fileSystem.mkdirs(new Path(pathToFile()))) {
             throw new IOException("unknown error creating " + pathToFile());
         }
     }
@@ -208,20 +212,16 @@ public class HdfsFile extends AbstractGFile {
 
     @Override
     public InputStream getLastLines(long lineNumber) throws IOException {
-        // TODO Auto-generated method stub
         return null;
     }
     @Override
     public InputStream getLastBytes(long byteNumber) throws IOException {
-        // TODO Auto-generated method stub
         return null;
     }
     @Override
     public InputStream getRange(long begin, long length) throws IOException {
-        // TODO Auto-generated method stub
         return null;
     }
-
 
     // Local Methods
     // Private

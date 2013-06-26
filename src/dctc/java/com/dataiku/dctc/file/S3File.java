@@ -61,7 +61,8 @@ public class S3File extends BucketBasedFile {
         this.bucket = split[0];
         this.path = split[1];
     }
-    protected S3File(String directoryPath, AmazonS3 s3, S3ObjectSummary objectSummary, boolean autoRecur) {
+    protected S3File(String directoryPath, AmazonS3 s3,
+                     S3ObjectSummary objectSummary, boolean autoRecur) {
         super(autoRecur);
         this.s3 = s3;
         this.type = Type.FILE;
@@ -84,9 +85,10 @@ public class S3File extends BucketBasedFile {
     }
     @Override
     public S3File createSubFile(String path, String separator) {
-        /* If this file is resolved, and we already have the list, then maybe we can reuse a storage object / type */
+        /* If this file is resolved, and we already have the list,
+         * then maybe we can reuse a storage object / type */
         String subNameWithBucket = FileManipulation.concat(getAbsolutePath(),
-                path, fileSeparator(), separator);
+                                                           path, fileSeparator(), separator);
 
         if (type == Type.DIR && recursiveFileList != null) {
             for (S3ObjectSummary sum : recursiveFileList) {
@@ -201,8 +203,8 @@ public class S3File extends BucketBasedFile {
                                                                           , fileSeparator())
                                                   , s3
                                                   , getChildrenOf(FileManipulation.concat(bucket
-                                                                                        , parent
-                                                                                        , fileSeparator()))
+                                                                                          , parent
+                                                                                          , fileSeparator()))
                                                   , autoRecur));
                 }
             }
@@ -215,10 +217,12 @@ public class S3File extends BucketBasedFile {
             req.setRange(begin, begin + length);
             S3Object obj = s3.getObject(req);
             return obj.getObjectContent();
-        } catch (AmazonS3Exception access) {
+        }
+        catch (AmazonS3Exception access) {
             if (isFileNotFound(access)) {
                 throw new FileNotFoundException(getAbsoluteAddress());
-            } else {
+            }
+            else {
                 throw wrapProperly("getObject", access);
             }
         }
@@ -228,16 +232,20 @@ public class S3File extends BucketBasedFile {
         try {
             S3Object obj = s3.getObject(new GetObjectRequest(bucket, path));
             return obj.getObjectContent();
-        } catch (AmazonS3Exception access) {
+        }
+        catch (AmazonS3Exception access) {
             if (isFileNotFound(access)) {
                 throw new FileNotFoundException(getAbsoluteAddress());
-            } else {
+            }
+            else {
                 throw wrapProperly("getObject", access);
             }
-        } catch (AmazonClientException e) {
+        }
+        catch (AmazonClientException e) {
             if (e.getMessage().startsWith("Unable to unmarshall response")) {
                 throw new IOException("Is a directory (Unable to unmarshall s3 response)");
-            } else {
+            }
+            else {
                 throw e;
             }
         }
@@ -292,7 +300,8 @@ public class S3File extends BucketBasedFile {
                     s3.createBucket(bucket);
                 }
                 type = Type.DIR;
-            } catch (AmazonS3Exception e) {
+            }
+            catch (AmazonS3Exception e) {
                 throw wrapProperly("createBucket", e);
             }
         }
@@ -314,11 +323,13 @@ public class S3File extends BucketBasedFile {
                     content.delete();
                 }
                 s3.deleteBucket(bucket);
-            } catch (AmazonClientException e) {
+            }
+            catch (AmazonClientException e) {
                 return false;
             }
             return true;
-        } else {
+        }
+        else {
             s3.deleteObject(bucket, path);
             return true;
         }
@@ -336,10 +347,17 @@ public class S3File extends BucketBasedFile {
         resolve();
         if (type != Type.FILE) {
             throw new IOException("Can't hash " + getAbsoluteAddress() + ": not a file");
-        } else {
-            if (objectMeta != null) return objectMeta.getETag();
-            else if (objectSummary != null) return objectSummary.getETag();
-            else throw new Error("No meta and no summary");
+        }
+        else {
+            if (objectMeta != null) {
+                return objectMeta.getETag();
+            }
+            else if (objectSummary != null) {
+                return objectSummary.getETag();
+            }
+            else {
+                throw new Error("No meta and no summary");
+            }
         }
     }
     @Override
@@ -351,10 +369,17 @@ public class S3File extends BucketBasedFile {
         resolve();
         if (type != Type.FILE) {
             throw new IOException("Can't get date of " + getAbsoluteAddress() + ": not a file");
-        } else {
-            if (objectMeta != null) return objectMeta.getLastModified().getTime();
-            else if (objectSummary != null) return objectSummary.getLastModified().getTime();
-            else throw new Error("No meta and no summary");
+        }
+        else {
+            if (objectMeta != null) {
+                return objectMeta.getLastModified().getTime();
+            }
+            else if (objectSummary != null) {
+                return objectSummary.getLastModified().getTime();
+            }
+            else {
+                throw new Error("No meta and no summary");
+            }
         }
     }
     @Override
@@ -362,7 +387,8 @@ public class S3File extends BucketBasedFile {
         resolve();
         if (type != Type.FILE) {
             return GlobalConstants.FOUR_KIO;
-        } else {
+        }
+        else {
             if (objectMeta != null) return objectMeta.getContentLength();
             else if (objectSummary != null) return objectSummary.getSize();
             else throw new Error("No meta and no summary");
@@ -403,7 +429,8 @@ public class S3File extends BucketBasedFile {
             List<Bucket> buckets = null;
             try {
                 buckets = s3.listBuckets();
-            } catch (AmazonS3Exception e) {
+            }
+            catch (AmazonS3Exception e) {
                 throw wrapProperly("list buckets", e);
             }
             bucketList = new ArrayList<String>();
@@ -411,13 +438,15 @@ public class S3File extends BucketBasedFile {
                 Bucket b = buckets.get(i);
                 bucketList.add(b.getName());
             }
-        } else {
+        }
+        else {
             if (!path.isEmpty()) {
                 // Check if it's a file
                 try {
                     objectMeta = s3.getObjectMetadata(bucket, path);
                     type = Type.FILE;
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     // Don't act on exception here, because it could just be a path
                 }
             }
@@ -435,7 +464,7 @@ public class S3File extends BucketBasedFile {
                     }
                     ObjectListing list = s3.listObjects(listRequest);
                     while (true) {
-                        for (S3ObjectSummary sum : list.getObjectSummaries()) {
+                        for (S3ObjectSummary sum: list.getObjectSummaries()) {
                             recursiveFileList.add(sum);
                         }
                         if (!autoRecur) {
@@ -445,7 +474,8 @@ public class S3File extends BucketBasedFile {
                         }
                         if (list.isTruncated()) {
                             list = s3.listNextBatchOfObjects(list);
-                        } else {
+                        }
+                        else {
                             break;
                         }
                     }
@@ -467,7 +497,8 @@ public class S3File extends BucketBasedFile {
                 } catch (AmazonS3Exception e) {
                     if (isFileNotFound(e)) {
                         type = Type.NOT_FOUND;
-                    } else {
+                    }
+                    else {
                         type = Type.FAILURE;
                         S3File root = new S3File("", s3);
                         for (S3File s3Bucket: root.glist()) {
@@ -483,17 +514,14 @@ public class S3File extends BucketBasedFile {
     }
 
     private boolean isFileNotFound(AmazonS3Exception e) {
-        if (e.getStatusCode() == 404
-            && (e.getMessage().equals("Not Found") || e.getErrorCode().equals("NoSuchBucket") ||
-                e.getErrorCode().equals("NoSuchKey"))) {
-            return true;
-        }
-        return false;
+        return (e.getStatusCode() == 404
+                && (e.getMessage().equals("Not Found") || e.getErrorCode().equals("NoSuchBucket") ||
+                    e.getErrorCode().equals("NoSuchKey")));
     }
 
     private IOException wrapProperly(String failedCall, AmazonS3Exception e) {
         return new IOException("Failed to " + failedCall + ": status=" + e.getStatusCode() +
-                " code=" + e.getErrorCode() + " message=" + e.getMessage(),e );
+                               " code=" + e.getErrorCode() + " message=" + e.getMessage(),e );
     }
 
     /// Public
@@ -501,10 +529,10 @@ public class S3File extends BucketBasedFile {
         return s3;
     }
     public void put(GeneralizedFile file) throws IOException {
-        s3.putObject(bucket,
-                path,
-                file.inputStream(),
-                new ObjectMetadata());
+        s3.putObject(bucket
+                     , path
+                     , file.inputStream()
+                     , new ObjectMetadata());
     }
 
     // Private
@@ -522,8 +550,9 @@ public class S3File extends BucketBasedFile {
                     }
                 }
             }
-        } catch (IOException e) {
         }
+        catch (IOException e) {}
+
         return res;
     }
 

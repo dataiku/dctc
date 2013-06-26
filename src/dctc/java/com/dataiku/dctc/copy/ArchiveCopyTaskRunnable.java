@@ -42,23 +42,25 @@ public class ArchiveCopyTaskRunnable extends CopyTaskRunnable {
             in.close();
             entry.closeEntry();
 
-        } else {
+        }
+        else {
             System.err.println("FIXME");
         }
     }
 
     public String print()  {
         return task.src.givenName() + " ->> " + task.dstDir.givenName()
-                + " (as "
-                + getEntryName() + ")";
+            + " (as "
+            + getEntryName() + ")";
     }
 
     private String getEntryName() {
         if (task.dstFileName.isEmpty()) {
             return task.src.getFileName();
-        } else {
+        }
+        else {
             return FileManipulation.makeRelative(task.dstFileName,
-                    task.src.absolutePattern());
+                                                 task.src.absolutePattern());
         }
     }
 

@@ -3,7 +3,8 @@ package com.dataiku.dctc.copy;
 import com.dataiku.dctc.file.GeneralizedFile;
 
 public class CopyTask {
-    public CopyTask(GeneralizedFile src, GeneralizedFile dstDir, String dstFileName, boolean deleteSrc) {
+    public CopyTask(GeneralizedFile src, GeneralizedFile dstDir,
+                    String dstFileName, boolean deleteSrc) {
         this.src = src;
         this.dstDir = dstDir;
         this.dstFileName = dstFileName;

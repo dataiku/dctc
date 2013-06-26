@@ -99,7 +99,8 @@ public abstract class Command {
         CommandLineParser parser = new PosixParser();
         try {
             line = parser.parse(opt, shellargs);
-        } catch (ParseException exp) {
+        }
+        catch (ParseException exp) {
             error(exp.getMessage(), 1);
             usage();
             throw new EndOfCommand();
@@ -126,21 +127,23 @@ public abstract class Command {
             if (GlobalConf.getResolveGlobbing()) {
                 try {
                     args.addAll(Globbing.resolve(garg, false));
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     error(garg.givenName(),
                           "Couldn't resolve globbing for " + garg.givenName(), e, 2);
                     args.add(garg);
                 }
-            } else {
+            }
+            else {
                 args.add(garg);
             }
         }
+
         return args;
     }
     protected void setExitCode(int exitCode) {
         this.exitCode = Math.max(exitCode, this.exitCode);
     }
-
 
     protected void error(String msg, int exitCode) {
         DCTCLog.error(cmdname(), msg);
@@ -161,7 +164,8 @@ public abstract class Command {
         msg = (fileName == null ? msg :  ("`" + fileName + "': " + msg));
         if (exception instanceof UnknownHostException) {
             error(msg + ": Unknown host '" + exception.getMessage() + "'", exitCode);
-        } else {
+        }
+        else {
             error(msg, exception, exitCode);
         }
     }

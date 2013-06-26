@@ -40,7 +40,8 @@ public abstract class ListFilesCommand extends Command {
             try {
                 computeTasksList(arguments);
                 execute(taskList, getExitCode());
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 error("failed to " + cmdname(), e, 1);
             }
         }
@@ -49,7 +50,7 @@ public abstract class ListFilesCommand extends Command {
     public void performWithExceptions(List<GeneralizedFile> args) throws IOException {
         computeTasksList(args);
         if (getExitCode() != 0) {
-            throw new IOException("Aborting "  + cmdname() + " due to previous errors");
+            throw new IOException("Aborting " + cmdname() + " due to previous errors");
         }
         execute(taskList, getExitCode());
     }
@@ -64,7 +65,8 @@ public abstract class ListFilesCommand extends Command {
                 return;
             }
             execute(taskList, getExitCode());
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             error("failed to " + cmdname(), e, 1);
         }
     }
@@ -144,6 +146,7 @@ public abstract class ListFilesCommand extends Command {
             usage();
             return true;
         }
+
         return false;
     }
     private boolean checkArgs(GeneralizedFile[] src, GeneralizedFile dst) throws IOException {
@@ -181,7 +184,8 @@ public abstract class ListFilesCommand extends Command {
         }
         if (shouldAdd(src, dst, root)) {
             taskList.add(new CopyTask(src, dst, root, deleteSource()));
-        } else {
+        }
+        else {
             logger.info("Should not add");
         }
     }

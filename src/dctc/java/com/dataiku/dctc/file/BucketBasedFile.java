@@ -24,8 +24,12 @@ public abstract class BucketBasedFile extends AbstractGFile {
     @Override
     public boolean exists() throws IOException {
         resolve();
-        assert(type !=Type.UNRESOLVED);
-        assert(type != Type.FAILURE); // If failure, it should have already thrown
+        // If failure, it should have already thrown
+        assert (type != Type.UNRESOLVED)
+            : "(type != Type.UNRESOLVED)";
+        assert (type != Type.FAILURE)
+            : "(type != Type.FAILURE)";
+
         return !(type == Type.NOT_FOUND || type == Type.BUCKET_EXISTS);
     }
     @Override
@@ -34,13 +38,19 @@ public abstract class BucketBasedFile extends AbstractGFile {
             return true;
         }
         resolve();
-        assert(type != Type.FAILURE); // If failure, it should have already thrown
+        // If failure, it should have already thrown
+        assert (type != Type.FAILURE)
+            : "(type != Type.FAILURE)";
+
         return type == Type.ROOT || type == Type.DIR;
     }
     @Override
     public boolean isFile() throws IOException {
         resolve();
-        assert(type != Type.FAILURE); // If failure, it should have already thrown
+         // If failure, it should have already thrown
+        assert (type != Type.FAILURE)
+            : "(type != Type.FAILURE)";
+
         return type == Type.FILE;
     }
     @Override

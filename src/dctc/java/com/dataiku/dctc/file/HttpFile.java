@@ -32,7 +32,6 @@ public class HttpFile extends AbstractGFile {
     }
     @Override
     public InputStream getLastLines(long lineNumber) throws IOException {
-        // TODO Auto-generated method stub
         return null;
     }
     @Override
@@ -59,10 +58,12 @@ public class HttpFile extends AbstractGFile {
                 if (!href.startsWith("/")) {
                     if (href.startsWith(givenName())) {
                         list.add(create(href.substring(7)));
-                    } else if (!href.startsWith("http://")) {
+                    }
+                    else if (!href.startsWith("http://")) {
                         list.add(create(FileManipulation.concat(path, href, "/")));
                     }
-                } else {
+                }
+                else {
                     if (!href.startsWith("//")) {
                         if (FileManipulation.getDepth(path, "/") < 1) {
                             list.add(create(FileManipulation.concat(path, href, "/")));
@@ -83,7 +84,8 @@ public class HttpFile extends AbstractGFile {
                     for (HttpFile s: son.grecursiveList()) {
                         recursiveList.add(s);
                     }
-                } else {
+                }
+                else {
                     recursiveList.add(son);
                 }
             }
@@ -120,7 +122,7 @@ public class HttpFile extends AbstractGFile {
     @Override
     public String getAbsolutePath() {
         return path;
-            }
+    }
     @Override
     public String givenName() {
         return givenPath();
@@ -176,8 +178,6 @@ public class HttpFile extends AbstractGFile {
     @Override
     public long getSize() throws IOException {
         return 0;
-        //setResponse();
-        //return response.getEntity().getContentLength();
     }
     @Override
     public boolean hasDate() {

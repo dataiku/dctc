@@ -88,10 +88,9 @@ public class FileBuilder {
         if (proto == Protocol.SSH) {
             ((SshFileBuilder) proto.builder).setSshConfig(sshConfig);
         }
+
         return proto.builder.buildFile(account, path);
-
     }
-
     public GeneralizedFile[] buildFile(String[] paths) {
         GeneralizedFile[] res = new GeneralizedFile[paths.length];
         for (int i = 0; i < paths.length; ++i) {

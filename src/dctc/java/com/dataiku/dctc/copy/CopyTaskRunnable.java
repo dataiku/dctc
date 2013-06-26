@@ -23,7 +23,8 @@ public abstract class CopyTaskRunnable implements Runnable {
             else {
                 this.inSize = GlobalConstants.FOUR_KIO;
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             this.inSize = -1;
         }
     }
@@ -56,10 +57,12 @@ public abstract class CopyTaskRunnable implements Runnable {
 
         try {
             work();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             logger.info("Error in copy of " + getInputFile().getAbsoluteAddress(), e);
             exp = e;
-        } finally {
+        }
+        finally {
             synchronized (this) {
                 done = true;
             }

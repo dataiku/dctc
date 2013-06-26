@@ -48,10 +48,12 @@ public class DirectCopyTaskRunnable extends CopyTaskRunnable {
             o = out.outputStream();
             if (compress()) {
                 o = new GZIPOutputStream(o);
-            } else if (uncompress()) {
+            }
+            else if (uncompress()) {
                 try {
                     i = new GZIPInputStream(i);
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     if (!in.exists()) {
                         throw e;
                     }
@@ -77,7 +79,8 @@ public class DirectCopyTaskRunnable extends CopyTaskRunnable {
             if (deleteSrc) {
                 in.delete();
             }
-        } else {
+        }
+        else {
             readIndirection = true;
             inputStream = new CountingInputStream(in.inputStream());
             out.copy(inputStream, in.getSize());
@@ -88,7 +91,8 @@ public class DirectCopyTaskRunnable extends CopyTaskRunnable {
     public long read() {
         if (readIndirection && inputStream != null) {
             return inputStream.getByteCount();
-        } else {
+        }
+        else {
             return super.read();
         }
     }
