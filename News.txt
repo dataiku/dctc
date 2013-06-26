@@ -1,6 +1,9 @@
 # -*- mode: org eval: (auto-fill-mode) -*-
 
 * 0.3
+** Configuration
+
+   The comments could not be inline, due to the password inclusion on this file.
 
 ** Find command
 
