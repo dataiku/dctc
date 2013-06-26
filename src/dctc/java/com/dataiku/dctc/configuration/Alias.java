@@ -1,10 +1,13 @@
 package com.dataiku.dctc.configuration;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import com.dataiku.dctc.GlobalConstants;
 
 public class Alias {
     public void setAlias(Map<String, String> settings) {
@@ -19,7 +22,7 @@ public class Alias {
         }
 
         String cmd = cmdargs.get(0);
-        if (cmd.startsWith(".")) {
+        if (cmd.startsWith(GlobalConstants.ESCAPE_CHARACTER)) {
             cmdargs.set(0, cmd.substring(1));
             return;
         }
@@ -38,7 +41,7 @@ public class Alias {
         }
     }
     public String[] resolve(String[] cmdargs) {
-        List<String> args = Arrays.asList(cmdargs);
+        List<String> args = new ArrayList<String>(Arrays.asList(cmdargs));
 
         resolve(args, cloneAlias());
 

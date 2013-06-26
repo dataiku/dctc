@@ -19,6 +19,8 @@ public class GlobalConstants {
     public final static String UNCOMPRESS_OPT = "u";
     public final static String HELP_OPT = "h";
 
+    public final static String ESCAPE_CHARACTER = "."; // Mainly use for the alias management.
+
     // Default port
     public final static short SSH_PORT = 22;
     public final static short FTP_PORT = 21;
