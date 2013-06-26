@@ -3,7 +3,11 @@
 * 0.3
 ** Configuration
 
-   The comments could not be inline, due to the password inclusion on this file.
+*** The comments could not be inline, due to the password inclusion on this file.
+
+*** Number
+
+    The number in the global section can be pretty written with underscore.
 
 ** Find command
 
@@ -30,7 +34,7 @@
    Amazon S3 or Google GCS API
 
 ** Ssh Configuration File
-   
+
    Read =~/.ssh/config= for the host, username, and identity key configurations.
 
 ** Bug fixes
