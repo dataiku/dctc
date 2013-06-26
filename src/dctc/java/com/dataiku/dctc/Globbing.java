@@ -36,7 +36,8 @@ public class Globbing {
         }
         return true;
     }
-    static public List<GeneralizedFile> resolve(GeneralizedFile globbing, boolean showHidden) throws IOException {
+    static public List<GeneralizedFile> resolve(GeneralizedFile globbing,
+                                                boolean showHidden) throws IOException {
         List<GeneralizedFile> res = new ArrayList<GeneralizedFile>();
         boolean first = true;
         if (hasGlobbing(globbing.givenName())) {
@@ -88,7 +89,7 @@ public class Globbing {
         return res;
     }
     static public boolean hasGlobbing(String f) {
-        f = f.replaceAll("\\\\", "");
+        f = f.replaceAll("\\.", ""); // Delete all escaped character.
         return f.indexOf(star) != -1
             || f.indexOf(question) != -1
             || f.indexOf(openBracket) != -1;
@@ -96,49 +97,63 @@ public class Globbing {
 
     // Private
     static private boolean matchRawBracket(String pattern, char letter) {
+        // if the regex is [a-zA-Z], pattern = a-zA-Z
         for (int i = 0; i < pattern.length(); ++i) {
             if (i + 2 < pattern.length() && pattern.charAt(i + 1) == dash) {
+                // a-z
                 if (pattern.charAt(i) <= letter
                     && letter <= pattern.charAt(i + 2)) {
+                    // the letter is present in the dash.
                     return true;
-                } else {
+                }
+                else {
+                    // continue to match
                     i += 2;
                 }
             } else if (pattern.charAt(i) == letter) {
+                // Single letter, check if it
                 return true;
             }
         }
+        // Not found.
         return false;
     }
     static private boolean matchBracket(String pattern, char letter) {
-        if (pattern.charAt(0) == '!'
-            || pattern.charAt(0) == '^') {
-            return !matchRawBracket(pattern.substring(1), letter);
-        }
-        return matchRawBracket(pattern, letter);
+        return matchRawBracket(pattern, letter) ^
+            (pattern.charAt(0) == '!'
+             || pattern.charAt(0) == '^');
     }
     static private boolean match(String pattern, String filename, boolean escape) {
+        // Recursion of the globbing matching
         if (!escape) {
             if (pattern.length() == 0 && filename.length() == 0) {
                 return true;
-            } else if (pattern.length() == 0 || filename.length() == 0) {
+            }
+            else if (pattern.length() == 0 || filename.length() == 0) {
                 if (pattern.length() != 0 && pattern.charAt(0) == star) {
                     return match(pattern.substring(1), filename, false);
                 }
                 return false;
-            } else if (pattern.charAt(0) == question) {
+            }
+            else if (pattern.charAt(0) == question) {
                 return match(pattern.substring(1), filename.substring(1), false);
-            } else if (pattern.charAt(0) == openBracket) {
+            }
+            else if (pattern.charAt(0) == openBracket) {
                 int idx = pattern.indexOf("]", 2);
                 if (idx != -1) {
                     return matchBracket(pattern.substring(1, idx), filename.charAt(0))
                         && match(pattern.substring(idx + 1), filename.substring(1), false);
                 }
-            } else if (pattern.charAt(0) == star) {
+            }
+            else if (pattern.charAt(0) == star) {
                 return match(pattern, filename.substring(1), false)
                     || match(pattern.substring(1), filename, false)
                     || match(pattern.substring(1), filename.substring(1), false);
             }
+            assert pattern.charAt(0) == openBracket
+                : "pattern.charAt(0) == openBracket";
+            assert pattern.indexOf("]", 2) == -1
+                : "pattern.indexOf(\"]\", 2) == -1";
         }
         // Character is escaped or the current character is not a
         // special one.
