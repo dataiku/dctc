@@ -1,6 +1,6 @@
 package com.dataiku.dctc.configuration;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +13,7 @@ public class Alias {
         }
     }
     public void resolve(List<String> cmdargs, Map<String, String> unusedAlias) {
+        // unusedAlias variable avoid the loop inside the alias
         if (cmdargs.size() == 0) {
             return;
         }
@@ -25,8 +26,9 @@ public class Alias {
         if (unusedAlias.containsKey(cmd)) {
             cmdargs.remove(0);
             int idx = 0;
+            // Split on spaces or tabulation
             for (String space: alias.get(cmd).split(" ")) {
-                for (String tab: space.split("	")) {
+                for (String tab: space.split("	")) { // <- It's a tabulation
                     cmdargs.add(idx, tab);
                     ++idx;
                 }
@@ -36,16 +38,11 @@ public class Alias {
         }
     }
     public String[] resolve(String[] cmdargs) {
-        List<String> args = new ArrayList<String>();
-        for (String cmdarg: cmdargs) {
-            args.add(cmdarg);
-        }
+        List<String> args = Arrays.asList(cmdargs);
+
         resolve(args, cloneAlias());
-        String[] res = new String[args.size()];
-        for (int i = 0; i < args.size(); ++i) {
-            res[i] = args.get(i);
-        }
-        return res;
+
+        return args.toArray(new String[0]);
     }
     private Map<String, String> cloneAlias() {
         Map<String, String> res = new HashMap<String, String>();
