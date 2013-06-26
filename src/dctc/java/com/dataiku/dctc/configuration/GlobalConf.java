@@ -9,6 +9,8 @@ import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.display.DisplayFactory;
 import com.dataiku.dctc.display.ThreadedDisplay;
 import com.dataiku.dctc.exception.UserException;
+import com.dataiku.dip.utils.BooleanUtils;
+import com.dataiku.dip.utils.IntegerUtils;
 import com.dataiku.dip.utils.DKUtils;
 
 public class GlobalConf {
@@ -30,35 +32,24 @@ public class GlobalConf {
             String value = elt.getValue();
 
             if (key.equals("display")) {
-                display = new DisplayFactory(value);
+                display = value;
             }
             else if (key.equals("thread_max")) {
-                threadLimit = Integer.parseInt(value);
+                threadLimit = IntegerUtils.toInt(value);
             }
             else if (key.equals("globbing")) {
-                resolveGlobbing = getBoolean(value, false);
+                resolveGlobbing = BooleanUtils.toBoolean(value, false);
             }
             else {
-                throw new UserException("In configuration file: invalid option '" + key + "' in [global] section");
+                throw new UserException("dctc conf: Invalid option '" + key + "' in [global] section");
             }
         }
     }
-    public static boolean isValid() {
-        return threadLimit > 0;
-    }
-    public static boolean printInvalidSettings() {
-        if (threadLimit < 0) {
-            System.err.println("Global settings check: the number of thread if negative or null (value: " + threadLimit + ").");
-            return false;
-        }
-        return true;
-    }
-
     public static void setDisplay(String displayName) {
-        display = new DisplayFactory(displayName);
+        display = displayName;
     }
     public static ThreadedDisplay getDisplay() {
-        return display.build();
+        return new DisplayFactory(display).build();
     }
     public static int getThreadLimit() {
         return threadLimit;
@@ -75,7 +66,7 @@ public class GlobalConf {
                 } catch (Exception e) {
                     System.err.println("dctc global conf: Can't compute terminal width (set it to 80).");
                     DCTCLog.warn("global conf", "Cannot compute terminal width", e);
-                    colNumber =  80;
+                    colNumber = 80;
                 }
             }
         }
@@ -87,33 +78,15 @@ public class GlobalConf {
     public static String pathSeparator() {
         if (GlobalConstants.isWindows) {
             return ";";
-        } else {
+        }
+        else {
             return ":";
         }
     }
 
-    // Privates
-    private static Boolean getBoolean(String value) {
-        String lowerValue = value.toLowerCase();
-        if ("yes".startsWith(lowerValue) || "true".startsWith(lowerValue) || "1".equals(lowerValue)) {
-            return true;
-        }
-        else if ("no".startsWith(lowerValue) || "false".startsWith(lowerValue) || "0".equals(lowerValue)) {
-            return false;
-        } else {
-            return null;
-        }
-    }
-    private static Boolean getBoolean(String value, Boolean defaultValue) {
-        Boolean ofTheJedi = getBoolean(value);
-        if (ofTheJedi == null) {
-            ofTheJedi = defaultValue;
-        }
-        return ofTheJedi;
-    }
     // Attributes
     static private int colNumber;
-    static private DisplayFactory display = new DisplayFactory("auto");
+    static private String display = "auto";
     static private int threadLimit = Runtime.getRuntime().availableProcessors();
     static private Boolean resolveGlobbing = true;
 }
