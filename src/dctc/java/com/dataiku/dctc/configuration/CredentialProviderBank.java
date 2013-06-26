@@ -27,7 +27,8 @@ public class CredentialProviderBank {
             pcre.put(account, accountCred);
         }
         if (accountCred.hasParam(key)) {
-            throw ErrorContext.iaef("For protocol '%s' and account '%s', param '%s' specified twice", protocol, account, key);
+            throw ErrorContext.iaef("For protocol '%s' and account '%s', param '%s' specified twice",
+                                    protocol, account, key);
         }
         accountCred.add(key, value);
     }
@@ -60,7 +61,8 @@ public class CredentialProviderBank {
                                              pquoted(defaultAccount),
                                              "for protocol", pquoted(protocol)));
             }
-        } else {
+        }
+        else {
             protocolToDefaultAccount.put(protocol, firstAccount);
         }
     }
@@ -73,24 +75,14 @@ public class CredentialProviderBank {
         assert(protocol != null);
 
         ProtocolCredentials creds = protocolCredentials.get(protocol);
-        if (creds == null) {
-            if (protocol.equals("s3")) {
-                throw new UserException("No credentials for protocol '" + protocol + "'. You can add an account using 'dctc add-account'");
-            } else {
-                throw new UserException("No credentials for protocol '" + protocol + "'. Please edit configuration file: " + GlobalConf.confPath());
-            }
-        }
+        checkCredentials(creds, protocol);
+
         if (account == null) {
             account = protocolToDefaultAccount.get(protocol);
         }
+
         Params p = creds.get(account);
-        if (p == null) {
-            if (protocol.equals("s3")) {
-                throw new UserException("No credentials for protocol '" + protocol + "' and account '" + account + "'. You can add an account using 'dctc add-account'");
-            } else {
-                throw new UserException("No credentials for protocol '" + protocol + "' and account '" + account + "'.Please edit configuration file: " + GlobalConf.confPath());
-            }
-        }
+        checkCredentials(p, protocol);
         return p;
     }
 
@@ -98,7 +90,8 @@ public class CredentialProviderBank {
         assert (protocol != null);
         if (account == null) {
             return protocolToDefaultAccount.get(protocol);
-        } else {
+        }
+        else {
             return account;
         }
     }
@@ -114,9 +107,26 @@ public class CredentialProviderBank {
         return p;
     }
 
+    // Private
+    private void checkCredentials(Object o, String protocol) {
+        if (o == null) {
+            if (protocol.equals("s3") || protocol.equals("gs")) {
+                throw ue(protocol, "You can add an account using 'dctc add-account'.");
+            }
+            else {
+                throw ue(protocol, "Please edit configuration file: " + GlobalConf.confPath());
+            }
+        }
+    }
+    private UserException ue(String protocol, String msg) {
+        return new UserException("No credentials for protocol '" + protocol + "'. "
+                                 + msg);
+    }
+
     @SuppressWarnings("serial")
     public static class ProtocolCredentials extends HashMap<String, Params> {}
 
+    // Attributes
     private Map<String, String> protocolToDefaultAccount = new HashMap<String, String>();
     private Map<String, ProtocolCredentials> protocolCredentials = new HashMap<String, ProtocolCredentials>();
 }
