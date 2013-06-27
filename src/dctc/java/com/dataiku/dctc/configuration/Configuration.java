@@ -66,10 +66,8 @@ public class Configuration {
                     if (line.startsWith("[")) {
                         int closingElt = line.lastIndexOf(']');
                         if (closingElt > 1) {
-                            protocol = new HashMap<String, String>();
                             String protocolName = line.substring(1, closingElt);
-                            conf.put(protocolName, protocol);
-                            nonValidSection.add(protocolName);
+                            protocol = getNotNull(protocolName, conf);
                         }
                         else {
                             if (closingElt == -1) {
@@ -110,6 +108,7 @@ public class Configuration {
         if (sectionData == null) {
             sectionData = new HashMap<String, String>();
             from.put(section, sectionData);
+            nonValidSection.add(section);
         }
         return sectionData;
     }
