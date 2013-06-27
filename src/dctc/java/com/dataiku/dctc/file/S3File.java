@@ -202,9 +202,7 @@ public class S3File extends BucketBasedFile {
                                                                           , parent
                                                                           , fileSeparator())
                                                   , s3
-                                                  , getChildrenOf(FileManipulation.concat(bucket
-                                                                                          , parent
-                                                                                          , fileSeparator()))
+                                                  , getChildrenOf(parent)
                                                   , autoRecur));
                 }
             }
@@ -545,7 +543,7 @@ public class S3File extends BucketBasedFile {
             }
             if (grecursiveList != null) {
                 for (S3File e: grecursiveList) {
-                    if (FileManipulation.isSon(path, e.getAbsolutePath(), fileSeparator())) {
+                    if (FileManipulation.isSon(path, e.path, fileSeparator())) {
                         res.add(e);
                     }
                 }
