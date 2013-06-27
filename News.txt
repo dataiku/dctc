@@ -1,6 +1,10 @@
 # -*- mode: org eval: (auto-fill-mode) -*-
 
 * 0.3
+** Alias command
+
+   Display, define alias with the shell syntax.
+
 ** Configuration
 
 *** The comments could not be inline, due to the password inclusion on this file.
