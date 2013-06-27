@@ -11,7 +11,7 @@ import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dip.utils.PrettyString;
 
 public class Alias {
-    public void setAlias(Map<String, String> settings) {
+    public void addAlias(Map<String, String> settings) {
         for (Entry<String, String> setting: settings.entrySet()) {
             alias.put(setting.getKey(), setting.getValue());
         }

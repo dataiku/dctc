@@ -56,7 +56,7 @@ public class StructuredConf {
 
     // Private Methods
     private void alias() {
-        alias.setAlias(conf.getOrCreateSection("alias"));
+        alias.addAlias(conf.getOrCreateSection("alias"));
         conf.valid("alias");
     }
     private void bank() {
