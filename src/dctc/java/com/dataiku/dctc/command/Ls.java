@@ -205,12 +205,28 @@ public class Ls extends Command {
     }
     private void printAsList(List<PrintTask> tasks) throws IOException {
         printTotalSize(tasks);
+        long maxSize = 0;
         for (PrintTask task: tasks) {
-            printAcl(task); System.out.print(" ");
-            printSize(task); System.out.print(" ");
-            printDate(task.first); System.out.print(" ");
+            maxSize = Math.max(maxSize, task.first.getSize());
+        }
+        int maxSizeLength = getPrettySize(maxSize).length();
+        for (PrintTask task: tasks) {
+            printAcl(task);
+            System.out.print(" ");
+            printSize(task, maxSizeLength);
+            System.out.print(" ");
+            printDate(task.first);
+            System.out.print(" ");
             printName(task);
             System.out.println();
+        }
+    }
+    private String getPrettySize(long size) {
+        if (humanReadable()) {
+            return Size.getReadableSize(size, "#0.0");
+        }
+        else {
+            return Long.toString(size);
         }
     }
     private void printTotalSize(List<PrintTask> tasks) throws IOException {
@@ -238,12 +254,12 @@ public class Ls extends Command {
             System.out.print("     ");
         }
     }
-    private void printSize(PrintTask task) throws IOException {
-        if (humanReadable()) {
-            System.out.print(Size.getReadableSize(task.first.getSize(), "#0.0"));
-        } else {
-            System.out.print(task.first.getSize());
+    private void printSize(PrintTask task, int maxSizeLength) throws IOException {
+        String size = getPrettySize(task.first.getSize());
+        for (int i = size.length(); i < maxSizeLength; ++i) {
+            System.out.print(" ");
         }
+        System.out.print(size);
     }
     private void printDate(GeneralizedFile f) {
         Date date = new Date();
@@ -255,21 +271,22 @@ public class Ls extends Command {
         }
         if (humanReadable()) {
             DateFormat dateFormat = new SimpleDateFormat("yyyy MMM d h:mm");
-            String[] split = FileManipulation.split(dateFormat.format(date), " ", 4);
+            String[/*year/month/day/hour/minutes*/] split
+                = FileManipulation.split(dateFormat.format(date), " ", 4);
             System.out.print(split[0] + " " + split[1]);
             if (split[2].length() == 1) {
                 System.out.print("  ");
-            } else {
+            }
+            else {
                 System.out.print(" ");
             }
             System.out.print(split[2]);
-            if (split[3].length() == 4) {
-                System.out.print("  ");
-            } else {
+            for (int i = split[3].length(); i < 6; ++i) {
                 System.out.print(" ");
             }
             System.out.print(split[3]);
-        } else {
+        }
+        else {
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             System.out.print(dateFormat.format(date));
         }
