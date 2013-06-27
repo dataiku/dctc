@@ -11,13 +11,14 @@ import com.dataiku.dctc.file.FileManipulation;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dctc.file.LocalFile;
 import com.dataiku.dip.utils.IndentedWriter;
+import com.dataiku.dip.utils.IntegerUtils;
 
 public class Du extends Command {
     public String cmdname() {
         return "du";
     }
     public String tagline() {
-        return "estimate file space usage.";
+        return "compute file space usage.";
     }
     public String proto() {
         return "[FILE]...";
@@ -26,40 +27,55 @@ public class Du extends Command {
         Options opt = new Options();
 
         opt.addOption("h", "human-readable", false, "print sizes in human readable format.");
+        longOpt(opt, "Print the total for a directory (or file, with --all) only if it is N or fewer levels below the command line argument; --max-depth=0 is the same as --summarize."
+                , "max-depth", "d", "N");
+        opt.addOption("s", "summarize", false, "Display only a total for each argument.");
+        opt.addOption("c", "total", false, "Produce a grand total.");
+        opt.addOption("a", "all", false, "Write counts for all files, not just directories.");
         return opt;
     }
     public void longDescription(IndentedWriter printer) {
-        printer.print("Estimate file space usage.");
+        printer.print("Compute file space usage.");
     }
     public void perform(List<GeneralizedFile> args) {
         if (args.size() == 0) {
             args.add(new LocalFile("."));
         }
+        long size = 0;
         for (GeneralizedFile arg: args) {
-            perform(arg, 0);
+            try {
+                size += perform(arg, 0);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
+        if (hasOption("c")) {
+            print(size, "total");
         }
     }
-    public long perform(GeneralizedFile arg, int depth) {
+    public long perform(GeneralizedFile arg, int depth) throws IOException {
         long size;
-        try {
+        if (arg.isFile()) {
+            size = arg.getSize();
+            print(size, arg.givenName());
+        }
+        else {
             size = arg.getSize();
             boolean first = true;
             for (GeneralizedFile son: arg.grecursiveList()) {
                 size += son.getSize();
-                if (son.isDirectory()
+                if ((all() || son.isDirectory())
                     && FileManipulation.isDirectSon(arg.givenName(), son.givenName(), "/")
                     && !first) {
                     perform(son, depth + 1);
                 }
                 first = false;
             }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            return 0;
-        }
-        if (depth <= maxDepth) {
-            System.out.println(getPrettySize(size) + "	" + arg.givenName());
+            if (depth <= getDepth()) {
+                print(size, arg.givenName());
+            }
         }
         return size;
     }
@@ -71,13 +87,38 @@ public class Du extends Command {
             return Long.toString(size);
         }
     }
+    private int getDepth() {
+        if (maxDepth == null) {
+            if (hasOption("s")) {
+                maxDepth = 0;
+            }
+            else if (hasOption("d")) {
+                maxDepth = IntegerUtils.toInt(getOptionValue("d"));
+            }
+            else {
+                maxDepth = Integer.MAX_VALUE;
+            }
+
+        }
+        return maxDepth;
+    }
+    private boolean all() {
+        if (all == null) {
+            all = hasOption("a");
+        }
+        return all;
+    }
     private boolean humanReadable() {
         if (humanReadable == null) {
             humanReadable = hasOption("h");
         }
         return humanReadable;
     }
+    private void print(long size, String name) {
+        System.out.println(getPrettySize(size) + "	" + name);
+    }
 
     private Boolean humanReadable;
-    private int maxDepth = 1;
+    private Integer maxDepth;
+    private Boolean all;
 }
