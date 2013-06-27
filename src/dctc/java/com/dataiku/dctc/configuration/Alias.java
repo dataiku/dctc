@@ -47,6 +47,10 @@ public class Alias {
 
         return args.toArray(new String[0]);
     }
+    public Map<String, String> getAlias() {
+        return alias;
+    }
+
     private Map<String, String> cloneAlias() {
         Map<String, String> res = new HashMap<String, String>();
         res.putAll(alias);

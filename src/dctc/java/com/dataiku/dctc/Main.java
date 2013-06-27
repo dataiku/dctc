@@ -87,6 +87,7 @@ public class Main {
     }
     private static void fillCommand() {
         addCmd(new AddAccount());
+        addCmd(new Alias());
         addCmd(new Cat());
         addCmd(new Cmp());
         addCmd(new Cp());
@@ -170,6 +171,9 @@ public class Main {
                     if (cmd.cmdname().equals("add-account")) {
                         assert cmd instanceof AddAccount;
                         ((AddAccount) cmd).setConfiguration(conf.getConfAppenders());
+                    }
+                    else if (cmd.cmdname().equals("alias")) {
+                        ((Alias) cmd).setAlias(conf.getAlias());
                     }
                     cmd.setFileBuilder(conf.getFileBuilder());
                     try {
