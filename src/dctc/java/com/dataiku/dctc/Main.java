@@ -92,6 +92,7 @@ public class Main {
         addCmd(new Cmp());
         addCmd(new Cp());
         addCmd(new Dispatch());
+        addCmd(new Du());
         addCmd(new Edit());
         addCmd(new Find());
         addCmd(new Grep());

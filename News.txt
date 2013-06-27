@@ -1,6 +1,10 @@
 # -*- mode: org eval: (auto-fill-mode) -*-
 
 * 0.3
+** Du command
+
+   Command to estimate file space usage.
+
 ** Alias command
 
    Display, define alias with the shell syntax.
