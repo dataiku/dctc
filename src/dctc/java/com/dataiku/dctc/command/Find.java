@@ -128,13 +128,16 @@ public class Find extends Command {
     private Kind kind() {
         if (kind == null) {
             String value = getOptionValue("type");
-            if ("directory".startsWith(value)) {
+            if (value == null || "all".startsWith(value)) {
+                kind = Kind.ALL;
+            }
+            else if ("directory".startsWith(value)) {
                 kind = Kind.DIRECTORY;
             }
             else if ("file".startsWith(value)) {
                 kind = Kind.FILE;
             }
-            else if ("all".startsWith(value)) {
+            else {
                 kind = Kind.ALL;
             }
         }
