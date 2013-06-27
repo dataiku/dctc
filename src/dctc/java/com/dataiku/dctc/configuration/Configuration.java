@@ -44,7 +44,7 @@ public class Configuration {
             }
         }
 
-        FileWriter fw = new FileWriter(file,true);
+        FileWriter fw = new FileWriter(file, true);
         fw.write(sb.toString());
         fw.close();
     }
