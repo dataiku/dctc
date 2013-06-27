@@ -228,11 +228,13 @@ public class GSFile extends BucketBasedFile {
                 GSFile l = createInstanceFor(bucket);
                 l.resolve();
                 fill(l.recursiveFileList);
-
             }
         }
         else if (isDirectory()) {
-            fill(recursiveFileList);
+            if (recursiveFileList != null) {
+                // Optimize diretory. This object is not filled.
+                fill(recursiveFileList);
+            }
         }
         else if (isFile()) {
             throw new IOException("can't list " + getAbsoluteAddress() + ": is a file");
@@ -242,6 +244,7 @@ public class GSFile extends BucketBasedFile {
     private void fill(List<StorageObject> sos) throws IOException {
         grecursiveList = new ArrayList<GSFile>();
         grecursiveList.add(this);
+
         for (StorageObject so: sos) {
             grecursiveList.add(new GSFile(this, so));
             String parent = so.getName();
@@ -402,7 +405,8 @@ public class GSFile extends BucketBasedFile {
                 for (Bucket bucket : bucketsObj.getItems()) {
                     bucketsList.add(bucket.getId());
                 }
-            } else {
+            }
+            else {
                 if (path.length() > 0) {
                     /* Check if I am a file */
                     try {
@@ -431,7 +435,7 @@ public class GSFile extends BucketBasedFile {
                             type = Type.DIR;
                         }
                         else if (path.length() == 0) {
-                            /* There is an exception : the root of a bucket always exists, if we did not have an error */
+                            /* There is an exception: the root of a bucket always exists, if we did not have an error */
                             type = Type.DIR;
                         }
                         else {
@@ -537,7 +541,7 @@ public class GSFile extends BucketBasedFile {
             }
             if (grecursiveList != null) {
                 for (GSFile e: grecursiveList) {
-                    if (FileManipulation.isSon(path, e.getAbsolutePath(), fileSeparator())) {
+                    if (FileManipulation.isSon(path, e.path, fileSeparator())) {
                         res.add(e);
                     }
                 }

@@ -77,6 +77,7 @@ public class Du extends Command {
                 print(size, arg.givenName());
             }
         }
+
         return size;
     }
     private String getPrettySize(long size) {
