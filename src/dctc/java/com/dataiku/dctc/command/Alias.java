@@ -1,5 +1,13 @@
 package com.dataiku.dctc.command;
 
+import static com.dataiku.dip.utils.PrettyString.eol;
+import static com.dataiku.dip.utils.PrettyString.scat;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map.Entry;
 
 import org.apache.commons.cli.Options;
@@ -27,8 +35,30 @@ public class Alias extends Command {
     }
 
     public void perform(String[] args) {
-        for (Entry<String, String> alia: alias.getAlias().entrySet()) {
-            System.out.println(alia.getKey() + "=\"" + alia.getValue() + "\"");
+        if (args.length == 0) {
+            for (Entry<String, String> alia: alias.getAlias().entrySet()) {
+                System.out.println(alia.getKey() + "=\"" + alia.getValue() + "\"");
+            }
+        }
+        else {
+            // Write an alias
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(eol());
+            sb.append("# Added by dctc alias (" + dateFormat.format(date) + ")." + eol());
+            sb.append("[alias]" + eol());
+            sb.append(scat((Object[]) args));
+
+            try {
+                FileWriter fw = new FileWriter("/home/vash/.dctcrc", true);
+                fw.write(sb.toString() + eol());
+                fw.close();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
