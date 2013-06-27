@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.dataiku.dctc.GlobalConstants;
+import com.dataiku.dip.utils.PrettyString;
 
 public class Alias {
     public void setAlias(Map<String, String> settings) {
@@ -41,6 +42,9 @@ public class Alias {
         }
     }
     public String[] resolve(String[] cmdargs) {
+        if (!PrettyString.isInteractif()) {
+            return cmdargs;
+        }
         List<String> args = new ArrayList<String>(Arrays.asList(cmdargs));
 
         resolve(args, cloneAlias());
