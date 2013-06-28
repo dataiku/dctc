@@ -92,10 +92,54 @@ public class RegexpFieldsBuilder {
 	}
 
 	public static class PartialMatch {
-		int totalChars;
-		int totalChunks;
-		public int matchedChars;
-		int matchedChunks;
+            public int getTotalChars() {
+                return totalChars;
+            }
+            public void setTotalChars(int totalChars) {
+                this.totalChars = totalChars;
+            }
+            public PartialMatch withTotalChars(int totalChars) {
+                this.totalChars = totalChars;
+                return this;
+            }
+
+            public int getTotalChunks() {
+                return totalChunks;
+            }
+            public void setTotalChunks(int totalChunks) {
+                this.totalChunks = totalChunks;
+            }
+            public PartialMatch withTotalChunks(int totalChunks) {
+                this.totalChunks = totalChunks;
+                return this;
+            }
+
+            public int getMatchedChars() {
+                return matchedChars;
+            }
+            public void setMatchedChars(int matchedChars) {
+                this.matchedChars = matchedChars;
+            }
+            public PartialMatch withMatchedChars(int matchedChars) {
+                this.matchedChars = matchedChars;
+                return this;
+            }
+
+            public int getMatchedChunks() {
+                return matchedChunks;
+            }
+            public void setMatchedChunks(int matchedChunks) {
+                this.matchedChunks = matchedChunks;
+            }
+            public PartialMatch withMatchedChunks(int matchedChunks) {
+                this.matchedChunks = matchedChunks;
+                return this;
+            }
+
+            private int matchedChunks;
+            private int matchedChars;
+            private int totalChunks;
+            private int totalChars;
 	}
 
 	public PartialMatch partialExec(String line) {
