@@ -3,7 +3,6 @@ package com.dataiku.dctc.command;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.List;
 
@@ -14,6 +13,7 @@ import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
+import com.dataiku.dip.utils.StreamUtils;
 
 public class Tail extends Command {
     public String tagline() {
@@ -89,7 +89,7 @@ public class Tail extends Command {
                 int idx = 0;
                 BufferedReader in = null;
                 try {
-                    in = new BufferedReader(new InputStreamReader(arg.inputStream()));
+                    in = StreamUtils.readStream(arg.inputStream());
                     String line = null;
 
                     while((line = in.readLine()) != null) {

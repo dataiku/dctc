@@ -3,7 +3,6 @@ package com.dataiku.dctc.command;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.List;
 
 import org.apache.commons.cli.OptionBuilder;
@@ -15,6 +14,7 @@ import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
+import com.dataiku.dip.utils.StreamUtils;
 
 public class Head extends Command {
     public String tagline() {
@@ -86,7 +86,7 @@ public class Head extends Command {
     private void head(InputStream in) {
         try {
             int n = numberOfLines();
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            BufferedReader br = StreamUtils.readStream(in);
             try {
                 while(true) {
                     if (n-- == 0) {

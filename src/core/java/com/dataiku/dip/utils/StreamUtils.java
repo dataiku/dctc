@@ -13,6 +13,15 @@ public class StreamUtils {
                                             String encoding) throws UnsupportedEncodingException{
         return new BufferedReader(new InputStreamReader(input, encoding));
     }
+    public static BufferedReader readStream(InputStream input) {
+        try {
+            return readStream(input, "UTF-8");
+        }
+        catch (UnsupportedEncodingException e) {
+            assert false;
+            return null;
+        }
+    }
     public static BufferedReader readFile(File f,
                                           String encoding) throws FileNotFoundException,
                                                                   UnsupportedEncodingException {
@@ -20,5 +29,14 @@ public class StreamUtils {
         InputStreamReader in = new InputStreamReader(fis, encoding);
 
         return new BufferedReader(in);
+    }
+    public static BufferedReader readFile(File f) throws FileNotFoundException {
+        try {
+            return readFile(f, "UTF-8");
+        }
+        catch (UnsupportedEncodingException e) {
+            assert false;
+            return null;
+        }
     }
 }
