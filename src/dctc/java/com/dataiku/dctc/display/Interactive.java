@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 
 public class Interactive {
     public static boolean ask(String cmd, String question, String yes, String no) {
-        BufferedReader i = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader i = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
         while (true) {
             System.err.print(question);
             System.err.flush();
@@ -30,7 +30,7 @@ public class Interactive {
     }
 
     public static String askString(String question) {
-        BufferedReader i = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader i = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
         while (true) {
             System.err.print(question);
             System.err.flush();
