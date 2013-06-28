@@ -36,11 +36,12 @@ public class Partition implements Cloneable {
             return "NP";
         } else {
             StringBuilder sb = new StringBuilder();
-            boolean empty = true;
+            boolean first = true;
             for (DimensionValue dv : dimensionValues.values()) {
-                if (empty) {
+                if (first == true) {
+                    first = false;
+                } else {
                     sb.append("|");
-                    empty = false;
                 }
                 sb.append(dv.id());
             }
