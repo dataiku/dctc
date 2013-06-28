@@ -128,7 +128,12 @@ public class Tail extends Command {
             } else {
                 try {
                     InputStream input = arg.inputStream();
-                    input.skip(arg.getSize() - nbByte());
+                    long toSkip = arg.getSize() - nbByte();
+
+                    while (toSkip > 0) {
+                        toSkip -= input.skip(toSkip);
+                    }
+
                     IOUtils.copyLarge(input, System.out);
                 } catch (IOException e) {
                     error(arg.givenName(), e.getMessage(), 1);
