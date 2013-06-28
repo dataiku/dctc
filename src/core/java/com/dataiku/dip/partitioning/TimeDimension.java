@@ -84,4 +84,9 @@ public class TimeDimension extends Dimension {
         }
         return timeDim;
     }
+
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 51; // Viva le pastis
+    }
 }
