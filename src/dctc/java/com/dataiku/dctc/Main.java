@@ -4,6 +4,7 @@ import static com.dataiku.dip.utils.PrettyString.nlcat;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -13,8 +14,27 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
 import com.dataiku.dctc.DCTCLog.Mode;
+import com.dataiku.dctc.command.AddAccount;
+import com.dataiku.dctc.command.Alias;
+import com.dataiku.dctc.command.Cat;
+import com.dataiku.dctc.command.Cmp;
+import com.dataiku.dctc.command.Cp;
+import com.dataiku.dctc.command.Dispatch;
+import com.dataiku.dctc.command.Du;
+import com.dataiku.dctc.command.Edit;
+import com.dataiku.dctc.command.Find;
+import com.dataiku.dctc.command.Grep;
+import com.dataiku.dctc.command.Head;
+import com.dataiku.dctc.command.ListColumns;
+import com.dataiku.dctc.command.Ls;
+import com.dataiku.dctc.command.Mkdir;
+import com.dataiku.dctc.command.Mv;
+import com.dataiku.dctc.command.Rm;
+import com.dataiku.dctc.command.Rmdir;
+import com.dataiku.dctc.command.Sync;
+import com.dataiku.dctc.command.Tail;
+import com.dataiku.dctc.command.Version;
 import com.dataiku.dctc.command.abs.Command;
-import com.dataiku.dctc.command.*;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.configuration.StructuredConf;
 import com.dataiku.dctc.exception.UserException;
@@ -119,8 +139,11 @@ public class Main {
              } );
     }
     public static void atBegin() {
-        System.setOut(new StdOut(System.out));
-        System.setErr(new StdOut(System.err));
+        try {
+            System.setOut(new StdOut(System.out));
+            System.setErr(new StdOut(System.err));
+        }
+        catch (UnsupportedEncodingException e) {}
         setLogger();
         fillCommand();
 

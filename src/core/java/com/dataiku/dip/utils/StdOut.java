@@ -1,12 +1,13 @@
 package com.dataiku.dip.utils;
 
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 public class StdOut extends PrintStream {
 
-    public StdOut(PrintStream out) {
-        super(out);
+    public StdOut(PrintStream out) throws UnsupportedEncodingException {
+        super(out, false, "UTF-8");
         this.out = out;
     }
     @Override
