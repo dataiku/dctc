@@ -3,10 +3,18 @@ package com.dataiku.dctc.display;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 
 public class Interactive {
     public static boolean ask(String cmd, String question, String yes, String no) {
-        BufferedReader i = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
+        BufferedReader i;
+        try {
+            i = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
+        }
+        catch (UnsupportedEncodingException e) {
+            assert false;
+            return false;
+        }
         while (true) {
             System.err.print(question);
             System.err.flush();
@@ -30,7 +38,14 @@ public class Interactive {
     }
 
     public static String askString(String question) {
-        BufferedReader i = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
+        BufferedReader i;
+        try {
+            i = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
+        }
+        catch (UnsupportedEncodingException e) {
+            assert false;
+            return "";
+        }
         while (true) {
             System.err.print(question);
             System.err.flush();
