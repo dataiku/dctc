@@ -131,7 +131,7 @@ public abstract class AbstractGFile implements GeneralizedFile {
         return "";
     }
     @Override
-    public void setDate(long date) {
+    public void setDate(long date) throws IOException {
     }
     @Override // Could be override.
     public boolean allocate(long size) {

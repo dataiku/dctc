@@ -255,8 +255,10 @@ public class LocalFile extends AbstractGFile {
         return f.lastModified();
     }
     @Override
-    public void setDate(long date) {
-        f.setLastModified(date);
+    public void setDate(long date) throws IOException {
+        if (!f.setLastModified(date)) {
+            throw new IOException("Cannot set the date");
+        }
     }
     @Override
     public long getSize() {
