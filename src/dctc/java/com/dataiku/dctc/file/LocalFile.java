@@ -208,8 +208,7 @@ public class LocalFile extends AbstractGFile {
             return false;
         }
         LocalFile input = (LocalFile) ginput;
-        f.renameTo(input.f);
-        return true;
+        return f.renameTo(input.f);
     }
     @Override
     public boolean delete() {
