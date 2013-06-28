@@ -4,7 +4,6 @@ import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import com.dataiku.dctc.AutoGZip;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
+import com.dataiku.dip.utils.StreamUtils;
 
 public class Grep extends Command {
     public String tagline() {
@@ -160,7 +160,7 @@ public class Grep extends Command {
 
     private void grep(GeneralizedFile file, String pattern, boolean header) throws IOException {
         pattern = formatPattern(pattern);
-        BufferedReader i =  new BufferedReader(new InputStreamReader(AutoGZip.buildInput(file)));
+        BufferedReader i = StreamUtils.readStream(AutoGZip.buildInput(file), "UTF-8");
         try {
             while(true) {
                 String line = i.readLine();
