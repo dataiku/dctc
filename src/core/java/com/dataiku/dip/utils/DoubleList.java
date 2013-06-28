@@ -5,7 +5,7 @@ import java.util.Iterator;
 /**
  * Mutable array of longs
  */
-public class DoubleList implements Iterable<Double>{
+public class DoubleList implements Iterable<Double> {
     private transient double[] data;
     private int size;
 
@@ -34,7 +34,7 @@ public class DoubleList implements Iterable<Double>{
     }
 
     /**
-     * Get a copy of valid elements. 
+     * Get a copy of valid elements.
      */
     public double[] getValidDataCopy() {
     	double[] newData = new double[size];
@@ -96,7 +96,7 @@ public class DoubleList implements Iterable<Double>{
     public void grow(int minCapacity) {
         int oldCapacity = data.length;
         if (minCapacity > oldCapacity) {
-        	double[] oldData = data;
+            double[] oldData = data;
             int newCapacity = (oldCapacity * 3)/2 + 1;
             if (newCapacity < minCapacity) {
                 newCapacity = minCapacity;
@@ -120,21 +120,21 @@ public class DoubleList implements Iterable<Double>{
     }
 
     @Override
-    public Iterator<Double> iterator() {
+        public Iterator<Double> iterator() {
         return new Iterator<Double>() {
             int nextIndex = 0;
             @Override
-            public boolean hasNext() {
+                public boolean hasNext() {
                 return nextIndex < size();
             }
 
             @Override
-            public Double next() {
+                public Double next() {
                 return data[nextIndex++];
             }
 
             @Override
-            public void remove() {
+                public void remove() {
             }
         };
     }
