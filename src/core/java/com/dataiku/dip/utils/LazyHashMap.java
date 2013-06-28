@@ -9,18 +9,16 @@ import java.util.Set;
 public class LazyHashMap<K, V> implements Map<K, V>{
     Map<K, V> backend = new HashMap<K, V>();
 
-    Class<V> clazz;
     Constructor<V> ctor;
 
     public LazyHashMap(Class<V> clazz) {
-        this.clazz = clazz;
         try {
             this.ctor = clazz.getConstructor();
         } catch (Exception e) {
             throw new Error("Can't create lazy hash map", e);
         }
     }
-    
+
     public V getOrCreate(K key) {
         V ret = backend.get(key);
         if (ret == null) {
