@@ -1,12 +1,10 @@
 package com.dataiku.dip.utils;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,13 +24,13 @@ public class DKUtils {
     public static <T> T lastElement(T[] array) {
         return array[array.length - 1];
     }
-    
+
     public static void unsafeSleep(long ms) {
         try { Thread.sleep(ms); } catch (InterruptedException e) {}
     }
 
     public static void setStdoutNotBuffered( ){
-        System.setOut(new PrintStream(new BufferedOutputStream(new FileOutputStream(FileDescriptor.in))));
+        System.setOut(new PrintStream(StreamUtils.readFD(FileDescriptor.in, "UTF-8")));
     }
 
     /* Warning: not optimized */
