@@ -29,12 +29,12 @@ public class LongList implements Iterable<Long>{
      * Get the raw pointer to all elements.
      * @warning this return all elements in the array, ie more than the size. You must not read past size()
      */
-    public long[] getAllData() {
+    private long[] getAllData() {
         return data;
     }
 
     /**
-     * Get a copy of valid elements. 
+     * Get a copy of valid elements.
      */
     public long[] getValidDataCopy() {
         long[] newData = new long[size];
