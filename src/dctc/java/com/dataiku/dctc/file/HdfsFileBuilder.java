@@ -27,10 +27,10 @@ public class HdfsFileBuilder extends ProtocolFileBuilder {
         HadoopDistributionClassLoader.addLibraries();
         Params p;
         if (accountSettings != null) {
-            p = bank.getAccountParams("hdfs", accountSettings);
+            p = getBank().getAccountParams("hdfs", accountSettings);
         }
         else {
-            p = bank.getAccountParamsIfExists("hdfs", accountSettings);
+            p = getBank().getAccountParamsIfExists("hdfs", accountSettings);
 
             if (p == null) {
                 /* I can still try to build using HADOOP_HOME */

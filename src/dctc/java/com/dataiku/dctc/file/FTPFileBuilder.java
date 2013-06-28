@@ -58,7 +58,7 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
             return build(path[0], accountChunks[0], accountChunks[1], path[1]);
         }
         else {
-            Params p = bank.getAccountParams(getProtocol().getCanonicalName(), accountSettings);
+            Params p = getBank().getAccountParams(getProtocol().getCanonicalName(), accountSettings);
 
             if (validateAccountParams(accountSettings, p)) {
                 throw invalidAccountSettings(accountSettings);

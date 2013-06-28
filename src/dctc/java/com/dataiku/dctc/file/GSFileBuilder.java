@@ -15,8 +15,8 @@ public class GSFileBuilder extends ProtocolFileBuilder {
 
     @Override
     public synchronized GeneralizedFile buildFile(String accountSettings, String rawPath) {
-        assert bank != null;
-        Params p = bank.getAccountParams(getProtocol().getCanonicalName(), accountSettings);
+        assert getBank() != null;
+        Params p = getBank().getAccountParams(getProtocol().getCanonicalName(), accountSettings);
         if (validateAccountParams(accountSettings, p)) {
             throw invalidAccountSettings(accountSettings);
         }

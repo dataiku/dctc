@@ -45,8 +45,15 @@ public abstract class ProtocolFileBuilder {
         return false;
     }
 
+    public CredentialProviderBank getBank() {
+        return bank;
+    }
     public void setBank(CredentialProviderBank bank) {
         this.bank = bank;
+    }
+    public ProtocolFileBuilder withBank(CredentialProviderBank bank) {
+        this.bank = bank;
+        return this;
     }
 
     protected String translateDefaultPath(Params accountParams, String protocolData) {
@@ -73,5 +80,5 @@ public abstract class ProtocolFileBuilder {
     public abstract String fileSeparator();
 
     // Attributes
-    protected CredentialProviderBank bank;
+    private CredentialProviderBank bank;
 }

@@ -32,11 +32,11 @@ public class SshFileBuilder extends ProtocolFileBuilder {
     public synchronized GeneralizedFile buildFile(String account, String rawPath) {
         if (account == null) {
             String[] hostPath = FileManipulation.split(rawPath, ":", 2);
-            Params p = bank.getAccountParamsIfExists(getProtocol().getCanonicalName(), account);
+            Params p = getBank().getAccountParamsIfExists(getProtocol().getCanonicalName(), account);
             return new SshFile(sshConfig, hostPath[0], hostPath[1], p);
         }
 
-        Params p = bank.getAccountParamsIfExists(getProtocol().getCanonicalName(), account);
+        Params p = getBank().getAccountParamsIfExists(getProtocol().getCanonicalName(), account);
         if (p != null) {
             if (validateAccountParams(account, p)) {
                 throw invalidAccountSettings(account);
