@@ -9,15 +9,15 @@ import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.configuration.StructuredConf;
 
 public class CmpTest {
-    private void checkErr(String str) {
+    private void checkErr(String str) throws Exception {
         assertTrue(str.equals(Settings.getErr()));
     }
-    private void checkOut(String str) {
+    private void checkOut(String str) throws Exception {
         assertTrue(str.equals(Settings.getOut()));
     }
 
     @org.junit.Test
-    public void cmp() throws IOException {
+    public void cmp() throws IOException, Exception {
         Settings.setOutputs();
 
         Cmp cmp = new Cmp();

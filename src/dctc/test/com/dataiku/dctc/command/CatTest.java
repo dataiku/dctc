@@ -17,18 +17,18 @@ import com.dataiku.dip.utils.IndentedWriter;
 
 public class CatTest {
 
-    private void checkErr(String str) {
+    private void checkErr(String str) throws Exception {
         assertTrue(str.equals(Settings.getErr()));
     }
-    private void checkOut(String str) {
+    private void checkOut(String str) throws Exception {
         assertTrue(str.equals(Settings.getOut()));
     }
-    private void checkOutputs(String out, String err) {
+    private void checkOutputs(String out, String err) throws Exception {
         checkOut(out);
         checkErr(err);
     }
     @org.junit.Test
-    public void commandParameters()throws IOException  {
+    public void commandParameters()throws IOException, Exception {
         Settings.setOutputs();
         Cat c = new Cat();
         String[] s = { "-foo" };
@@ -43,7 +43,7 @@ public class CatTest {
         assertTrue(Settings.getErr().startsWith("dctc cat: ERROR: Unrecognized option: -foo" + System.getProperty("line.separator")));
     }
     @org.junit.Test
-    public void help() throws IOException {
+    public void help() throws IOException, Exception {
         // reset context
         Settings.setOutputs();
         Cat c = new Cat();
@@ -62,7 +62,7 @@ public class CatTest {
         checkOutputs(helpMessage,"");
     }
     @org.junit.Test
-    public void commandOutput() throws IOException {
+    public void commandOutput() throws IOException, Exception {
         String fileName = "cat-test.foo";
         String fileContent = "The Hitchhicker.";
         Settings.setOutputs();
