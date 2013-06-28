@@ -1,7 +1,7 @@
 package com.dataiku.dip.datalayer;
 
 
-/** 
+/**
  * Small helper to fit a SingleRowProcessor in a SingleInputSingleOutput processor.
  * It simply processes the row and emit it in its output if it's not deleted.
  */
@@ -26,7 +26,7 @@ public class SRPAdapter extends SingleInputSingleOutputRowProcessor{
 //        if (row.isDeleted()) {
 //            throw new Error("Deleted by " + p);
 //        }
-        if (out != null && !row.isDeleted()) {
+        else if (!row.isDeleted()) {
 //            if (p.getClass().getName().contains("RemoveRows"))System.out.println("  and emits to "+ out);
             out.emitRow(row);
         } else  {
