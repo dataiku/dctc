@@ -36,6 +36,20 @@ public class CSVFormatConfig {
         f.addParam(AbstractFormatExtractor.PARAM_skipRowsAfterHeader, skipRowsAfterHeader);
     }
 
+    public int getProbableNumberOfRecords() {
+        return probableNumberOfRecords;
+    }
+    public void setProbableNumberOfRecords(int problableNumberOfRecords) {
+        this.probableNumberOfRecords = problableNumberOfRecords;
+    }
+    public CSVFormatConfig withProbableNumberOfRecords(int probableNumberOfRecords) {
+        this.probableNumberOfRecords = probableNumberOfRecords;
+        return this;
+    }
+
+    // Attributes
+    private int probableNumberOfRecords;
+
     public String charset = "utf8";
     public char separator;
     public char quoteChar;
@@ -44,6 +58,4 @@ public class CSVFormatConfig {
     public int skipRowsBeforeHeader;
     public boolean parseHeaderRow;
     public int skipRowsAfterHeader;
-
-    // private int probableNumberOfRecords;
 }
