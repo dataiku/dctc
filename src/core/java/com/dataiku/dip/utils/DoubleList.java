@@ -29,7 +29,7 @@ public class DoubleList implements Iterable<Double> {
      * Get the raw pointer to all elements.
      * @warning this return all elements in the array, ie more than the size. You must not read past size()
      */
-    public double[] getAllData() {
+    protected double[] getAllData() {
         return data;
     }
 

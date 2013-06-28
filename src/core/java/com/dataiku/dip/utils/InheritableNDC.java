@@ -7,8 +7,8 @@ import java.util.Stack;
 import org.apache.log4j.NDC;
 
 public class InheritableNDC {
-    public static InheritableThreadLocal<List<Object>> itl = new InheritableThreadLocal<List<Object>>();
-    
+    private static InheritableThreadLocal<List<Object>> itl = new InheritableThreadLocal<List<Object>>();
+
     public static void inheritNDC() {
         if (itl.get() != null) {
             for (Object s : itl.get()) {
@@ -20,19 +20,23 @@ public class InheritableNDC {
             }
         }
     }
-    
+
     public static void pushAll(Stack<?> stack) {
         if (stack != null) {
             push(stack);
         }
     }
-    
+
     public static void push(Object chunk) {
-        if (itl.get() == null) itl.set(new ArrayList<Object>());
+        if (itl.get() == null) {
+            itl.set(new ArrayList<Object>());
+        }
         itl.get().add(chunk);
     }
     public static void pop() {
-        if (itl.get() == null) itl.set(new ArrayList<Object>());
+        if (itl.get() == null) {
+            itl.set(new ArrayList<Object>());
+        }
         if (itl.get().size() > 0) {
             itl.get().remove(itl.get().size() - 1);
         }
