@@ -18,7 +18,7 @@ public class HadoopDistributionClassLoader {
             method.setAccessible(true);
             method.invoke(ClassLoader.getSystemClassLoader(), new Object[]{file.toURI().toURL()});
         } else {
-            logger.warn("Did not find JAR to load : " + file);
+            logger.warn("Did not find JAR to load: " + file);
         }
     }
 
@@ -60,9 +60,6 @@ public class HadoopDistributionClassLoader {
         }
         return false;
     }
-
-    private static boolean librariesAdded = false;
-
 
     public static void addLibraries() {
         if (librariesAdded) return;
@@ -106,5 +103,6 @@ public class HadoopDistributionClassLoader {
             logger.warn("Failed to set distribution-specific parameters", e);
         }
     }
+    private static boolean librariesAdded = false;
     private static Logger logger = Logger.getLogger("dctc.hadoop");
 }
