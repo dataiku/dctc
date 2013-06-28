@@ -188,7 +188,7 @@ public class DKUtils {
     }
 
     public static String tailFile(File f, int nlines) throws IOException{
-        long skip = Math.max(0, f.length() - (nlines * 2000));
+        long skip = Math.max(0L, f.length() - (nlines * 2000L));
         FileInputStream fis = new FileInputStream(f);
         fis.skip(skip);
 
