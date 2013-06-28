@@ -46,7 +46,6 @@ public class FileBuilder {
 
     public FileBuilder(CredentialProviderBank bank, SshConfig sshConfig) {
         this.bank = bank;
-        bank = new CredentialProviderBank();
         this.sshConfig = sshConfig;
     }
 
