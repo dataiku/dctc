@@ -43,11 +43,11 @@ public class DKUtils {
     }
 
     public static String indent(int indent) {
-        String s = "";
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < indent; i++) {
-            s += "  ";
+            sb.append(" ");
         }
-        return s;
+        return sb.toString();
     }
 
     public static void unsafeClose(Connection conn) {
