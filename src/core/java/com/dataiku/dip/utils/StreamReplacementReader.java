@@ -96,6 +96,6 @@ public class StreamReplacementReader extends Reader {
 
     private StreamReplacement replace;
     private Reader inputStream;
-    private String buffer = new String();
+    private String buffer = "";
     private boolean stop = false;
 }
