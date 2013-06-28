@@ -35,12 +35,16 @@ public class Partition {
             assert(dimensionValues.size() == 0);
             return "NP";
         } else {
-            String id = "";
+            StringBuilder sb = new StringBuilder();
+            boolean empty = true;
             for (DimensionValue dv : dimensionValues.values()) {
-                if (id.length() > 0) id += '|';
-                id += dv.id();
+                if (empty) {
+                    sb.append("|");
+                    empty = false;
+                }
+                sb.append(dv.id());
             }
-            return id;
+            return sb.toString();
         }
     }
 
