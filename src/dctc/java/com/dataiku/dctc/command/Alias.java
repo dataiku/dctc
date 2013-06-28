@@ -3,8 +3,9 @@ package com.dataiku.dctc.command;
 import static com.dataiku.dip.utils.PrettyString.eol;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,9 +54,10 @@ public class Alias extends Command {
             sb.append(scat((Object[]) args));
 
             try {
-                FileWriter fw = new FileWriter(GlobalConf.confFile(), true);
-                fw.write(sb.toString() + eol());
-                fw.close();
+                OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(GlobalConf.confFile()),"UTF-8");
+                osw.write(sb.toString());
+                osw.write(eol());
+                osw.close();
             }
             catch (IOException e) {
                 e.printStackTrace();
