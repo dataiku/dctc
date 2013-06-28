@@ -10,10 +10,17 @@ package com.dataiku.dip.datalayer;
  * The column factory must be set before init
  */
 public abstract class SingleRowProcessor {
-    protected ColumnFactory cf;
+    private ColumnFactory cf;
 
     public void setColumnFactory(ColumnFactory cf) {
         this.cf = cf;
+    }
+    public ColumnFactory getColumnFactory() {
+        return cf;
+    }
+    public SingleRowProcessor withColumnFactory(ColumnFactory cf) {
+        this.cf = cf;
+        return this;
     }
 
     /** Called after the ColumnFactory has been set */
