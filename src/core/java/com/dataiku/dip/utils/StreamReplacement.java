@@ -119,5 +119,5 @@ public class StreamReplacement implements StreamFilter {
     // Attributes
     private List<StringPair> replacementString;
     private int minCache;
-    private String buffer = new String();
+    private String buffer = "";
 }
