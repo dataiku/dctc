@@ -17,6 +17,10 @@ public class Interactive {
                 System.err.println("dctc " + cmd + ": Internal error.");
                 return false;
             }
+            if (line == null) {
+                // Ctrl-D
+                continue;
+            }
             if (yes.indexOf(line) != -1) {
                 return true;
             } else if (no.indexOf(line) != -1) {
