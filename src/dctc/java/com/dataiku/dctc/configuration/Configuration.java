@@ -6,10 +6,8 @@ import static com.dataiku.dip.utils.PrettyString.nl;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,6 +21,7 @@ import org.apache.commons.io.IOUtils;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.FileManipulation;
 import com.dataiku.dip.utils.Params;
+import com.dataiku.dip.utils.StreamUtils;
 
 public class Configuration {
     public void appendConfTo(String file) throws IOException {
@@ -44,9 +43,9 @@ public class Configuration {
             }
         }
 
-        FileWriter fw = new FileWriter(file, true);
-        fw.write(sb.toString());
-        fw.close();
+        BufferedWriter writer = StreamUtils.writeToFile(GlobalConf.confFile(), true);
+        writer.write(sb.toString());
+        writer.close();
     }
     public void parse(File file) throws IOException {
         if (!file.exists()) {
@@ -56,7 +55,7 @@ public class Configuration {
             }
         }
 
-        BufferedReader stream =  new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+        BufferedReader stream = StreamUtils.readFile(file);
         String line;
         Map<String, String> protocol = null;
         try {
