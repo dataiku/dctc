@@ -145,7 +145,7 @@ public class DKUtils {
             Thread.currentThread().setName("Exec-" + Thread.currentThread().getId());
             InheritableNDC.inheritNDC();
             try {
-                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                BufferedReader br = StreamUtils.readStream(is);
                 while (true) {
                     String line = br.readLine();
                     if (line == null) break;
