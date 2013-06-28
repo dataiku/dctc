@@ -5,13 +5,12 @@ import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.dataiku.dctc.file.FileManipulation;
+import com.dataiku.dip.utils.StreamUtils;
 
 public class SshConfig {
     public void parse(String path) throws IOException {
@@ -24,7 +23,7 @@ public class SshConfig {
         }
         BufferedReader stream = null;
         try {
-            stream =  new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            stream = StreamUtils.readFile(file);
             String line;
             String currentHost = "*";
             Map<String, String> hostParam = get(currentHost);
