@@ -626,7 +626,7 @@ public class SshFile extends AbstractGFile {
             //                    connData.jsch.setLogger(l);
 
             connData.session = connData.jsch.getSession(connData.username,connData.host, connData.port);
-            if (skipHostKeyCheck) {
+            if (connData.skipHostKeyCheck) {
                 java.util.Properties config = new java.util.Properties();
                 config.put("StrictHostKeyChecking", "no");
                 connData.session.setConfig(config);
@@ -669,7 +669,6 @@ public class SshFile extends AbstractGFile {
     private long date = -1;
     private Acl acl;
     private static Map<String, Boolean> hasHash = new HashMap<String, Boolean>();
-    private boolean skipHostKeyCheck;
     private String host;
 
     private static String statOpt = "\\`if \"x$(uname)\" = \"xLinux\"; then echo f; "
