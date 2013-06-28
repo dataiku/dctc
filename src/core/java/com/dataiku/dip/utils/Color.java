@@ -1,7 +1,6 @@
 package com.dataiku.dip.utils;
 
 public class Color {
-    public static boolean colorOutput = true;
     public final static String blue = "\u001B[01;34m";
     public final static String purple = "\u001B[01;35m";
     public final static String yellow = "\u001B[01;93m";
@@ -11,7 +10,7 @@ public class Color {
     public final static String reset = "\u001B[0m";
 
     public static String color(String color, String msg) {
-        if (colorOutput) {
+        if (getColor()) {
             return color + msg + reset;
         } else {
             return msg;
@@ -35,4 +34,13 @@ public class Color {
     public static String grey(String msg) {
         return color(grey, msg);
     }
+
+    public static boolean getColor() {
+        return color;
+    }
+    public static void setColor(boolean setColor) {
+        color = setColor;
+    }
+
+    private static boolean color;
 }
