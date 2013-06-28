@@ -40,6 +40,13 @@ public class TimeDimensionValue extends DimensionValue {
     public TimeDimension getDimension() {
         return dimension;
     }
+    public void setDimension(TimeDimension dimension) {
+        this.dimension = dimension;
+    }
+    public TimeDimensionValue withDimension(TimeDimension dimension) {
+        this.dimension = dimension;
+        return this;
+    }
     public int getYear() {
         return year;
     }
@@ -64,6 +71,23 @@ public class TimeDimensionValue extends DimensionValue {
     public void setHour(int hour) {
         this.hour = hour;
     }
+    public TimeDimensionValue withYear(int year) {
+        this.year = year;
+        return this;
+    }
+    public TimeDimensionValue withMonth(int month) {
+        this.month = month;
+        return this;
+    }
+    public TimeDimensionValue withDay(int day) {
+        this.day = day;
+        return this;
+    }
+    public TimeDimensionValue withHour(int hour) {
+        this.hour = hour;
+        return this;
+    }
+
     @Override
     public DimensionValue clone() {
         TimeDimensionValue clone = new TimeDimensionValue();
@@ -77,15 +101,6 @@ public class TimeDimensionValue extends DimensionValue {
     @Override
     public String id() {
         switch (dimension.mappedPeriod) {
-        case YEAR : return "" + year;
-        case MONTH : return "" + year + "-" + String.format("%02d", month);
-        case DAY : return "" + year + "-" + String.format("%02d", month)+ "-" + String.format("%02d", day);
-        case HOUR: return "" + year + "-" + String.format("%02d", month)+ "-" + String.format("%02d", day) + String.format("%02d", hour);
-        default: throw new Error("impossible happened");
-        }
-    }
-    public String toPrettyString() {
-        switch (dimension.mappedPeriod) {
         case HOUR:
             return String.format("%04d-%02d-%02d-%02d", year, month, day, hour);
         case DAY:
@@ -95,8 +110,7 @@ public class TimeDimensionValue extends DimensionValue {
         case YEAR:
             return String.format("%04d", year);
         default:
-            assert false : "Must not be reached.";
-            return null;
+            throw new Error("Must not be reached");
         }
     }
     @SuppressWarnings("fallthrough")
