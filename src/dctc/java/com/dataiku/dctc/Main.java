@@ -143,7 +143,9 @@ public class Main {
             System.setOut(new StdOut(System.out));
             System.setErr(new StdOut(System.err));
         }
-        catch (UnsupportedEncodingException e) {}
+        catch (UnsupportedEncodingException e) {
+            throw new Error("Never appends.");
+        }
         setLogger();
         fillCommand();
 
