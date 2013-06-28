@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import org.apache.commons.cli.Options;
 
 import com.dataiku.dctc.command.abs.Command;
+import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dip.utils.IndentedWriter;
 
 public class Alias extends Command {
@@ -52,7 +53,7 @@ public class Alias extends Command {
             sb.append(scat((Object[]) args));
 
             try {
-                FileWriter fw = new FileWriter("/home/vash/.dctcrc", true);
+                FileWriter fw = new FileWriter(GlobalConf.confFile(), true);
                 fw.write(sb.toString() + eol());
                 fw.close();
             }
