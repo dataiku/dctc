@@ -212,7 +212,7 @@ public class DKUtils {
         return sb.toString();
     }
 
-    /** 
+    /**
      * Parse an array of "key=value" strings to a map.
      * TODO: Should handle quoting of the value
      */
@@ -221,7 +221,7 @@ public class DKUtils {
         for (String val : array) {
             String[] chunks =val.split("=");
             if (chunks.length < 2) {
-                throw new IllegalArgumentException("Illegal param : " + val + ", expected key=value");
+                throw new IllegalArgumentException("Illegal param: " + val + ", expected key=value");
             }
             String paramValue = val.substring(chunks[0].length() + 1);
             map.put(chunks[0], paramValue);
@@ -232,6 +232,6 @@ public class DKUtils {
     public static Map<String, String> parseKVStringArray(Collection<String> array) {
         return parseKVStringArray(array.toArray(new String[0]));
     }
-    
+
     private static Logger logger = Logger.getLogger("dku.utils");
 }
