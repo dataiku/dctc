@@ -20,7 +20,7 @@ public class SRPAdapter extends SingleInputSingleOutputRowProcessor{
     public void processRow(Row row) throws Exception {
 //        if (p.getClass().getName().contains("RemoveRows")) System.out.println("Processor " + p + " processes " + row);
         p.processRow(row);
-        if (out == null) {
+        if (getProcessorOutput() == null) {
             throw new Error("No output for " + p);
         }
 //        if (row.isDeleted()) {
@@ -28,7 +28,7 @@ public class SRPAdapter extends SingleInputSingleOutputRowProcessor{
 //        }
         else if (!row.isDeleted()) {
 //            if (p.getClass().getName().contains("RemoveRows"))System.out.println("  and emits to "+ out);
-            out.emitRow(row);
+            getProcessorOutput().emitRow(row);
         } else  {
 //            if (p.getClass().getName().contains("RemoveRows"))System.out.println("   and dropped");
         }
@@ -36,15 +36,15 @@ public class SRPAdapter extends SingleInputSingleOutputRowProcessor{
 
     @Override
     public void init() throws Exception {
-        p.setColumnFactory(cf);
+        p.setColumnFactory(getCf());
         p.init();
     }
 
     @Override
     public void postProcess() throws Exception {
         p.postProcess();
-        if (out != null) {
-            out.lastRowEmitted();
+        if (getProcessorOutput() != null) {
+            getProcessorOutput().lastRowEmitted();
         }
     }
 }
