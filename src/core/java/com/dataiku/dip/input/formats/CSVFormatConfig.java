@@ -45,5 +45,5 @@ public class CSVFormatConfig {
     public boolean parseHeaderRow;
     public int skipRowsAfterHeader;
 
-    int probableNumberOfRecords;
+    // private int probableNumberOfRecords;
 }

@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
-
 import com.dataiku.dip.datalayer.Column;
 import com.dataiku.dip.datalayer.ColumnFactory;
 import com.dataiku.dip.datalayer.ProcessorOutput;
@@ -34,7 +32,7 @@ public class RawRegexpFormatExtractor extends AbstractFormatExtractor  {
         Matcher m = pattern.matcher(line);
         return m.find();
     }
-    
+
     @Override
     public boolean run(StreamsInputSplit in, ProcessorOutput out, ProcessorOutput err,
             ColumnFactory cf, RowFactory rf, StreamInputSplitProgressListener listener,
@@ -56,7 +54,7 @@ public class RawRegexpFormatExtractor extends AbstractFormatExtractor  {
             boolean broken = false;
             try {
                 long nlines = 0;
-                Matcher m = pattern.matcher(""); 
+                Matcher m = pattern.matcher("");
 
                 while (true) {
                     String line = br.readLine();
@@ -65,7 +63,7 @@ public class RawRegexpFormatExtractor extends AbstractFormatExtractor  {
                     }
                     line = line.trim();
                     m.reset(line);
-                    
+
                     if (m.find()) {
 //                        System.out.println("DID PARSE" + line);
                         Row r = rf.row();
@@ -85,7 +83,7 @@ public class RawRegexpFormatExtractor extends AbstractFormatExtractor  {
                         broken = true;
                         break;
                     }
-                    
+
                     if (listener != null && nlines % 50 == 0) {
                         synchronized (listener) {
                             listener.setErrorRecords(0);
@@ -114,5 +112,5 @@ public class RawRegexpFormatExtractor extends AbstractFormatExtractor  {
         return true;
     }
 
-    Logger logger = Logger.getLogger("csv");
+    // private Logger logger = Logger.getLogger("csv");
 }

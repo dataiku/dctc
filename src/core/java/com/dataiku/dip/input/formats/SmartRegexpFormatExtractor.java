@@ -6,8 +6,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import com.dataiku.dip.datalayer.Column;
 import com.dataiku.dip.datalayer.ColumnFactory;
 import com.dataiku.dip.datalayer.ProcessorOutput;
@@ -91,5 +89,5 @@ public class SmartRegexpFormatExtractor extends AbstractFormatExtractor  {
         return true;
     }
 
-    Logger logger = Logger.getLogger("csv");
+    // private Logger logger = Logger.getLogger("csv");
 }
