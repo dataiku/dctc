@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 
-public class Partition {
+public class Partition implements Cloneable {
     public Partition(PartitioningScheme scheme) {
         this.scheme = scheme;
     }
