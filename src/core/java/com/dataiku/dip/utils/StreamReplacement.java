@@ -84,7 +84,7 @@ public class StreamReplacement implements StreamFilter {
         return buffer.length();
     }
 
-    public class StringPair {
+    public static class StringPair {
         public StringPair(String source, String destination) {
             this.source = source;
             this.destination = destination;
