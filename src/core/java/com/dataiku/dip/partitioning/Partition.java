@@ -14,7 +14,7 @@ public class Partition implements Cloneable {
         return scheme;
     }
 
-    public Partition clone() {
+    public final Partition clone() {
         Partition clone = new Partition(this.scheme);
 
         for (Map.Entry<String, DimensionValue> dv : dimensionValues.entrySet()) {
