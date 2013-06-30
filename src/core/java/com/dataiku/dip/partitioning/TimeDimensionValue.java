@@ -1,5 +1,7 @@
 package com.dataiku.dip.partitioning;
 
+import java.util.Calendar;
+
 import com.dataiku.dip.partitioning.TimeDimension.Period;
 import com.google.common.base.Preconditions;
 
@@ -130,6 +132,24 @@ public class TimeDimensionValue extends DimensionValue {
             return null;
         }
         return glob;
+    }
+    
+    public long getTimestamp() {
+        Calendar cal = Calendar.getInstance();
+        switch (dimension.mappedPeriod) {
+        case HOUR:
+            cal.set(Calendar.HOUR_OF_DAY, hour);
+        case DAY:
+            cal.set(Calendar.DAY_OF_MONTH, day);
+        case MONTH:
+            cal.set(Calendar.MONTH, month - 1);
+        case YEAR:
+            cal.set(Calendar.YEAR, year);
+            break;
+        default:
+            assert false : "Must not be reached.";
+        }
+        return cal.getTimeInMillis();
     }
 
     // Attributes
