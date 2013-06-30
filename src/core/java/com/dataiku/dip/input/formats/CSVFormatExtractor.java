@@ -5,7 +5,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.apache.xmlbeans.impl.common.IOUtil;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -17,6 +19,7 @@ import com.dataiku.dip.datalayer.RowFactory;
 import com.dataiku.dip.input.StreamInputSplitProgressListener;
 import com.dataiku.dip.input.stream.EnrichedInputStream;
 import com.dataiku.dip.input.stream.StreamsInputSplit;
+import com.dataiku.dip.utils.DKULogger;
 import com.google.common.io.CountingInputStream;
 
 public class CSVFormatExtractor extends AbstractFormatExtractor  {
@@ -133,12 +136,15 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                     listener.setData(totalBytes, totalRecords, 0);
                 }
             } finally {
+                logger.info("Closing stream");
                 reader.close();
+                IOUtils.closeQuietly(cis);
+                logger.info("Stream closed");
             }
         }
         out.lastRowEmitted();
         return true;
     }
 
-    private static Logger logger = Logger.getLogger("dku.format.csv");
+    private static Logger logger = DKULogger.getLogger("dku.format.csv");
 }
