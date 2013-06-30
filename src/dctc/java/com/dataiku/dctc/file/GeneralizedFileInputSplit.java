@@ -17,16 +17,20 @@ public class GeneralizedFileInputSplit extends StreamsInputSplit {
         this(f, f.inputStream());
     }
     public EnrichedInputStream nextStream() throws IOException {
-        EnrichedInputStream res = in;
-        in = null;
-        return res;
+        if (called) return null;
+        called = true;
+        return in;
     }
     @Override
     public String getDesc() {
-        // The file path is the description.
         return desc;
+    }
+    @Override
+    public void reset() {
+        called = false;
     }
 
     private BasicEnrichedInputStream in;
+    private boolean called = false;
     String desc;
 }
