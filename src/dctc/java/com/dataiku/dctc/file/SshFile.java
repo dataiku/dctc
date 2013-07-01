@@ -101,6 +101,7 @@ public class SshFile extends AbstractGFile {
     public SshFile(String host, String username, String password, String path, int port,
                    boolean skipHostKeyCheck) {
         this.connData = new ConnectionData();
+        this.host = host;
         this.connData.host = host;
         this.connData.port = port;
         this.connData.username = username;
