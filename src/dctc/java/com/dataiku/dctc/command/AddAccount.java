@@ -97,6 +97,7 @@ public class AddAccount extends Command {
 
                 System.err.println("Testing if these credentials work.");
                 System.err.print("Please wait...");
+                System.err.flush();
                 try {
                     S3File s3File = new S3File("/", new AmazonS3Client(new BasicAWSCredentials(parameters.get("access_key"), parameters.get("secret_key"))));
                     int nbuckets = s3File.glist().size();
@@ -135,6 +136,7 @@ public class AddAccount extends Command {
                 // Testing
                 System.err.println("Testing if these credentials work.");
                 System.err.print("Please wait...");
+                System.err.flush();
                 try {
                     GSFile gfile = new GSFile(parameters.get("mail"), parameters.get("key_path"), "/");
                     int nbuckets = gfile.glist().size();
