@@ -58,6 +58,8 @@ public class SshUserInfo implements UserInfo {
     }
     @Override
     public void showMessage(String arg0) {
+        System.err.println(arg0);
+        System.err.flush();
     }
 
     private String password;
