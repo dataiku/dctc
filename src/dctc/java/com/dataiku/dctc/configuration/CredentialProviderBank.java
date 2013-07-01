@@ -25,10 +25,6 @@ public class CredentialProviderBank {
             accountCred = new Params();
             pcre.put(account, accountCred);
         }
-        if (accountCred.hasParam(key)) {
-            throw ErrorContext.iaef("For protocol '%s' and account '%s', param '%s' specified twice"
-                                    , protocol, account, key);
-        }
         accountCred.add(key, value);
     }
     public void setProtocolSettings(String protocol, Map<String, String> settings) {
