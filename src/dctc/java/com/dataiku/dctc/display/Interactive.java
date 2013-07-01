@@ -2,8 +2,8 @@ package com.dataiku.dctc.display;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
+import com.dataiku.dctc.DCTCLog;
 import com.dataiku.dip.utils.StreamUtils;
 
 public class Interactive {
@@ -16,8 +16,9 @@ public class Interactive {
             String line;
             try {
                 line = i.readLine();
-            } catch (IOException e) {
-                System.err.println("dctc " + cmd + ": Internal error.");
+            }
+            catch (IOException e) {
+                DCTCLog.error(cmd, "Unexpected error", e);
                 return false;
             }
             if (line == null) {
@@ -26,7 +27,8 @@ public class Interactive {
             }
             if (yes.indexOf(line) != -1) {
                 return true;
-            } else if (no.indexOf(line) != -1) {
+            }
+            else if (no.indexOf(line) != -1) {
                 return false;
             }
         }
@@ -41,8 +43,10 @@ public class Interactive {
             String line;
             try {
                 line = i.readLine();
-            } catch (IOException e) {
-                throw new Error("Unexpected error", e);
+            }
+            catch (IOException e) {
+                DCTCLog.error("interactive", "Unexpected error", e);
+                return "";
             }
             if (line == null) {
                 System.err.println();
