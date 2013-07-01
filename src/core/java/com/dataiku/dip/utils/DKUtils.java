@@ -134,8 +134,8 @@ public class DKUtils {
     }
 
     /* Eat a stream and log its output */
-    static class LoggingStreamEater extends Thread {
-        LoggingStreamEater(InputStream is, org.apache.log4j.Level level) {
+    static public class LoggingStreamEater extends Thread {
+        public LoggingStreamEater(InputStream is, org.apache.log4j.Level level) {
             this.is = is;
             this.level = level;
 
