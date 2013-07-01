@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.apache.xmlbeans.impl.common.IOUtil;
 
 import au.com.bytecode.opencsv.CSVReader;
 
