@@ -8,8 +8,7 @@ public class RandomFunction implements SplitFunction {
         this.outputSize = outputSize;
     }
     public synchronized String split(Row row, Column column) {
-        ++ct;
-        ct = ct % outputSize;
+        ct = (ct + 1) % outputSize;
         return Integer.toString(ct);
     }
 
