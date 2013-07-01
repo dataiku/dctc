@@ -7,6 +7,9 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -20,48 +23,45 @@ import com.dataiku.dip.utils.Params;
 import com.dataiku.dip.utils.StreamUtils;
 
 public class Configuration {
-    public void appendNewProtocol(String protocol, String user,
+    public void appendNewProtocol(String addedBy, String protocol, String user,
                                   Map<String, String> parameters) throws IOException {
+        if (parameters.isEmpty()) {
+            return;
+        }
+
+        Map<String, String> newParameters = new HashMap<String, String>();
+        for(Map.Entry<String, String> confEntry: parameters.entrySet()) {
+            newParameters.put(user + "." + confEntry.getKey(), confEntry.getValue());
+        }
+        appendCustomSection(addedBy, protocol, newParameters);
+    }
+    public void appendCustomSection(String addedBy, String sectionName,
+                                    Map<String, String> parameters) throws IOException {
         if (parameters.isEmpty()) {
             return;
         }
 
         StringBuilder sb = new StringBuilder();
 
-        if (!lastProtocolDefined.equals(protocol)) {
-            sb.append("[" + protocol + "]");
+        printDate(sb, addedBy);
+
+        if (!lastProtocolDefined.equals(sectionName)) {
+            sb.append(eol() + "[" + sectionName + "]");
         }
 
         for(Map.Entry<String, String> confEntry: parameters.entrySet()) {
-            sb.append(eol());
-            sb.append(user + "." + confEntry.getKey() + " = " + confEntry.getValue());
+            sb.append(eol() + "  ");
+            sb.append(confEntry.getKey() + " = " + confEntry.getValue());
         }
 
         sb.append(eol());
-
         appendToConf(sb.toString());
     }
-    // public void appendConfTo(String file) throws IOException {
-    //     if (conf.size() == 0) {
-    //         return;
-    //     }
-    //     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-    //     Date date = new Date();
-
-    //     StringBuilder sb = new StringBuilder();
-
-    //     sb.append(eol());
-    //     sb.append("# Added by dctc wizard (" + dateFormat.format(date) + ").");
-    //     for (Map.Entry<String, Map<String, String>> e: conf.entrySet()) {
-    //         sb.append(eol());
-    //         sb.append("[" + e.getKey() + "]" + eol());
-    //         for (Map.Entry<String, String> confEntry : e.getValue().entrySet()) {
-    //             sb.append(confEntry.getKey() + " = " + confEntry.getValue() + eol());
-    //         }
-    //     }
-
-    //     appendToConf(sb.toString());
-    // }
+    public void printDate(StringBuilder sb, String addedBy) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        sb.append("# Added by dctc " + addedBy + " (" + dateFormat.format(date) + ").");
+    }
     public void appendToConf(String conf) throws IOException {
         BufferedWriter writer = StreamUtils.writeToFile(GlobalConf.confFile(), true);
 
@@ -93,8 +93,8 @@ public class Configuration {
                     if (line.startsWith("[")) {
                         int closingElt = line.lastIndexOf(']');
                         if (closingElt > 1) {
-                            String protocolName = line.substring(1, closingElt);
-                            protocol = getNotNull(protocolName, conf);
+                            lastProtocolDefined = line.substring(1, closingElt);
+                            protocol = getNotNull(lastProtocolDefined, conf);
                         }
                         else {
                             if (closingElt == -1) {
@@ -186,5 +186,5 @@ public class Configuration {
     // Attributes
     private Set<String> nonValidSection = new HashSet<String>();
     private Map<String, Map<String, String>> conf = new HashMap<String, Map<String, String>>();
-    private String lastProtocolDefined = null;
+    private String lastProtocolDefined = "";
 }

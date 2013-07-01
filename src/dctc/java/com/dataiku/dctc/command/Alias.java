@@ -1,12 +1,10 @@
 package com.dataiku.dctc.command;
 
-import static com.dataiku.dip.utils.PrettyString.eol;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.cli.Options;
@@ -42,18 +40,22 @@ public class Alias extends Command {
             }
         }
         else {
-            // Write an alias
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            Date date = new Date();
+            Map<String, String> newAlias = new HashMap<String, String>();
 
-            StringBuilder sb = new StringBuilder();
-            sb.append(eol());
-            sb.append("# Added by dctc alias (" + dateFormat.format(date) + ")." + eol());
-            sb.append("[alias]" + eol());
-            sb.append(scat((Object[]) args));
+            int sep = args[0].indexOf("=");
+            String aliasName;
+            if (sep != -1) {
+                aliasName = args[0].substring(0, sep);
+                args[0] = args[0].substring(sep + 1);
+            }
+            else {
+                aliasName = args[0];
+                args[0] = "";
+            }
+            newAlias.put(aliasName, scat((Object[]) args).trim());
 
             try {
-                conf.getConf().appendToConf(sb.toString());
+                conf.getConf().appendCustomSection("alias", "alias", newAlias);
             }
             catch (IOException e) {
                 error("Could not write to: " + GlobalConf.confPath(), e, 2);
