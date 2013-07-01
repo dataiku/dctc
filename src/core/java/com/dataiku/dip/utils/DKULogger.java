@@ -14,7 +14,7 @@ public class DKULogger extends Logger {
     public static DKULogger getLogger(String loggerName) {
        return new DKULogger(Logger.getLogger(loggerName));
     }
-    
+
     protected DKULogger(Logger innerLogger) {
         super(innerLogger.getName());
         this.delegate = innerLogger;
@@ -22,7 +22,7 @@ public class DKULogger extends Logger {
     protected DKULogger(String name) {
         super(name);
     }
-    
+
     private Logger delegate;
 
     static private class CallTime {
@@ -36,7 +36,7 @@ public class DKULogger extends Logger {
         if (tl.get() != null) tl.get().start = 0;
     }
     private static ThreadLocal<CallTime> tl = new ThreadLocal<DKULogger.CallTime>();
-    
+
     private Object concatTime(Object message) {
         if (tl.get() != null && tl.get().start != 0) {
             String header = "[ct: " + (System.currentTimeMillis() - tl.get().start) + "]";
@@ -122,7 +122,7 @@ public class DKULogger extends Logger {
     public int hashCode() {
         return delegate.hashCode();
     }
-    
+
     public void info(Object message, Throwable t) {
         delegate.info(concatTime(message), t);
     }

@@ -12,7 +12,7 @@ public class HashFunction implements SplitFunction {
     public HashFunction(int outputSize) {
         this.outputSize = outputSize;
     }
-    
+
     public String split(Row row, Column column) {
         assert(column != null);
         String splitData = row.get(column);

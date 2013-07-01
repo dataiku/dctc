@@ -43,7 +43,7 @@ public class CSVOutputFormatter extends StringOutputFormatter {
                 headerColumns.add(c);
                 if (i++ > 0 && printHeaderLine) sb.append(delimiter);
                 if (printHeaderLine) sb.append(c.getName());
-            }          
+            }
         }
         if (printHeaderLine) sb.append('\n');
     }
