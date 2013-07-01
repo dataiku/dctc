@@ -6,7 +6,9 @@ import java.net.URLClassLoader;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.LocalFileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.RawLocalFileSystem;
 
 import com.dataiku.dctc.HadoopDistributionClassLoader;
 
@@ -33,9 +35,14 @@ public class HadoopUtils {
     }
     
     public static FileSystem getFS() throws IOException{
+        HadoopDistributionClassLoader.addLibraries();
         Configuration conf = new Configuration();
         conf.addResource(new Path(HadoopUtils.getCoreSiteLocation()));
-        return FileSystem.get(conf);
+        FileSystem fs =  FileSystem.get(conf);
+        if (fs instanceof RawLocalFileSystem || fs  instanceof LocalFileSystem) {
+            throw new IOException("HDFS initialization returned a LocalFileSystem. Maybe you need to configure your HDFS location ?");
+        }
+        return fs;
     }
     
     public static ClassLoader getConfigClassLoader() throws Exception {
