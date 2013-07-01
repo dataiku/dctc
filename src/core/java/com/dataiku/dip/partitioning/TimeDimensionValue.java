@@ -92,13 +92,12 @@ public class TimeDimensionValue extends DimensionValue {
 
     @Override
     public DimensionValue clone() {
-        TimeDimensionValue clone = new TimeDimensionValue();
-        clone.dimension = dimension;
-        clone.year = year;
-        clone.month = month;
-        clone.day = day;
-        clone.hour = hour;
-        return clone;
+        return new TimeDimensionValue()
+            .withDimension(dimension)
+            .withYear(year)
+            .withMonth(month)
+            .withDay(day)
+            .withHour(hour);
     }
     @Override
     public String id() {
@@ -133,7 +132,7 @@ public class TimeDimensionValue extends DimensionValue {
         }
         return glob;
     }
-    
+
     public long getTimestamp() {
         Calendar cal = Calendar.getInstance();
         switch (dimension.mappedPeriod) {
