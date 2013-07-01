@@ -5,6 +5,8 @@ import java.util.List;
 import com.dataiku.dctc.copy.CopyTaskRunnable;
 import com.dataiku.dip.utils.FriendlyTime;
 
+import static com.dataiku.dip.utils.PrettyString.scat;
+
 public class LessSimpleDisplay extends AbstractTransferRateDisplay {
     @Override
     protected final void init(List<CopyTaskRunnable> tasks) {
@@ -19,16 +21,12 @@ public class LessSimpleDisplay extends AbstractTransferRateDisplay {
         if (fail != 0) {
             prettyFail = String.format("(%d have failed) ", fail);
         }
-        print(String.format("done: %s/%s in %s - %d/%d files done %s- %sBps - %d transfer(s) running.",
-                            Size.getReadableSize(doneTransfer()),
-                            prettyWholeSize(),
-                            FriendlyTime.elapsedTime(getElapsedTime() / 1000),
-                            nbDone(),
-                            nbFiles(),
-                            prettyFail,
-                            Size.getReadableSize(getBnd()),
-                            nbRunning()));
-
+        print(scat("done:"
+                   , Size.getReadableSize(doneTransfer()), "/", prettyWholeSize()
+                   , "in", FriendlyTime.elapsedTime(getElapsedTime() / 1000)
+                   , nbDone(), "/", nbFiles(), "files done", prettyFail
+                   , "-", Size.getReadableSize(getBnd()) + "Bps -"
+                   , nbRunning(), "transfer(s) running."));
     }
     protected final void done(CopyTaskRunnable task) {
     }
@@ -38,7 +36,8 @@ public class LessSimpleDisplay extends AbstractTransferRateDisplay {
     }
     protected final void done() {
         System.out.println();
-        System.out.println("Copied " + Size.getReadableSize(doneTransfer()) + " in "
-                           + FriendlyTime.elapsedTime(getTotalElapsedTime() / 1000));
+        System.out.println(scat("Copied,"
+                                , Size.getReadableSize(doneTransfer()),"in"
+                                , FriendlyTime.elapsedTime(getTotalElapsedTime() / 1000)));
     }
 }
