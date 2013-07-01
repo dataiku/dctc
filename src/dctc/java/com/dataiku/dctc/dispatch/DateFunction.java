@@ -8,41 +8,39 @@ import java.util.Date;
 import com.dataiku.dip.datalayer.Column;
 import com.dataiku.dip.datalayer.Row;
 import com.dataiku.dip.partitioning.TimeDimension;
+import com.dataiku.dip.partitioning.TimeDimensionValue;
 
 public class DateFunction implements SplitFunction {
     public DateFunction(String dateFormat, TimeDimension.Period period) {
         this.format = new SimpleDateFormat(dateFormat);
-        this.period = period;
+        // "DateFunction" is a magic value and is not used.
+        this.dimension = new TimeDimensionValue(new TimeDimension("DateFunction", period));
     }
 
     public String split(Row row, Column column) {
-        assert(column != null);
+        assert (column != null)
+            : "(column != null)";
+
         String splitData = row.get(column);
         if (splitData == null) {
             return "no_value";
         }
-        
+
         try {
             format.setLenient(true);
             Date date = format.parse(splitData);
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
 
-            switch (period) {
-            case YEAR : return String.format("%04d", cal.get(Calendar.YEAR));
-            case MONTH: return String.format("%04d-%02d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1);
-            case DAY:return String.format("%04d-%02d-%02d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, 
-                    cal.get(Calendar.DAY_OF_MONTH));
-            case HOUR:return String.format("%04d-%02d-%02d:%02d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, 
-                    cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR));
-            default:
-                throw new Error("Invalid value");
-            }
+            dimension.setCal(cal);
+
+            return dimension.id();
+
         } catch (ParseException e) {
             return "invalid_value";
         }
     }
 
     private SimpleDateFormat format;
-    private TimeDimension.Period period;
+    private TimeDimensionValue dimension;
 }
