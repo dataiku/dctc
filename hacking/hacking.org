@@ -1,5 +1,10 @@
 # -*- mode: org -*-
 
+* Compiling
+  #+BEGIN_EXAMPLE
+  ant configure # Mainly download the libraries
+  ant           # Compile core and dctc
+  #+END_EXAMPLE
 * How to make a release
 
   #+BEGIN_EXAMPLE sh
