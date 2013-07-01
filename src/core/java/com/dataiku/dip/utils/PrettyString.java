@@ -33,10 +33,18 @@ public class PrettyString {
     protected static String cat(String concatenateStr, Object... msg) {
         StringBuilder b = new StringBuilder();
         if (msg.length > 0) {
-            b.append(msg[0].toString());
-            for(int i = 1; i < msg.length; ++i) {
-                b.append(concatenateStr);
-                b.append(msg[i]);
+            boolean first = true;
+            for (int i = 0; i < msg.length; ++i) {
+                String m = msg[i].toString();
+                if (!m.isEmpty()) {
+                    if (first) {
+                        first = false;
+                    }
+                    else {
+                        b.append(concatenateStr);
+                    }
+                    b.append(m);
+                }
             }
         }
         return b.toString();
