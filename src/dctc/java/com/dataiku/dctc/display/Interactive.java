@@ -8,14 +8,8 @@ import com.dataiku.dip.utils.StreamUtils;
 
 public class Interactive {
     public static boolean ask(String cmd, String question, String yes, String no) {
-        BufferedReader i;
-        try {
-            i = StreamUtils.readStream(System.in, "UTF-8");
-        }
-        catch (UnsupportedEncodingException e) {
-            assert false;
-            return false;
-        }
+        BufferedReader i = StreamUtils.readStream(System.in);
+
         while (true) {
             System.err.print(question);
             System.err.flush();
@@ -39,14 +33,8 @@ public class Interactive {
     }
 
     public static String askString(String question) {
-        BufferedReader i;
-        try {
-            i = StreamUtils.readStream(System.in, "UTF-8");
-        }
-        catch (UnsupportedEncodingException e) {
-            assert false;
-            return "";
-        }
+        BufferedReader i = StreamUtils.readStream(System.in);
+
         while (true) {
             System.err.print(question);
             System.err.flush();
