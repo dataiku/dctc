@@ -6,18 +6,18 @@ public class Date {
         for (int i = 0; i < 3; ++i) {
             if (time == 0) {
                 if (i < 2) {
-                    res = "0" + unit[i] + res;
+                    res = "0" + unit.charAt(i) + res;
                 }
                 break;
             } else {
                 int t = time % div[i];
                 time /= div[i];
-                res = "" + t + unit[i] + res;
+                res = "" + t + unit.charAt(i) + res;
             }
         }
         return res;
     }
 
     private static int[] div = { 60, 60, 24, 7, 4, 12 };
-    private static String[] unit = { "s", "m", "h", "w", "m", "y" };
+    private static String unit = "smhwmy";
 }
