@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dip.utils.PrettyString;
@@ -31,11 +32,9 @@ public class Alias {
             cmdargs.remove(0);
             int idx = 0;
             // Split on spaces or tabulation
-            for (String space: alias.get(cmd).split(" ")) {
-                for (String tab: space.split("	")) { // <- It's a tabulation
-                    cmdargs.add(idx, tab);
-                    ++idx;
-                }
+            for (String s: pat.split(alias.get(cmd))) {
+                cmdargs.add(idx, s);
+                ++idx;
             }
             unusedAlias.remove(cmd);
             resolve(cmdargs, unusedAlias);
@@ -58,7 +57,9 @@ public class Alias {
     private Map<String, String> cloneAlias() {
         Map<String, String> res = new HashMap<String, String>();
         res.putAll(alias);
+
         return res;
     }
     private Map<String, String> alias = new HashMap<String, String>();
+    static Pattern pat = Pattern.compile("[ \t]+");
 }
