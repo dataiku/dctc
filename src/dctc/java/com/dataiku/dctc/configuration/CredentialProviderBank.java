@@ -27,7 +27,7 @@ public class CredentialProviderBank {
         }
         accountCred.add(key, value);
     }
-    public void setProtocolSettings(String protocol, Map<String, String> settings) {
+    public void addProtocolSettings(String protocol, Map<String, String> settings) {
         String firstAccount = null;
         for (Map.Entry<String, String> setting: settings.entrySet()) {
             String key = setting.getKey();

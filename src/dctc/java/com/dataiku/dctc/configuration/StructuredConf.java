@@ -56,7 +56,7 @@ public class StructuredConf {
     private void bank() {
         for (Protocol protocol: Protocol.values()) {
             String proto = protocol.getCanonicalName();
-            bank.setProtocolSettings(proto, conf.getOrCreateSection(proto));
+            bank.addProtocolSettings(proto, conf.getOrCreateSection(proto));
             conf.valid(proto);
         }
     }
