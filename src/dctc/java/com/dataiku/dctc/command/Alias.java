@@ -60,7 +60,7 @@ public class Alias extends Command {
                 osw.close();
             }
             catch (IOException e) {
-                e.printStackTrace();
+                error("Could not write to: " + GlobalConf.confPath(), e, 2);
             }
         }
     }
