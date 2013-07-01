@@ -36,7 +36,6 @@ public class TimeDimensionValue extends DimensionValue {
         this.day = day;
         this.hour = hour;
     }
-
     private TimeDimensionValue() {
     }
     public TimeDimension getDimension() {
@@ -87,6 +86,25 @@ public class TimeDimensionValue extends DimensionValue {
     }
     public TimeDimensionValue withHour(int hour) {
         this.hour = hour;
+        return this;
+    }
+    public void setCal(Calendar cal) {
+        switch(dimension.mappedPeriod) {
+        case HOUR:
+            setHour(cal.get(Calendar.HOUR));
+        case DAY:
+            setDay(cal.get(Calendar.DAY_OF_MONTH));
+        case MONTH:
+            setMonth(cal.get(Calendar.MONTH + 1));
+        case YEAR:
+            setYear(cal.get(Calendar.YEAR));
+            break;
+        default:
+            throw new Error("Never reached");
+        }
+    }
+    public TimeDimensionValue withCal(Calendar cal) {
+        setCal(cal);
         return this;
     }
 
