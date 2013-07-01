@@ -3,9 +3,8 @@ package com.dataiku.dctc.command;
 import static com.dataiku.dip.utils.PrettyString.eol;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
-import java.io.FileOutputStream;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,6 +15,7 @@ import org.apache.commons.cli.Options;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dip.utils.IndentedWriter;
+import com.dataiku.dip.utils.StreamUtils;
 
 public class Alias extends Command {
     public String cmdname() {
@@ -54,10 +54,11 @@ public class Alias extends Command {
             sb.append(scat((Object[]) args));
 
             try {
-                OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(GlobalConf.confFile()),"UTF-8");
-                osw.write(sb.toString());
-                osw.write(eol());
-                osw.close();
+                BufferedWriter writer = StreamUtils.writeToFile(GlobalConf.confFile(), true);
+                writer.write(sb.toString());
+                writer.write(eol());
+                writer.close();
+
             }
             catch (IOException e) {
                 error("Could not write to: " + GlobalConf.confPath(), e, 2);
