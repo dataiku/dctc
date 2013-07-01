@@ -32,4 +32,8 @@ public class BasicEnrichedInputStream implements EnrichedInputStream {
     public Partition getPartition() {
         return null;
     }
+    @Override
+    public InputStream headStream(long targetSize) throws IOException {
+        return stream();
+    }
 }

@@ -39,7 +39,7 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
 
             logger.info("CSV starting to process one stream: " + stream.size());
 
-            InputStream is = stream.stream();
+            InputStream is = stream.headStream(limit != null ? limit.maxBytes : -1); 
             CountingInputStream cis = new CountingInputStream(is);
 
             CSVReader reader = null;
