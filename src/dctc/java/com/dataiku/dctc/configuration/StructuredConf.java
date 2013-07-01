@@ -47,12 +47,6 @@ public class StructuredConf {
         }
         return builder;
     }
-    public Configuration getConfAppenders() {
-        if (confAppenders == null) {
-            confAppenders = new Configuration();
-        }
-        return confAppenders;
-    }
 
     // Private Methods
     private void alias() {
@@ -70,12 +64,21 @@ public class StructuredConf {
         GlobalConf.setGlobalSettings(conf.getOrCreateSection("global"));
         conf.valid("global");
     }
+    public Configuration getConf() {
+        return conf;
+    }
+    public void setConf(Configuration conf) {
+        this.conf = conf;
+    }
+    public StructuredConf withConf(Configuration conf) {
+        this.conf = conf;
+        return this;
+    }
 
     // Attributes
     private Alias alias = new Alias();
     private CredentialProviderBank bank = new CredentialProviderBank();
     private Configuration conf = new Configuration();
-    private Configuration confAppenders;
     private FileBuilder builder;
     private SshConfig ssh = new SshConfig();
 }

@@ -7,9 +7,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -23,28 +20,60 @@ import com.dataiku.dip.utils.Params;
 import com.dataiku.dip.utils.StreamUtils;
 
 public class Configuration {
-    public void appendConfTo(String file) throws IOException {
-        if (conf.size() == 0) {
+    public void appendNewProtocol(String protocol, String user,
+                                  Map<String, String> parameters) throws IOException {
+        if (parameters.isEmpty()) {
             return;
         }
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append(eol());
-        sb.append("# Added by dctc wizard (" + dateFormat.format(date) + ").");
-        for (Map.Entry<String, Map<String, String>> e: conf.entrySet()) {
-            sb.append(eol());
-            sb.append("[" + e.getKey() + "]" + eol());
-            for (Map.Entry<String, String> confEntry : e.getValue().entrySet()) {
-                sb.append(confEntry.getKey() + " = " + confEntry.getValue() + eol());
-            }
+        if (!lastProtocolDefined.equals(protocol)) {
+            sb.append("[" + protocol + "]");
         }
 
+        for(Map.Entry<String, String> confEntry: parameters.entrySet()) {
+            sb.append(eol());
+            sb.append(user + "." + confEntry.getKey() + " = " + confEntry.getValue());
+        }
+
+        sb.append(eol());
+
+        appendToConf(sb.toString());
+    }
+    // public void appendConfTo(String file) throws IOException {
+    //     if (conf.size() == 0) {
+    //         return;
+    //     }
+    //     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    //     Date date = new Date();
+
+    //     StringBuilder sb = new StringBuilder();
+
+    //     sb.append(eol());
+    //     sb.append("# Added by dctc wizard (" + dateFormat.format(date) + ").");
+    //     for (Map.Entry<String, Map<String, String>> e: conf.entrySet()) {
+    //         sb.append(eol());
+    //         sb.append("[" + e.getKey() + "]" + eol());
+    //         for (Map.Entry<String, String> confEntry : e.getValue().entrySet()) {
+    //             sb.append(confEntry.getKey() + " = " + confEntry.getValue() + eol());
+    //         }
+    //     }
+
+    //     appendToConf(sb.toString());
+    // }
+    public void appendToConf(String conf) throws IOException {
         BufferedWriter writer = StreamUtils.writeToFile(GlobalConf.confFile(), true);
-        writer.write(sb.toString());
+
+        if (!conf.startsWith(eol())) {
+            writer.write(eol());
+        }
+        writer.write(conf);
+        if (!conf.endsWith(eol())) {
+            writer.write(eol());
+        }
         writer.close();
+
     }
     public void parse(File file) throws IOException {
         if (!file.exists()) {
@@ -157,4 +186,5 @@ public class Configuration {
     // Attributes
     private Set<String> nonValidSection = new HashSet<String>();
     private Map<String, Map<String, String>> conf = new HashMap<String, Map<String, String>>();
+    private String lastProtocolDefined = null;
 }

@@ -196,10 +196,10 @@ public class Main {
                 if (cmd != null) {
                     if (cmd.cmdname().equals("add-account")) {
                         assert cmd instanceof AddAccount;
-                        ((AddAccount) cmd).setConfiguration(conf.getConfAppenders());
+                        ((AddAccount) cmd).setConfiguration(conf.getConf());
                     }
                     else if (cmd.cmdname().equals("alias")) {
-                        ((Alias) cmd).setAlias(conf.getAlias());
+                        ((Alias) cmd).setConf(conf);
                     }
                     cmd.setFileBuilder(conf.getFileBuilder());
                     try {

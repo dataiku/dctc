@@ -3,7 +3,6 @@ package com.dataiku.dctc.command;
 import static com.dataiku.dip.utils.PrettyString.eol;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -14,8 +13,8 @@ import org.apache.commons.cli.Options;
 
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.configuration.GlobalConf;
+import com.dataiku.dctc.configuration.StructuredConf;
 import com.dataiku.dip.utils.IndentedWriter;
-import com.dataiku.dip.utils.StreamUtils;
 
 public class Alias extends Command {
     public String cmdname() {
@@ -38,7 +37,7 @@ public class Alias extends Command {
 
     public void perform(String[] args) {
         if (args.length == 0) {
-            for (Entry<String, String> alia: alias.getAlias().entrySet()) {
+            for (Entry<String, String> alia: conf.getAlias().getAlias().entrySet()) {
                 System.out.println(alia.getKey() + "=\"" + alia.getValue() + "\"");
             }
         }
@@ -54,11 +53,7 @@ public class Alias extends Command {
             sb.append(scat((Object[]) args));
 
             try {
-                BufferedWriter writer = StreamUtils.writeToFile(GlobalConf.confFile(), true);
-                writer.write(sb.toString());
-                writer.write(eol());
-                writer.close();
-
+                conf.getConf().appendToConf(sb.toString());
             }
             catch (IOException e) {
                 error("Could not write to: " + GlobalConf.confPath(), e, 2);
@@ -67,17 +62,16 @@ public class Alias extends Command {
     }
 
     // Getters/Setters
-    public com.dataiku.dctc.configuration.Alias getAlias() {
-        return alias;
+    public StructuredConf getConf() {
+        return conf;
     }
-    public void setAlias(com.dataiku.dctc.configuration.Alias alias) {
-        this.alias = alias;
+    public void setConf(StructuredConf conf) {
+        this.conf = conf;
     }
-    public Alias withAlias(com.dataiku.dctc.configuration.Alias alias) {
-        this.alias = alias;
+    public Alias withConf(StructuredConf conf) {
+        this.conf = conf;
         return this;
     }
-
     // Attributes
-    private com.dataiku.dctc.configuration.Alias alias;
+    private StructuredConf conf;
 }

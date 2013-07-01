@@ -5,6 +5,8 @@ import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.cli.Options;
 
@@ -71,20 +73,27 @@ public class AddAccount extends Command {
                                     + proto + "'.");
         }
 
+        Map<String, String> parameters = new HashMap<String, String>();
         if (proto.equalsIgnoreCase("s3")) {
             while (true) {
+                parameters.clear();
+                // Get the access key
                 String accessKey = Interactive.askString("Please enter your AWS access key: ");
                 if (accessKey.length() < 8) {
                     System.err.println("Invalid AWS access key");
                     continue;
                 }
+                parameters.put("access_key", accessKey);
+
+                // Get the secret key
                 String secretKey = Interactive.askString("Please enter your AWS secret key: ");
                 if (secretKey.length() < 16) {
                     System.err.println("Invalid AWS secret key");
                     continue;
                 }
-                System.err.println("Testing if these credentials work.");
+                parameters.put("secret_key", secretKey);
 
+                System.err.println("Testing if these credentials work.");
                 System.err.print("Please wait...");
                 try {
                     S3File s3File = new S3File("/", new AmazonS3Client(new BasicAWSCredentials(accessKey, secretKey)));
@@ -95,53 +104,52 @@ public class AddAccount extends Command {
                     System.err.println("\rCould not list your buckets using these credentials. AWS said: " + e.getMessage());
                     continue;
                 }
-                configuration.put("s3", account, "access_key", accessKey);
-                configuration.put("s3", account, "secret_key", secretKey);
-                System.err.println("Updating configuration file: " + GlobalConf.confPath());
-                try {
-                    configuration.appendConfTo(GlobalConf.confPath());
-                } catch (IOException e) {
-                    error(GlobalConf.confPath(), "Couldn't write in the configuration file", e, 3);
-                }
-                return;
+                break;
             }
         }
         else if (proto.equalsIgnoreCase("gs")) {
             System.err.println("You can find your Google service account email in the 'API Access' tab of the API Console, in 'Service Account'");
             while (true) {
+                parameters.clear();
+                // Get the mail
                 String email = Interactive.askString("Please enter your Google service account email: ");
                 if (email.length() < 8 || !email.contains("@")) {
                     System.err.println("Invalid Google service account email");
                     continue;
                 }
+                parameters.put("mail", email);
+
+                // Get the .p12 file
                 System.err.println("Your private key file is generally a .p12 file");
                 String keyPath = Interactive.askString("Please enter the path on disk of your private key file: ");
                 if (!new File(keyPath).exists()) {
                     System.err.println("Invalid key file path: No such file.");
                     continue;
                 }
-                System.err.println("Testing if these credentials work.");
+                parameters.put("key_path", keyPath);
 
+                // Testing
+                System.err.println("Testing if these credentials work.");
                 System.err.print("Please wait...");
                 try {
                     GSFile gfile = new GSFile(email, keyPath, "/");
                     int nbuckets = gfile.glist().size();
                     System.err.println("\rOK, listed " + nbuckets + " buckets in your GCS account");
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     System.err.println("\rCould not list your buckets using these credentials. GCS said: " + e.getMessage());
                     e.printStackTrace();
                     continue;
                 }
-                configuration.put("gs", account, "mail", email);
-                configuration.put("gs", account, "key_path", keyPath);
-                System.err.println("Updating configuration file: " + GlobalConf.confPath());
-                try {
-                    configuration.appendConfTo(GlobalConf.confPath());
-                } catch (IOException e) {
-                    error(GlobalConf.confPath(), "Couldn't write in the configuration file", e, 3);
-                }
-                return;
+                break;
             }
+        }
+        System.err.println("Updating configuration file: " + GlobalConf.confPath());
+        try {
+            configuration.appendNewProtocol("s3", account, parameters);
+        }
+        catch (IOException e) {
+            error(GlobalConf.confPath(), "Couldn't write in the configuration file", e, 3);
         }
     }
     @Override
