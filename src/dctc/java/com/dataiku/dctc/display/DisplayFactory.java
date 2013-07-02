@@ -6,8 +6,17 @@ public class DisplayFactory {
     public DisplayFactory(String type) {
         setType(type);
     }
+    public DisplayFactory() {
+    }
+    public String getType() {
+        return type;
+    }
     public void setType(String type) {
         this.type = type;
+    }
+    public DisplayFactory withType(String type) {
+        this.type = type;
+        return this;
     }
 
     public ThreadedDisplay build() {
