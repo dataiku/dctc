@@ -42,7 +42,7 @@ cat >"$TMP_DEST"<<.
 TMPFILE=\`mktemp /tmp/temp.XXXX\`
 tail -n+$line_pattern \$0 > \$TMPFILE
 java -jar \$TMPFILE "\$@"
-RET=\$?; rm -f \$TMPFILE; exit $RET
+RET=\$?; rm -f \$TMPFILE; exit \$RET
 .
 
 sed -e "s/$line_pattern/`wc -l <$TMP_DEST | sed 's/ *//'`/" < "$TMP_DEST" > "$DEST"
