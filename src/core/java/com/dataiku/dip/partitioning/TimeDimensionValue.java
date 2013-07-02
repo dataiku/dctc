@@ -88,6 +88,7 @@ public class TimeDimensionValue extends DimensionValue {
         this.hour = hour;
         return this;
     }
+    @SuppressWarnings("fallthrough")
     public void setCal(Calendar cal) {
         switch(dimension.mappedPeriod) {
         case HOUR:
@@ -151,6 +152,7 @@ public class TimeDimensionValue extends DimensionValue {
         return glob;
     }
 
+    @SuppressWarnings("fallthrough")
     public long getTimestamp() {
         Calendar cal = Calendar.getInstance();
         switch (dimension.mappedPeriod) {
