@@ -156,8 +156,14 @@ public abstract class Command {
     protected void error(String fileName, String msg, Throwable exception, int exitCode) {
         error("`" + fileName + "': " + msg, exception, exitCode);
     }
+    protected void error(GeneralizedFile file, String msg, Throwable exception, int exitCode) {
+        error(file.givenName(), msg, exception, exitCode);
+    }
     protected void error(String fileName, String msg, int errorCode) {
         error("`" + fileName + "': " + msg, errorCode);
+    }
+    protected void error(GeneralizedFile file, String msg, int errorCode) {
+        error(file.givenName(), msg, errorCode);
     }
 
     protected void errorWithHandlingOfKnownExceptions(String fileName, String msg, Throwable exception, int exitCode) {

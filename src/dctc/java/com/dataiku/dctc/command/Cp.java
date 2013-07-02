@@ -73,36 +73,43 @@ public class Cp extends ListFilesCommand {
         return opt;
     }
     @Override
-    public void execute(List<CopyTask> tasks, int exitCode) throws IOException {
+    public void execute(List<CopyTask> tasks) {
         SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(unarchive(),
                                                                                archive(),
                                                                                hasOption("p"));
         ThreadedDisplay display = GlobalConf.getDisplay();
         CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, getThreadLimit());
-        exec.run(tasks, archive());
+        try {
+            exec.run(tasks, archive());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         if (exec.hasFail()) {
             setExitCode(2);
             exec.displayErrors();
         }
     }
     @Override
-    protected boolean recursion(GeneralizedFile dir) {
-        if (!recur()) {
-            warn("Omitting directory `" + dir.givenName() + "'");
-            return false;
-        }
-        return true;
+    protected boolean recursion() {
+        return recur();
     }
     @Override
     protected boolean includeLastPathElementInTarget() {
         return !archive();
     }
     @Override
-    protected boolean shouldAdd(GeneralizedFile src, GeneralizedFile dst, String root) throws IOException {
-        return !dst.exists() || noClobber() || ask(dst);
+    protected boolean shouldAdd(GeneralizedFile src, GeneralizedFile dst, String root) {
+        try {
+            return !dst.exists() || noClobber() || ask(dst);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return false;
+        }
     }
     @Override
-    protected void dstRoot(GeneralizedFile dst) throws IOException {
+    protected void dstRoot(GeneralizedFile dst) {
     }
     @Override
     protected void leave(GeneralizedFile sourceDir) {

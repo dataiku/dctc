@@ -109,7 +109,7 @@ public class Dispatch extends ListFilesCommand {
     }
 
     @Override
-    public final void execute(List<CopyTask> tasks, int exitCode) throws IOException {
+    public final void execute(List<CopyTask> tasks) {
         if (tasks.size() == 0) return;
 
         SplitFunction fct = buildDispatchFunction();
@@ -121,12 +121,16 @@ public class Dispatch extends ListFilesCommand {
         SplitFactory fact = new SplitFactory(dst, prefix(), postfix(), fct, column(), fmt, compress());
         ThreadedDisplay display = GlobalConf.getDisplay();
         CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, GlobalConf.getThreadLimit());
-        exec.run(tasks, false);
-        fact.close();
-
+        try {
+            exec.run(tasks, false);
+            fact.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     @Override
-    protected final boolean recursion(GeneralizedFile dir) {
+    protected final boolean recursion() {
         return true;
     }
     @Override
@@ -138,9 +142,14 @@ public class Dispatch extends ListFilesCommand {
         return true;
     }
     @Override
-    protected void dstRoot(GeneralizedFile dst) throws IOException {
-        if (!dst.exists()) {
-            dst.mkpath();
+    protected void dstRoot(GeneralizedFile dst) {
+        try {
+            if (!dst.exists()) {
+                dst.mkpath();
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
         this.dst = dst;
     }

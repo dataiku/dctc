@@ -30,13 +30,18 @@ public class Mv extends ListFilesCommand {
 
     // Protected
     @Override
-    public void execute(List<CopyTask> tasks, int exitCode) throws IOException {
-        if (exitCode == 0) {
+    public void execute(List<CopyTask> tasks) {
+        if (getExitCode() == 0) {
             SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(false, false, false);
             ThreadedDisplay display = GlobalConf.getDisplay();
             CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, getThreadLimit());
 
-            exec.run(tasks, archive());
+            try {
+                exec.run(tasks, archive());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             if (exec.hasFail()) {
                 setExitCode(2);
                 exec.displayErrors();
@@ -44,8 +49,13 @@ public class Mv extends ListFilesCommand {
             else {
                 // No errors, delete the directory if needed.
                 for (GeneralizedFile dir: list) {
-                    if (!dir.delete()) {
-                        error(dir.givenName(), "Cannot delete directory", 2);
+                    try {
+                        if (!dir.delete()) {
+                            error(dir.givenName(), "Cannot delete directory", 2);
+                        }
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
                     }
                 }
             }
@@ -62,7 +72,7 @@ public class Mv extends ListFilesCommand {
         return options;
     }
     @Override
-    protected boolean shouldAdd(GeneralizedFile src, GeneralizedFile dst, String root) throws IOException {
+    protected boolean shouldAdd(GeneralizedFile src, GeneralizedFile dst, String root) {
         return true;
     }
     @Override
@@ -85,13 +95,17 @@ public class Mv extends ListFilesCommand {
             return false;
         }
     }
-    protected void dstRoot(GeneralizedFile dst) throws IOException {
+    protected void dstRoot(GeneralizedFile dst) {
     }
     protected void leave(GeneralizedFile sourceDir) {
         list.add(sourceDir);
     }
     @Override
     protected boolean deleteSource() {
+        return true;
+    }
+    @Override
+    protected boolean recursion() {
         return true;
     }
 

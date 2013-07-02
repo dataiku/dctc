@@ -139,6 +139,9 @@ public class FileManipulation {
     }
     public static String getSonPath(String parent, String son, String separator) {
         /* Handle the specific case of '.' */
+        if (parent.equals(son)) {
+            return "";
+        }
         if (!isSon(parent, son, separator)) {
             throw new Error("Fatal error in getSonPath: parent=" + parent + " son=" + son + " separator=" + separator);
         }
