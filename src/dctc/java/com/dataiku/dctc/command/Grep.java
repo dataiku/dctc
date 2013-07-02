@@ -37,6 +37,7 @@ public class Grep extends Command {
         options.addOption("v", "invert-match", false, "Invert the sense of matching, to select non-matching lines.");
         options.addOption("i", "ignore-case", false, "Ignore case distinctions in both the PATTERN and the input files.");
         options.addOption("c", "count", false, "Write only a count of selected lines to standard output.");
+        options.addOption("q", "quiet", false, ". Nothing shall be written to the standard output, regardless of matching lines. Exit with zero status if an input line is selected.");
 
         OptionBuilder.withDescription("Add color to the output");
         options.addOption(OptionBuilder.create("color"));
@@ -144,9 +145,15 @@ public class Grep extends Command {
     }
     public boolean count() {
         if (count == null) {
-            count = hasOption("c");
+            count = hasOption("c") || quiet();
         }
         return count;
+    }
+    public boolean quiet() {
+        if (quiet == null) {
+            quiet = hasOption("q");
+        }
+        return quiet;
     }
 
     // Protected
@@ -221,9 +228,13 @@ public class Grep extends Command {
         return cmd.matches(pattern) ^ invert();
     }
     private void printCount() {
-        if (count()) {
+        if (count() && !quiet()) {
             System.out.println(nbMatch);
         }
+        else if (quiet() && nbMatch == 0) {
+            setExitCode(1);
+        }
+    }
 
     // Attributes
     private Boolean ignoreCase = null;
@@ -231,6 +242,7 @@ public class Grep extends Command {
     private Boolean recursive = null;
     private Boolean color = null;
     private Boolean count = null;
-    private int nbMatch;
+    private Boolean quiet = null;
+    private long nbMatch;
     private String pattern;
 }
