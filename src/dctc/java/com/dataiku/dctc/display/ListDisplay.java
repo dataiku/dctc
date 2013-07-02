@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import com.dataiku.dctc.copy.CopyTaskRunnable;
 
-public class ListDisplay extends AbstractThreadedDisplay {
+class ListDisplay extends AbstractThreadedDisplay {
     protected final boolean display(CopyTaskRunnable task) {
         if (task.isDone()) {
             try {

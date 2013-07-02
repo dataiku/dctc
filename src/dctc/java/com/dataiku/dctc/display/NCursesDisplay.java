@@ -9,7 +9,7 @@ import jcurses.system.Toolkit;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.copy.CopyTaskRunnable;
 
-public class NCursesDisplay extends AbstractTransferRateDisplay {
+class NCursesDisplay extends AbstractTransferRateDisplay {
     @Override
     protected final void init(List<CopyTaskRunnable> tasks) {
         Toolkit.init();

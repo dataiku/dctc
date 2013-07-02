@@ -7,7 +7,7 @@ import com.dataiku.dip.utils.FriendlyTime;
 
 import static com.dataiku.dip.utils.PrettyString.scat;
 
-public class LessSimpleDisplay extends AbstractTransferRateDisplay {
+class LessSimpleDisplay extends AbstractTransferRateDisplay {
     @Override
     protected final void init(List<CopyTaskRunnable> tasks) {
     }

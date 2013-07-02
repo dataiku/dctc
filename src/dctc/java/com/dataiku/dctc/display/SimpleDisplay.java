@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.dataiku.dctc.copy.CopyTaskRunnable;
 
-public class SimpleDisplay extends AbstractThreadedDisplay {
+class SimpleDisplay extends AbstractThreadedDisplay {
     @Override
     protected final boolean display(CopyTaskRunnable task) {
         if (task.isDone()) {
