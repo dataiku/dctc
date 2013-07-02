@@ -36,6 +36,7 @@ public class Grep extends Command {
         options.addOption("r", "recursive", false, "Read all files under each directory, recursively.");
         options.addOption("v", "invert-match", false, "Invert the sense of matching, to select non-matching lines.");
         options.addOption("i", "ignore-case", false, "Ignore case distinctions in both the PATTERN and the input files.");
+        options.addOption("c", "count", false, "Write only a count of selected lines to standard output.");
 
         OptionBuilder.withDescription("Add color to the output");
         options.addOption(OptionBuilder.create("color"));
@@ -106,6 +107,7 @@ public class Grep extends Command {
 
             }
         }
+        printCount();
     }
     @Override
     public String cmdname() {
@@ -139,6 +141,12 @@ public class Grep extends Command {
             color = hasOption("color");
         }
         return color;
+    }
+    public boolean count() {
+        if (count == null) {
+            count = hasOption("c");
+        }
+        return count;
     }
 
     // Protected
@@ -176,6 +184,10 @@ public class Grep extends Command {
 
     private void matchAndPrint(GeneralizedFile file, String line, String pattern, boolean header) {
         if (match(line, pattern)) {
+            if (count()) {
+                ++nbMatch;
+                return;
+            }
             if (header) {
                 if (color()) {
                     System.out.print("\u001B[0;35m");
@@ -208,11 +220,17 @@ public class Grep extends Command {
         }
         return cmd.matches(pattern) ^ invert();
     }
+    private void printCount() {
+        if (count()) {
+            System.out.println(nbMatch);
+        }
 
     // Attributes
     private Boolean ignoreCase = null;
     private Boolean invert = null;
     private Boolean recursive = null;
     private Boolean color = null;
+    private Boolean count = null;
+    private int nbMatch;
     private String pattern;
 }
