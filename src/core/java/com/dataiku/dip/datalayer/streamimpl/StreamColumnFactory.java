@@ -7,7 +7,6 @@ import java.util.Map;
 
 import com.dataiku.dip.datalayer.Column;
 import com.dataiku.dip.datalayer.ColumnFactory;
-import com.dataiku.dip.datalayer.memimpl.MemColumn;
 
 public class StreamColumnFactory implements ColumnFactory {
     @Override
