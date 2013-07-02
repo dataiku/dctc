@@ -12,7 +12,6 @@ public class Size {
             ++indic;
             s /= 1024;
         }
-        String unit = " kMGTP"; // octect, kilo, giga…
         String res = unit.substring(indic, indic + 1);
         if (indic == 0) {
             return "" + size;
@@ -22,4 +21,5 @@ public class Size {
     public static String getReadableSize(long size) {
         return getReadableSize(size, "#0.00");
     }
+    private final static String unit = " kMGTP";
 }
