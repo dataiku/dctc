@@ -6,8 +6,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.io.IOUtils;
 
@@ -38,9 +38,9 @@ public class Grep extends Command {
         options.addOption("i", "ignore-case", false, "Ignore case distinctions in both the PATTERN and the input files.");
         options.addOption("c", "count", false, "Write only a count of selected lines to standard output.");
         options.addOption("q", "quiet", false, ". Nothing shall be written to the standard output, regardless of matching lines. Exit with zero status if an input line is selected.");
-
-        OptionBuilder.withDescription("Add color to the output");
-        options.addOption(OptionBuilder.create("color"));
+        options.addOption("n", "line", false, "Precede each output line by its relative line number in the file, each file starting at line 1. The line number counter shall be reset for each file processed.");
+        options.addOption("G", "color", false, "Add color to the output");
+        options.addOption("E", false, "Match using java extended regular expressions.");
 
         return options;
     }
@@ -155,6 +155,18 @@ public class Grep extends Command {
         }
         return quiet;
     }
+    public boolean line() {
+        if (line == null) {
+            line = hasOption("n");
+        }
+        return line;
+    }
+    public boolean ratexp() {
+        if (ratexp == null) {
+            ratexp = hasOption("E");
+        }
+        return ratexp;
+    }
 
     // Protected
     @Override
@@ -174,41 +186,34 @@ public class Grep extends Command {
     }
 
     private void grep(GeneralizedFile file, String pattern, boolean header) throws IOException {
+        long lineNumber = 0;
         pattern = formatPattern(pattern);
         BufferedReader i = StreamUtils.readStream(AutoGZip.buildInput(file), "UTF-8");
         try {
             while(true) {
+                ++lineNumber;
                 String line = i.readLine();
                 if (line == null) {
                     break;
                 }
-                matchAndPrint(file, line, pattern, header);
+                matchAndPrint(lineNumber, file, line, pattern, header);
             }
         } finally {
             IOUtils.closeQuietly(i);
         }
     }
 
-    private void matchAndPrint(GeneralizedFile file, String line, String pattern, boolean header) {
+    private void matchAndPrint(long lineNumber, GeneralizedFile file, String line,
+                               String pattern, boolean header) {
         if (match(line, pattern)) {
             if (count()) {
                 ++nbMatch;
                 return;
             }
-            if (header) {
-                if (color()) {
-                    System.out.print("\u001B[0;35m");
-                }
-                System.out.print(file.givenName());
-                if (color()) {
-                    System.out.print("\u001B[0;36m");
-                }
-                System.out.print(":");
-                if (color()) {
-                    System.out.print("\u001B[0m");
-                }
-            }
+            printHeader(file, header);
+            printLine(lineNumber);
             if (color()) {
+
                 System.out.println(line.replaceAll(this.pattern,
                         "\u001B[1;31m" + this.pattern +"\u001B[0m"));
             } else {
@@ -225,6 +230,12 @@ public class Grep extends Command {
                 cmd = line;
             }
         }
+        if (ratexp()) {
+            if (epattern == null) {
+                epattern = Pattern.compile(pattern);
+            }
+            return epattern.matcher(pattern).find() ^ invert();
+        }
         return cmd.matches(pattern) ^ invert();
     }
     private void printCount() {
@@ -235,14 +246,44 @@ public class Grep extends Command {
             setExitCode(1);
         }
     }
+    private void printHeader(GeneralizedFile file, boolean header) {
+        if (header) {
+            if (color()) {
+                System.out.print("\u001B[0;35m");
+            }
+            System.out.print(file.givenName());
+            if (color()) {
+                System.out.print("\u001B[0;36m");
+            }
+            System.out.print(":");
+            if (color()) {
+                System.out.print("\u001B[0m");
+            }
+        }
+    }
+    private void printLine(long line) {
+        if (line()) {
+            if (color()) {
+                System.out.print("\u001B[1;32m" + line + "\u001B[1;36m:\u001B[0m");
+            }
+            else {
+                System.out.print(line);
+                System.out.print(":");
+            }
+        }
+
+    }
 
     // Attributes
-    private Boolean ignoreCase = null;
-    private Boolean invert = null;
-    private Boolean recursive = null;
-    private Boolean color = null;
-    private Boolean count = null;
-    private Boolean quiet = null;
+    private Boolean ignoreCase;
+    private Boolean invert;
+    private Boolean recursive;
+    private Boolean color;
+    private Boolean count;
+    private Boolean quiet;
+    private Boolean line;
+    private Boolean ratexp;
     private long nbMatch;
     private String pattern;
+    private Pattern epattern;
 }
