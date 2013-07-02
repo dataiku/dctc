@@ -44,10 +44,10 @@ public class SshConfig {
                         parameter = FileManipulation.split(line, "	", 2, false);
                     }
                     if (parameter[1] == null) {
-                        throw new IOException(scat("dctc ssh config:",
-                                                   "The parameter",
-                                                   pquoted(parameter[0]),
-                                                   "doesn't define any value."));
+                        throw new IOException(scat("dctc ssh config:"
+                                                   , "The parameter"
+                                                   , pquoted(parameter[0])
+                                                   , "doesn't define any value."));
                     }
                     hostParam.put(parameter[0], parameter[1]);
                 }
