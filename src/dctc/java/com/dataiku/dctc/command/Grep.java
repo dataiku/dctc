@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.apache.commons.cli.Options;
 import org.apache.commons.io.IOUtils;
@@ -58,15 +57,16 @@ public class Grep extends Command {
     public void perform(List<GeneralizedFile> args) {
         perform(args, pattern);
     }
+    private boolean recursive() {
+        return false;
+    }
     public void perform(List<GeneralizedFile> args, String pattern) {
         if (args.size() < 1) {
             usage();
             setExitCode(2);
         }
-        pattern = formatPattern(pattern);
-        if (ignoreCase()) {
-            pattern = pattern.toLowerCase();
-        }
+        //pattern = formatPattern(pattern);
+        // lowerCase here
         boolean header = args.size() > 1;
         for (GeneralizedFile arg: args) {
             try {
@@ -108,65 +108,13 @@ public class Grep extends Command {
 
             }
         }
-        printCount();
+        //printCount();
     }
     @Override
     public String cmdname() {
         return "grep";
     }
     /// Getters
-    public boolean ignoreCase() {
-        if (ignoreCase == null) {
-            ignoreCase = hasOption("i");
-        }
-        return ignoreCase;
-    }
-    public boolean invert() {
-        if (invert == null) {
-            invert = hasOption("v");
-        }
-        return invert;
-    }
-    public boolean recursive() {
-        if (recursive == null) {
-            recursive = hasOption("r");
-        }
-        return recursive;
-    }
-    public String formatPattern(String pattern) {
-        pattern = ".*" + pattern + ".*";
-        return pattern;
-    }
-    public boolean color() {
-        if (color == null) {
-            color = hasOption("color");
-        }
-        return color;
-    }
-    public boolean count() {
-        if (count == null) {
-            count = hasOption("c") || quiet();
-        }
-        return count;
-    }
-    public boolean quiet() {
-        if (quiet == null) {
-            quiet = hasOption("q");
-        }
-        return quiet;
-    }
-    public boolean line() {
-        if (line == null) {
-            line = hasOption("n");
-        }
-        return line;
-    }
-    public boolean ratexp() {
-        if (ratexp == null) {
-            ratexp = hasOption("E");
-        }
-        return ratexp;
-    }
 
     // Protected
     @Override
@@ -186,104 +134,92 @@ public class Grep extends Command {
     }
 
     private void grep(GeneralizedFile file, String pattern, boolean header) throws IOException {
+        buildMe(pattern, header);
         long lineNumber = 0;
-        pattern = formatPattern(pattern);
         BufferedReader i = StreamUtils.readStream(AutoGZip.buildInput(file), "UTF-8");
         try {
             while(true) {
-                ++lineNumber;
                 String line = i.readLine();
                 if (line == null) {
                     break;
                 }
-                matchAndPrint(lineNumber, file, line, pattern, header);
+                match(file, ++lineNumber, line);
             }
-        } finally {
+            printer.end(file);
+            if (hasMatch) {
+                setExitCode(1);
+            }
+        }
+        finally {
             IOUtils.closeQuietly(i);
         }
     }
-
-    private void matchAndPrint(long lineNumber, GeneralizedFile file, String line,
-                               String pattern, boolean header) {
-        if (match(line, pattern)) {
-            if (count()) {
-                ++nbMatch;
-                return;
-            }
-            printHeader(file, header);
-            printLine(lineNumber);
-            if (color()) {
-
-                System.out.println(line.replaceAll(this.pattern,
-                        "\u001B[1;31m" + this.pattern +"\u001B[0m"));
-            } else {
-                System.out.println(line);
-            }
+    private void match(GeneralizedFile file, long lineNumber, String line) {
+        if (matcher.match(line)) {
+            hasMatch = true;
+            header.print(file);
+            this.line.print(lineNumber);
+            printer.print(line);
         }
     }
-    private boolean match(String line, String pattern) {
-        String cmd; {
-            if (ignoreCase()) {
-                cmd = line.toLowerCase();
+
+    private void buildHeaderPrinter(boolean header) {
+        if(header) {
+            this.header = new SimpleGrepHeaderPrinter();
+            if (hasOption("c")) {
+                this.header = new QuietGrepHeaderPrinter(this.header);
+            }
+        }
+        else {
+            this.header = new QuietGrepHeaderPrinter(null);
+        }
+    }
+    private void buildLinePrinter() {
+        if (hasOption("c") || !hasOption("n")) {
+            line = new OffGrepLinePrinter();
+        }
+        else if (hasOption("n")) {
+            if (hasOption("G")) {
+                line = new ColoredGrepLinePrinter();
             }
             else {
-                cmd = line;
-            }
-        }
-        if (ratexp()) {
-            if (epattern == null) {
-                epattern = Pattern.compile(pattern);
-            }
-            return epattern.matcher(pattern).find() ^ invert();
-        }
-        return cmd.matches(pattern) ^ invert();
-    }
-    private void printCount() {
-        if (count() && !quiet()) {
-            System.out.println(nbMatch);
-        }
-        else if (quiet() && nbMatch == 0) {
-            setExitCode(1);
-        }
-    }
-    private void printHeader(GeneralizedFile file, boolean header) {
-        if (header) {
-            if (color()) {
-                System.out.print("\u001B[0;35m");
-            }
-            System.out.print(file.givenName());
-            if (color()) {
-                System.out.print("\u001B[0;36m");
-            }
-            System.out.print(":");
-            if (color()) {
-                System.out.print("\u001B[0m");
+                line = new OnGrepLinePrinter();
             }
         }
     }
-    private void printLine(long line) {
-        if (line()) {
-            if (color()) {
-                System.out.print("\u001B[1;32m" + line + "\u001B[1;36m:\u001B[0m");
-            }
-            else {
-                System.out.print(line);
-                System.out.print(":");
-            }
+    private void buildPrinter() {
+        if (hasOption("c")) {
+            printer = new CountGrepPrinter(header);
         }
+        else {
+            printer = new SimpleGrepPrinter();
+        }
+    }
+    private void buildMatcher(String pattern) {
+        matcher = new StringGrepMatcher(pattern);
 
+        if (hasOption("i")) {
+            matcher = new IgnoreCaseGrepMatcher(matcher, pattern);
+        }
+        if (hasOption("v")) {
+            matcher = new InvGrepMatcher(matcher);
+        }
     }
+    public void buildMe(String pattern, boolean header) {
+        // Don't sort. Dependencies between the building methods.
+        buildHeaderPrinter(header);
+        buildPrinter();
+        buildMatcher(pattern);
+        buildLinePrinter();
+        hasMatch = false;
+    }
+
+    private GrepPrinter printer;
+    private GrepMatcher matcher;
+    private GrepLinePrinter line;
+    private GrepHeaderPrinter header;
+    private boolean hasMatch;
 
     // Attributes
-    private Boolean ignoreCase;
-    private Boolean invert;
-    private Boolean recursive;
-    private Boolean color;
-    private Boolean count;
-    private Boolean quiet;
-    private Boolean line;
-    private Boolean ratexp;
-    private long nbMatch;
     private String pattern;
-    private Pattern epattern;
 }
