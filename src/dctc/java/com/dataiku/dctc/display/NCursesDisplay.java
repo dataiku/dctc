@@ -47,7 +47,7 @@ public class NCursesDisplay extends AbstractTransferRateDisplay {
             ++line;
         }
         prettyDisplay("done: " + Size.getReadableSize(doneTransfer()) + "\t\t"
-                      +  Size.getReadableSize(getBnd()) + "/s",
+                      + Size.getReadableSize(getBnd()) + "/s",
                       doneTransfer(),
                       wholeSize(),
                       line);
@@ -64,23 +64,35 @@ public class NCursesDisplay extends AbstractTransferRateDisplay {
         if (currentLine >= GlobalConf.getThreadLimit() + 2) {
             return;
         }
-        String str = Size.getReadableSize(task.read())
-            + "/"
-            + Size.getReadableSize(task.getInSize())
-            + "\t\t";
-        try {
-            str += task.print();
-        } catch (IOException e) {
-            str += task.getInputFile().givenName();
+        StringBuilder sb = new StringBuilder();
+        { // Print the size
+            String str = Size.getReadableSize(task.read())
+                + "/"
+                + Size.getReadableSize(task.getInSize())
+                + "\t\t";
+            sb.append(str);
+            for (int i = str.length(); i < 18; ++i) {
+                sb.append(" ");
+            }
         }
-        prettyDisplay(str, task.read(), task.getInSize(), currentLine++);
+        try {
+            sb.append(task.print());
+        }
+        catch (IOException e) {
+            sb.append(task.getInputFile().givenName());
+        }
+        prettyDisplay(sb.toString(), task.read(), task.getInSize(), currentLine++);
     }
 
     private void prettyDisplay(String str, long transferred, long total, int line) {
+        if (Toolkit.getScreenWidth() < str.length()) {
+            str = str.substring(0, Toolkit.getScreenWidth() - 1);
+        }
         int pourcent;
         if (total == 0) {
             pourcent = 1;
-        } else {
+        }
+        else {
             pourcent = Math.min(str.length() - 1, (int) ((transferred * str.length()) / total));
         }
 
