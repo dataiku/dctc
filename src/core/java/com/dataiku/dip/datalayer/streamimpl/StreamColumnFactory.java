@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.dataiku.dip.datalayer.Column;
 import com.dataiku.dip.datalayer.ColumnFactory;
+import com.dataiku.dip.datalayer.memimpl.MemColumn;
 
 public class StreamColumnFactory implements ColumnFactory {
     @Override
@@ -39,6 +40,39 @@ public class StreamColumnFactory implements ColumnFactory {
         }
         return c;
     }
+    @Override
+    public Column columnBefore(String after, String newCol) {
+        if (after == null) {
+            return column(newCol);
+        }
+        StreamColumn c = map.get(newCol);
+        if (c == null) {
+            c = new StreamColumn();
+            c.factory = this;
+            c.name = newCol;
+            StreamColumn afterCD = map.get(after);
+            if (afterCD != null) {
+                int index = list.indexOf(afterCD);
+                list.add(index, c);
+            } else {
+                list.add(c);
+            }
+            map.put(newCol, c);
+        }
+        return c;
+    }
+    @Override
+    public Column getColumnAfter(String current) {
+        StreamColumn beforeCD = map.get(current);
+
+        if (beforeCD != null) {
+            int index = list.indexOf(beforeCD);
+            if (index + 1 < list.size()) {
+                return list.get(index+1);
+            }
+        }
+        return null;
+    }
 
     @Override
     public synchronized void deleteColumn(String name) {
@@ -62,4 +96,5 @@ public class StreamColumnFactory implements ColumnFactory {
         l.addAll(list);
         return l;
     }
+  
 }
