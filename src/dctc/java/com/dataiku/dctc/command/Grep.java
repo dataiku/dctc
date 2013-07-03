@@ -46,6 +46,7 @@ public class Grep extends Command {
         options.addOption("s", "no-messages", false, "Suppress the error messages ordinarily written for nonexistent or unreadable files. Other error messages shall not be suppressed.");
         longOpt(options, "Specify one or more patterns to be used during the search for input.", "PATTERN", "e", "regexp");
         options.addOption("l", "files-with-matches", false, "print only names of FILEs containing matches");
+        options.addOption("x", false, "Consider only input lines that use all characters in the line excluding the terminating <newline> to match an entire fixed string or regular expression to be matching lines.");
 
         return options;
     }
@@ -237,6 +238,9 @@ public class Grep extends Command {
         if (ignoreCase()) {
             matcher = new IgnoreCaseGrepMatcher(matcher);
         }
+        if (fullLine()) {
+            matcher = new FullLineGrepMatcher(matcher);
+        }
         if (inverse()) {
             matcher = new InvGrepMatcher(matcher);
         }
@@ -305,11 +309,17 @@ public class Grep extends Command {
         }
         return ratexp;
     }
-    private Boolean linum() {
+    private boolean linum() {
         if (linum == null) {
             linum = hasOption("n");
         }
         return linum;
+    }
+    private boolean fullLine() {
+        if (fullLine == null) {
+            fullLine = hasOption("x");
+        }
+        return fullLine;
     }
 
     // Attributes
@@ -328,6 +338,7 @@ public class Grep extends Command {
     private Boolean ignoreCase;
     private Boolean ratexp;
     private Boolean linum;
+    private Boolean fullLine;
 
     private Boolean printFileError;
 }
