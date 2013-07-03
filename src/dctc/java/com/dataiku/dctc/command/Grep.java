@@ -40,6 +40,7 @@ public class Grep extends Command {
         options.addOption("n", "line", false, "Precede each output line by its relative line number in the file, each file starting at line 1. The line number counter shall be reset for each file processed.");
         options.addOption("G", "color", false, "Add color to the output");
         options.addOption("E", false, "Match using java extended regular expressions.");
+        options.addOption("F", false, "Match using fixed strings."); // Follow the posix specifications. Don't need it... Really.
         options.addOption("s", false, "Suppress the error messages ordinarily written for nonexistent or unreadable files. Other error messages shall not be suppressed.");
 
         return options;
