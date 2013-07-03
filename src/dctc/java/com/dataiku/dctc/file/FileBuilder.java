@@ -66,7 +66,12 @@ public class FileBuilder {
     public GeneralizedFile buildFile(String uri) {
         int protocolSeparator = uri.indexOf("://");
         if (protocolSeparator == -1) {
-            return Protocol.FILE.builder.buildFile(null, uri);
+            if (uri.equals("-")) {
+                return new StandardFile();
+            }
+            else {
+                return Protocol.FILE.builder.buildFile(null, uri);
+            }
         }
 
         Protocol protocol = Protocol.forName(uri.substring(0, protocolSeparator));

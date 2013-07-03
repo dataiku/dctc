@@ -1,6 +1,11 @@
 # -*- mode: org eval: (auto-fill-mode) -*-
 
 * 0.3
+** Standard Fs
+
+   Input/Output standard stream. The protocol name is std, but could be
+   ommitted.
+
 ** Du command
 
    Command to estimate file space usage.
