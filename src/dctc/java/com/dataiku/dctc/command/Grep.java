@@ -196,7 +196,12 @@ public class Grep extends Command {
         }
     }
     private void buildMatcher(String pattern) {
-        matcher = new StringGrepMatcher(pattern);
+        if (hasOption("E")) {
+            matcher = new RatExpGrepMatcher(pattern);
+        }
+        else {
+            matcher = new StringGrepMatcher(pattern);
+        }
 
         if (hasOption("i")) {
             matcher = new IgnoreCaseGrepMatcher(matcher, pattern);
