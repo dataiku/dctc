@@ -26,8 +26,7 @@ public class SimpleCopyTaskRunnableFactory implements CopyTaskRunnableFactory {
                     return new UnarchiveCopyTask(task.src, task.dstDir);
 
                 } else {
-                    GeneralizedFile dst = task.dstDir.createSubFile("",
-                                                                    task.dstDir.fileSeparator());
+                    GeneralizedFile dst = task.dstDir;
                     return new UnarchiveCopyTask(task.src, dst);
                 }
             }
