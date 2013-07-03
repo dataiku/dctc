@@ -28,13 +28,13 @@ class InvGrepMatcher implements GrepMatcher {
         return this;
     }
 
-    public String getPattern() {
+    public String[] getPattern() {
         return matcher.getPattern();
     }
-    public void setPattern(String pattern) {
+    public void setPattern(String[] pattern) {
         matcher.setPattern(pattern);
     }
-    public InvGrepMatcher withPattern(String pattern) {
+    public InvGrepMatcher withPattern(String[] pattern) {
         setPattern(pattern);
         return this;
     }

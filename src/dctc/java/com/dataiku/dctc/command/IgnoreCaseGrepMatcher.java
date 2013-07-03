@@ -1,9 +1,9 @@
 package com.dataiku.dctc.command;
 
 class IgnoreCaseGrepMatcher implements GrepMatcher {
-    IgnoreCaseGrepMatcher(GrepMatcher matcher, String pattern) {
+    IgnoreCaseGrepMatcher(GrepMatcher matcher) {
         this.matcher = matcher;
-        this.matcher.setPattern(pattern.toLowerCase());
+        setPattern(matcher.getPattern());
     }
 
     public boolean match(String line) {
@@ -27,13 +27,16 @@ class IgnoreCaseGrepMatcher implements GrepMatcher {
         this.matcher = matcher;
         return this;
     }
-    public String getPattern() {
+    public String[] getPattern() {
         return matcher.getPattern();
     }
-    public void setPattern(String pattern) {
-        matcher.setPattern(pattern.toLowerCase());
+    public void setPattern(String[] pattern) {
+        for (int i = 0; i < pattern.length; ++i) {
+            pattern[i] = pattern[i].toLowerCase();
+        }
+        this.matcher.setPattern(pattern);
     }
-    public IgnoreCaseGrepMatcher withPattern(String pattern) {
+    public IgnoreCaseGrepMatcher withPattern(String[] pattern) {
         setPattern(pattern);
         return this;
     }

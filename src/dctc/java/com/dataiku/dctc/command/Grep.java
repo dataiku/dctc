@@ -1,5 +1,6 @@
 package com.dataiku.dctc.command;
 
+import static com.dataiku.dip.utils.PrettyString.eol;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.BufferedReader;
@@ -23,11 +24,11 @@ public class Grep extends Command {
     }
     public void longDescription(IndentedWriter printer) {
         printer.paragraph(scat("Search the pattern in input files and outputs the lines that match."
-                               ,"The pattern is handled as a non-anchored regular expression.")
+                               , "The pattern is handled as a non-anchored regular expression.")
                           ,scat("dctc grep only offers a tiny subset of the capabilities of"
-                                ,"POSIX or GNU grep. It is intended as a fallback for systems that"
-                                ,"do not offer a native grep (eg, Microsoft Windows). For UNIX"
-                                ,"systems, use dctc cat|grep"));
+                                , "POSIX or GNU grep. It is intended as a fallback for systems that"
+                                , "do not offer a native grep (eg, Microsoft Windows). For UNIX"
+                                , "systems, use dctc cat|grep"));
     }
 
     protected Options setOptions() {
@@ -73,33 +74,6 @@ public class Grep extends Command {
         if (arguments != null) {
             buildMe(arguments.size() > 1);
             perform(arguments);
-        }
-    }
-    private boolean recursive() {
-        return false;
-    }
-    private void noSuch(GeneralizedFile file) {
-        if (printFileError()) {
-            error(file, "No such file or directory", 2);
-        }
-        else {
-            setExitCode(2);
-        }
-    }
-    private void isADirectory(GeneralizedFile dir) {
-        if (printFileError()) {
-            error(dir, "Is a directory", 2);
-        }
-        else {
-            setExitCode(2);
-        }
-    }
-    private void failRead(GeneralizedFile file, Throwable e) {
-        if (printFileError()) {
-            error(file, "Failed to read file", e, 2);
-        }
-        else {
-            setExitCode(2);
         }
     }
     public boolean printFileError() {
@@ -162,7 +136,15 @@ public class Grep extends Command {
     public String cmdname() {
         return "grep";
     }
-    /// Getters
+
+    public void buildMe(boolean header) {
+        // Don't sort. Dependencies between the building methods.
+        buildHeaderPrinter(header);
+        buildMatcher(pattern.split(eol()));
+        buildPrinter();
+        buildLinePrinter();
+        hasMatch = false;
+    }
 
     // Protected
     @Override
@@ -170,6 +152,7 @@ public class Grep extends Command {
         return "[OPT...] PATTERN FILES...";
     }
 
+    // Private
     private void grep(GeneralizedFile file) throws IOException {
         long lineNumber = 0;
         BufferedReader i = StreamUtils.readStream(AutoGZip.buildInput(file), "UTF-8");
@@ -227,11 +210,14 @@ public class Grep extends Command {
         if (hasOption("c")) {
             printer = new CountGrepPrinter(header);
         }
+        else if (hasOption("G")) {
+            printer = new ColorGrepPrinter(matcher);
+        }
         else {
             printer = new SimpleGrepPrinter();
         }
     }
-    private void buildMatcher(String pattern) {
+    private void buildMatcher(String[] pattern) {
         if (hasOption("E")) {
             matcher = new RatExpGrepMatcher(pattern);
         }
@@ -240,19 +226,38 @@ public class Grep extends Command {
         }
 
         if (hasOption("i")) {
-            matcher = new IgnoreCaseGrepMatcher(matcher, pattern);
+            matcher = new IgnoreCaseGrepMatcher(matcher);
         }
         if (hasOption("v")) {
             matcher = new InvGrepMatcher(matcher);
         }
     }
-    public void buildMe(boolean header) {
-        // Don't sort. Dependencies between the building methods.
-        buildHeaderPrinter(header);
-        buildPrinter();
-        buildMatcher(pattern);
-        buildLinePrinter();
-        hasMatch = false;
+    private boolean recursive() {
+        return false;
+    }
+    private void noSuch(GeneralizedFile file) {
+        if (printFileError()) {
+            error(file, "No such file or directory", 2);
+        }
+        else {
+            setExitCode(2);
+        }
+    }
+    private void isADirectory(GeneralizedFile dir) {
+        if (printFileError()) {
+            error(dir, "Is a directory", 2);
+        }
+        else {
+            setExitCode(2);
+        }
+    }
+    private void failRead(GeneralizedFile file, Throwable e) {
+        if (printFileError()) {
+            error(file, "Failed to read file", e, 2);
+        }
+        else {
+            setExitCode(2);
+        }
     }
 
     private GrepPrinter printer;
