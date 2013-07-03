@@ -5,6 +5,7 @@ import static com.dataiku.dip.utils.PrettyString.scat;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.cli.Options;
@@ -36,14 +37,32 @@ public class Grep extends Command {
         options.addOption("v", "invert-match", false, "Invert the sense of matching, to select non-matching lines.");
         options.addOption("i", "ignore-case", false, "Ignore case distinctions in both the PATTERN and the input files.");
         options.addOption("c", "count", false, "Write only a count of selected lines to standard output.");
-        options.addOption("q", "quiet", false, ". Nothing shall be written to the standard output, regardless of matching lines. Exit with zero status if an input line is selected.");
+        options.addOption("q", "quiet", false, "Nothing shall be written to the standard output, regardless of matching lines. Exit with zero status if an input line is selected.");
         options.addOption("n", "line", false, "Precede each output line by its relative line number in the file, each file starting at line 1. The line number counter shall be reset for each file processed.");
         options.addOption("G", "color", false, "Add color to the output");
-        options.addOption("E", false, "Match using java extended regular expressions.");
-        options.addOption("F", false, "Match using fixed strings."); // Follow the posix specifications. Don't need it... Really.
-        options.addOption("s", false, "Suppress the error messages ordinarily written for nonexistent or unreadable files. Other error messages shall not be suppressed.");
+        options.addOption("E", "extended-regexp", false, "Match using java extended regular expressions.");
+        options.addOption("F", "fixed-strings", false, "Match using fixed strings."); // Follow the posix specifications. Don't need it... Really.
+        options.addOption("s", "no-messages", false, "Suppress the error messages ordinarily written for nonexistent or unreadable files. Other error messages shall not be suppressed.");
+        longOpt(options, "Specify one or more patterns to be used during the search for input.", "PATTERN", "e", "regexp");
 
         return options;
+    }
+
+    protected List<GeneralizedFile> getArgs(String[] shellArgs) {
+        parseCommandLine(shellArgs);
+        List<String> args = new ArrayList<String>(Arrays.asList(getRawArgs().getArgs()));
+        { // Set pattern
+            if (hasOption("e")) {
+                pattern = getOptionValue("e");
+            }
+            else {
+                if (!args.isEmpty()) {
+                    pattern = args.get(0);
+                    args.remove(0);
+                }
+            }
+        }
+        return resolveGlobbing(args);
     }
 
     // Public
@@ -52,12 +71,9 @@ public class Grep extends Command {
         resetExitCode();
         List<GeneralizedFile> arguments = getArgs(args);
         if (arguments != null) {
-            perform(arguments, pattern);
+            buildMe(arguments.size() > 1);
+            perform(arguments);
         }
-    }
-    @Override
-    public void perform(List<GeneralizedFile> args) {
-        perform(args, pattern);
     }
     private boolean recursive() {
         return false;
@@ -92,13 +108,12 @@ public class Grep extends Command {
         }
         return printFileError;
     }
-    public void perform(List<GeneralizedFile> args, String pattern) {
+    public void perform(List<GeneralizedFile> args) {
         if (args.size() < 1) {
             usage();
             setExitCode(2);
         }
 
-        boolean header = args.size() > 1;
         for (GeneralizedFile arg: args) {
             try {
                 if (!arg.exists()) {
@@ -118,7 +133,7 @@ public class Grep extends Command {
                     for (GeneralizedFile son: sons) {
                         try {
                             if (son.exists() && son.isFile()) { // FIXME: Catch this
-                                grep(son, pattern, header); // FIXME: Not this
+                                grep(son); // FIXME: Not this
                             }
                         }
                         catch (IOException e) {
@@ -129,7 +144,7 @@ public class Grep extends Command {
                 }
                 else {
                     try {
-                        grep(arg, pattern, header);
+                        grep(arg);
                     }
                     catch (IOException e) {
                         failRead(arg, e);
@@ -154,21 +169,8 @@ public class Grep extends Command {
     protected String proto() {
         return "[OPT...] PATTERN FILES...";
     }
-    @Override
-    protected List<String> getFileArguments(String[] list) {
-        if (list.length > 0) {
-            this.pattern = list[0];
-        }
-        List<String> res = new ArrayList<String>();
-        for (int i = 1; i < list.length; ++i) {
-            res.add(list[i]);
-        }
-        return res;
-    }
 
-    private void grep(GeneralizedFile file, String pattern, boolean header) throws IOException {
-        // FIXME: Don't need to throw
-        buildMe(pattern, header);
+    private void grep(GeneralizedFile file) throws IOException {
         long lineNumber = 0;
         BufferedReader i = StreamUtils.readStream(AutoGZip.buildInput(file), "UTF-8");
         try {
@@ -244,7 +246,7 @@ public class Grep extends Command {
             matcher = new InvGrepMatcher(matcher);
         }
     }
-    public void buildMe(String pattern, boolean header) {
+    public void buildMe(boolean header) {
         // Don't sort. Dependencies between the building methods.
         buildHeaderPrinter(header);
         buildPrinter();
@@ -258,8 +260,8 @@ public class Grep extends Command {
     private GrepLinePrinter line;
     private GrepHeaderPrinter header;
     private boolean hasMatch;
+    private String pattern;
 
     // Attributes
-    private String pattern;
     private Boolean printFileError;
 }

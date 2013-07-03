@@ -41,9 +41,6 @@ public abstract class Command {
 
     // Abstract methods
     protected abstract Options setOptions();
-    protected List<String> getFileArguments(String[] list) {
-        return Arrays.asList(list);
-    }
     public void perform(String[] args) {
         resetExitCode();
         // Default implementation could be override
@@ -118,29 +115,35 @@ public abstract class Command {
             DCTCLog.setLevel(DCTCLog.Level.DEBUG);
         }
     }
-
+    protected CommandLine getRawArgs() {
+        return line;
+    }
     protected List<GeneralizedFile> getArgs(String[] shellargs) {
         parseCommandLine(shellargs);
-        List<GeneralizedFile> args = new ArrayList<GeneralizedFile>();
-        for (String arg: getFileArguments(line.getArgs())) {
+        return resolveGlobbing(Arrays.asList(getRawArgs().getArgs()));
+    }
+    protected List<GeneralizedFile> resolveGlobbing(List<String> args) {
+        List<GeneralizedFile> gargs = new ArrayList<GeneralizedFile>();
+
+        for (String arg: args) {
             GeneralizedFile garg = build(arg);
             if (GlobalConf.getResolveGlobbing()) {
                 try {
-                    args.addAll(Globbing.resolve(garg, false));
+                    gargs.addAll(Globbing.resolve(garg, false));
                 }
                 catch (IOException e) {
                     error(garg.givenName(),
                           "Couldn't resolve globbing for " + garg.givenName(), e, 2);
-                    args.add(garg);
+                    gargs.add(garg);
                 }
             }
             else {
-                args.add(garg);
+                gargs.add(garg);
             }
         }
-
-        return args;
+        return gargs;
     }
+
     protected void setExitCode(int exitCode) {
         this.exitCode = Math.max(exitCode, this.exitCode);
     }
