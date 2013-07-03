@@ -8,11 +8,11 @@ class InvGrepMatcher implements GrepMatcher {
     public boolean match(String line) {
         return matcher.match(line);
     }
-    public int idx(String line) {
+    public int begin(String line) {
         return -1; // FIXME: Maybe false, did we need to color the
                    // inverse?
     }
-    public int len(String line) {
+    public int end(String line) {
         return 0; // Return the length of the matching group.
     }
 

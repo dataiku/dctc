@@ -6,13 +6,13 @@ class StringGrepMatcher implements GrepMatcher {
     }
 
     public boolean match(String line) {
-        return idx(line) != -1;
+        return begin(line) != -1;
     }
-    public int idx(String line) {
+    public int begin(String line) {
         return line.indexOf(pattern);
     }
-    public int len(String line) {
-        return pattern.length();
+    public int end(String line) {
+        return pattern.length() + line.indexOf(pattern);
     }
 
     // Getters/Setters

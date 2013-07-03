@@ -9,11 +9,11 @@ class IgnoreCaseGrepMatcher implements GrepMatcher {
     public boolean match(String line) {
         return matcher.match(line.toLowerCase());
     }
-    public int idx(String line) {
-        return matcher.idx(line.toLowerCase());
+    public int begin(String line) {
+        return matcher.begin(line.toLowerCase());
     }
-    public int len(String line) {
-        return matcher.len(line.toLowerCase());
+    public int end(String line) {
+        return matcher.end(line.toLowerCase());
     }
 
     // Getters/Setters
