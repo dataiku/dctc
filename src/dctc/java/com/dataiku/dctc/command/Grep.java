@@ -40,6 +40,7 @@ public class Grep extends Command {
         options.addOption("n", "line", false, "Precede each output line by its relative line number in the file, each file starting at line 1. The line number counter shall be reset for each file processed.");
         options.addOption("G", "color", false, "Add color to the output");
         options.addOption("E", false, "Match using java extended regular expressions.");
+        options.addOption("s", false, "Suppress the error messages ordinarily written for nonexistent or unreadable files. Other error messages shall not be suppressed.");
 
         return options;
     }
@@ -60,23 +61,52 @@ public class Grep extends Command {
     private boolean recursive() {
         return false;
     }
+    private void noSuch(GeneralizedFile file) {
+        if (printFileError()) {
+            error(file, "No such file or directory", 2);
+        }
+        else {
+            setExitCode(2);
+        }
+    }
+    private void isADirectory(GeneralizedFile dir) {
+        if (printFileError()) {
+            error(dir, "Is a directory", 2);
+        }
+        else {
+            setExitCode(2);
+        }
+    }
+    private void failRead(GeneralizedFile file, Throwable e) {
+        if (printFileError()) {
+            error(file, "Failed to read file", e, 2);
+        }
+        else {
+            setExitCode(2);
+        }
+    }
+    public boolean printFileError() {
+        if (printFileError == null) {
+            printFileError = !hasOption("s");
+        }
+        return printFileError;
+    }
     public void perform(List<GeneralizedFile> args, String pattern) {
         if (args.size() < 1) {
             usage();
             setExitCode(2);
         }
-        //pattern = formatPattern(pattern);
-        // lowerCase here
+
         boolean header = args.size() > 1;
         for (GeneralizedFile arg: args) {
             try {
                 if (!arg.exists()) {
-                    error(arg.givenName(), "No such file or directory", 2);
+                    noSuch(arg);
                     continue;
                 }
                 if (arg.isDirectory()) {
                     if (!recursive()) {
-                        error(arg.givenName(), "Is a directory", 2);
+                        isADirectory(arg);
                         continue;
                     }
                     List<? extends GeneralizedFile> sons = arg.grecursiveList();
@@ -86,11 +116,12 @@ public class Grep extends Command {
                     }
                     for (GeneralizedFile son: sons) {
                         try {
-                            if (son.exists() && son.isFile()) {
-                                grep(son, pattern, header);
+                            if (son.exists() && son.isFile()) { // FIXME: Catch this
+                                grep(son, pattern, header); // FIXME: Not this
                             }
-                        } catch (IOException e) {
-                            error("Failed to read file : " + son.getAbsolutePath(), e, 2);
+                        }
+                        catch (IOException e) {
+                            failRead(arg, e);
                         }
                     }
 
@@ -98,8 +129,9 @@ public class Grep extends Command {
                 else {
                     try {
                         grep(arg, pattern, header);
-                    } catch (IOException e) {
-                        error("Failed to read file : " + arg.getAbsolutePath(), e, 2);
+                    }
+                    catch (IOException e) {
+                        failRead(arg, e);
                     }
                 }
             }
@@ -134,6 +166,7 @@ public class Grep extends Command {
     }
 
     private void grep(GeneralizedFile file, String pattern, boolean header) throws IOException {
+        // FIXME: Don't need to throw
         buildMe(pattern, header);
         long lineNumber = 0;
         BufferedReader i = StreamUtils.readStream(AutoGZip.buildInput(file), "UTF-8");
@@ -227,4 +260,5 @@ public class Grep extends Command {
 
     // Attributes
     private String pattern;
+    private Boolean printFileError;
 }
