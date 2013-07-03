@@ -4,6 +4,7 @@ import static com.dataiku.dip.utils.PrettyString.eol;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +16,7 @@ import org.apache.commons.io.IOUtils;
 import com.dataiku.dctc.AutoGZip;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dip.utils.DKUFileUtils;
 import com.dataiku.dip.utils.IndentedWriter;
 import com.dataiku.dip.utils.StreamUtils;
 
@@ -47,6 +49,7 @@ public class Grep extends Command {
         longOpt(options, "Specify one or more patterns to be used during the search for input.", "PATTERN", "e", "regexp");
         options.addOption("l", "files-with-matches", false, "print only names of FILEs containing matches");
         options.addOption("x", false, "Consider only input lines that use all characters in the line excluding the terminating <newline> to match an entire fixed string or regular expression to be matching lines.");
+        longOpt(options, "obtain PATTERN from FILE", "FILE", "f", "file");
 
         return options;
     }
@@ -57,6 +60,14 @@ public class Grep extends Command {
         { // Set pattern
             if (hasOption("e")) {
                 pattern = getOptionValue("e");
+            }
+            else if (hasOption("f")) {
+                try {
+                    pattern = DKUFileUtils.fileToString(new File(getOptionValue("f")));
+                }
+                catch (Exception e) {
+                    error("Unexpected error while reading " + getOptionValue("f"), e, 3);
+                }
             }
             else {
                 if (!args.isEmpty()) {
