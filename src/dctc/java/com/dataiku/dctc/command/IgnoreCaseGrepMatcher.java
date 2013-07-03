@@ -12,8 +12,8 @@ class IgnoreCaseGrepMatcher implements GrepMatcher {
     public int begin(String line) {
         return matcher.begin(line.toLowerCase());
     }
-    public int end(String line) {
-        return matcher.end(line.toLowerCase());
+    public int end(int start, String line) {
+        return matcher.end(start, line.toLowerCase());
     }
 
     // Getters/Setters

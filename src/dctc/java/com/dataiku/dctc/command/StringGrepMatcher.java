@@ -6,25 +6,38 @@ class StringGrepMatcher implements GrepMatcher {
     }
 
     public boolean match(String line) {
-        return begin(line) != -1;
+        for (String pat: pattern) {
+            if (line.indexOf(pat) != -1)
+                return true;
+        }
+        return false;
     }
     public int begin(String line) {
+        assert match(line)
+            : "match(line)";
+
+        int res = Integer.MAX_VALUE;
+
         for (String pat: pattern) {
             int indx = line.indexOf(pat);
             if (indx != -1) {
-                return indx;
+                res = Math.min(res, indx);
             }
         }
-        return -1;
+        return res;
     }
-    public int end(String line) {
+    public int end(int start, String line) {
+        assert begin(line) == start
+            : "begin(line) == start";
+
+        int res = start;
         for (String pat: pattern) {
             int indx = line.indexOf(pat);
-            if (indx != -1) {
-                return indx + pat.length();
+            if (indx == start) {
+                res = Math.max(res, indx + pat.length());
             }
         }
-        return -1;
+        return res;
     }
 
     // Getters/Setters

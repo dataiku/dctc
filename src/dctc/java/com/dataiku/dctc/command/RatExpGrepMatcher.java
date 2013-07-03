@@ -9,22 +9,31 @@ class RatExpGrepMatcher implements GrepMatcher {
     }
 
     public int begin(String line) {
+        assert match(line)
+            : "match(line)";
+
+        int res = Integer.MAX_VALUE;
         for (Pattern pat: pattern) {
             Matcher matcher = pat.matcher(line);
             if (matcher.find()) {
-                return matcher.start();
+                res = Math.min(res, matcher.start());
             }
         }
-        return -1;
+        return res;
     }
-    public int end(String line) {
+    public int end(int begin, String line) {
+        assert begin(line) == begin
+            : "begin(line) == begin";
+
+        int res = -1;
+
         for (Pattern pat: pattern) {
             Matcher matcher = pat.matcher(line);
-            if (matcher.find()) {
-                return matcher.end();
+            if (matcher.find() && matcher.start() == begin) {
+                res = Math.max(res, matcher.end());
             }
         }
-        return -1;
+        return res;
     }
     public boolean match(String line) {
         for (Pattern pat: pattern) {

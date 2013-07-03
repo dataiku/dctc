@@ -12,7 +12,7 @@ class InvGrepMatcher implements GrepMatcher {
         return -1; // FIXME: Maybe false, did we need to color the
                    // inverse?
     }
-    public int end(String line) {
+    public int end(int start, String line) {
         return 0; // Return the length of the matching group.
     }
 
