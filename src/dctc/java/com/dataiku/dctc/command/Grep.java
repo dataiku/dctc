@@ -195,10 +195,10 @@ public class Grep extends Command {
         }
     }
     private void buildLinePrinter() {
-        if (count() || !hasOption("n")) {
+        if (count() || !linum()) {
             line = new OffGrepLinePrinter();
         }
-        else if (hasOption("n")) {
+        else if (linum()) {
             if (color()) {
                 line = new ColoredGrepLinePrinter();
             }
@@ -227,17 +227,17 @@ public class Grep extends Command {
         }
     }
     private void buildMatcher(String[] pattern) {
-        if (hasOption("E")) {
+        if (ratexp()) {
             matcher = new RatExpGrepMatcher(pattern);
         }
         else {
             matcher = new StringGrepMatcher(pattern);
         }
 
-        if (hasOption("i")) {
+        if (ignoreCase()) {
             matcher = new IgnoreCaseGrepMatcher(matcher);
         }
-        if (hasOption("v")) {
+        if (inverse()) {
             matcher = new InvGrepMatcher(matcher);
         }
     }
@@ -287,6 +287,30 @@ public class Grep extends Command {
         }
         return count;
     }
+    private boolean inverse() {
+        if (inverse == null) {
+            inverse = hasOption("v");
+        }
+        return inverse;
+    }
+    private boolean ignoreCase() {
+        if (ignoreCase == null) {
+            ignoreCase = hasOption("i");
+        }
+        return ignoreCase;
+    }
+    private boolean ratexp() {
+        if (ratexp == null) {
+            ratexp = hasOption("E");
+        }
+        return ratexp;
+    }
+    private Boolean linum() {
+        if (linum == null) {
+            linum = hasOption("n");
+        }
+        return linum;
+    }
 
     // Attributes
     private GrepPrinter printer;
@@ -300,6 +324,10 @@ public class Grep extends Command {
     private Boolean color;
     private Boolean listing;
     private Boolean count;
+    private Boolean inverse;
+    private Boolean ignoreCase;
+    private Boolean ratexp;
+    private Boolean linum;
 
     private Boolean printFileError;
 }
