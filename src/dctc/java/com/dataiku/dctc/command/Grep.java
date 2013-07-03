@@ -45,6 +45,7 @@ public class Grep extends Command {
         options.addOption("F", "fixed-strings", false, "Match using fixed strings."); // Follow the posix specifications. Don't need it... Really.
         options.addOption("s", "no-messages", false, "Suppress the error messages ordinarily written for nonexistent or unreadable files. Other error messages shall not be suppressed.");
         longOpt(options, "Specify one or more patterns to be used during the search for input.", "PATTERN", "e", "regexp");
+        options.addOption("l", "files-with-matches", false, "print only names of FILEs containing matches");
 
         return options;
     }
@@ -165,7 +166,7 @@ public class Grep extends Command {
                 match(file, ++lineNumber, line);
             }
             printer.end(file);
-            if (hasMatch) {
+            if (!hasMatch) {
                 setExitCode(1);
             }
         }
@@ -185,7 +186,7 @@ public class Grep extends Command {
     private void buildHeaderPrinter(boolean header) {
         if(header) {
             this.header = new SimpleGrepHeaderPrinter();
-            if (hasOption("c")) {
+            if (count()) {
                 this.header = new QuietGrepHeaderPrinter(this.header);
             }
         }
@@ -194,11 +195,11 @@ public class Grep extends Command {
         }
     }
     private void buildLinePrinter() {
-        if (hasOption("c") || !hasOption("n")) {
+        if (count() || !hasOption("n")) {
             line = new OffGrepLinePrinter();
         }
         else if (hasOption("n")) {
-            if (hasOption("G")) {
+            if (color()) {
                 line = new ColoredGrepLinePrinter();
             }
             else {
@@ -207,10 +208,18 @@ public class Grep extends Command {
         }
     }
     private void buildPrinter() {
-        if (hasOption("c")) {
+        if (count()) {
             printer = new CountGrepPrinter(header);
         }
-        else if (hasOption("G")) {
+        else if (listing()) {
+            if (color()) {
+                printer = new ColorFileGrepPrinter();
+            }
+            else {
+                printer = new FileGrepPrinter();
+            }
+        }
+        else if (color()) {
             printer = new ColorGrepPrinter(matcher);
         }
         else {
@@ -260,6 +269,26 @@ public class Grep extends Command {
         }
     }
 
+    private boolean color() {
+        if (color == null) {
+            color = hasOption("G");
+        }
+        return color;
+    }
+    private boolean listing() {
+        if (listing == null) {
+            listing = hasOption("l");
+        }
+        return listing;
+    }
+    private boolean count() {
+        if (count == null) {
+            count = hasOption("c");
+        }
+        return count;
+    }
+
+    // Attributes
     private GrepPrinter printer;
     private GrepMatcher matcher;
     private GrepLinePrinter line;
@@ -267,6 +296,10 @@ public class Grep extends Command {
     private boolean hasMatch;
     private String pattern;
 
-    // Attributes
+    // Options
+    private Boolean color;
+    private Boolean listing;
+    private Boolean count;
+
     private Boolean printFileError;
 }
