@@ -10,13 +10,14 @@ import com.dataiku.dip.utils.Params;
 
 public class FileBuilder {
     public enum Protocol {
-        FTP("ftp", new FTPFileBuilder()),
-        FILE("file", new LocalFileBuilder()),
-        GS("gs", new GSFileBuilder()),
-        HDFS("hdfs", new HdfsFileBuilder()),
-        HTTP("http", new HttpFileBuilder()),
-        S3("s3", new S3FileBuilder()),
-        SSH("ssh", new SshFileBuilder());
+        FTP("ftp", new FTPFileBuilder())
+        , FILE("file", new LocalFileBuilder())
+        , GS("gs", new GSFileBuilder())
+        , HDFS("hdfs", new HdfsFileBuilder())
+        , HTTP("http", new HttpFileBuilder())
+        , S3("s3", new S3FileBuilder())
+        , SSH("ssh", new SshFileBuilder())
+        ;
 
         Protocol(String canonicalName, ProtocolFileBuilder builder) {
             this.canonicalName = canonicalName;
