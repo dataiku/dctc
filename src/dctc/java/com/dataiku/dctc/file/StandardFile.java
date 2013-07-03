@@ -3,6 +3,7 @@ package com.dataiku.dctc.file;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 class StandardFile implements GeneralizedFile {
@@ -14,20 +15,27 @@ class StandardFile implements GeneralizedFile {
         return 1;
     }
     @Override
-    public GeneralizedFile createInstanceFor(String path) {
-        throw new Error("Invalid operation");
+    public StandardFile createInstanceFor(String path) {
+        if (!path.isEmpty()) {
+            throw new Error("Invalid operation");
+        }
+        return this;
     }
     @Override
-    public List<? extends GeneralizedFile> createInstanceFor(List<String> paths) {
-        throw new Error("Invalid operation");
+    public List<StandardFile> createInstanceFor(List<String> paths) {
+        List<StandardFile> list = new ArrayList<StandardFile>();
+        for (String path: paths) {
+            list.add(createInstanceFor(path));
+        }
+        return list;
     }
     @Override
     public GeneralizedFile createSubFile(String path) throws IOException {
-        throw new IOException("Invalid operation");
+        return createInstanceFor(path);
     }
     @Override
     public GeneralizedFile createSubFile(String path, String fileSeparator) throws IOException {
-        throw new IOException("Invalid operation");
+        return createInstanceFor(path);
     }
     @Override
     public boolean exists() throws IOException {
@@ -123,15 +131,12 @@ class StandardFile implements GeneralizedFile {
     }
     @Override
     public void mkdir() throws IOException {
-        throw new IOException("Not a dir");
     }
     @Override
     public void mkdirs() throws IOException {
-        throw new IOException("Not a dir");
     }
     @Override
     public void mkpath() throws IOException {
-        throw new IOException("Not a dir");
     }
     @Override
     public boolean hasOutputStream() {
