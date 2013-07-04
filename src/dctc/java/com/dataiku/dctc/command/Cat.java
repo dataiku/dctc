@@ -46,6 +46,7 @@ public class Cat extends Command {
 
         options.addOption("n", "number", false, "Number all output lines.");
         options.addOption("E", "show-ends", false, "Display $ at end of each line.");
+        options.addOption("s", "squeeze-blank", false, "Suppress repeated empty output lines.");
 
         return options;
     }
@@ -66,4 +67,3 @@ public class Cat extends Command {
     CatAlgorithmFactory fact;
     CatAlgorithm cat;
 }
-
