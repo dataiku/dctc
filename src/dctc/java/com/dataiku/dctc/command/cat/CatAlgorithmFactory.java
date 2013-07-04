@@ -76,7 +76,15 @@ public class CatAlgorithmFactory {
         }
     }
     private CatAlgorithm buildHead(GeneralizedFile file) {
-        return null;
+        return buildHead(file, getHead());
+    }
+    private CatAlgorithm buildHead(GeneralizedFile file, int head) {
+        return new LinumCatAlgorithm(file)
+            .withSelect(new FullCatLineSelector())
+            .withHeader(new EmptyCatHeader())
+            .withPrinter(new SimpleCatPrinter())
+            .withEol(new NewLineEOLCatPrinter())
+            .withStop(new HeadCatStop().withHead(head));
     }
     private CatAlgorithm buildTail(GeneralizedFile file) {
         return null;
@@ -124,10 +132,21 @@ public class CatAlgorithmFactory {
         setSqueezeMultipleEmpty(squeezeMultipleEmpty);
         return this;
     }
+    public int getHead() {
+        return head;
+    }
+    public void setHead(int head) {
+        this.head = head;
+    }
+    public CatAlgorithmFactory withHead(int head) {
+        setHead(head);
+        return this;
+    }
 
     // Attributes
     private boolean squeezeMultipleEmpty;
     private boolean dollar;
     private boolean linum;
     private Algorithm algo;
+    private int head;
 }
