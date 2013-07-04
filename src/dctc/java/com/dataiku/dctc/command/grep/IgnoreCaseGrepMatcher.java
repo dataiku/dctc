@@ -1,4 +1,4 @@
-package com.dataiku.dctc.command;
+package com.dataiku.dctc.command.grep;
 
 class IgnoreCaseGrepMatcher implements GrepMatcher {
     IgnoreCaseGrepMatcher(GrepMatcher matcher) {

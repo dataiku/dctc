@@ -1,4 +1,4 @@
-package com.dataiku.dctc.command;
+package com.dataiku.dctc.command.grep;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

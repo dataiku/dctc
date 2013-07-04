@@ -1,4 +1,4 @@
-package com.dataiku.dctc.command;
+package com.dataiku.dctc.command.grep;
 
 class StringGrepMatcher implements GrepMatcher {
     public StringGrepMatcher(String[] pattern) {

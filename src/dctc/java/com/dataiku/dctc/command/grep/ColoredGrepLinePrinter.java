@@ -1,4 +1,4 @@
-package com.dataiku.dctc.command;
+package com.dataiku.dctc.command.grep;
 
 class ColoredGrepLinePrinter implements GrepLinePrinter {
     public void print(long line) {
