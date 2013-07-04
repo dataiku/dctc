@@ -1,20 +1,18 @@
 package com.dataiku.dctc.command;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.lang.StringUtils;
 
-import com.dataiku.dctc.AutoGZip;
 import com.dataiku.dctc.command.abs.Command;
+import com.dataiku.dctc.command.cat.CatAlgorithm;
+import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
+import com.dataiku.dctc.command.cat.CatAlgorithmFactory.Algorithm;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.StandardFile;
 import com.dataiku.dip.utils.IndentedWriter;
-import com.dataiku.dip.utils.StreamUtils;
 
 public class Head extends Command {
     public String tagline() {
@@ -25,51 +23,63 @@ public class Head extends Command {
     }
     protected Options setOptions() {
         Options options = new Options();
-        OptionBuilder.withArgName("number");
-        OptionBuilder.hasArg();
-        OptionBuilder.withLongOpt("lines");
-        OptionBuilder.withDescription("Display the first `number' lines of each file");
-        options.addOption(OptionBuilder.create("n"));
+
+        longOpt(options, "Display the first `number' lines of each file", "n", "lines", "number");
+        options.addOption("q", "quiet", false, "Never print headers giving file names");
+
         return options;
     }
 
     @Override
     public void perform(List<GeneralizedFile> args) {
-        // Sanity check
-        numberOfLines();
         if (args.size() == 0) {
-            performStdHead();
-            return;
+            // Compute a std head.
+
+            args.add(new StandardFile());
         }
-        boolean header = args.size() > 1;
-        for (GeneralizedFile arg: args) {
+
+        CatAlgorithmFactory fact = new CatAlgorithmFactory()
+            .withAlgo(Algorithm.HEAD)
+            .withHead(numberOfLines());
+
+        boolean header = args.size() > 1 && !getQuiet();
+        boolean first = true;
+
+        for(GeneralizedFile arg: args) {
             if (header) {
+                if (!first) {
+                    System.out.println();
+                }
+                else {
+                    first = false;
+                }
                 header(arg);
             }
-            try {
-                head(AutoGZip.buildInput(arg));
-            } catch (IOException e) {
-                error(e.getMessage(), 3);
-            }
+            CatAlgorithm head = fact.build(arg);
+            head.run();
+            setExitCode(head.getExitCode());
         }
     }
     @Override
     public String cmdname() {
         return "head";
     }
-
+    public boolean getQuiet() {
+        if (quiet == null) {
+            quiet = hasOption("q");
+        }
+        return quiet;
+    }
     public int numberOfLines() {
+        // FIXME: Buggy, -1 and +1 is not a number for StringUtils.
         if (hasOption("n")) {
             String val = getOptionValue("n");
             if (!StringUtils.isNumeric(val)) {
                 throw new UserException("Invalid value for -n: " + val + ", expected an integer");
             }
-            int i = Integer.parseInt(val);
-            if (i < 0) {
-                throw new UserException("Invalid value for -n: " + val + ", must be positive");
-            }
-            return i;
-        } else {
+            return Integer.parseInt(val);
+        }
+        else {
             return DEFAULT_LINE_NUMBER;
         }
     }
@@ -80,40 +90,13 @@ public class Head extends Command {
     }
 
     // Private
-    private void performStdHead() {
-        head(System.in);
-    }
-    private void head(InputStream in) {
-        try {
-            int n = numberOfLines();
-            BufferedReader br = StreamUtils.readStream(in);
-            try {
-                while(true) {
-                    if (n-- == 0) {
-                        break;
-                    }
-                    String line = br.readLine();
-                    if (line == null) {
-                        break;
-                    }
-                    System.out.println(line);
-                }
-            } finally {
-                br.close();
-            }
-        } catch (IOException e) {
-            error(e.getMessage(), 1);
-        }
-    }
-    private void header(GeneralizedFile arg, boolean first) {
-        if (!first) {
-            System.out.println();
-        }
+    private void header(GeneralizedFile arg) {
         System.out.print("==> ");
         System.out.print(arg.givenName());
         System.out.println(" <==");
     }
 
     // Attributes
+    private Boolean quiet;
     private static final int DEFAULT_LINE_NUMBER = 10;
 }
