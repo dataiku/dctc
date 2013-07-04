@@ -5,6 +5,12 @@ public class IntegerUtils {
         if (v.isEmpty()) {
             return 0;
         }
+        if (v.startsWith("+")) {
+            return toInt(v.substring(1));
+        }
+        if (v.startsWith("-")) {
+            return - toInt(v.substring(1));
+        }
 
         int base = 10;
         if (v.startsWith("0x") || v.startsWith("0X")) {
