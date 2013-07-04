@@ -1,5 +1,7 @@
 package com.dataiku.dip.utils;
 
+import java.util.regex.Pattern;
+
 public class IntegerUtils {
     static public int toInt(String v) {
         if (v.isEmpty()) {
@@ -27,5 +29,20 @@ public class IntegerUtils {
         v = v.replaceAll("_", ""); // Allow to write 1_000, 1_00_00...
 
         return Integer.parseInt(v, base);
+    }
+    static public boolean isNumeric(String val) {
+        String baseRatExp;
+        val = val.toLowerCase();
+        if (val.startsWith("0x")) {
+            baseRatExp = "^[-+]*0x[0-9a-f]$";
+        }
+        else if (val.startsWith("0")) {
+            baseRatExp = "^[-+]*0[01]$";
+        }
+        else {
+            baseRatExp = "^[-+]*[0-9]*$";
+        }
+
+        return Pattern.compile(baseRatExp).matcher(val).find();
     }
 }
