@@ -2,16 +2,14 @@ package com.dataiku.dctc.command;
 
 import static com.dataiku.dip.utils.PrettyString.scat;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import org.apache.commons.cli.Options;
-import org.apache.commons.io.IOUtils;
 
-import com.dataiku.dctc.AutoGZip;
 import com.dataiku.dctc.command.abs.Command;
+import com.dataiku.dctc.command.cat.CatAlgorithm;
+import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
+import com.dataiku.dctc.command.cat.CatAlgorithmFactory.Algorithm;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
@@ -27,9 +25,14 @@ public class Cat extends Command {
     // Public
     @Override
     public void perform(List<GeneralizedFile> args) {
-        // No option
+        // Set the option to the factory.
+        fact = new CatAlgorithmFactory()
+            .withAlgo(Algorithm.CAT)
+            .withLinum(hasOption("n"))
+            .withDollar(hasOption("E"));
+
         for (GeneralizedFile arg: args) {
-            print(arg);
+            run(arg);
         }
     }
     @Override
@@ -40,6 +43,10 @@ public class Cat extends Command {
     @Override
     protected Options setOptions() {
         Options options = new Options();
+
+        options.addOption("n", "number", false, "Number all output lines.");
+        options.addOption("E", "show-ends", false, "Display $ at end of each line.");
+
         return options;
     }
     @Override
@@ -47,27 +54,16 @@ public class Cat extends Command {
         return "[OPT...] FILES...";
     }
 
-    // Private
-    private void print(GeneralizedFile file) {
-        InputStream i;
-        try {
-            i = AutoGZip.buildInput(file);
-        }
-        catch (FileNotFoundException e) {
-            error (file.givenName(), "No such file or directory", 1);
-            return;
-        }
-        catch (IOException e) {
-            error(file.givenName(), "Could not open file: " + e.getMessage(), e, 2);
-            return;
-        }
-        try {
-            IOUtils.copyLarge(i, System.out);
-            i.close();
-        }
-        catch (IOException e) {
-            error("Unexpected error while reading" + file.givenName(), e, 3);
-            return;
-        }
+    private void run(GeneralizedFile file) {
+        // Run cat.
+        CatAlgorithm algo = fact.build(file);
+
+        algo.run();
+        setExitCode(algo.getExitCode());
     }
+
+    // Attributes
+    CatAlgorithmFactory fact;
+    CatAlgorithm cat;
 }
+
