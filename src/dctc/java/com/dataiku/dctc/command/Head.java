@@ -105,7 +105,10 @@ public class Head extends Command {
             error(e.getMessage(), 1);
         }
     }
-    private void header(GeneralizedFile arg) {
+    private void header(GeneralizedFile arg, boolean first) {
+        if (!first) {
+            System.out.println();
+        }
         System.out.print("==> ");
         System.out.print(arg.givenName());
         System.out.println(" <==");
