@@ -3,7 +3,6 @@ package com.dataiku.dctc.command;
 import java.util.List;
 
 import org.apache.commons.cli.Options;
-import org.apache.commons.lang.StringUtils;
 
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.command.cat.CatAlgorithm;
@@ -13,6 +12,7 @@ import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dctc.file.StandardFile;
 import com.dataiku.dip.utils.IndentedWriter;
+import com.dataiku.dip.utils.IntegerUtils;
 
 public class Head extends Command {
     public String tagline() {
@@ -74,10 +74,10 @@ public class Head extends Command {
         // FIXME: Buggy, -1 and +1 is not a number for StringUtils.
         if (hasOption("n")) {
             String val = getOptionValue("n");
-            if (!StringUtils.isNumeric(val)) {
+            if (!IntegerUtils.isNumeric(val)) {
                 throw new UserException("Invalid value for -n: " + val + ", expected an integer");
             }
-            return Integer.parseInt(val);
+            return IntegerUtils.toInt(val);
         }
         else {
             return DEFAULT_LINE_NUMBER;
