@@ -79,12 +79,24 @@ public class CatAlgorithmFactory {
         return buildHead(file, getHead());
     }
     private CatAlgorithm buildHead(GeneralizedFile file, int head) {
-        return new LinumCatAlgorithm(file)
-            .withSelect(new FullCatLineSelector())
-            .withPrinter(new SimpleCatPrinter()
-                         .withHeader(new EmptyCatHeader())
-                         .withEol(new NewLineEOLCatPrinter()))
-            .withStop(new HeadCatStop().withHead(head));
+        if (head > 0) {
+            return new LinumCatAlgorithm(file)
+                .withSelect(new FullCatLineSelector())
+                .withPrinter(new SimpleCatPrinter()
+                             .withHeader(new EmptyCatHeader())
+                             .withEol(new NewLineEOLCatPrinter()))
+                .withStop(new HeadCatStop().withHead(head));
+        }
+        else {
+            return new LinumCatAlgorithm(file)
+                .withSelect(new FullCatLineSelector())
+                .withPrinter(new HeadCatPrinter()
+                             .withHead(-head)
+                             .withHeader(new EmptyCatHeader())
+                             .withEol(new NewLineEOLCatPrinter()))
+                .withStop(new ContinueCatStop());
+
+        }
     }
     private CatAlgorithm buildTail(GeneralizedFile file) {
         return null;
