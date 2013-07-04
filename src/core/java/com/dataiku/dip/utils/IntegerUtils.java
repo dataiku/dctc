@@ -26,7 +26,7 @@ public class IntegerUtils {
         else {
             base = 10;
         }
-        v = v.replaceAll("_", ""); // Allow to write 1_000, 1_00_00...
+        v = v.replaceAll("_|,", ""); // Allow to write 1_000, 1_00_00 or 1,000...
 
         return Integer.parseInt(v, base);
     }
@@ -34,13 +34,13 @@ public class IntegerUtils {
         String baseRatExp;
         val = val.toLowerCase();
         if (val.startsWith("0x")) {
-            baseRatExp = "^[-+]*0x[0-9a-f]$";
+            baseRatExp = "^[-+]*0x[0-9a-f_,]$";
         }
         else if (val.startsWith("0")) {
-            baseRatExp = "^[-+]*0[01]$";
+            baseRatExp = "^[-+]*0[01_,]$";
         }
         else {
-            baseRatExp = "^[-+]*[0-9]*$";
+            baseRatExp = "^[-+]*[0-9_,]*$";
         }
 
         return Pattern.compile(baseRatExp).matcher(val).find();
