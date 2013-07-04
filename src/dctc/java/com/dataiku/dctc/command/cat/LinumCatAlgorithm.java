@@ -22,7 +22,7 @@ class LinumCatAlgorithm extends AbstractCatAlgorithm {
         BufferedReader reader = StreamUtils.readStream(in);
         String line;
         try {
-            while ((line = reader.readLine()) != null) {
+            while (!stop.stop() && ((line = reader.readLine()) != null)) {
                 if (select.needPrint(line)) {
                     header.print();
                     printer.print(line);
@@ -75,10 +75,21 @@ class LinumCatAlgorithm extends AbstractCatAlgorithm {
         setEol(eol);
         return this;
     }
+    public CatStop getStop() {
+        return stop;
+    }
+    public void setStop(CatStop stop) {
+        this.stop = stop;
+    }
+    public LinumCatAlgorithm withStop(CatStop stop) {
+        setStop(stop);
+        return this;
+    }
 
     // Attributes
     private CatLineSelector select;
     private CatHeader header;
     private CatPrinter printer;
     private EOLCatPrinter eol;
+    private CatStop stop;
 }

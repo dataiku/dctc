@@ -62,6 +62,9 @@ public class CatAlgorithmFactory {
                     cat.setEol(new NewLineEOLCatPrinter());
                 }
             }
+            { // Don't stop the cat
+                cat.setStop(new ContinueCatStop());
+            }
 
             return cat;
         }
