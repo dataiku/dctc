@@ -34,13 +34,15 @@ public class CatAlgorithmFactory {
                                   boolean dollar, boolean squeezeMultipleEmpty) {
         if (linum || dollar || squeezeMultipleEmpty) {
             LinumCatAlgorithm cat = new LinumCatAlgorithm(file);
-
+            { // Set the cat printer
+                cat.setPrinter(new SimpleCatPrinter());
+            }
             { // Set Header
                 if (linum) {
-                    cat.setHeader(new LinumCatHeader());
+                    cat.getPrinter().setHeader(new LinumCatHeader());
                 }
                 else {
-                    cat.setHeader(new EmptyCatHeader());
+                    cat.getPrinter().setHeader(new EmptyCatHeader());
                 }
             }
             { // Set the line selector
@@ -51,15 +53,13 @@ public class CatAlgorithmFactory {
                     cat.setSelect(new FullCatLineSelector());
                 }
             }
-            { // Set the cat printer
-                cat.setPrinter(new SimpleCatPrinter());
-            }
+
             { // Set the end of line printer
                 if (dollar) {
-                    cat.setEol(new DollarEOLCatPrinter());
+                    cat.getPrinter().setEol(new DollarEOLCatPrinter());
                 }
                 else {
-                    cat.setEol(new NewLineEOLCatPrinter());
+                    cat.getPrinter().setEol(new NewLineEOLCatPrinter());
                 }
             }
             { // Don't stop the cat
@@ -81,9 +81,9 @@ public class CatAlgorithmFactory {
     private CatAlgorithm buildHead(GeneralizedFile file, int head) {
         return new LinumCatAlgorithm(file)
             .withSelect(new FullCatLineSelector())
-            .withHeader(new EmptyCatHeader())
-            .withPrinter(new SimpleCatPrinter())
-            .withEol(new NewLineEOLCatPrinter())
+            .withPrinter(new SimpleCatPrinter()
+                         .withHeader(new EmptyCatHeader())
+                         .withEol(new NewLineEOLCatPrinter()))
             .withStop(new HeadCatStop().withHead(head));
     }
     private CatAlgorithm buildTail(GeneralizedFile file) {

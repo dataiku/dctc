@@ -24,9 +24,7 @@ class LinumCatAlgorithm extends AbstractCatAlgorithm {
         try {
             while (!stop.stop() && ((line = reader.readLine()) != null)) {
                 if (select.needPrint(line)) {
-                    header.print();
                     printer.print(line);
-                    eol.print();
                 }
             }
         }
@@ -45,16 +43,6 @@ class LinumCatAlgorithm extends AbstractCatAlgorithm {
         setSelect(select);
         return this;
     }
-    public CatHeader getHeader() {
-        return header;
-    }
-    public void setHeader(CatHeader header) {
-        this.header = header;
-    }
-    public LinumCatAlgorithm withHeader(CatHeader header) {
-        setHeader(header);
-        return this;
-    }
     public CatPrinter getPrinter() {
         return printer;
     }
@@ -63,16 +51,6 @@ class LinumCatAlgorithm extends AbstractCatAlgorithm {
     }
     public LinumCatAlgorithm withPrinter(CatPrinter printer) {
         setPrinter(printer);
-        return this;
-    }
-    public EOLCatPrinter getEol() {
-        return eol;
-    }
-    public void setEol(EOLCatPrinter eol) {
-        this.eol = eol;
-    }
-    public LinumCatAlgorithm withEol(EOLCatPrinter eol) {
-        setEol(eol);
         return this;
     }
     public CatStop getStop() {
@@ -88,8 +66,6 @@ class LinumCatAlgorithm extends AbstractCatAlgorithm {
 
     // Attributes
     private CatLineSelector select;
-    private CatHeader header;
     private CatPrinter printer;
-    private EOLCatPrinter eol;
     private CatStop stop;
 }
