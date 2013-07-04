@@ -52,17 +52,20 @@ public class Cat extends Command {
         InputStream i;
         try {
             i = AutoGZip.buildInput(file);
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             error (file.givenName(), "No such file or directory", 1);
             return;
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             error(file.givenName(), "Could not open file: " + e.getMessage(), e, 2);
             return;
         }
         try {
             IOUtils.copyLarge(i, System.out);
             i.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             error("Unexpected error while reading" + file.givenName(), e, 3);
             return;
         }

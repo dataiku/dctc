@@ -139,11 +139,11 @@ public class Cmp extends Command {
             stream = AutoGZip.buildInput(file);
         }
         catch (FileNotFoundException e) {
-            error (file.givenName(), "No such file or directory", 2);
+            error (file, "No such file or directory", 2);
             return null;
         }
         catch (IOException e) {
-            error(file.givenName(), "Could not open file: " + e.getMessage(), e, 2);
+            error(file, "Could not open file: " + e.getMessage(), e, 2);
             return null;
         }
 
