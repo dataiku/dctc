@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-class StandardFile implements GeneralizedFile {
+public class StandardFile implements GeneralizedFile {
     @Override
     public int compareTo(GeneralizedFile arg0) {
         if (arg0 instanceof StandardFile) {
