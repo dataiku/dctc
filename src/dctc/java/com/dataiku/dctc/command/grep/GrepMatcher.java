@@ -1,6 +1,6 @@
 package com.dataiku.dctc.command.grep;
 
-interface GrepMatcher {
+public interface GrepMatcher {
     public boolean match(String line);
     public int begin(String line);
     public int end(int begin, String line);
