@@ -15,6 +15,7 @@ import org.apache.commons.io.IOUtils;
 
 import com.dataiku.dctc.AutoGZip;
 import com.dataiku.dctc.command.abs.Command;
+import com.dataiku.dctc.command.grep.*;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.DKUFileUtils;
 import com.dataiku.dip.utils.IndentedWriter;
@@ -151,11 +152,22 @@ public class Grep extends Command {
     }
 
     public void buildMe(boolean header) {
-        // Don't sort. Dependencies between the building methods.
-        buildHeaderPrinter(header);
-        buildMatcher(pattern.split(eol()));
-        buildPrinter();
-        buildLinePrinter();
+        GrepStrategyFactory fact = new GrepStrategyFactory()
+            .withInverse(!hasOption("v"))
+            .withFullLine(hasOption("x"))
+            .withIgnoreCase(hasOption("i"))
+            .withLinum(hasOption("n"))
+            .withRatexp(hasOption("E"))
+            .withHeader(header)
+            .withColor(hasOption("G"))
+            .withListing(hasOption("l"))
+            .withCount(hasOption("c"))
+            ;
+        matcher = fact.buildMatcher(pattern.split(eol()));
+        this.header = fact.buildHeaderPrinter();
+        line = fact.buildLinePrinter();
+        printer = fact.buildPrinter(this.header, matcher);
+
         hasMatch = false;
     }
 
@@ -195,67 +207,6 @@ public class Grep extends Command {
         }
     }
 
-    private void buildHeaderPrinter(boolean header) {
-        if(header) {
-            this.header = new SimpleGrepHeaderPrinter();
-            if (count()) {
-                this.header = new QuietGrepHeaderPrinter(this.header);
-            }
-        }
-        else {
-            this.header = new QuietGrepHeaderPrinter(null);
-        }
-    }
-    private void buildLinePrinter() {
-        if (count() || !linum()) {
-            line = new OffGrepLinePrinter();
-        }
-        else if (linum()) {
-            if (color()) {
-                line = new ColoredGrepLinePrinter();
-            }
-            else {
-                line = new OnGrepLinePrinter();
-            }
-        }
-    }
-    private void buildPrinter() {
-        if (count()) {
-            printer = new CountGrepPrinter(header);
-        }
-        else if (listing()) {
-            if (color()) {
-                printer = new ColorFileGrepPrinter();
-            }
-            else {
-                printer = new FileGrepPrinter();
-            }
-        }
-        else if (color()) {
-            printer = new ColorGrepPrinter(matcher);
-        }
-        else {
-            printer = new SimpleGrepPrinter();
-        }
-    }
-    private void buildMatcher(String[] pattern) {
-        if (ratexp()) {
-            matcher = new RatExpGrepMatcher(pattern);
-        }
-        else {
-            matcher = new StringGrepMatcher(pattern);
-        }
-
-        if (ignoreCase()) {
-            matcher = new IgnoreCaseGrepMatcher(matcher);
-        }
-        if (fullLine()) {
-            matcher = new FullLineGrepMatcher(matcher);
-        }
-        if (inverse()) {
-            matcher = new InvGrepMatcher(matcher);
-        }
-    }
     private boolean recursive() {
         return false;
     }
@@ -284,55 +235,6 @@ public class Grep extends Command {
         }
     }
 
-    private boolean color() {
-        if (color == null) {
-            color = hasOption("G");
-        }
-        return color;
-    }
-    private boolean listing() {
-        if (listing == null) {
-            listing = hasOption("l");
-        }
-        return listing;
-    }
-    private boolean count() {
-        if (count == null) {
-            count = hasOption("c");
-        }
-        return count;
-    }
-    private boolean inverse() {
-        if (inverse == null) {
-            inverse = hasOption("v");
-        }
-        return inverse;
-    }
-    private boolean ignoreCase() {
-        if (ignoreCase == null) {
-            ignoreCase = hasOption("i");
-        }
-        return ignoreCase;
-    }
-    private boolean ratexp() {
-        if (ratexp == null) {
-            ratexp = hasOption("E");
-        }
-        return ratexp;
-    }
-    private boolean linum() {
-        if (linum == null) {
-            linum = hasOption("n");
-        }
-        return linum;
-    }
-    private boolean fullLine() {
-        if (fullLine == null) {
-            fullLine = hasOption("x");
-        }
-        return fullLine;
-    }
-
     // Attributes
     private GrepPrinter printer;
     private GrepMatcher matcher;
@@ -340,16 +242,6 @@ public class Grep extends Command {
     private GrepHeaderPrinter header;
     private boolean hasMatch;
     private String pattern;
-
-    // Options
-    private Boolean color;
-    private Boolean listing;
-    private Boolean count;
-    private Boolean inverse;
-    private Boolean ignoreCase;
-    private Boolean ratexp;
-    private Boolean linum;
-    private Boolean fullLine;
 
     private Boolean printFileError;
 }
