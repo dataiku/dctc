@@ -30,6 +30,7 @@ public class IntegerUtils {
 
         return Integer.parseInt(v, base);
     }
+    // Could add unit if we parse hexadecimal numbers 1K -> 0x1,000
     static public boolean isNumeric(String val) {
         String baseRatExp;
         val = val.toLowerCase();
