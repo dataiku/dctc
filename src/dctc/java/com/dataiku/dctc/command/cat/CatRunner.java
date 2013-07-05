@@ -4,10 +4,12 @@ import java.util.List;
 
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dctc.file.StandardFile;
+import com.dataiku.dctc.utils.ExitCode;
 
 public class CatRunner {
 
-    public int perform(List<GeneralizedFile> args, boolean printHeader, CatAlgorithmFactory fact) {
+    public void perform(List<GeneralizedFile> args, boolean printHeader,
+                        CatAlgorithmFactory fact, ExitCode exitCode) {
         if (args.size() == 0) {
             args.add(new StandardFile());
         }
@@ -25,26 +27,30 @@ public class CatRunner {
                 header(arg);
             }
             CatAlgorithm runner = fact.build(arg);
+            runner.setExitCode(exitCode);
             runner.run();
             setExitCode(runner.getExitCode());
         }
-
-        return getExitCode();
     }
 
     // Getters-Setters
-    public int getExitCode() {
+    public ExitCode getExitCode() {
         return exitCode;
     }
+    public void setExitCode(ExitCode exitCode) {
+        this.exitCode = exitCode;
+    }
+    public CatRunner withExitCode(ExitCode exitCode) {
+        setExitCode(exitCode);
+        return this;
+    }
+
     public void setExitCode(int exitCode) {
-        this.exitCode = Math.max(this.exitCode, exitCode);
+        this.exitCode.setExitCode(exitCode);
     }
     public CatRunner withExitCode(int exitCode) {
         setExitCode(exitCode);
         return this;
-    }
-    public void resetExitCode() {
-        this.exitCode = 0;
     }
 
     // Privates
@@ -53,5 +59,6 @@ public class CatRunner {
     }
 
     // Attributes
-    private int exitCode;
+    private ExitCode exitCode;
 }
+

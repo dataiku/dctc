@@ -6,13 +6,13 @@ import java.io.InputStream;
 
 import com.dataiku.dctc.AutoGZip;
 import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.utils.ExitCode;
 
 abstract class AbstractCatAlgorithm implements CatAlgorithm {
     public AbstractCatAlgorithm(GeneralizedFile file) {
         this.file = file;
     }
     public void run() {
-        resetExitCode();
         _run(file);
     }
 
@@ -42,19 +42,6 @@ abstract class AbstractCatAlgorithm implements CatAlgorithm {
     }
 
     // Getters-Setters
-    public int getExitCode() {
-        return exitCode;
-    }
-    public void setExitCode(int exitCode) {
-        this.exitCode = Math.max(this.exitCode, exitCode);
-    }
-    public AbstractCatAlgorithm withExitCode(int exitCode) {
-        setExitCode(exitCode);
-        return this;
-    }
-    public void resetExitCode() {
-        this.exitCode = 0;
-    }
     public GeneralizedFile getFile() {
         return file;
     }
@@ -65,8 +52,21 @@ abstract class AbstractCatAlgorithm implements CatAlgorithm {
         setFile(file);
         return this;
     }
+    public ExitCode getExitCode() {
+        return exit;
+    }
+    public void setExitCode(ExitCode exit) {
+        this.exit = exit;
+    }
+    public AbstractCatAlgorithm withExitCode(ExitCode exit) {
+        setExitCode(exit);
+        return this;
+    }
+    public void setExitCode(int exitCode) {
+        exit.setExitCode(exitCode);
+    }
 
     // Attributes
     private GeneralizedFile file;
-    private int exitCode;
+    private ExitCode exit;
 }
