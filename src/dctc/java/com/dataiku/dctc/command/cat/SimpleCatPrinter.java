@@ -6,4 +6,6 @@ class SimpleCatPrinter extends AbstractCatPrinter {
         System.out.print(line);
         getEol().print();
     }
+    public void end() {
+    }
 }

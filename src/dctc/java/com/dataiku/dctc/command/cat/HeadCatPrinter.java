@@ -11,6 +11,8 @@ class HeadCatPrinter extends AbstractCatPrinter {
 
         idx = (idx + 1) % head;
     }
+    public void end() {
+    }
 
     public int getHead() {
         return head;

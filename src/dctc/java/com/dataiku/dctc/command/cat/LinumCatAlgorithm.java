@@ -27,6 +27,7 @@ class LinumCatAlgorithm extends AbstractCatAlgorithm {
                     printer.print(line);
                 }
             }
+            printer.end();
         }
         catch (IOException e) {
             yell("Unexpected error", e, 2);
