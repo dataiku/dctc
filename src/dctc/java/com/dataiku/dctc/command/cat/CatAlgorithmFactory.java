@@ -68,7 +68,7 @@ public class CatAlgorithmFactory {
         }
     }
     private CatAlgorithm buildHead(GeneralizedFile file) {
-        return buildHead(file, getHead());
+        return buildHead(file, getNbLine());
     }
     private CatAlgorithm buildHead(GeneralizedFile file, int head) {
         if (head > 0) {
@@ -136,14 +136,14 @@ public class CatAlgorithmFactory {
         setSqueezeMultipleEmpty(squeezeMultipleEmpty);
         return this;
     }
-    public int getHead() {
-        return head;
+    public int getNbLine() {
+        return nbLine;
     }
-    public void setHead(int head) {
-        this.head = head;
+    public void setNbLine(int nbLine) {
+        this.nbLine = nbLine;
     }
-    public CatAlgorithmFactory withHead(int head) {
-        setHead(head);
+    public CatAlgorithmFactory withNbLine(int nbLine) {
+        setNbLine(nbLine);
         return this;
     }
 
@@ -152,5 +152,5 @@ public class CatAlgorithmFactory {
     private boolean dollar;
     private boolean linum;
     private AlgorithmType algo;
-    private int head;
+    private int nbLine;
 }

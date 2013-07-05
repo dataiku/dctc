@@ -40,7 +40,7 @@ public class Head extends Command {
 
         CatAlgorithmFactory fact = new CatAlgorithmFactory()
             .withAlgo(AlgorithmType.HEAD)
-            .withHead(numberOfLines());
+            .withNbLine(numberOfLines());
 
         boolean header = args.size() > 1 && !getQuiet();
         boolean first = true;
