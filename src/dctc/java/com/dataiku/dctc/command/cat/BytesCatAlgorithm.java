@@ -33,7 +33,7 @@ class BytesCatAlgorithm extends AbstractCatAlgorithm {
             IOUtils.copy(i, System.out);
         }
         catch (IOException e) {
-            // lol
+            yell("Unexpected error while reading " + file.givenName(), e, 2);
         }
     }
 

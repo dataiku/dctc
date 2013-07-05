@@ -71,7 +71,7 @@ public class CatAlgorithmFactory {
     private CatAlgorithm buildHead(GeneralizedFile file) {
         return buildHead(file, getNbLine());
     }
-    private CatAlgorithm buildHead(GeneralizedFile file, int head) {
+    private CatAlgorithm buildHead(GeneralizedFile file, long head) {
         if (head > 0) {
             return new LinumCatAlgorithm(file)
                 .withSelect(new FullCatLineSelector())
@@ -92,26 +92,33 @@ public class CatAlgorithmFactory {
         }
     }
     private CatAlgorithm buildTail(GeneralizedFile file) {
-        return buildTail(file, getNbLine());
+        return buildTail(file, getNbLine(), getIsLineAlgo());
     }
-    private CatAlgorithm buildTail(GeneralizedFile file, int nbLine) {
-        if (file.canGetLastLines()) {
-            return new LastestLineCatAlgorithm(file)
-                .withNbLine(nbLine);
-        } else if (file.canGetPartialFile()) {
-            return new PartialFileTailAlgorithm(file)
-                .withNbLine(nbLine);
+    private CatAlgorithm buildTail(GeneralizedFile file, long number, boolean isLine) {
+        if (isLine) {
+            if (file.canGetLastLines()) {
+                return new LastestLineCatAlgorithm(file)
+                    .withNbLine(number);
+            } else if (file.canGetPartialFile()) {
+                return new PartialFileTailAlgorithm(file)
+                    .withNbLine(number);
+            }
+            else {
+
+                // Should be called only for full read text.
+                return new LinumCatAlgorithm(file)
+                    .withSelect(new FullCatLineSelector())
+                    .withPrinter(new TailCatPrinter()
+                                 .withTail(nbLine)
+                                 .withHeader(new EmptyCatHeader())
+                                 .withEol(new NewLineEOLCatPrinter()))
+                    .withStop(new ContinueCatStop());
+            }
         }
         else {
-
-            // Should be called only for full read text.
-            return new LinumCatAlgorithm(file)
-                .withSelect(new FullCatLineSelector())
-                .withPrinter(new TailCatPrinter()
-                             .withTail(nbLine)
-                             .withHeader(new EmptyCatHeader())
-                             .withEol(new NewLineEOLCatPrinter()))
-                .withStop(new ContinueCatStop());
+            // bytes
+            return new BytesCatAlgorithm(file)
+                .withSkip(new CatByteSkip().withSkip(number));
         }
     }
 
@@ -157,14 +164,24 @@ public class CatAlgorithmFactory {
         setSqueezeMultipleEmpty(squeezeMultipleEmpty);
         return this;
     }
-    public int getNbLine() {
+    public long getNbLine() {
         return nbLine;
     }
-    public void setNbLine(int nbLine) {
+    public void setNbLine(long nbLine) {
         this.nbLine = nbLine;
     }
-    public CatAlgorithmFactory withNbLine(int nbLine) {
+    public CatAlgorithmFactory withNbLine(long nbLine) {
         setNbLine(nbLine);
+        return this;
+    }
+    public boolean getIsLineAlgo() {
+        return isLineAlgo;
+    }
+    public void setIsLineAlgo(boolean isLineAlgo) {
+        this.isLineAlgo = isLineAlgo;
+    }
+    public CatAlgorithmFactory withIsLineAlgo(boolean isLineAlgo) {
+        setIsLineAlgo(isLineAlgo);
         return this;
     }
 
@@ -173,5 +190,6 @@ public class CatAlgorithmFactory {
     private boolean dollar;
     private boolean linum;
     private AlgorithmType algo;
-    private int nbLine;
+    private long nbLine;
+    private boolean isLineAlgo;
 }
