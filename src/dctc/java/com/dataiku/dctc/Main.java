@@ -38,6 +38,7 @@ import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.configuration.StructuredConf;
 import com.dataiku.dctc.exception.UserException;
+import com.dataiku.dctc.utils.ExitCode;
 import com.dataiku.dip.utils.IndentedWriter;
 import com.dataiku.dip.utils.StdOut;
 
@@ -201,11 +202,13 @@ public class Main {
                     else if (cmd.cmdname().equals("alias")) {
                         ((Alias) cmd).setConf(conf);
                     }
+                    ExitCode exit = new ExitCode();
+                    cmd.setExitCode(exit);
                     cmd.setFileBuilder(conf.getFileBuilder());
                     try {
                         cmd.perform(cmdargs);
                     } catch (Command.EndOfCommand e) {}
-                    System.exit(cmd.getExitCode());
+                    System.exit(exit.getExitCode());
                 }
                 System.err.println("Unknown command: " + usercmd);
             }

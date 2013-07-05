@@ -53,8 +53,7 @@ public class Tail extends Command {
 
         CatRunner runner = new CatRunner();
 
-        runner.perform(args, true, fact);
-        setExitCode(runner.getExitCode());
+        runner.perform(args, true, fact, getExitCode());
     }
     private void performByte(List<GeneralizedFile> args) {
         for (GeneralizedFile arg: args) {

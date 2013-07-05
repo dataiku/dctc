@@ -36,10 +36,7 @@ public class Head extends Command {
             .withNbLine(numberOfLines());
 
         CatRunner runner = new CatRunner();
-        runner.perform(args, !getQuiet(), fact);
-
-        setExitCode(runner.getExitCode());
-
+        runner.perform(args, !getQuiet(), fact, getExitCode());
     }
     @Override
     public String cmdname() {

@@ -1,5 +1,7 @@
 package com.dataiku.dctc.command.abs;
 
+import static com.dataiku.dip.utils.PrettyString.scat;
+
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -23,9 +25,8 @@ import com.dataiku.dctc.Main;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.file.FileBuilder;
 import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.utils.ExitCode;
 import com.dataiku.dip.utils.IndentedWriter;
-
-import static com.dataiku.dip.utils.PrettyString.scat;
 
 public abstract class Command {
     // The goal of this exception is to abort a command by bubbling up to main
@@ -63,7 +64,7 @@ public abstract class Command {
 
     /** Prints the usage in case of bad usage by the user */
     public void usage() {
-        if (getExitCode() != 0) {
+        if (exitCode.getExitCode() != 0) {
             System.setOut(System.err);
         }
         initOptions();
@@ -81,13 +82,24 @@ public abstract class Command {
         return this;
     }
 
-    public int getExitCode() {
-        return exitCode;
-    }
     public void perform(GeneralizedFile[] args) {
         resetExitCode();
         perform(Arrays.asList(args));
     }
+
+
+    public ExitCode getExitCode() {
+        return exitCode;
+    }
+    public void setExitCode(ExitCode exitCode) {
+        this.exitCode = exitCode;
+    }
+    public Command withExitCode(ExitCode exitCode) {
+        setExitCode(exitCode);
+        return this;
+    }
+    private ExitCode exitCode;
+
 
     // Protected methods
 
@@ -145,7 +157,11 @@ public abstract class Command {
     }
 
     protected void setExitCode(int exitCode) {
-        this.exitCode = Math.max(exitCode, this.exitCode);
+        this.exitCode.setExitCode(exitCode);
+
+    }
+    protected void resetExitCode() {
+        this.exitCode.resetExitCode();
     }
 
     protected void error(String msg, int exitCode) {
@@ -202,9 +218,6 @@ public abstract class Command {
     protected String getOptionValue(String opt, String defaultValue) {
         return hasOption(opt) ? getOptionValue(opt) : defaultValue;
     }
-    protected void resetExitCode() {
-        this.exitCode = 0;
-    }
 
     // Private methods
     private void initOptions() {
@@ -217,10 +230,8 @@ public abstract class Command {
             opt.addOption("V", "VV", false, "Enable debug logging");
         }
     }
-
     // Attributes
     private CommandLine line;
-    private int exitCode;
     private FileBuilder builder;
     private Options opt;
 }

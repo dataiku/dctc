@@ -27,14 +27,14 @@ public class CmpTest {
         conf.parseSsh(GlobalConf.sshConfigFile());
         cmp.setFileBuilder(conf.getFileBuilder());
         cmp.perform(args);
-        assertTrue(cmp.getExitCode() == 2);
+        assertTrue(cmp.getExitCode().getExitCode() == 2);
         checkOut("");
 
         Settings.setOutputs();
         args[0] = "/etc/bash.bashrc";
         args[1] = "/etc/bash.bashrc";
         cmp.perform(args);
-        assertTrue(cmp.getExitCode() == 0);
+        assertTrue(cmp.getExitCode().getExitCode() == 0);
         checkOut("");
         checkErr("");
     }

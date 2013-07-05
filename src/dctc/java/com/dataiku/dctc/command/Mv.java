@@ -31,7 +31,7 @@ public class Mv extends ListFilesCommand {
     // Protected
     @Override
     public void execute(List<CopyTask> tasks) {
-        if (getExitCode() == 0) {
+        if (getExitCode().getExitCode() == 0) {
             SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(false, false, false);
             ThreadedDisplay display = GlobalConf.getDisplay();
             CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, getThreadLimit());

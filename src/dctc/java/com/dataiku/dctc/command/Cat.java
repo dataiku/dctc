@@ -33,9 +33,7 @@ public class Cat extends Command {
             .withDollar(hasOption("E"));
 
         CatRunner runner = new CatRunner();
-        runner.perform(args, true, fact);
-
-        setExitCode(runner.getExitCode());
+        runner.perform(args, true, fact, getExitCode());
     }
     @Override
     public final String cmdname() {
