@@ -64,7 +64,8 @@ public class CatAlgorithmFactory {
             // This implementation make a full dump of the file to the
             // standard output. It's an optimization for the standard
             // usage case.
-            return new SimpleCatAlgorithm(file);
+            return new BytesCatAlgorithm(file)
+                .withSkip(new CatByteSkip()); // Skip 0 bytes.
         }
     }
     private CatAlgorithm buildHead(GeneralizedFile file) {
