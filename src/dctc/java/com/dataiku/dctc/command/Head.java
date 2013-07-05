@@ -5,12 +5,11 @@ import java.util.List;
 import org.apache.commons.cli.Options;
 
 import com.dataiku.dctc.command.abs.Command;
-import com.dataiku.dctc.command.cat.CatAlgorithm;
-import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
 import com.dataiku.dctc.command.cat.AlgorithmType;
+import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
+import com.dataiku.dctc.command.cat.CatRunner;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.GeneralizedFile;
-import com.dataiku.dctc.file.StandardFile;
 import com.dataiku.dip.utils.IndentedWriter;
 import com.dataiku.dip.utils.IntegerUtils;
 
@@ -32,33 +31,15 @@ public class Head extends Command {
 
     @Override
     public void perform(List<GeneralizedFile> args) {
-        if (args.size() == 0) {
-            // Compute a std head.
-
-            args.add(new StandardFile());
-        }
-
         CatAlgorithmFactory fact = new CatAlgorithmFactory()
             .withAlgo(AlgorithmType.HEAD)
             .withNbLine(numberOfLines());
 
-        boolean header = args.size() > 1 && !getQuiet();
-        boolean first = true;
+        CatRunner runner = new CatRunner();
+        runner.perform(args, !getQuiet(), fact);
 
-        for(GeneralizedFile arg: args) {
-            if (header) {
-                if (!first) {
-                    System.out.println();
-                }
-                else {
-                    first = false;
-                }
-                header(arg);
-            }
-            CatAlgorithm head = fact.build(arg);
-            head.run();
-            setExitCode(head.getExitCode());
-        }
+        setExitCode(runner.getExitCode());
+
     }
     @Override
     public String cmdname() {
@@ -71,7 +52,6 @@ public class Head extends Command {
         return quiet;
     }
     public int numberOfLines() {
-        // FIXME: Buggy, -1 and +1 is not a number for StringUtils.
         if (hasOption("n")) {
             String val = getOptionValue("n");
             if (!IntegerUtils.isNumeric(val)) {
@@ -83,17 +63,9 @@ public class Head extends Command {
             return DEFAULT_LINE_NUMBER;
         }
     }
-
     @Override
     protected String proto() {
         return "[OPT...] PATHS...";
-    }
-
-    // Private
-    private void header(GeneralizedFile arg) {
-        System.out.print("==> ");
-        System.out.print(arg.givenName());
-        System.out.println(" <==");
     }
 
     // Attributes

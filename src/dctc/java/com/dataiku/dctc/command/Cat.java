@@ -7,9 +7,10 @@ import java.util.List;
 import org.apache.commons.cli.Options;
 
 import com.dataiku.dctc.command.abs.Command;
+import com.dataiku.dctc.command.cat.AlgorithmType;
 import com.dataiku.dctc.command.cat.CatAlgorithm;
 import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
-import com.dataiku.dctc.command.cat.AlgorithmType;
+import com.dataiku.dctc.command.cat.CatRunner;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
@@ -31,9 +32,10 @@ public class Cat extends Command {
             .withLinum(hasOption("n"))
             .withDollar(hasOption("E"));
 
-        for (GeneralizedFile arg: args) {
-            run(arg);
-        }
+        CatRunner runner = new CatRunner();
+        runner.perform(args, true, fact);
+
+        setExitCode(runner.getExitCode());
     }
     @Override
     public final String cmdname() {
@@ -53,14 +55,6 @@ public class Cat extends Command {
     @Override
     protected final String proto() {
         return "[OPT...] FILES...";
-    }
-
-    private void run(GeneralizedFile file) {
-        // Run cat.
-        CatAlgorithm algo = fact.build(file);
-
-        algo.run();
-        setExitCode(algo.getExitCode());
     }
 
     // Attributes
