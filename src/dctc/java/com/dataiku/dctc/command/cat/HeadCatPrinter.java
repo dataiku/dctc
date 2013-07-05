@@ -17,12 +17,12 @@ class HeadCatPrinter extends AbstractCatPrinter {
     public int getHead() {
         return head;
     }
-    public void setHead(int head) {
-        this.head = head;
+    public void setHead(long head) {
+        this.head = (int) head;
         this.idx = 0;
-        buf = new String[head];
+        buf = new String[this.head];
     }
-    public HeadCatPrinter withHead(int head) {
+    public HeadCatPrinter withHead(long head) {
         setHead(head);
         return this;
     }

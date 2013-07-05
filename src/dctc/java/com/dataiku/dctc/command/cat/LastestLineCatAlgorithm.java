@@ -19,16 +19,16 @@ class LastestLineCatAlgorithm extends AbstractCatAlgorithm {
         }
     }
 
-    public int getNbLine() {
+    public long getNbLine() {
         return nbLine;
     }
-    public void setNbLine(int nbLine) {
+    public void setNbLine(long nbLine) {
         this.nbLine = nbLine;
     }
-    public LastestLineCatAlgorithm withNbLine(int nbLine) {
+    public LastestLineCatAlgorithm withNbLine(long nbLine) {
         setNbLine(nbLine);
         return this;
     }
 
-    private int nbLine;
+    private long nbLine;
 }

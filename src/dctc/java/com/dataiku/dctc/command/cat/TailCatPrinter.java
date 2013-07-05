@@ -17,12 +17,12 @@ public class TailCatPrinter extends AbstractCatPrinter {
     public int getTail() {
         return tail;
     }
-    public void setTail(int tail) {
-        this.tail = tail;
-        buf = new String[tail];
+    public void setTail(long tail) {
+        this.tail = (int) tail;
+        buf = new String[this.tail];
         idx = 0;
     }
-    public TailCatPrinter withTail(int tail) {
+    public TailCatPrinter withTail(long tail) {
         setTail(tail);
         return this;
     }

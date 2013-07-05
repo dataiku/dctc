@@ -45,10 +45,10 @@ class PartialFileTailAlgorithm extends AbstractCatAlgorithm {
     public int getNbLine() {
         return nbLine;
     }
-    public void setNbLine(int nbLine) {
-        this.nbLine = nbLine;
+    public void setNbLine(long nbLine) {
+        this.nbLine = (int) nbLine;
     }
-    public PartialFileTailAlgorithm withNbLine(int nbLine) {
+    public PartialFileTailAlgorithm withNbLine(long nbLine) {
         setNbLine(nbLine);
         return this;
     }
