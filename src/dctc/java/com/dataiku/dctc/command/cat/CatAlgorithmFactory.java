@@ -91,7 +91,27 @@ public class CatAlgorithmFactory {
         }
     }
     private CatAlgorithm buildTail(GeneralizedFile file) {
-        return null;
+        return buildTail(file, getNbLine());
+    }
+    private CatAlgorithm buildTail(GeneralizedFile file, int nbLine) {
+        if (file.canGetLastLines()) {
+            return new LastestLineCatAlgorithm(file)
+                .withNbLine(nbLine);
+        } else if (file.canGetPartialFile()) {
+            return new PartialFileTailAlgorithm(file)
+                .withNbLine(nbLine);
+        }
+        else {
+
+            // Should be called only for full read text.
+            return new LinumCatAlgorithm(file)
+                .withSelect(new FullCatLineSelector())
+                .withPrinter(new TailCatPrinter()
+                             .withTail(nbLine)
+                             .withHeader(new EmptyCatHeader())
+                             .withEol(new NewLineEOLCatPrinter()))
+                .withStop(new ContinueCatStop());
+        }
     }
 
     // Getters-Setters
