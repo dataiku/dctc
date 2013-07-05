@@ -68,14 +68,20 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                         if (line[0].startsWith("#")) {
                             line[0] = line[0].substring(1);
                         }
+                        int colIdx = 0;
                         for (String ch : line) {
                             ch = ch.trim();
                             // Sometimes, people leave holes in the header ...
                             if (ch.isEmpty()) {
                                 ch = "col_" + columns.size();
                             }
+                            /* Override with schema ... */
+                            if (getSchema() != null && getSchema().getColumns().size() > colIdx) {
+                                ch = getSchema().getColumns().get(colIdx).getName();
+                            }
                             Column cd = cf.column(ch);
                             columns.add(cd);
+                            colIdx++;
                         }
                     } else {
                         if (columns.size() > 0 && line.length != columns.size() && Math.abs(line.length - columns.size()) > 2) {
