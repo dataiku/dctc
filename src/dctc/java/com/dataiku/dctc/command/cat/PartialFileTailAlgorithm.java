@@ -34,7 +34,6 @@ class PartialFileTailAlgorithm extends AbstractCatAlgorithm {
                 yell("Unexpected error on " + file.givenName(), e, 1);
             }
             line = writer.toString() + line;
-
         }
         String[] lines = line.split("\n");
         for (int i = Math.max(0, lines.length - getNbLine()); i < lines.length; ++i) {
@@ -57,4 +56,3 @@ class PartialFileTailAlgorithm extends AbstractCatAlgorithm {
     // Attributes
     private int nbLine;
 }
-

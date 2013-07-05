@@ -29,11 +29,11 @@ public class HadoopUtils {
         }
         return hadoopHome;
     }
-    
+
     public static String getCoreSiteLocation() {
         return getHadoopHome() + "conf/core-site.xml";
     }
-    
+
     public static FileSystem getFS() throws IOException{
         HadoopDistributionClassLoader.addLibraries();
         Configuration conf = new Configuration();
@@ -44,7 +44,7 @@ public class HadoopUtils {
         }
         return fs;
     }
-    
+
     public static ClassLoader getConfigClassLoader() throws Exception {
         URL url = new URL("file:///" + getHadoopHome() + "conf/");
         System.out.println("LOADING " + url);

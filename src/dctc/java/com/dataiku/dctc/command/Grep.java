@@ -33,7 +33,6 @@ public class Grep extends Command {
                                 , "do not offer a native grep (eg, Microsoft Windows). For UNIX"
                                 , "systems, use dctc cat|grep"));
     }
-
     protected Options setOptions() {
         Options options = new Options();
 
@@ -54,7 +53,6 @@ public class Grep extends Command {
 
         return options;
     }
-
     protected List<GeneralizedFile> getArgs(String[] shellArgs) {
         parseCommandLine(shellArgs);
         List<String> args = new ArrayList<String>(Arrays.asList(getRawArgs().getArgs()));
@@ -67,6 +65,7 @@ public class Grep extends Command {
                     pattern = DKUFileUtils.fileToString(new File(getOptionValue("f")));
                 }
                 catch (Exception e) {
+                    // FIXME: If -s, be quiet
                     error("Unexpected error while reading " + getOptionValue("f"), e, 3);
                 }
             }
@@ -77,6 +76,7 @@ public class Grep extends Command {
                 }
             }
         }
+
         return resolveGlobbing(args);
     }
 

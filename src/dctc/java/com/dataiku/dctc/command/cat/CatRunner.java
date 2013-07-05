@@ -61,4 +61,3 @@ public class CatRunner {
     // Attributes
     private ExitCode exitCode;
 }
-

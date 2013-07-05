@@ -1,7 +1,6 @@
 package com.dataiku.dctc.utils;
 
 public class ExitCode {
-
     // Getters - Setters
     public int getExitCode() {
         return exitCode;
@@ -20,4 +19,3 @@ public class ExitCode {
     // Attributes
     private int exitCode;
 }
-

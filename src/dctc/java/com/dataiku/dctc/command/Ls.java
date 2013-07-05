@@ -149,8 +149,9 @@ public class Ls extends Command {
             }
             if (isFirst) {
                 isFirst = false;
-            } else {
-                new_line();
+            }
+            else {
+                System.out.println();
             }
             if (arg.isDirectory()) {
                 printDirectory(arg, header);
@@ -159,7 +160,10 @@ public class Ls extends Command {
     }
     private void printDirectory(GeneralizedFile arg, boolean header) throws IOException {
         List<GeneralizedFile> toPrint = new ArrayList<GeneralizedFile>();
-        assert arg.isDirectory();
+
+        assert arg.isDirectory()
+            : "arg.isDirectory()";
+
         if (header) {
             header(arg);
         }
@@ -191,9 +195,11 @@ public class Ls extends Command {
     private void print(List<PrintTask> tasks) throws IOException {
         if (listing()) {
             printAsList(tasks);
-        } else if (columnPrint()) {
+        }
+        else if (columnPrint()) {
             columnPrint(tasks);
-        } else {
+        }
+        else {
             prettyPrint(tasks);
         }
     }
@@ -564,9 +570,6 @@ public class Ls extends Command {
         else {
             System.out.print(f);
         }
-    }
-    private void new_line() {
-        System.out.println();
     }
     private boolean color() {
         if (colorize == null) {

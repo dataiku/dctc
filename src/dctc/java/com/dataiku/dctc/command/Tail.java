@@ -49,7 +49,7 @@ public class Tail extends Command {
     private void performLine(List<GeneralizedFile> args) {
         CatAlgorithmFactory fact = new CatAlgorithmFactory()
             .withAlgo(AlgorithmType.TAIL)
-            .withNbLine((int) nbLine()); // FIXME: Pass the number of line to int
+            .withNbLine(nbLine());
 
         CatRunner runner = new CatRunner();
 
@@ -63,7 +63,8 @@ public class Tail extends Command {
             if (arg.canGetPartialFile()) {
                 try {
                     IOUtils.copyLarge(arg.getLastBytes(nbByte()), System.out);
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     error(arg.givenName(), e.getMessage(), 1);
                 }
             } else {
@@ -76,7 +77,8 @@ public class Tail extends Command {
                     }
 
                     IOUtils.copyLarge(input, System.out);
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     error(arg.givenName(), e.getMessage(), 1);
                 }
             }

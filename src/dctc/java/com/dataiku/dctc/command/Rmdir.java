@@ -35,7 +35,8 @@ public class Rmdir extends Command {
                 if (hasOption("v")) {
                     System.out.println("rmdir: removing directory, `" + arg.givenName() + "'");
                 }
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 warn("failed to rmdir " + arg.givenName(), e);
             }
         }

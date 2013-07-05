@@ -33,6 +33,7 @@ public class ListColumns extends Command {
         Options opt = new Options();
         opt.addOption("m", "minimal", false, "Set to minimal the display scheme.");
         longOpt(opt, "Set the separator", "separator", "s", "sep");
+
         return opt;
     }
     public String cmdname() {
@@ -80,7 +81,6 @@ public class ListColumns extends Command {
         }
 
         array.print();
-
     }
     // protected
     protected String proto() {

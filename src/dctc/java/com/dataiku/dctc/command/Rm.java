@@ -30,7 +30,7 @@ public class Rm extends Command {
                     rm(arg);
                 }
             } catch (IOException e) {
-                warn("failed to rm " +arg.givenName(), e);
+                warn("failed to delete " + arg.givenName(), e);
             }
         }
     }
@@ -106,7 +106,8 @@ public class Rm extends Command {
                     error("Cannot remove `" + arg.givenName() + "'", 2);
                 }
             }
-        } else {
+        }
+        else {
             notEmpty(arg);
         }
     }
@@ -114,7 +115,8 @@ public class Rm extends Command {
         if (arg.isEmpty()) {
             return Interactive.ask("rm", "rm: remove directory `" + arg.givenName() + "'? ",
                                    "yY", "nN");
-        } else {
+        }
+        else {
             return Interactive.ask("rm", "rm: descend into directory `" + arg.givenName() + "'? ",
                                    "yY", "nN");
         }
@@ -139,13 +141,16 @@ public class Rm extends Command {
                             if (dirAsk(son)) {
                                 del(son);
                             }
-                        } else {
+                        }
+
+                        else {
                             if (fileAsk(son)) {
                                 del(son);
                             }
                         }
                     }
-                } else {
+                }
+                else {
                     if (verbose()) {
                         @SuppressWarnings("unchecked")
                         List<GeneralizedFile> rlist = (List<GeneralizedFile>) arg.grecursiveList();
@@ -154,12 +159,14 @@ public class Rm extends Command {
                             verbose(son.givenName());
                             del(son);
                         }
-                    } else {
+                    }
+                    else {
                         del(arg);
                     }
                 }
             }
-        } else {
+        }
+        else {
             if (!interactive() || fileAsk(arg)) {
                 del(arg);
             }
@@ -177,7 +184,8 @@ public class Rm extends Command {
     private boolean exists(GeneralizedFile arg) throws IOException {
         if (arg.exists() || force()) {
             return true;
-        } else {
+        }
+        else {
             if (!force()) {
                 error("cannot remove `" + arg.givenName() + "': No such file or directory", 2);
             }

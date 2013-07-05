@@ -39,7 +39,7 @@ public class StandardFile implements GeneralizedFile {
     }
     @Override
     public boolean exists() throws IOException {
-        return true; // FIXME: Maybe not if in interactive.
+        return true;
     }
     @Override
     public boolean isDirectory() throws IOException {

@@ -13,7 +13,8 @@ class LastestLineCatAlgorithm extends AbstractCatAlgorithm {
     protected void _run(GeneralizedFile file) {
         try {
             IOUtils.copyLarge(file.getLastLines(getNbLine()), System.out);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             yell("Unexpected error on " + file.givenName(), e, 1);
         }
     }
@@ -31,4 +32,3 @@ class LastestLineCatAlgorithm extends AbstractCatAlgorithm {
 
     private int nbLine;
 }
-

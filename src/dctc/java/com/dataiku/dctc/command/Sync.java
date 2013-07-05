@@ -38,7 +38,7 @@ public class Sync extends Command {
                                 ,"re-sync already synced folders, it would always recopy all."
                                 ,"With -m, the MD5 hash is computed and files are copied if the MD5 hash"
                                 ,"does not match."));
-    }
+   }
 
     // Public
     @Override
