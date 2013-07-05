@@ -9,7 +9,7 @@ import org.apache.commons.cli.Options;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.command.cat.CatAlgorithm;
 import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
-import com.dataiku.dctc.command.cat.CatAlgorithmFactory.Algorithm;
+import com.dataiku.dctc.command.cat.AlgorithmType;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
@@ -27,7 +27,7 @@ public class Cat extends Command {
     public void perform(List<GeneralizedFile> args) {
         // Set the option to the factory.
         fact = new CatAlgorithmFactory()
-            .withAlgo(Algorithm.CAT)
+            .withAlgo(AlgorithmType.CAT)
             .withLinum(hasOption("n"))
             .withDollar(hasOption("E"));
 

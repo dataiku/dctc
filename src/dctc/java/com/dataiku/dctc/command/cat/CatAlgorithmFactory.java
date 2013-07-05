@@ -3,19 +3,11 @@ package com.dataiku.dctc.command.cat;
 import com.dataiku.dctc.file.GeneralizedFile;
 
 public class CatAlgorithmFactory {
-    // The algorithms types
-    public enum Algorithm {
-        CAT
-        , HEAD
-        , TAIL
-        ;
-    }
-
     // Building methods.
     public CatAlgorithm build(GeneralizedFile file) {
         return build(file, getAlgo());
     }
-    public CatAlgorithm build(GeneralizedFile file, Algorithm algo) {
+    public CatAlgorithm build(GeneralizedFile file, AlgorithmType algo) {
         switch (algo) {
         case CAT:
             return buildCat(file);
@@ -103,13 +95,13 @@ public class CatAlgorithmFactory {
     }
 
     // Getters-Setters
-    public Algorithm getAlgo() {
+    public AlgorithmType getAlgo() {
         return algo;
     }
-    public void setAlgo(Algorithm algo) {
+    public void setAlgo(AlgorithmType algo) {
         this.algo = algo;
     }
-    public CatAlgorithmFactory withAlgo(Algorithm algo) {
+    public CatAlgorithmFactory withAlgo(AlgorithmType algo) {
         setAlgo(algo);
         return this;
     }
@@ -159,6 +151,6 @@ public class CatAlgorithmFactory {
     private boolean squeezeMultipleEmpty;
     private boolean dollar;
     private boolean linum;
-    private Algorithm algo;
+    private AlgorithmType algo;
     private int head;
 }

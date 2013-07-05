@@ -7,7 +7,7 @@ import org.apache.commons.cli.Options;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.command.cat.CatAlgorithm;
 import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
-import com.dataiku.dctc.command.cat.CatAlgorithmFactory.Algorithm;
+import com.dataiku.dctc.command.cat.AlgorithmType;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dctc.file.StandardFile;
@@ -39,7 +39,7 @@ public class Head extends Command {
         }
 
         CatAlgorithmFactory fact = new CatAlgorithmFactory()
-            .withAlgo(Algorithm.HEAD)
+            .withAlgo(AlgorithmType.HEAD)
             .withHead(numberOfLines());
 
         boolean header = args.size() > 1 && !getQuiet();
