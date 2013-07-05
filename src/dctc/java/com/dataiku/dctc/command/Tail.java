@@ -1,11 +1,8 @@
 package com.dataiku.dctc.command;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import org.apache.commons.cli.Options;
-import org.apache.commons.io.IOUtils;
 
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.command.cat.AlgorithmType;
@@ -21,7 +18,6 @@ public class Tail extends Command {
     public void longDescription(IndentedWriter printer) {
         printer.print("Output the last N lines or bytes of the input files");
     }
-
     @Override
     public String cmdname() {
         return "tail";
@@ -40,82 +36,43 @@ public class Tail extends Command {
     }
     @Override
     public void perform(List<GeneralizedFile> args) {
-        if (nbByte() != -1) {
-            performByte(args);
-        } else {
-            performLine(args);
-        }
-    }
-    private void performLine(List<GeneralizedFile> args) {
         CatAlgorithmFactory fact = new CatAlgorithmFactory()
             .withAlgo(AlgorithmType.TAIL)
-            .withNbLine(nbLine());
+            .withNbLine(number())
+            .withIsLineAlgo(isLine());
 
         CatRunner runner = new CatRunner();
 
         runner.perform(args, true, fact, getExitCode());
     }
-    private void performByte(List<GeneralizedFile> args) {
-        for (GeneralizedFile arg: args) {
-            if (args.size() > 1) {
-                header(arg);
-            }
-            if (arg.canGetPartialFile()) {
-                try {
-                    IOUtils.copyLarge(arg.getLastBytes(nbByte()), System.out);
-                }
-                catch (IOException e) {
-                    error(arg.givenName(), e.getMessage(), 1);
-                }
+    public long number() {
+        nbLines();
+        nbBytes();
+
+        return number;
+    }
+    public void nbLines() {
+        if (isLine()) {
+            if (hasOption("n")) {
+                number = Long.parseLong(getOptionValue("n"));
             } else {
-                try {
-                    InputStream input = arg.inputStream();
-                    long toSkip = arg.getSize() - nbByte();
-
-                    while (toSkip > 0) {
-                        toSkip -= input.skip(toSkip);
-                    }
-
-                    IOUtils.copyLarge(input, System.out);
-                }
-                catch (IOException e) {
-                    error(arg.givenName(), e.getMessage(), 1);
-                }
+                number = 10;
             }
         }
     }
-    private void header(GeneralizedFile arg) {
-        System.out.print("===> ");
-        System.out.print(arg.givenName());
-        System.out.println(" <===");
-    }
-    public int nbLine() {
-        if (nbLine == -1) {
-            if (hasOption("line")) {
-                nbLine = Integer.parseInt(getOptionValue("line"));
-            } else {
-                nbLine = 10;
-            }
+    public void nbBytes() {
+        if (!isLine()) {
+            number = Long.parseLong(getOptionValue("b"));
         }
-        return nbLine;
     }
-    public Tail nbLine(int nbLine) {
-        this.nbLine = nbLine;
-        return this;
-    }
-    public int nbByte() {
-        if (nbByte == -1) {
-            if (hasOption("byte")) {
-                nbByte = Integer.parseInt(getOptionValue("byte"));
-            }
+    private boolean isLine() {
+        if (isLine == null) {
+            isLine = !hasOption("b");
         }
-        return nbByte;
-    }
-    public Tail nbByte(int nbByte) {
-        this.nbByte = nbByte;
-        return this;
+
+        return isLine;
     }
 
-    private int nbLine = -1;
-    private int nbByte = -1;
+    private Boolean isLine;
+    private long number = -1;
 }
