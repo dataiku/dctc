@@ -16,16 +16,12 @@ class BytesCatAlgorithm extends AbstractCatAlgorithm {
 
         { // Skip the beginning file.
 
-            long skip = this.skip.getSkip();
-
-            while (skip > 0) {
-                try {
-                    skip -= i.skip(skip);
-                }
-                catch (IOException e) {
-                    yell("Failed to skip beginning bytes of " + file.givenName(),
-                         e, 2);
-                }
+            try {
+                skip.skip(i);
+            }
+            catch (IOException e) {
+                yell("Failed to skip beginning bytes of " + file.givenName(),
+                     e, 2);
             }
         }
 
