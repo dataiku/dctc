@@ -82,7 +82,8 @@ public class CatAlgorithmFactory {
                 linum.withPrinter(new SimpleCatPrinter()
                                   .withHeader(new EmptyCatHeader())
                                   .withEol(new NewLineEOLCatPrinter()))
-                    .withStop(new HeadCatStop().withHead(skipLast));
+                    .withStop(new HeadCatStop()
+                              .withHead(skipLast));
 
             }
             else {
@@ -131,7 +132,13 @@ public class CatAlgorithmFactory {
                     .withStop(new ContinueCatStop());
             }
             else {
-                return null;
+                linum.withSelect(new FullCatLineSelector())
+                    .withPrinter(new SkipFirstLine()
+                                 .withSkipNbLine(-skipFirst)
+                                 .withPrinter(new SimpleCatPrinter()
+                                              .withHeader(new EmptyCatHeader())
+                                              .withEol(new NewLineEOLCatPrinter())))
+                    .withStop(new ContinueCatStop());
             }
 
             return linum;
