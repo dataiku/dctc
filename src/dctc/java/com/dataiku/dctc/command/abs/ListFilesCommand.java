@@ -179,7 +179,7 @@ public abstract class ListFilesCommand extends Command {
             if (dst.exists() && !dst.isDirectory()) {
                 // src has at least, one element (checked by earlyCheck()).
                 if (src.length > 1 && !dst.isDirectory() && !archive()) {
-                    error(dstAddress, "is not a directory or the destination is not compressed.", 2);
+                    error(dst, "is not a directory or the destination is not compressed.", 2);
                     return false;
                 }
             }

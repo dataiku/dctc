@@ -37,7 +37,7 @@ public class Find extends Command {
         try {
             for (GeneralizedFile arg: args) {
                 if (!arg.exists()) {
-                    notFind(arg.givenName());
+                    notFind(arg);
                 } else {
                     if (arg.isDirectory()) {
                         for (GeneralizedFile f: arg.grecursiveList()) {
@@ -113,7 +113,7 @@ public class Find extends Command {
             System.out.println(path.givenName());
         }
     }
-    private void notFind(String file) {
+    private void notFind(GeneralizedFile file) {
         error(file, "No such file or directory", 2);
     }
     private boolean hasName() {

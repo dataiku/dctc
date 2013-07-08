@@ -30,7 +30,7 @@ public class Rm extends Command {
                     rm(arg);
                 }
             } catch (IOException e) {
-                warn("failed to delete " + arg.givenName(), e);
+                error(arg, "failed to delete", e, 0);
             }
         }
     }
@@ -103,7 +103,7 @@ public class Rm extends Command {
         if (recursiveDeletion() || arg.isFile() || arg.isEmpty()) {
             if (!arg.delete()) {
                 if (!force()) {
-                    error("Cannot remove `" + arg.givenName() + "'", 2);
+                    error(arg, "Cannot remove", 2);
                 }
             }
         }
@@ -126,7 +126,7 @@ public class Rm extends Command {
                                "yY", "nN");
     }
     private void notEmpty(GeneralizedFile arg) {
-        error("cannot remove '" + arg.givenName() + ": Directory not empty", 1);
+        error(arg, "Cannot remove, directory not empty", 1);
     }
     private void rm(GeneralizedFile arg) throws IOException {
         if (arg.isDirectory()) {
@@ -175,7 +175,7 @@ public class Rm extends Command {
     private boolean couldDelDir(GeneralizedFile arg) throws IOException {
         if (arg.isDirectory() && !recursiveDeletion()) {
             if (!force()) {
-                error("cannot remove `" + arg.givenName() + "': Is a directory", 2);
+                error(arg, "Cannot remove, is a diretory", 2);
             }
             return false;
         }
@@ -187,7 +187,7 @@ public class Rm extends Command {
         }
         else {
             if (!force()) {
-                error("cannot remove `" + arg.givenName() + "': No such file or directory", 2);
+                error(arg, "Cannot remove, no such file or directory", 2);
             }
             return false;
         }

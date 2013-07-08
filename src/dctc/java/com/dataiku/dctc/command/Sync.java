@@ -99,7 +99,7 @@ public class Sync extends Command {
                 execute(tasks);
             }
         } catch (FileNotFoundException e) {
-            error("File not found: " + e.getMessage(), 1);
+            error("File not found: " + e.getMessage(), 1); // FIXME
         } catch (IOException e) {
             error("Failed to sync", e, 2);
         }

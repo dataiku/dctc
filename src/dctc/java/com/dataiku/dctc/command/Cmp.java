@@ -1,5 +1,6 @@
 package com.dataiku.dctc.command;
 
+import static com.dataiku.dip.utils.PrettyString.pquoted;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -89,7 +90,7 @@ public class Cmp extends Command {
         String unit = l.replaceAll("[0-9]", "");
         String number = l.replaceAll("\\D", "");
         if (!l.equals(number + unit)) {
-            error("`" + l + "' is not a number", 2);
+            error(pquoted(l) + ": is not a number", 2);
             return -1;
         }
         long exp = 1;
@@ -139,7 +140,7 @@ public class Cmp extends Command {
             stream = AutoGZip.buildInput(file);
         }
         catch (FileNotFoundException e) {
-            error (file, "No such file or directory", 2);
+            error(file, "No such file or directory", e, 2);
             return null;
         }
         catch (IOException e) {

@@ -27,7 +27,7 @@ public class Mkdir extends Command {
         for (GeneralizedFile arg: args) {
             try {
                 if (arg.exists()) {
-                    error(arg.givenName(), "cannot create directory, file exists", 1);
+                    error(arg, "cannot create directory, file exists", 1);
                 } else {
                     arg.mkdir();
                     if (verbose()) {

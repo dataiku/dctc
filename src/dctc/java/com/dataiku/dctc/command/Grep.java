@@ -140,7 +140,7 @@ public class Grep extends Command {
                 }
             }
             catch (IOException e) {
-                error(arg.givenName(), "grep failed: " + e, 1);
+                error(arg, "grep failed: " + e, 1);
 
             }
         }

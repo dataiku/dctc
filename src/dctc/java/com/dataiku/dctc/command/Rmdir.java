@@ -24,11 +24,11 @@ public class Rmdir extends Command {
         for (GeneralizedFile arg: args) {
             try {
                 if (!arg.exists()) {
-                    error(arg.givenName(), "No such file or directory", 2);
+                    error(arg, "No such file or directory", 2);
                     continue;
                 }
                 else if (!arg.isEmpty()) {
-                    error(arg.givenName(), "Directory not empty", 2);
+                    error(arg, "Directory not empty", 2);
                     continue;
                 }
                 arg.delete();
@@ -37,7 +37,7 @@ public class Rmdir extends Command {
                 }
             }
             catch (IOException e) {
-                warn("failed to rmdir " + arg.givenName(), e);
+                error("failed to rmdir " + arg.givenName(), e, 0);
             }
         }
     }

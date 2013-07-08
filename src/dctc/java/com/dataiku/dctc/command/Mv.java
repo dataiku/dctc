@@ -51,7 +51,7 @@ public class Mv extends ListFilesCommand {
                 for (GeneralizedFile dir: list) {
                     try {
                         if (!dir.delete()) {
-                            error(dir.givenName(), "Cannot delete directory", 2);
+                            error(dir, "Cannot delete directory", 2);
                         }
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
@@ -91,7 +91,7 @@ public class Mv extends ListFilesCommand {
             dst.mkdirs();
             return true;
         } catch (IOException e) {
-            error(dst.givenName(), e.getMessage(), 3);
+            error(dst, e.getMessage(), 3);
             return false;
         }
     }
