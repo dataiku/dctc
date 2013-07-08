@@ -33,7 +33,7 @@ public class Head extends Command {
     public void perform(List<GeneralizedFile> args) {
         CatAlgorithmFactory fact = new CatAlgorithmFactory()
             .withAlgo(AlgorithmType.HEAD)
-            .withNbLine(numberOfLines());
+            .withSkipLast(numberOfLines());
 
         CatRunner runner = new CatRunner();
         runner.perform(args, !getQuiet(), fact, getExitCode());

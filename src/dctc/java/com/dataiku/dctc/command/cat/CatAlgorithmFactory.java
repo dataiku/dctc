@@ -20,10 +20,13 @@ public class CatAlgorithmFactory {
         }
     }
     private CatAlgorithm buildCat(GeneralizedFile file) {
-        return buildCat(file, getLinum(), getDollar(), getSqueezeMultipleEmpty());
+        return buildCat(file, getLinum(), getDollar(),
+                        getSqueezeMultipleEmpty());
     }
-    private CatAlgorithm buildCat(GeneralizedFile file, boolean linum,
-                                  boolean dollar, boolean squeezeMultipleEmpty) {
+    private CatAlgorithm buildCat(GeneralizedFile file,
+                                  boolean linum,
+                                  boolean dollar,
+                                  boolean squeezeMultipleEmpty) {
         if (linum || dollar || squeezeMultipleEmpty) {
             LinumCatAlgorithm cat = new LinumCatAlgorithm(file);
             { // Set the cat printer
@@ -69,22 +72,22 @@ public class CatAlgorithmFactory {
         }
     }
     private CatAlgorithm buildHead(GeneralizedFile file) {
-        return buildHead(file, getNbLine());
+        return buildHead(file, getSkipLast());
     }
-    private CatAlgorithm buildHead(GeneralizedFile file, long head) {
-        if (head > 0) {
+    private CatAlgorithm buildHead(GeneralizedFile file, long skipLast) {
+        if (skipLast > 0) {
             return new LinumCatAlgorithm(file)
                 .withSelect(new FullCatLineSelector())
                 .withPrinter(new SimpleCatPrinter()
                              .withHeader(new EmptyCatHeader())
                              .withEol(new NewLineEOLCatPrinter()))
-                .withStop(new HeadCatStop().withHead(head));
+                .withStop(new HeadCatStop().withHead(skipLast));
         }
         else {
             return new LinumCatAlgorithm(file)
                 .withSelect(new FullCatLineSelector())
                 .withPrinter(new HeadCatPrinter()
-                             .withHead(-head)
+                             .withHead(-skipLast)
                              .withHeader(new EmptyCatHeader())
                              .withEol(new NewLineEOLCatPrinter()))
                 .withStop(new ContinueCatStop());
@@ -92,16 +95,17 @@ public class CatAlgorithmFactory {
         }
     }
     private CatAlgorithm buildTail(GeneralizedFile file) {
-        return buildTail(file, getNbLine(), getIsLineAlgo());
+        return buildTail(file, skipFirst, getIsLineAlgo());
     }
-    private CatAlgorithm buildTail(GeneralizedFile file, long number, boolean isLine) {
+    private CatAlgorithm buildTail(GeneralizedFile file, long skipFirst,
+                                   boolean isLine) {
         if (isLine) {
             if (file.canGetLastLines()) {
                 return new LatestLineCatAlgorithm(file)
-                    .withNbLine(number);
+                    .withNbLine(skipFirst);
             } else if (file.canGetPartialFile()) {
                 return new PartialFileTailAlgorithm(file)
-                    .withNbLine(number);
+                    .withNbLine(skipFirst);
             }
             else {
 
@@ -109,7 +113,7 @@ public class CatAlgorithmFactory {
                 return new LinumCatAlgorithm(file)
                     .withSelect(new FullCatLineSelector())
                     .withPrinter(new TailCatPrinter()
-                                 .withTail(nbLine)
+                                 .withTail(skipFirst)
                                  .withHeader(new EmptyCatHeader())
                                  .withEol(new NewLineEOLCatPrinter()))
                     .withStop(new ContinueCatStop());
@@ -118,7 +122,7 @@ public class CatAlgorithmFactory {
         else {
             // bytes
             return new BytesCatAlgorithm(file)
-                .withSkip(new CatByteSkip().withSkip(number));
+                .withSkip(new CatByteSkip().withSkip(skipFirst));
         }
     }
 
@@ -164,16 +168,6 @@ public class CatAlgorithmFactory {
         setSqueezeMultipleEmpty(squeezeMultipleEmpty);
         return this;
     }
-    public long getNbLine() {
-        return nbLine;
-    }
-    public void setNbLine(long nbLine) {
-        this.nbLine = nbLine;
-    }
-    public CatAlgorithmFactory withNbLine(long nbLine) {
-        setNbLine(nbLine);
-        return this;
-    }
     public boolean getIsLineAlgo() {
         return isLineAlgo;
     }
@@ -184,12 +178,34 @@ public class CatAlgorithmFactory {
         setIsLineAlgo(isLineAlgo);
         return this;
     }
+    public long getSkipFirst() {
+        return skipFirst;
+    }
+    public void setSkipFirst(long skipFirst) {
+        this.skipFirst = skipFirst;
+    }
+    public CatAlgorithmFactory withSkipFirst(long skipFirst) {
+        setSkipFirst(skipFirst);
+        return this;
+    }
+
+    public long getSkipLast() {
+        return skipLast;
+    }
+    public void setSkipLast(long skipLast) {
+        this.skipLast = skipLast;
+    }
+    public CatAlgorithmFactory withSkipLast(long skipLast) {
+        setSkipLast(skipLast);
+        return this;
+    }
 
     // Attributes
-    private boolean squeezeMultipleEmpty;
+    private boolean squeezeMultipleEmpty; // Squeeze multiple empty line.
     private boolean dollar;
     private boolean linum;
     private AlgorithmType algo;
-    private long nbLine;
+    private long skipLast;
+    private long skipFirst;
     private boolean isLineAlgo;
 }

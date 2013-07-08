@@ -38,7 +38,7 @@ public class Tail extends Command {
     public void perform(List<GeneralizedFile> args) {
         CatAlgorithmFactory fact = new CatAlgorithmFactory()
             .withAlgo(AlgorithmType.TAIL)
-            .withNbLine(number())
+            .withSkipFirst(number())
             .withIsLineAlgo(isLine());
 
         CatRunner runner = new CatRunner();
