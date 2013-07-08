@@ -73,12 +73,12 @@ public class CatAlgorithmFactory {
             return new BytesCatAlgorithm(file);
         }
     }
-    private CatAlgorithm buildHead(GeneralizedFile file) throws IOException {
+    private CatAlgorithm buildHead(GeneralizedFile file) {
         return buildHead(file, getSkipLast(), getIsLineAlgo());
     }
     private CatAlgorithm buildHead(GeneralizedFile file,
                                    long skipLast,
-                                   boolean isLine) throws IOException {
+                                   boolean isLine) {
         if (isLine) {
             LinumCatAlgorithm linum = new LinumCatAlgorithm(file)
                 .withSelect(new FullCatLineSelector());
@@ -102,13 +102,12 @@ public class CatAlgorithmFactory {
         }
         else {
             if (skipLast > 0) {
-                long fileSize = file.getSize();
                 return new BytesCatAlgorithm(file)
-                    .withSkipLast(fileSize - skipLast);
+                    .withSkipLast(skipLast);
             }
             else {
                 return new BytesCatAlgorithm(file)
-                    .withSkipLast(-skipLast);
+                    .withSkipFirst(skipLast);
             }
         }
     }

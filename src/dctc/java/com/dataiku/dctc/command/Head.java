@@ -8,10 +8,8 @@ import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.command.cat.AlgorithmType;
 import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
 import com.dataiku.dctc.command.cat.CatRunner;
-import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
-import com.dataiku.dip.utils.IntegerUtils;
 
 public class Head extends Command {
     public String tagline() {
@@ -23,9 +21,9 @@ public class Head extends Command {
     protected Options setOptions() {
         Options options = new Options();
 
-        longOpt(options, "Display the first `number' lines of each file", "n", "lines", "number");
+        longOpt(options, "Display the first `number' lines of each file", "n", "lines", "K");
+        longOpt(options, "Print the first k bytes  of each file.", "c", "bytes", "K");
         options.addOption("q", "quiet", false, "Never print headers giving file names");
-
         return options;
     }
 
@@ -33,8 +31,8 @@ public class Head extends Command {
     public void perform(List<GeneralizedFile> args) {
         CatAlgorithmFactory fact = new CatAlgorithmFactory()
             .withAlgo(AlgorithmType.HEAD)
-            .withSkipLast(numberOfLines())
-            .withIsLineAlgo(true);
+            .withSkipLast(number())
+            .withIsLineAlgo(isLine());
 
         CatRunner runner = new CatRunner();
         runner.perform(args, !getQuiet(), fact, getExitCode());
@@ -49,24 +47,41 @@ public class Head extends Command {
         }
         return quiet;
     }
-    public int numberOfLines() {
-        if (hasOption("n")) {
-            String val = getOptionValue("n");
-            if (!IntegerUtils.isNumeric(val)) {
-                throw new UserException("Invalid value for -n: " + val + ", expected an integer");
+    public long number() {
+        nbLines();
+        nbBytes();
+
+        return number;
+    }
+
+    public void nbLines() {
+        if (isLine()) {
+            if (hasOption("n")) {
+                number = Long.parseLong(getOptionValue("n"));
+            } else {
+                number = 10;
             }
-            return IntegerUtils.toInt(val);
         }
-        else {
-            return DEFAULT_LINE_NUMBER;
+    }
+    public void nbBytes() {
+        if (!isLine()) {
+            number = Long.parseLong(getOptionValue("c"));
         }
     }
     @Override
     protected String proto() {
         return "[OPT...] PATHS...";
     }
+    private boolean isLine() {
+        if (isLine == null) {
+            isLine = !hasOption("c");
+        }
+
+        return isLine;
+    }
 
     // Attributes
     private Boolean quiet;
-    private static final int DEFAULT_LINE_NUMBER = 10;
+    private Boolean isLine;
+    private long number;
 }
