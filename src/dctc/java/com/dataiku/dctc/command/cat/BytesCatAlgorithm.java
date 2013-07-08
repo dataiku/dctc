@@ -62,5 +62,5 @@ class BytesCatAlgorithm extends AbstractCatAlgorithm {
 
     // Attributes
     private long skipFirst;
-    private long skipLast;
+    private long skipLast = Long.MAX_VALUE;
 }
