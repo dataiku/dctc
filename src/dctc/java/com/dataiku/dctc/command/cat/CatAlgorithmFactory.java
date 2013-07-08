@@ -119,20 +119,22 @@ public class CatAlgorithmFactory {
                     return new PartialFileTailAlgorithm(file)
                         .withNbLine(skipFirst);
                 }
-                else {
-                    // Should be called only for full read text.
-                    return new LinumCatAlgorithm(file)
-                        .withSelect(new FullCatLineSelector())
-                        .withPrinter(new TailCatPrinter()
-                                     .withTail(skipFirst)
-                                     .withHeader(new EmptyCatHeader())
-                                     .withEol(new NewLineEOLCatPrinter()))
-                        .withStop(new ContinueCatStop());
-                }
+            }
+            LinumCatAlgorithm linum = new LinumCatAlgorithm(file);
+
+            if (skipFirst > 0) {
+                linum.withSelect(new FullCatLineSelector())
+                    .withPrinter(new TailCatPrinter()
+                                 .withTail(skipFirst)
+                                 .withHeader(new EmptyCatHeader())
+                                 .withEol(new NewLineEOLCatPrinter()))
+                    .withStop(new ContinueCatStop());
             }
             else {
                 return null;
             }
+
+            return linum;
         }
         else {
             // bytes
