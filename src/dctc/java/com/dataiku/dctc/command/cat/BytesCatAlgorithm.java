@@ -6,18 +6,20 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 
 import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dip.utils.StreamUtils;
+import org.apache.commons.io.input.BoundedInputStream;
 
 class BytesCatAlgorithm extends AbstractCatAlgorithm {
     public BytesCatAlgorithm(GeneralizedFile file) {
         super(file);
     }
     protected void _run(GeneralizedFile file) {
-        InputStream i = open();
+        InputStream i = bound(open());
 
         { // Skip the beginning file.
 
             try {
-                skip.skip(i);
+                StreamUtils.skip(i, skipFirst);
             }
             catch (IOException e) {
                 yell("Failed to skip beginning bytes of " + file.givenName(),
@@ -33,17 +35,32 @@ class BytesCatAlgorithm extends AbstractCatAlgorithm {
         }
     }
 
-    public CatByteSkip getSkip() {
-        return skip;
+    // Getters-Setters
+    public long getSkipLast() {
+        return skipLast;
     }
-    public void setSkip(CatByteSkip skip) {
-        this.skip = skip;
+    public void setSkipLast(long skipLast) {
+        this.skipLast = skipLast;
     }
-    public BytesCatAlgorithm withSkip(CatByteSkip skip) {
-        setSkip(skip);
+    public BytesCatAlgorithm withSkipLast(long skipLast) {
+        setSkipLast(skipLast);
         return this;
+    }
+    public long getSkipFirst() {
+        return skipFirst;
+    }
+    public void setSkipFirst(long skipFirst) {
+        this.skipFirst = skipFirst;
+    }
+    public BytesCatAlgorithm withSkipFirst(long skipFirst) {
+        setSkipFirst(skipFirst);
+        return this;
+    }
+    public InputStream bound(InputStream i) {
+        return new BoundedInputStream(i, skipLast);
     }
 
     // Attributes
-    private CatByteSkip skip;
+    private long skipFirst;
+    private long skipLast;
 }
