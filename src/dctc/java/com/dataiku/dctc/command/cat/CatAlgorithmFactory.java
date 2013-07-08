@@ -97,7 +97,7 @@ public class CatAlgorithmFactory {
     private CatAlgorithm buildTail(GeneralizedFile file, long number, boolean isLine) {
         if (isLine) {
             if (file.canGetLastLines()) {
-                return new LastestLineCatAlgorithm(file)
+                return new LatestLineCatAlgorithm(file)
                     .withNbLine(number);
             } else if (file.canGetPartialFile()) {
                 return new PartialFileTailAlgorithm(file)

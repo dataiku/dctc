@@ -6,8 +6,8 @@ import org.apache.commons.io.IOUtils;
 
 import com.dataiku.dctc.file.GeneralizedFile;
 
-class LastestLineCatAlgorithm extends AbstractCatAlgorithm {
-    public LastestLineCatAlgorithm(GeneralizedFile file) {
+class LatestLineCatAlgorithm extends AbstractCatAlgorithm {
+    public LatestLineCatAlgorithm(GeneralizedFile file) {
         super(file);
     }
     protected void _run(GeneralizedFile file) {
@@ -25,7 +25,7 @@ class LastestLineCatAlgorithm extends AbstractCatAlgorithm {
     public void setNbLine(long nbLine) {
         this.nbLine = nbLine;
     }
-    public LastestLineCatAlgorithm withNbLine(long nbLine) {
+    public LatestLineCatAlgorithm withNbLine(long nbLine) {
         setNbLine(nbLine);
         return this;
     }
