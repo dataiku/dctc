@@ -1,6 +1,7 @@
 package com.dataiku.dctc.command.abs;
 
 import static com.dataiku.dip.utils.PrettyString.scat;
+import static com.dataiku.dip.utils.PrettyString.pquoted;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -22,15 +23,21 @@ import org.apache.log4j.Logger;
 import com.dataiku.dctc.DCTCLog;
 import com.dataiku.dctc.Globbing;
 import com.dataiku.dctc.Main;
+import com.dataiku.dctc.command.policy.YellPolicy;
+import com.dataiku.dctc.command.policy.YellPolicyFactory;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.file.FileBuilder;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dctc.utils.ExitCode;
 import com.dataiku.dip.utils.IndentedWriter;
-
 public abstract class Command {
+    public Command() {
+        YellPolicyFactory fact = new YellPolicyFactory();
+        yell = fact.build();
+    }
     // The goal of this exception is to abort a command by bubbling up to main
     public static class EndOfCommand extends Error {
+
         private static final long serialVersionUID = 1L;
     }
 
@@ -39,7 +46,6 @@ public abstract class Command {
     public abstract String tagline();
     protected abstract String proto();
     public abstract void longDescription(IndentedWriter printer);
-
     // Abstract methods
     protected abstract Options setOptions();
     public void perform(String[] args) {
@@ -61,7 +67,6 @@ public abstract class Command {
     public void perform(List<GeneralizedFile> args) {
         throw new NotImplementedException();
     }
-
     /** Prints the usage in case of bad usage by the user */
     public void usage() {
         if (exitCode.getExitCode() != 0) {
@@ -95,11 +100,8 @@ public abstract class Command {
         setExitCode(exitCode);
         return this;
     }
-    private ExitCode exitCode;
-
 
     // Protected methods
-
     protected void parseCommandLine(String[] shellargs) {
         initOptions();
         CommandLineParser parser = new PosixParser();
@@ -162,27 +164,29 @@ public abstract class Command {
     }
 
     protected void error(String msg, int exitCode) {
-        DCTCLog.error(cmdname(), msg);
+        yell.yell(cmdname(), msg, null);
         setExitCode(exitCode);
     }
     protected void error(String msg, Throwable exception, int exitCode) {
-        DCTCLog.error(cmdname(), msg, exception);
+        yell.yell(cmdname(), msg, exception);
         setExitCode(exitCode);
     }
-    protected void error(String fileName, String msg, Throwable exception, int exitCode) {
-        error("`" + fileName + "': " + msg, exception, exitCode);
+    protected void error(String fileName, String msg,
+                         Throwable exception, int exitCode) {
+        error(pquoted(fileName) + ": " + msg, exception, exitCode);
     }
-    protected void error(GeneralizedFile file, String msg, Throwable exception, int exitCode) {
+    protected void error(GeneralizedFile file, String msg,
+                         Throwable exception, int exitCode) {
         error(file.givenName(), msg, exception, exitCode);
     }
-    protected void error(String fileName, String msg, int errorCode) {
-        error("`" + fileName + "': " + msg, errorCode);
-    }
-    protected void error(GeneralizedFile file, String msg, int errorCode) {
-        error(file.givenName(), msg, errorCode);
+    protected void error(GeneralizedFile file, String msg, int exitCode) {
+        error(file, msg, null, exitCode);
     }
 
-    protected void errorWithHandlingOfKnownExceptions(String fileName, String msg, Throwable exception, int exitCode) {
+    protected void errorWithHandlingOfKnownExceptions(String fileName,
+                                                      String msg,
+                                                      Throwable exception,
+                                                      int exitCode) {
         msg = (fileName == null ? msg :  ("`" + fileName + "': " + msg));
         if (exception instanceof UnknownHostException) {
             error(msg + ": Unknown host '" + exception.getMessage() + "'", exitCode);
@@ -224,11 +228,13 @@ public abstract class Command {
             OptionBuilder.withLongOpt("help");
             opt.addOption(OptionBuilder.create());
             opt.addOption("v", "verbose", false, "Enable verbose logging");
-            opt.addOption("V", "VV", false, "Enable debug logging");
+            opt.addOption("V", "VV", false, "Enable debug logging"); // FIXME: Delete me
         }
     }
     // Attributes
     private CommandLine line;
     private FileBuilder builder;
     private Options opt;
+    protected YellPolicy yell;
+    private ExitCode exitCode;
 }
