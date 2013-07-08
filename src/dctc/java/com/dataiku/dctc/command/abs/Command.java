@@ -228,7 +228,6 @@ public abstract class Command {
             OptionBuilder.withLongOpt("help");
             opt.addOption(OptionBuilder.create());
             opt.addOption("v", "verbose", false, "Enable verbose logging");
-            opt.addOption("V", "VV", false, "Enable debug logging"); // FIXME: Delete me
         }
     }
     // Attributes
