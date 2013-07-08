@@ -1,5 +1,5 @@
 package com.dataiku.dctc.command.cat;
 
-public interface CatStop {
+interface CatStop {
     public boolean stop();
 }
