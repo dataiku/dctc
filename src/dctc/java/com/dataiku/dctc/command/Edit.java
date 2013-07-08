@@ -36,7 +36,8 @@ public class Edit extends Command {
     public String getEditor() {
         if (hasOption("e")) {
             return getOptionValue("e");
-        } else {
+        }
+        else {
             return System.getenv("EDITOR");
         }
     }
@@ -63,7 +64,8 @@ public class Edit extends Command {
                 GeneralizedFile f = files.get(i);
                 if (f instanceof LocalFile) {
                     localFiles.add(f);
-                } else {
+                }
+                else {
                     String fileName = f.getFileName() + "-tmp";
                     String extension = FileManipulation.extension(fileName);
                     if (extension.isEmpty()) {
@@ -77,15 +79,16 @@ public class Edit extends Command {
 
             List<Long> timestamps = new ArrayList<Long>();
             copy(tasks);
-            for (CopyTask task : tasks) {
+            for (CopyTask task: tasks) {
                 timestamps.add(task.dstDir.getDate());
             }
 
             /* Build command-line and execute editor */
             List<String> args = new ArrayList<String>();
-            for (String c : rawEditor.split(" "))
+            for (String c: rawEditor.split(" ")) {
                 args.add(c);
-            for (CopyTask task : tasks) {
+            }
+            for (CopyTask task: tasks) {
                 args.add(task.dstDir.getAbsolutePath());
             }
             for (GeneralizedFile file: localFiles) {
@@ -96,7 +99,8 @@ public class Edit extends Command {
                                                + StringUtils.join(args, "' '")
                                                + "' > /dev/tty < /dev/tty"};
                 DKUtils.execAndGetOutput(cmdArgs, null);
-            } else {
+            }
+            else {
                 DKUtils.execAndGetOutput(args.toArray(new String[0]), null);
             }
 
@@ -117,11 +121,14 @@ public class Edit extends Command {
                 task.dstDir.delete();
             }
 
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             error("File not found: " + e.getMessage(), 1);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             error(e.getMessage(), 1);
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e) {
             error(e.getMessage(), 2);
         }
     }
@@ -142,6 +149,7 @@ public class Edit extends Command {
     // Private
     private void copy(List<CopyTask> tasks) throws IOException {
         SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(false, false, true);
+
         for (CopyTask task : tasks) {
             fact.build(task).work();
         }

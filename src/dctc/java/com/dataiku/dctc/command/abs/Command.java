@@ -81,13 +81,10 @@ public abstract class Command {
         this.builder = builder;
         return this;
     }
-
     public void perform(GeneralizedFile[] args) {
         resetExitCode();
         perform(Arrays.asList(args));
     }
-
-
     public ExitCode getExitCode() {
         return exitCode;
     }
