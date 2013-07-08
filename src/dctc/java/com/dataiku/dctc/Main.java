@@ -92,6 +92,7 @@ public class Main {
         System.out.println();
         cmd.longDescription(printer);
         System.out.println();
+        cmd.setExitCode(new ExitCode());
         cmd.usage();
     }
 
