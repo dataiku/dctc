@@ -71,26 +71,37 @@ public class CatAlgorithmFactory {
         }
     }
     private CatAlgorithm buildHead(GeneralizedFile file) {
-        return buildHead(file, getSkipLast());
+        return buildHead(file, getSkipLast(), getIsLineAlgo());
     }
-    private CatAlgorithm buildHead(GeneralizedFile file, long skipLast) {
-        if (skipLast > 0) {
-            return new LinumCatAlgorithm(file)
-                .withSelect(new FullCatLineSelector())
-                .withPrinter(new SimpleCatPrinter()
-                             .withHeader(new EmptyCatHeader())
-                             .withEol(new NewLineEOLCatPrinter()))
-                .withStop(new HeadCatStop().withHead(skipLast));
+    private CatAlgorithm buildHead(GeneralizedFile file, long skipLast, boolean isLine) {
+        if (isLine) {
+            LinumCatAlgorithm linum = new LinumCatAlgorithm(file)
+                .withSelect(new FullCatLineSelector());
+
+            if (skipLast > 0) {
+                linum.withPrinter(new SimpleCatPrinter()
+                                  .withHeader(new EmptyCatHeader())
+                                  .withEol(new NewLineEOLCatPrinter()))
+                    .withStop(new HeadCatStop().withHead(skipLast));
+
+            }
+            else {
+                linum.withPrinter(new HeadCatPrinter()
+                                  .withHead(-skipLast)
+                                  .withHeader(new EmptyCatHeader())
+                                  .withEol(new NewLineEOLCatPrinter()))
+                    .withStop(new ContinueCatStop());
+            }
+            return linum;
         }
         else {
-            return new LinumCatAlgorithm(file)
-                .withSelect(new FullCatLineSelector())
-                .withPrinter(new HeadCatPrinter()
-                             .withHead(-skipLast)
-                             .withHeader(new EmptyCatHeader())
-                             .withEol(new NewLineEOLCatPrinter()))
-                .withStop(new ContinueCatStop());
-
+            if (skipLast > 0) {
+                return null;
+            }
+            else {
+                return new BytesCatAlgorithm(file)
+                    .withSkipLast(-skipLast);
+            }
         }
     }
     private CatAlgorithm buildTail(GeneralizedFile file) {
@@ -99,29 +110,39 @@ public class CatAlgorithmFactory {
     private CatAlgorithm buildTail(GeneralizedFile file, long skipFirst,
                                    boolean isLine) {
         if (isLine) {
-            if (file.canGetLastLines()) {
-                return new LatestLineCatAlgorithm(file)
-                    .withNbLine(skipFirst);
-            } else if (file.canGetPartialFile()) {
-                return new PartialFileTailAlgorithm(file)
-                    .withNbLine(skipFirst);
+            if (skipFirst > 0) {
+                if (file.canGetLastLines()) {
+                    return new LatestLineCatAlgorithm(file)
+                        .withNbLine(skipFirst);
+                }
+                else if (file.canGetPartialFile()) {
+                    return new PartialFileTailAlgorithm(file)
+                        .withNbLine(skipFirst);
+                }
+                else {
+                    // Should be called only for full read text.
+                    return new LinumCatAlgorithm(file)
+                        .withSelect(new FullCatLineSelector())
+                        .withPrinter(new TailCatPrinter()
+                                     .withTail(skipFirst)
+                                     .withHeader(new EmptyCatHeader())
+                                     .withEol(new NewLineEOLCatPrinter()))
+                        .withStop(new ContinueCatStop());
+                }
             }
             else {
-
-                // Should be called only for full read text.
-                return new LinumCatAlgorithm(file)
-                    .withSelect(new FullCatLineSelector())
-                    .withPrinter(new TailCatPrinter()
-                                 .withTail(skipFirst)
-                                 .withHeader(new EmptyCatHeader())
-                                 .withEol(new NewLineEOLCatPrinter()))
-                    .withStop(new ContinueCatStop());
+                return null;
             }
         }
         else {
             // bytes
-            return new BytesCatAlgorithm(file)
-                .withSkipFirst(skipFirst);
+            if (skipFirst > 0) {
+                return new BytesCatAlgorithm(file)
+                    .withSkipFirst(skipFirst);
+            }
+            else {
+                return null;
+            }
         }
     }
 
