@@ -9,7 +9,8 @@ public class CatAlgorithmFactory {
     public CatAlgorithm build(GeneralizedFile file) throws IOException {
         return build(file, getAlgo());
     }
-    public CatAlgorithm build(GeneralizedFile file, AlgorithmType algo) throws IOException {
+    public CatAlgorithm build(GeneralizedFile file,
+                              AlgorithmType algo) throws IOException {
         switch (algo) {
         case CAT:
             return buildCat(file);
@@ -75,7 +76,9 @@ public class CatAlgorithmFactory {
     private CatAlgorithm buildHead(GeneralizedFile file) throws IOException {
         return buildHead(file, getSkipLast(), getIsLineAlgo());
     }
-    private CatAlgorithm buildHead(GeneralizedFile file, long skipLast, boolean isLine) throws IOException {
+    private CatAlgorithm buildHead(GeneralizedFile file,
+                                   long skipLast,
+                                   boolean isLine) throws IOException {
         if (isLine) {
             LinumCatAlgorithm linum = new LinumCatAlgorithm(file)
                 .withSelect(new FullCatLineSelector());
@@ -112,7 +115,8 @@ public class CatAlgorithmFactory {
     private CatAlgorithm buildTail(GeneralizedFile file) throws IOException {
         return buildTail(file, skipFirst, getIsLineAlgo());
     }
-    private CatAlgorithm buildTail(GeneralizedFile file, long skipFirst,
+    private CatAlgorithm buildTail(GeneralizedFile file,
+                                   long skipFirst,
                                    boolean isLine) throws IOException {
         if (isLine) {
             if (skipFirst > 0) {
