@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.copy.CopyTask;
@@ -94,8 +92,6 @@ public abstract class ListFilesCommand extends Command {
         dstRoot(dst);
         // src contains at least one element.
         for (GeneralizedFile source: sources) {
-            logger.debug("Check " + source.getAbsoluteAddress());
-
             // If not exists, continue.
             try  {
                 if (!source.exists()) {
@@ -228,5 +224,4 @@ public abstract class ListFilesCommand extends Command {
 
     // Attributes
     private List<CopyTask> taskList = new ArrayList<CopyTask>();
-    private static Logger logger = Logger.getLogger("dctc.command");
 }
