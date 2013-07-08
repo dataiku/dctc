@@ -3,11 +3,45 @@ package com.dataiku.dip.partitioning;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.NotImplementedException;
+
 import com.google.common.collect.ImmutableMap;
 
 public class Partition implements Cloneable {
     public Partition(PartitioningScheme scheme) {
         this.scheme = scheme;
+    }
+
+    public static Partition randomSamplePartition(PartitioningScheme scheme) {
+        Partition p = new Partition(scheme);
+
+        for (Dimension dim : scheme.getDimensions().values()) {
+            if (dim instanceof TimeDimension) {
+                TimeDimension td = (TimeDimension)dim;
+                switch (td.mappedPeriod) {
+                case DAY:
+                    p.dimensionValues.put(dim.getName(), new TimeDimensionValue(td, 2013, 12, 31));
+                    break;
+                case HOUR:
+                    p.dimensionValues.put(dim.getName(), new TimeDimensionValue(td, 2013, 12, 31, 23));
+                    break;
+                case MONTH:
+                    p.dimensionValues.put(dim.getName(), new TimeDimensionValue(td, 2013, 12));
+                    break;
+                case YEAR:
+                    p.dimensionValues.put(dim.getName(), new TimeDimensionValue(td, 2013));
+                    break;
+                default:
+                    throw new Error("unreachable");
+                }
+
+            } else if (dim instanceof ExactValueDimension) {
+                p.dimensionValues.put(dim.getName(), new ExactValueDimensionValue("sampleval"));
+            } else {
+                throw new NotImplementedException();
+            }
+        }
+        return p;
     }
 
     public PartitioningScheme getScheme() {
