@@ -8,6 +8,7 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -66,6 +67,16 @@ public class StreamUtils {
         catch (UnsupportedEncodingException e) {
             assert false;
             return null;
+        }
+    }
+
+    public static void skip(InputStream i, long n) throws IOException {
+        while (n > 0) {
+            long skipped = i.skip(n);
+            if (skipped == 0) {
+                break;
+            }
+            n -= skipped;
         }
     }
 }
