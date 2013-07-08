@@ -123,13 +123,13 @@ public class Edit extends Command {
 
         }
         catch (FileNotFoundException e) {
-            error("File not found: " + e.getMessage(), 1);
+            error("File not found: " + e.getMessage(), e, 1);
         }
         catch (IOException e) {
-            error(e.getMessage(), 1);
+            error(e.getMessage(), e, 1);
         }
         catch (InterruptedException e) {
-            error(e.getMessage(), 2);
+            error(e.getMessage(), e, 2);
         }
     }
 
