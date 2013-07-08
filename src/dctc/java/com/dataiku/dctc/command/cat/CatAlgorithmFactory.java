@@ -14,6 +14,8 @@ public class CatAlgorithmFactory {
         switch (algo) {
         case CAT:
             return buildCat(file);
+        case NL:
+            return buildNl(file);
         case HEAD:
             return buildHead(file);
         case TAIL:
@@ -164,7 +166,14 @@ public class CatAlgorithmFactory {
             }
         }
     }
-
+    private CatAlgorithm buildNl(GeneralizedFile file) {
+        return new LinumCatAlgorithm(file)
+            .withSelect(new NlCatLineSelector())
+            .withPrinter(new SimpleCatPrinter()
+                         .withHeader(new LinumCatHeader())
+                         .withEol(new NewLineEOLCatPrinter()))
+            .withStop(new ContinueCatStop());
+    }
     // Getters-Setters
     public AlgorithmType getAlgo() {
         return algo;
