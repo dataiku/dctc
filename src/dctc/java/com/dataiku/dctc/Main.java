@@ -29,6 +29,7 @@ import com.dataiku.dctc.command.ListColumns;
 import com.dataiku.dctc.command.Ls;
 import com.dataiku.dctc.command.Mkdir;
 import com.dataiku.dctc.command.Mv;
+import com.dataiku.dctc.command.Nl;
 import com.dataiku.dctc.command.Rm;
 import com.dataiku.dctc.command.Rmdir;
 import com.dataiku.dctc.command.Sync;
@@ -121,6 +122,7 @@ public class Main {
         addCmd(new ListColumns());
         addCmd(new Ls());
         addCmd(new Mkdir());
+        addCmd(new Nl());
         addCmd(new Mv());
         addCmd(new Rmdir());
         addCmd(new Rm());
