@@ -1,13 +1,15 @@
 package com.dataiku.dctc.command.cat;
 
+import java.io.IOException;
+
 import com.dataiku.dctc.file.GeneralizedFile;
 
 public class CatAlgorithmFactory {
     // Building methods.
-    public CatAlgorithm build(GeneralizedFile file) {
+    public CatAlgorithm build(GeneralizedFile file) throws IOException {
         return build(file, getAlgo());
     }
-    public CatAlgorithm build(GeneralizedFile file, AlgorithmType algo) {
+    public CatAlgorithm build(GeneralizedFile file, AlgorithmType algo) throws IOException {
         switch (algo) {
         case CAT:
             return buildCat(file);
@@ -70,10 +72,10 @@ public class CatAlgorithmFactory {
             return new BytesCatAlgorithm(file);
         }
     }
-    private CatAlgorithm buildHead(GeneralizedFile file) {
+    private CatAlgorithm buildHead(GeneralizedFile file) throws IOException {
         return buildHead(file, getSkipLast(), getIsLineAlgo());
     }
-    private CatAlgorithm buildHead(GeneralizedFile file, long skipLast, boolean isLine) {
+    private CatAlgorithm buildHead(GeneralizedFile file, long skipLast, boolean isLine) throws IOException {
         if (isLine) {
             LinumCatAlgorithm linum = new LinumCatAlgorithm(file)
                 .withSelect(new FullCatLineSelector());
@@ -97,7 +99,9 @@ public class CatAlgorithmFactory {
         }
         else {
             if (skipLast > 0) {
-                return null;
+                long fileSize = file.getSize();
+                return new BytesCatAlgorithm(file)
+                    .withSkipLast(fileSize - skipLast);
             }
             else {
                 return new BytesCatAlgorithm(file)
@@ -105,11 +109,11 @@ public class CatAlgorithmFactory {
             }
         }
     }
-    private CatAlgorithm buildTail(GeneralizedFile file) {
+    private CatAlgorithm buildTail(GeneralizedFile file) throws IOException {
         return buildTail(file, skipFirst, getIsLineAlgo());
     }
     private CatAlgorithm buildTail(GeneralizedFile file, long skipFirst,
-                                   boolean isLine) {
+                                   boolean isLine) throws IOException {
         if (isLine) {
             if (skipFirst > 0) {
                 if (file.canGetLastLines()) {
@@ -146,11 +150,13 @@ public class CatAlgorithmFactory {
         else {
             // bytes
             if (skipFirst > 0) {
+                long fileSize = file.getSize();
                 return new BytesCatAlgorithm(file)
-                    .withSkipFirst(skipFirst);
+                    .withSkipFirst(fileSize - skipFirst);
             }
             else {
-                return null;
+                return new BytesCatAlgorithm(file)
+                    .withSkipFirst(-skipFirst);
             }
         }
     }

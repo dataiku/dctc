@@ -1,7 +1,9 @@
 package com.dataiku.dctc.command.cat;
 
+import java.io.IOException;
 import java.util.List;
 
+import com.dataiku.dctc.DCTCLog;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dctc.file.StandardFile;
 import com.dataiku.dctc.utils.ExitCode;
@@ -26,7 +28,14 @@ public class CatRunner {
                 }
                 header(arg);
             }
-            CatAlgorithm runner = fact.build(arg);
+            CatAlgorithm runner;
+            try {
+                runner = fact.build(arg);
+            }
+            catch (IOException e) {
+                DCTCLog.error("cat,head,tail", "Error while reading the file", e);
+                continue;
+            }
             runner.setExitCode(exitCode);
             runner.run();
             setExitCode(runner.getExitCode());
