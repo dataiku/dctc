@@ -45,14 +45,16 @@ public class Edit extends Command {
     public void perform(List<GeneralizedFile> files) {
         List<CopyTask> tasks = new ArrayList<CopyTask>();
         List<GeneralizedFile> localFiles = new ArrayList<GeneralizedFile>();
-        String rawEditor = getEditor();
-        if (rawEditor == null) {
-            error("The variable `EDITOR' is not set in your environment.", 1);
-            return;
-        }
+
         if (files.size() == 0) {
             usage();
             setExitCode(1);
+            return;
+        }
+
+        String rawEditor = getEditor();
+        if (rawEditor == null) {
+            error("The variable `EDITOR' is not set in your environment.", 1);
             return;
         }
 
