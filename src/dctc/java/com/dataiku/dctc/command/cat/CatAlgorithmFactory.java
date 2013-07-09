@@ -28,10 +28,10 @@ public class CatAlgorithmFactory {
         return buildCat(file, getLinum(), getDollar(),
                         getSqueezeMultipleEmpty());
     }
-    private CatAlgorithm buildCat(GeneralizedFile file,
-                                  boolean linum,
-                                  boolean dollar,
-                                  boolean squeezeMultipleEmpty) {
+    private CatAlgorithm buildCat(GeneralizedFile file
+                                  , boolean linum
+                                  , boolean dollar
+                                  , boolean squeezeMultipleEmpty) {
         if (linum || dollar || squeezeMultipleEmpty) {
             LinumCatAlgorithm cat = new LinumCatAlgorithm(file);
             { // Set the cat printer
@@ -78,9 +78,9 @@ public class CatAlgorithmFactory {
     private CatAlgorithm buildHead(GeneralizedFile file) throws IOException {
         return buildHead(file, getSkipLast(), getIsLineAlgo());
     }
-    private CatAlgorithm buildHead(GeneralizedFile file,
-                                   long skipLast,
-                                   boolean isLine) throws IOException {
+    private CatAlgorithm buildHead(GeneralizedFile file
+                                   , long skipLast
+                                   , boolean isLine) throws IOException {
         if (isLine) {
             LinumCatAlgorithm linum = new LinumCatAlgorithm(file)
                 .withSelect(new FullCatLineSelector());
@@ -117,9 +117,9 @@ public class CatAlgorithmFactory {
     private CatAlgorithm buildTail(GeneralizedFile file) throws IOException {
         return buildTail(file, skipFirst, getIsLineAlgo());
     }
-    private CatAlgorithm buildTail(GeneralizedFile file,
-                                   long skipFirst,
-                                   boolean isLine) throws IOException {
+    private CatAlgorithm buildTail(GeneralizedFile file
+                                   , long skipFirst
+                                   , boolean isLine) throws IOException {
         if (isLine) {
             if (skipFirst > 0) {
                 if (file.canGetLastLines()) {
@@ -173,10 +173,11 @@ public class CatAlgorithmFactory {
                        , getIndentSize()
                        , getStartingLine());
     }
-    private CatAlgorithm buildNl(GeneralizedFile file, int lineIncrement,
-                                 String indentSeparator,
-                                 int minIndentSize,
-                                 long startingLine) {
+    private CatAlgorithm buildNl(GeneralizedFile file
+                                 , int lineIncrement
+                                 , String indentSeparator
+                                 , int minIndentSize
+                                 , long startingLine) {
         return new LinumCatAlgorithm(file)
             .withSelect(new NlCatLineSelector())
             .withPrinter(new SimpleCatPrinter()
