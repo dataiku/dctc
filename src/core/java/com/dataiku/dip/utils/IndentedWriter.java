@@ -45,7 +45,6 @@ public class IndentedWriter {
         }
     }
 
-
     // Getterrs/Setters
     public int getFirstLineIndentSize() {
         return firstLineIndentSize;
