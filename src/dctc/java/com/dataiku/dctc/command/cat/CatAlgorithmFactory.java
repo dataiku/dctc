@@ -39,7 +39,7 @@ public class CatAlgorithmFactory {
             }
             { // Set Header
                 if (linum) {
-                    cat.getPrinter().setHeader(new LinumCatHeader());
+                    cat.getPrinter().setHeader(new LeftLinumCatHeader());
                 }
                 else {
                     cat.getPrinter().setHeader(new EmptyCatHeader());
@@ -170,7 +170,7 @@ public class CatAlgorithmFactory {
         return new LinumCatAlgorithm(file)
             .withSelect(new NlCatLineSelector())
             .withPrinter(new SimpleCatPrinter()
-                         .withHeader(new LinumCatHeader())
+                         .withHeader(new LeftLinumCatHeader())
                          .withEol(new NewLineEOLCatPrinter()))
             .withStop(new ContinueCatStop());
     }
