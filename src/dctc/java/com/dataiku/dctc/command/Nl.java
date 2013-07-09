@@ -25,9 +25,12 @@ public class Nl extends Command {
     public Options setOptions() {
         Options opt = new Options();
 
-        longOpt(opt, "Line number increment at each line.", "lineincrement", "i", "NUMBER");
-        longOpt(opt, "Use NUMBER columns for line numbers.", "numberwidth", "w", "NUMBER");
-        longOpt(opt, "First line number on each logical page.", "startingline", "v", "NUMBER");
+        longOpt(opt, "Line number increment at each line."
+                , "lineincrement", "i", "NUMBER");
+        longOpt(opt, "Use NUMBER columns for line numbers."
+                , "numberwidth", "w", "NUMBER");
+        longOpt(opt, "First line number on each logical page."
+                , "startingline", "v", "NUMBER");
 
         return opt;
     }
