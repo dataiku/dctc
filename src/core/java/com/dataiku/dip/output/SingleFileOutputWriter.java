@@ -8,6 +8,7 @@ import java.util.zip.GZIPOutputStream;
 
 import com.dataiku.dip.datalayer.ColumnFactory;
 import com.dataiku.dip.datalayer.Row;
+import com.dataiku.dip.utils.DKUFileUtils;
 
 public class SingleFileOutputWriter extends OutputWriter{
     private OutputStream finalOutputStream;
@@ -25,6 +26,7 @@ public class SingleFileOutputWriter extends OutputWriter{
     @Override
     public void init(ColumnFactory cf) throws IOException {
         this.cf = cf;
+        DKUFileUtils.mkdirsParent(new File(path));
         fos = new FileOutputStream(new File(path));
         if (path.contains(".gz")) {
             finalOutputStream = new GZIPOutputStream(fos);
