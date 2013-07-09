@@ -26,6 +26,7 @@ public class Nl extends Command {
         Options opt = new Options();
 
         longOpt(opt, "Line number increment at each line.", "i", "lineincrement", "NUMBER");
+        longOpt(opt, "Use NUMBER columns for line numbers.", "w", "numberwidth", "NUMBER");
 
         return opt;
     }
@@ -37,20 +38,22 @@ public class Nl extends Command {
     public void perform(List<GeneralizedFile> args) {
         CatAlgorithmFactory fact = new CatAlgorithmFactory()
             .withAlgo(AlgorithmType.NL)
-            .withLineIncrement(getLineIncrement());
+            .withLineIncrement(getIntOption("i", 1))
+            .withIndentSeparator(" ")
+            .withIndentSize(getIntOption("w", 6));
 
         CatRunner runner = new CatRunner();
         runner.perform(args, false, fact, getExitCode());
     }
 
     // Private
-    private int getLineIncrement() {
-        if (hasOption("i")) {
+    private int getIntOption(String option, int defaultValue) {
+        if (hasOption(option)) {
             // FIXME: Should make a better management.
-            return IntegerUtils.toInt(getOptionValue("i"));
+            return IntegerUtils.toInt(getOptionValue(option));
         }
         else {
-            return 1;
+            return defaultValue;
         }
     }
 }

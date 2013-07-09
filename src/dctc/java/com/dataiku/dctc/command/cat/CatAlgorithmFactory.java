@@ -167,14 +167,21 @@ public class CatAlgorithmFactory {
         }
     }
     private CatAlgorithm buildNl(GeneralizedFile file) {
-        return buildNl(file, getLineIncrement());
+        return buildNl(file
+                       , getLineIncrement()
+                       , getIndentSeparator()
+                       , getIndentSize());
     }
-    private CatAlgorithm buildNl(GeneralizedFile file, int lineIncrement) {
+    private CatAlgorithm buildNl(GeneralizedFile file, int lineIncrement,
+                                 String indentSeparator,
+                                 int minIndentSize) {
         return new LinumCatAlgorithm(file)
             .withSelect(new NlCatLineSelector())
             .withPrinter(new SimpleCatPrinter()
                          .withHeader(new LeftLinumCatHeader()
-                                     .withNumberIncrement(lineIncrement))
+                                     .withNumberIncrement(lineIncrement)
+                                     .withIndentSeparator(indentSeparator)
+                                     .withNumberOfCol(minIndentSize))
                          .withEol(new NewLineEOLCatPrinter()))
             .withStop(new ContinueCatStop());
     }
@@ -261,11 +268,30 @@ public class CatAlgorithmFactory {
         setLineIncrement(lineIncrement);
         return this;
     }
-
-    private int lineIncrement;
-
+    public String getIndentSeparator() {
+        return indentSeparator;
+    }
+    public void setIndentSeparator(String indentSeparator) {
+        this.indentSeparator = indentSeparator;
+    }
+    public CatAlgorithmFactory withIndentSeparator(String indentSeparator) {
+        setIndentSeparator(indentSeparator);
+        return this;
+    }
+    public int getIndentSize() {
+        return indentSize;
+    }
+    public void setIndentSize(int indentSize) {
+        this.indentSize = indentSize;
+    }
+    public CatAlgorithmFactory withIndentSize(int indentSize) {
+        setIndentSize(indentSize);
+        return this;
+    }
     // Attributes
-
+    private int indentSize;
+    private String indentSeparator;
+    private int lineIncrement;
     private boolean squeezeMultipleEmpty; // Squeeze multiple empty line.
     private boolean dollar;
     private boolean linum;
