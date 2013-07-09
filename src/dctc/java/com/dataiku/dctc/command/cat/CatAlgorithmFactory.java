@@ -167,10 +167,14 @@ public class CatAlgorithmFactory {
         }
     }
     private CatAlgorithm buildNl(GeneralizedFile file) {
+        return buildNl(file, getLineIncrement());
+    }
+    private CatAlgorithm buildNl(GeneralizedFile file, int lineIncrement) {
         return new LinumCatAlgorithm(file)
             .withSelect(new NlCatLineSelector())
             .withPrinter(new SimpleCatPrinter()
-                         .withHeader(new LeftLinumCatHeader())
+                         .withHeader(new LeftLinumCatHeader()
+                                     .withNumberIncrement(lineIncrement))
                          .withEol(new NewLineEOLCatPrinter()))
             .withStop(new ContinueCatStop());
     }
@@ -247,8 +251,21 @@ public class CatAlgorithmFactory {
         setSkipLast(skipLast);
         return this;
     }
+    public int getLineIncrement() {
+        return lineIncrement;
+    }
+    public void setLineIncrement(int lineIncrement) {
+        this.lineIncrement = lineIncrement;
+    }
+    public CatAlgorithmFactory withLineIncrement(int lineIncrement) {
+        setLineIncrement(lineIncrement);
+        return this;
+    }
+
+    private int lineIncrement;
 
     // Attributes
+
     private boolean squeezeMultipleEmpty; // Squeeze multiple empty line.
     private boolean dollar;
     private boolean linum;
