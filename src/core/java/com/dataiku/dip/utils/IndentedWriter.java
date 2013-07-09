@@ -8,9 +8,9 @@ public class IndentedWriter {
 
     public void print(String message) {
         boolean hasPrint = false;
-        int index = 0;
+        int index = startIndex;
         StringBuilder sb = new StringBuilder();
-        index = indent(sb, firstLineIndentSize);
+        index = index + indent(sb, firstLineIndentSize);
         for (String word: message.split(" ")) {
             if (index + word.length() >= termSize && hasPrint) {
                 sb.append(eol());
@@ -83,6 +83,16 @@ public class IndentedWriter {
     public void setTermSize(int termSize) {
         this.termSize = termSize;
     }
+    public int getStartIndex() {
+        return startIndex;
+    }
+    public void setStartIndex(int startIndex) {
+        this.startIndex = startIndex;
+    }
+    public IndentedWriter withStartIndex(int startIndex) {
+        setStartIndex(startIndex);
+        return this;
+    }
 
     // Private methods
     private int indent(StringBuilder sb, int indentSize) {
@@ -94,6 +104,7 @@ public class IndentedWriter {
             + textIndentSeparator.length();
     }
 
+    private int startIndex;
     // Attributes
     private String separator = " ";
     private String indentString = " ";
