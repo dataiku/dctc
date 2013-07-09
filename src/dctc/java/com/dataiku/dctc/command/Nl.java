@@ -27,6 +27,7 @@ public class Nl extends Command {
 
         longOpt(opt, "Line number increment at each line.", "i", "lineincrement", "NUMBER");
         longOpt(opt, "Use NUMBER columns for line numbers.", "w", "numberwidth", "NUMBER");
+        longOpt(opt, "First line number on each logical page.", "v", "startingline", "NUMBER");
 
         return opt;
     }
@@ -40,7 +41,8 @@ public class Nl extends Command {
             .withAlgo(AlgorithmType.NL)
             .withLineIncrement(getIntOption("i", 1))
             .withIndentSeparator(" ")
-            .withIndentSize(getIntOption("w", 6));
+            .withIndentSize(getIntOption("w", 6))
+            .withStartingLine(getIntOption("v", 1));
 
         CatRunner runner = new CatRunner();
         runner.perform(args, false, fact, getExitCode());

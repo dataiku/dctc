@@ -170,18 +170,21 @@ public class CatAlgorithmFactory {
         return buildNl(file
                        , getLineIncrement()
                        , getIndentSeparator()
-                       , getIndentSize());
+                       , getIndentSize()
+                       , getStartingLine());
     }
     private CatAlgorithm buildNl(GeneralizedFile file, int lineIncrement,
                                  String indentSeparator,
-                                 int minIndentSize) {
+                                 int minIndentSize,
+                                 long startingLine) {
         return new LinumCatAlgorithm(file)
             .withSelect(new NlCatLineSelector())
             .withPrinter(new SimpleCatPrinter()
                          .withHeader(new LeftLinumCatHeader()
                                      .withNumberIncrement(lineIncrement)
                                      .withIndentSeparator(indentSeparator)
-                                     .withNumberOfCol(minIndentSize))
+                                     .withNumberOfCol(minIndentSize)
+                                     .withLineNumber(startingLine))
                          .withEol(new NewLineEOLCatPrinter()))
             .withStop(new ContinueCatStop());
     }
@@ -288,7 +291,18 @@ public class CatAlgorithmFactory {
         setIndentSize(indentSize);
         return this;
     }
+    public long getStartingLine() {
+        return startingLine;
+    }
+    public void setStartingLine(long startingLine) {
+        this.startingLine = startingLine;
+    }
+    public CatAlgorithmFactory withStartingLine(long startingLine) {
+        setStartingLine(startingLine);
+        return this;
+    }
     // Attributes
+    private long startingLine;
     private int indentSize;
     private String indentSeparator;
     private int lineIncrement;

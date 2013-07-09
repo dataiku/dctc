@@ -57,7 +57,7 @@ abstract class LinumCatHeader implements CatHeader {
 
     // Attributes
     private String indentSeparator;
-    private long lineNumber = 1;
+    private long lineNumber;
     private int numberIncrement;
     private int numberOfCol;
 }
