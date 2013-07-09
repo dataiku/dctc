@@ -10,6 +10,7 @@ import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
 import com.dataiku.dctc.command.cat.CatRunner;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
+import com.dataiku.dip.utils.IntegerUtils;
 
 public class Nl extends Command {
     public String cmdname() {
@@ -22,7 +23,11 @@ public class Nl extends Command {
         return "Numbered input files on the standard output.";
     }
     public Options setOptions() {
-        return new Options();
+        Options opt = new Options();
+
+        longOpt(opt, "Line number increment at each line.", "i", "lineincrement", "NUMBER");
+
+        return opt;
     }
     public void longDescription(IndentedWriter writer) {
         writer.print("Write each FILE to standard output, with line "
@@ -31,9 +36,21 @@ public class Nl extends Command {
     }
     public void perform(List<GeneralizedFile> args) {
         CatAlgorithmFactory fact = new CatAlgorithmFactory()
-            .withAlgo(AlgorithmType.NL);
+            .withAlgo(AlgorithmType.NL)
+            .withLineIncrement(getLineIncrement());
 
         CatRunner runner = new CatRunner();
         runner.perform(args, false, fact, getExitCode());
+    }
+
+    // Private
+    private int getLineIncrement() {
+        if (hasOption("i")) {
+            // FIXME: Should make a better management.
+            return IntegerUtils.toInt(getOptionValue("i"));
+        }
+        else {
+            return 1;
+        }
     }
 }
