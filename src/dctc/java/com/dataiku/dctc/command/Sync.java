@@ -4,11 +4,11 @@ import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.cli.Options;
-
 import com.dataiku.dctc.GlobalConstants;
+import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.copy.CopyTask;
@@ -49,10 +49,10 @@ public class Sync extends Command {
         if (compress()) {
             return Type.EXISTS_ONLY;
         }
-        if (hasOption("m")) {
+        if (hasOption('m')) {
             return Type.HASH_BASED;
         }
-        if (hasOption("t")) {
+        if (hasOption('t')) {
             return Type.TIME_AND_SIZE;
         }
         return Type.SIZE_ONLY;
@@ -63,17 +63,17 @@ public class Sync extends Command {
     }
 
     @Override
-    protected Options setOptions() {
-        Options options = new Options();
+    protected List<Option> setOptions() {
+        List<Option> opts = new ArrayList<Option>();
 
-        options.addOption("t", "time", false, "Check whether sync is required using file size and modification time (default: size only). Incompatible with -m");
-        options.addOption("m", "hash", false, "Check whether sync is required using file hash (default: size only). Incompatible with -t");
-        options.addOption("n", "dry-run", false, "Perform a trial run with no changes made.");
-        options.addOption("c", "compress", false, "Compress the output files and appends .gz extension. Disables -t and -m");
-        options.addOption("s", "sequential", false, "Make the copy with only one thread.");
-        longOpt(options, "Set the number of thread.", "thread_number", "n", "number");
+        opts.add(stdOption('t', "time", "Check whether sync is required using file size and modification time (default: size only). Incompatible with -m"));
+        opts.add(stdOption('m', "hash", "Check whether sync is required using file hash (default: size only). Incompatible with -t"));
+        opts.add(stdOption('n', "dry-run", "Perform a trial run with no changes made."));
+        opts.add(stdOption('c', "compress", "Compress the output files and appends .gz extension. Disables -t and -m"));
+        opts.add(stdOption('s', "sequential", "Make the copy with only one thread."));
+        opts.add(stdOption('n', "thread-number", "Set the number of thread.", true)); // FIXME: NUMBER
 
-        return options;
+        return opts;
     }
 
     public void perform(List<GeneralizedFile> args) {
@@ -93,7 +93,7 @@ public class Sync extends Command {
 
         try {
             List<CopyTask> tasks = computer.computeTasksList();
-            if (hasOption("n")) {
+            if (hasOption('n')) {
                 return;
             } else {
                 execute(tasks);
@@ -127,10 +127,10 @@ public class Sync extends Command {
 
     private int getThreadLimit() {
         int threadLimit = GlobalConf.getThreadLimit();
-        if (hasOption("n")) {
-            threadLimit = Integer.parseInt(getOptionValue("n"));
+        if (hasOption('n')) {
+            threadLimit = Integer.parseInt(getOptionValue('n'));
         }
-        if (hasOption("s")) {
+        if (hasOption('s')) {
             threadLimit = 1;
         }
 

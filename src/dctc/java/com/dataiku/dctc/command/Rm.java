@@ -3,10 +3,10 @@ package com.dataiku.dctc.command;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.cli.Options;
-
+import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.display.Interactive;
 import com.dataiku.dctc.file.GeneralizedFile;
@@ -18,7 +18,7 @@ public class Rm extends Command {
     }
     public void longDescription(IndentedWriter printer) {
         printer.print(scat("Remove files and folders. By default, it will refuse to remove"
-                           ,"folders. Use -r"));
+                           , "folders. Use -r"));
     }
     // Public
     @Override
@@ -41,25 +41,25 @@ public class Rm extends Command {
     /// Getters
     public boolean interactive() {
         if (interactive == null) {
-            interactive = hasOption("i");
+            interactive = hasOption('i');
         }
         return interactive;
     }
     public boolean verbose() {
         if (verbose == null) {
-            verbose = hasOption("v");
+            verbose = hasOption('v');
         }
         return verbose;
     }
     public boolean recursiveDeletion() {
         if (recursiveDeletion == null) {
-            recursiveDeletion = hasOption("r") || hasOption("R");
+            recursiveDeletion = hasOption('r');
         }
         return recursiveDeletion;
     }
     public boolean force() {
         if (force == null) {
-            force = hasOption("f");
+            force = hasOption('f');
         }
         return force;
     }
@@ -83,15 +83,15 @@ public class Rm extends Command {
 
     // Protected
     @Override
-    protected Options setOptions() {
-        Options options = new Options();
-        options.addOption("v", "verbose", false, "Explain what is being done.");
-        options.addOption("r", "recursive", false, "Remove directories and their contents recursively.");
-        options.addOption("R", false, "Remove directories and their contents recursively.");
-        options.addOption("f", "force", false, "Ignore nonexistent files and arguments, never prompt.");
-        options.addOption("i", false, "Prompt before every removal.");
+    protected List<Option> setOptions() {
+        List<Option> opts = new ArrayList<Option>();
 
-        return options;
+        opts.add(stdOption('v', "verbose", "Explain what i being done."));
+        opts.add(stdOption("rR", "recursive", "Remove directories and their contents recursively."));
+        opts.add(stdOption('f', "force", "Ignore nonexistent files and argumens, never prompt."));
+        opts.add(stdOption('i', "Prompt before every removal."));
+
+        return opts;
     }
     @Override
     protected String proto() {

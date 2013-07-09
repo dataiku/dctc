@@ -1,6 +1,5 @@
 package com.dataiku.dctc.command.abs;
 
-import static com.dataiku.dip.utils.PrettyString.scat;
 import static com.dataiku.dip.utils.PrettyString.pquoted;
 
 import java.io.IOException;
@@ -9,20 +8,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.PosixParser;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import com.dataiku.dctc.DCTCLog;
 import com.dataiku.dctc.Globbing;
 import com.dataiku.dctc.Main;
+import com.dataiku.dctc.clo.LongOption;
+import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.Parser;
+import com.dataiku.dctc.clo.ShortOption;
 import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.command.policy.YellPolicyFactory;
 import com.dataiku.dctc.configuration.GlobalConf;
@@ -47,7 +45,7 @@ public abstract class Command {
     protected abstract String proto();
     public abstract void longDescription(IndentedWriter printer);
     // Abstract methods
-    protected abstract Options setOptions();
+    protected abstract List<Option> setOptions();
     public void perform(String[] args) {
         resetExitCode();
         // Default implementation could be override
@@ -68,16 +66,15 @@ public abstract class Command {
         throw new NotImplementedException();
     }
     /** Prints the usage in case of bad usage by the user */
-    public void usage() {
+    public void usage() { // FIXME
         if (exitCode.getExitCode() != 0) {
             System.setOut(System.err);
         }
         initOptions();
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp(scat("dctc"
+        /*formatter.printHelp(scat("dctc"
                                  , cmdname()
-                                 , proto()), opt);
-
+                                 , proto()), opt);*/
     }
     public FileBuilder getFileBuilder() {
         return builder;
@@ -104,34 +101,20 @@ public abstract class Command {
     // Protected methods
     protected void parseCommandLine(String[] shellargs) {
         initOptions();
-        CommandLineParser parser = new PosixParser();
-        try {
-            line = parser.parse(opt, shellargs);
-        }
-        catch (ParseException exp) {
-            error(exp.getMessage(), 1);
-            usage();
-            throw new EndOfCommand();
-
-        }
-        if (line.hasOption("help")) {
+        parser = new Parser()
+            .withOptions(opts);
+        parser.parser(shellargs);
+        if (parser.hasOption("help")) {
             Main.commandHelp(this, new IndentedWriter());
             throw new EndOfCommand();
         }
-        if (line.hasOption("v")) {
+        if (parser.hasOption('v')) {
             Logger.getRootLogger().setLevel(Level.INFO);
         }
-        if (line.hasOption("V")) {
-            Logger.getRootLogger().setLevel(Level.DEBUG);
-            DCTCLog.setLevel(DCTCLog.Level.DEBUG);
-        }
-    }
-    protected CommandLine getRawArgs() {
-        return line;
     }
     protected List<GeneralizedFile> getArgs(String[] shellargs) {
         parseCommandLine(shellargs);
-        return resolveGlobbing(Arrays.asList(getRawArgs().getArgs()));
+        return resolveGlobbing(parser.getArgs());
     }
     protected List<GeneralizedFile> resolveGlobbing(List<String> args) {
         List<GeneralizedFile> gargs = new ArrayList<GeneralizedFile>();
@@ -210,30 +193,90 @@ public abstract class Command {
         GeneralizedFile[] array = getFileBuilder().buildFile(paths);
         return Arrays.asList(array);
     }
+    protected boolean hasOption(char opt) {
+        return parser != null && parser.hasOption(opt);
+    }
     protected boolean hasOption(String opt) {
-        return line != null && line.hasOption(opt);
+        return parser != null && parser.hasOption(opt);
     }
     protected String getOptionValue(String opt) {
-        return line.getOptionValue(opt);
+        return parser.getOptionValue(opt);
     }
     protected String getOptionValue(String opt, String defaultValue) {
         return hasOption(opt) ? getOptionValue(opt) : defaultValue;
     }
-
+    protected String getOptionValue(char opt) {
+        return parser.getOptionValue(opt);
+    }
+    protected String getOptionValue(char opt, String defaultValue) {
+        return hasOption(opt) ? getOptionValue(opt) : defaultValue;
+    }
+    protected Option stdOption(char shortOpt,
+                               String longOpt,
+                               String descrip) {
+        return stdOption(shortOpt, longOpt, descrip, false);
+    }
+    protected Option stdOption(String shortOpts,
+                               String longOpt,
+                               String descrip) {
+        return stdOption(shortOpts, longOpt, descrip, false);
+    }
+    protected Option stdOption(char shortOpt,
+                               String descrip) {
+        ShortOption sopt = new ShortOption();
+        sopt.addOpt(shortOpt);
+        return new Option()
+            .withShortOption(sopt)
+            .withDescription(descrip);
+    }
+    protected Option stdOption(char shortOpt,
+                               String longOpt,
+                               String descrip,
+                               boolean hasArg) {
+        ShortOption sopt = new ShortOption();
+        sopt.addOpt(shortOpt);
+        LongOption lopt = new LongOption();
+        lopt.addOpt(longOpt);
+        return new Option()
+            .withShortOption(sopt)
+            .withLongOption(lopt)
+            .withDescription(descrip)
+            .withHasOption(hasArg);
+    }
+    protected Option stdOption(String shortOpts,
+                               String longOpt,
+                               String descrip,
+                               boolean hasArg) {
+        ShortOption sopt = new ShortOption();
+        sopt.addOpts(shortOpts);
+        LongOption lopt = new LongOption();
+        lopt.addOpt(longOpt);
+        return new Option()
+            .withShortOption(sopt)
+            .withLongOption(lopt)
+            .withDescription(descrip)
+            .withHasOption(hasArg);
+    }
+    protected List<String> getArgs() {
+        return parser.getArgs();
+    }
     // Private methods
     private void initOptions() {
-        if (opt == null) {
-            opt = setOptions();
-            OptionBuilder.withDescription("Display this help message.");
-            OptionBuilder.withLongOpt("help");
-            opt.addOption(OptionBuilder.create());
-            opt.addOption("v", "verbose", false, "Enable verbose logging");
+        if (opts == null) {
+            opts = setOptions();
+            Option help = new Option()
+            .withDescription("Display this help message.");
+            LongOption longHelp = new LongOption();
+            longHelp.addOpt("help");
+            help.setLongOption(longHelp);
+
+            opts.add(help);
         }
     }
     // Attributes
-    private CommandLine line;
+    private Parser parser;
+    private List<Option> opts;
     private FileBuilder builder;
-    private Options opt;
     protected YellPolicy yell;
     private ExitCode exitCode;
 }

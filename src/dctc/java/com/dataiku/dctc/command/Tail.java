@@ -1,9 +1,9 @@
 package com.dataiku.dctc.command;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.cli.Options;
-
+import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.command.cat.AlgorithmType;
 import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
@@ -27,12 +27,13 @@ public class Tail extends Command {
         return "[OPTIONS...] [FILE...]";
     }
     @Override
-    protected Options setOptions() {
-        Options opt = new Options();
+    protected List<Option> setOptions() {
+        List<Option> opts = new ArrayList<Option>();
 
-        longOpt(opt, "Output the last K bytes", "bytes", "b", "K");
-        longOpt(opt, "Output the last K lines", "lines", "n", "K");
-        return opt;
+        opts.add(stdOption('b', "bytes", "Output the last K bytes.", true)); // FIXME: K
+        opts.add(stdOption('n', "lines", "Output the last K lines.", true)); // FIXME: K
+
+        return opts;
     }
     @Override
     public void perform(List<GeneralizedFile> args) {
@@ -53,8 +54,8 @@ public class Tail extends Command {
     }
     public void nbLines() {
         if (isLine()) {
-            if (hasOption("n")) {
-                number = Long.parseLong(getOptionValue("n"));
+            if (hasOption('n')) {
+                number = Long.parseLong(getOptionValue('n'));
             } else {
                 number = 10;
             }
@@ -62,12 +63,12 @@ public class Tail extends Command {
     }
     public void nbBytes() {
         if (!isLine()) {
-            number = Long.parseLong(getOptionValue("b"));
+            number = Long.parseLong(getOptionValue('b'));
         }
     }
     private boolean isLine() {
         if (isLine == null) {
-            isLine = !hasOption("b");
+            isLine = !hasOption('b');
         }
 
         return isLine;

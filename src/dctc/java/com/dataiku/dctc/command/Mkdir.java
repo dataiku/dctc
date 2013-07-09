@@ -1,10 +1,10 @@
 package com.dataiku.dctc.command;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.cli.Options;
-
+import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
@@ -46,10 +46,12 @@ public class Mkdir extends Command {
 
     // Protected
     @Override
-    protected Options setOptions() {
-        Options options = new Options();
-        options.addOption("v", "verbose", false, "Print a message for each created directory");
-        return options;
+    protected List<Option> setOptions() {
+        List<Option> opts = new ArrayList<Option>();
+
+        opts.add(stdOption('v', "verbose", "Print a message for each created directory."));
+
+        return opts;
     }
     @Override
     protected String proto() {
@@ -58,7 +60,7 @@ public class Mkdir extends Command {
 
     private boolean verbose() {
         if (verbose == null) {
-            verbose = hasOption("v");
+            verbose = hasOption('v');
         }
         return verbose;
     }

@@ -8,9 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.cli.Options;
 import org.apache.commons.lang.StringUtils;
 
+import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.copy.CopyTask;
 import com.dataiku.dctc.copy.SimpleCopyTaskRunnableFactory;
@@ -34,8 +34,8 @@ public class Edit extends Command {
         return "edit";
     }
     public String getEditor() {
-        if (hasOption("e")) {
-            return getOptionValue("e");
+        if (hasOption('e')) {
+            return getOptionValue('e');
         }
         else {
             return System.getenv("EDITOR");
@@ -135,10 +135,11 @@ public class Edit extends Command {
 
     // Protected
     @Override
-    protected Options setOptions() {
-        Options options = new Options();
-        longOpt(options, "Override the EDITOR variable.", "editor", "e", "command");
-        return options;
+    protected List<Option> setOptions() {
+        List<Option> opts = new ArrayList<Option>();
+        opts.add(stdOption('e', "editor", "Override the EDITOR variable.", true)); // FIXME: EDITOR
+
+        return opts;
     }
 
     @Override

@@ -1,10 +1,10 @@
 package com.dataiku.dctc.command;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.cli.Options;
-
+import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.display.Size;
 import com.dataiku.dctc.file.FileManipulation;
@@ -23,16 +23,16 @@ public class Du extends Command {
     public String proto() {
         return "[FILE]...";
     }
-    public Options setOptions() {
-        Options opt = new Options();
+    public List<Option> setOptions() {
+        List<Option> opts = new ArrayList<Option>();
 
-        opt.addOption("h", "human-readable", false, "print sizes in human readable format.");
-        longOpt(opt, "Print the total for a directory (or file, with --all) only if it is N or fewer levels below the command line argument; --max-depth=0 is the same as --summarize."
-                , "max-depth", "d", "N");
-        opt.addOption("s", "summarize", false, "Display only a total for each argument.");
-        opt.addOption("c", "total", false, "Produce a grand total.");
-        opt.addOption("a", "all", false, "Write counts for all files, not just directories.");
-        return opt;
+        opts.add(stdOption('h', "human-readable", "print sizes in human readable format."));
+        opts.add(stdOption('s', "summarize", "Display only a total for each argument."));
+        opts.add(stdOption('c', "total", "Produce a grand total."));
+        opts.add(stdOption('a', "all", "Write counts for all files, not just directories."));
+        opts.add(stdOption('d', "max-depth", "Print the total for a directory (or file, with --all) only if it is N or fewer levels below the command line argument; --max-depth=0 is the same as --summarize.", true)); // FIXME: NUMBER
+
+        return opts;
     }
     public void longDescription(IndentedWriter printer) {
         printer.print("Compute file space usage.");
@@ -51,7 +51,7 @@ public class Du extends Command {
                 return;
             }
         }
-        if (hasOption("c")) {
+        if (hasOption('c')) {
             print(size, "total");
         }
     }
@@ -90,11 +90,11 @@ public class Du extends Command {
     }
     private int getDepth() {
         if (maxDepth == null) {
-            if (hasOption("s")) {
+            if (hasOption('s')) {
                 maxDepth = 0;
             }
-            else if (hasOption("d")) {
-                maxDepth = IntegerUtils.toInt(getOptionValue("d"));
+            else if (hasOption('d')) {
+                maxDepth = IntegerUtils.toInt(getOptionValue('d'));
             }
             else {
                 maxDepth = Integer.MAX_VALUE;
@@ -105,13 +105,13 @@ public class Du extends Command {
     }
     private boolean all() {
         if (all == null) {
-            all = hasOption("a");
+            all = hasOption('a');
         }
         return all;
     }
     private boolean humanReadable() {
         if (humanReadable == null) {
-            humanReadable = hasOption("h");
+            humanReadable = hasOption('h');
         }
         return humanReadable;
     }

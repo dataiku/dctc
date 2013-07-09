@@ -10,10 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.cli.Options;
-
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.Globbing;
+import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.display.Size;
@@ -400,43 +399,43 @@ public class Ls extends Command {
     /// Getters
     public boolean hidden() {
         if (hidden == null) {
-            hidden = hasOption("a");
+            hidden = hasOption('a');
         }
         return hidden;
     }
     public boolean humanReadable() {
         if (humanReadable == null) {
-            humanReadable = hasOption("h");
+            humanReadable = hasOption('h');
         }
         return humanReadable;
     }
     public boolean listing() {
         if (listing == null) {
-            listing = hasOption("l");
+            listing = hasOption('l');
         }
         return listing;
     }
     public boolean recursion() {
         if (recursion == null) {
-            recursion = hasOption("R") || hasOption("r");
+            recursion = hasOption('r');
         }
         return recursion;
     }
     public boolean temp() {
         if (temp == null) {
-            temp = hasOption("e");
+            temp = hasOption('e');
         }
         return temp;
     }
     public boolean sort() {
         if (sort == null) {
-            sort = !hasOption("f");
+            sort = !hasOption('f');
         }
         return sort;
     }
     public boolean columnPrint() {
         if (columnPrint == null) {
-            columnPrint = hasOption("1") || !PrettyString.isInteractif();
+            columnPrint = hasOption('1') || !PrettyString.isInteractif();
         }
         return columnPrint;
     }
@@ -472,20 +471,20 @@ public class Ls extends Command {
 
     // Protected
     @Override
-    protected Options setOptions() {
-        Options options = new Options();
-        options.addOption("R", "recursive", false, "Recursive display of path given as arguments.");
-        options.addOption("r", false, "Recursive display of path given as arguments.");
-        options.addOption("a", "all", false, "Do not hide entries starting with.");
-        options.addOption("U", false, "Do not sort; list entries in directory order.");
-        options.addOption("l", false, "Use long listing format.");
-        options.addOption("h", "human-readable", false,
-                          "With -l, print sizes in human readable format.");
-        options.addOption("e", "temp", false, "Hide temporary files (*~, #*).");
-        options.addOption("G", "color", false, "Colorize the output.");
-        options.addOption("1", false, "List one file per line.");
-        options.addOption("f", false, "Do not sort.");
-        return options;
+    protected List<Option> setOptions() {
+        List<Option> opts = new ArrayList<Option>();
+
+        opts.add(stdOption("rR", "recursive", "Recursive display of path given as arguments."));
+        opts.add(stdOption('a', "all", "Do not hide entries starting with."));
+        opts.add(stdOption('U', "Do not sort; list entries in directory order."));
+        opts.add(stdOption('l', "Use long listing format."));
+        opts.add(stdOption('h', "human-readable", "With -l, print sizes in human readable format."));
+        opts.add(stdOption('e', "temp", "Hide temporary files (*~, #*)."));
+        opts.add(stdOption('G', "color", "Colorize the output."));
+        opts.add(stdOption('1', "List one file per line."));
+        opts.add(stdOption('f', "Do not sort")); // FIXME: What???
+
+        return opts;
     }
     @Override
     protected String proto() {
@@ -574,7 +573,7 @@ public class Ls extends Command {
     private boolean color() {
         if (colorize == null) {
             colorize = (PrettyString.isInteractif() || System.getenv("CLICOLOR_FORCE") != null) &&
-                (hasOption("G"));
+                (hasOption('G'));
         }
         return colorize;
     }

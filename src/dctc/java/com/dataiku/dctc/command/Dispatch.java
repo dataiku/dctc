@@ -3,11 +3,12 @@ package com.dataiku.dctc.command;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.cli.Options;
 import org.apache.commons.lang.NotImplementedException;
 
+import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.ListFilesCommand;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.copy.CopyTask;
@@ -45,25 +46,22 @@ public class Dispatch extends ListFilesCommand {
                           ,scat("Dispatch supports delimited files (CSV, TSV)."));
     }
     @Override
-    protected Options setOptions() {
-        Options options = new Options();
-        options.addOption("c", "compress", false, "Compress all files (add a .gz extension).");
+    protected List<Option> setOptions() {
+        List<Option> opts = new ArrayList<Option>();
 
-        longOpt(options, "Prefix the names of output files with a constant string", "prefix", "p", "pre");
-        longOpt(options, "Suffix the names of output files with a constant string", "suffix", "s", "suf");
-        longOpt(options, "Column to use for 'value', 'hash' and 'time' functions.", "column", "col", "column-name");
-        longOpt(options,
-                "Function to use to dispatch (one of 'random', 'value', 'hash', or 'time').",
-                "function", "f", "fct-name");
-        longOpt(options, "Number of output files to create for 'hash' and 'random' functions",
-                "nb-files", "nf", "number");
-        longOpt(options, "Time format string for the 'time' function.", "time-format", "tf", "format");
-        longOpt(options, "Dispatch time period for the 'time' function"
-                +" (one of 'year', 'month', 'day' or 'hour').", "time-period", "tp", "period");
-        longOpt(options, "Format type for the input files. Only supports 'csv'.", "input-format", "if", "file-format");
-        longOpt(options, "Separator character for CSV format", "input-separator", "isep", "separator");
-        longOpt(options, "Quote character for CSV format", "input-quote", "iquot", "quote-character");
-        return options;
+        opts.add(stdOption('c', "compress", "Compress all files (add a .gz extension)."));
+        opts.add(stdOption('p', "prefix", "Prefix the names of output files with a constant string", true)); // FIXME: prefix
+        opts.add(stdOption('s', "suffix", "Suffix the names of output files with a constant string", true)); // FIXME: suf
+        opts.add(stdOption("", "column", "Column to use for 'value', 'hash' and 'time' functions.", true)); // FIXME: column-name
+        opts.add(stdOption('f', "function", "Function to use to dispatch (one of 'random', 'value', 'hash', or 'time').", true)); // FIXME: fct-name
+        opts.add(stdOption("", "nb-files", "Number of output files to create for 'hash' and 'random' functions", true)); // FIXME: number
+        opts.add(stdOption("", "time-format", "Time format string for the 'time' function.", true)); // FIXME
+        opts.add(stdOption("", "time-period", "Dispatch time period for the 'time' function (one of 'year', 'month', 'day' or 'hour').", true)); // FIXME: period
+        opts.add(stdOption("", "input-format", "Format type for the input files. Only supports 'csv'.", true)); // FIXME: file-format
+        opts.add(stdOption("", "input-separator", "Separator character for CSV format", true)); // FIXME: separator
+        opts.add(stdOption("", "input-quote", "Quote character for CSV format", true)); // FIXME: quote-character
+
+        return opts;
     }
 
     @Override
@@ -72,12 +70,12 @@ public class Dispatch extends ListFilesCommand {
     }
     /// Getters
     public String prefix() {
-        String prefix = getOptionValue("p");
+        String prefix = getOptionValue('p');
         if (prefix == null) prefix = "";
         return prefix;
     }
     public String postfix() {
-        String postfix = getOptionValue("s");
+        String postfix = getOptionValue('s');
         if (postfix == null) postfix = "";
         if (getOptionValue("if") != null && getOptionValue("if").equalsIgnoreCase("csv")) {
             postfix += ".csv";
@@ -87,7 +85,7 @@ public class Dispatch extends ListFilesCommand {
         return postfix;
     }
     public String splitFunction() {
-        String splitFunction = getOptionValue("f");
+        String splitFunction = getOptionValue('f');
         if (splitFunction == null) {
             splitFunction = "random";
         }

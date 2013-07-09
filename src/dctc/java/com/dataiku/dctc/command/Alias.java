@@ -3,12 +3,14 @@ package com.dataiku.dctc.command;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.cli.Options;
 
+import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.configuration.StructuredConf;
@@ -21,10 +23,8 @@ public class Alias extends Command {
     public String tagline() {
         return "Display the alias";
     }
-    public Options setOptions() {
-        Options opt = new Options();
-
-        return opt;
+    public List<Option> setOptions() {
+        return new ArrayList<Option>();
     }
     public String proto() {
         return "";

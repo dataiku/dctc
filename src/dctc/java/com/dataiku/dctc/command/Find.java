@@ -1,12 +1,11 @@
 package com.dataiku.dctc.command;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-
+import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
@@ -71,20 +70,14 @@ public class Find extends Command {
 
     // Protected
     @Override
-    protected Options setOptions() {
-        Options options = new Options();
+    protected List<Option> setOptions() {
+        List<Option> opts = new ArrayList<Option>();
 
-        OptionBuilder.withArgName("pattern");
-        OptionBuilder.hasArg();
-        OptionBuilder.withDescription("Print the file only if its name contains the specified pattern.");
-        options.addOption(OptionBuilder.create("name"));
+        opts.add(stdOption("", "name", "Print the file only if its name contains the specified pattern.", true)); // FIXME: PATTERN
 
-        OptionBuilder.withArgName("c");
-        OptionBuilder.hasArg();
-        OptionBuilder.withDescription("Select the type of the file to print (d(irectory), f(ile), a(all)).");
-        options.addOption(OptionBuilder.create("type"));
+        opts.add(stdOption("", "type", "Select the type of the file to print (d(irectory), f(ile), a(all))."));
 
-        return options;
+        return opts;
     }
     @Override
     protected String proto() {

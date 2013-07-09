@@ -7,15 +7,18 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.cli.Options;
 import org.apache.commons.io.IOUtils;
 
 import com.dataiku.dctc.AutoGZip;
+import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.Command;
-import com.dataiku.dctc.command.grep.*;
+import com.dataiku.dctc.command.grep.GrepHeaderPrinter;
+import com.dataiku.dctc.command.grep.GrepLinePrinter;
+import com.dataiku.dctc.command.grep.GrepMatcher;
+import com.dataiku.dctc.command.grep.GrepPrinter;
+import com.dataiku.dctc.command.grep.GrepStrategyFactory;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.DKUFileUtils;
 import com.dataiku.dip.utils.IndentedWriter;
@@ -33,40 +36,41 @@ public class Grep extends Command {
                                 , "do not offer a native grep (eg, Microsoft Windows). For UNIX"
                                 , "systems, use dctc cat|grep"));
     }
-    protected Options setOptions() {
-        Options options = new Options();
+    protected List<Option> setOptions() {
+        List<Option> opts = new ArrayList<Option>();
 
-        options.addOption("r", "recursive", false, "Read all files under each directory, recursively.");
-        options.addOption("v", "invert-match", false, "Invert the sense of matching, to select non-matching lines.");
-        options.addOption("i", "ignore-case", false, "Ignore case distinctions in both the PATTERN and the input files.");
-        options.addOption("c", "count", false, "Write only a count of selected lines to standard output.");
-        options.addOption("q", "quiet", false, "Nothing shall be written to the standard output, regardless of matching lines. Exit with zero status if an input line is selected.");
-        options.addOption("n", "line", false, "Precede each output line by its relative line number in the file, each file starting at line 1. The line number counter shall be reset for each file processed.");
-        options.addOption("G", "color", false, "Add color to the output");
-        options.addOption("E", "extended-regexp", false, "Match using java extended regular expressions.");
-        options.addOption("F", "fixed-strings", false, "Match using fixed strings."); // Follow the posix specifications. Don't need it... Really.
-        options.addOption("s", "no-messages", false, "Suppress the error messages ordinarily written for nonexistent or unreadable files. Other error messages shall not be suppressed.");
-        longOpt(options, "Specify one or more patterns to be used during the search for input.", "PATTERN", "e", "regexp");
-        options.addOption("l", "files-with-matches", false, "print only names of FILEs containing matches");
-        options.addOption("x", false, "Consider only input lines that use all characters in the line excluding the terminating <newline> to match an entire fixed string or regular expression to be matching lines.");
-        longOpt(options, "obtain PATTERN from FILE", "FILE", "f", "file");
+        opts.add(stdOption('r', "recursive", "Read all files under each directory, recursively."));
+        opts.add(stdOption('v', "invert-match", "Invert the sense of matching, to select non-matching lines."));
+        opts.add(stdOption('i', "ignore-case", "Ignore case distinctions in both the PATTERN and the input files."));
+        opts.add(stdOption('c', "count", "Write only a count of selected lines to standard output."));
+        opts.add(stdOption('q', "quiet", "Nothing shall be written to the standard output, regardless of matching lines. Exit with zero status if an input line is selected."));
+        opts.add(stdOption('n', "line", "Precede each output line by its relative line number in the file, each file starting at line 1. The line number counter shall be reset for each file processed."));
+        opts.add(stdOption('G', "color", "Add color to the output"));
+        opts.add(stdOption('E', "extended-regexp", "Match using java extended regular expressions."));
+        opts.add(stdOption('F', "fixed-strings", "Match using fixed strings."));
+        opts.add(stdOption('s', "no-messages", "Suppress the error messages ordinarily written for nonexistent or unreadable files. Other error messages shall not be suppressed."));
+        opts.add(stdOption('l', "files-with-matches", "print only names of FILEs containing matches"));
+        opts.add(stdOption('x', "Consider only input lines that use all characters in the line excluding the terminating <newline> to match an entire fixed string or regular expression to be matching lines."));
 
-        return options;
+        opts.add(stdOption('f', "file", "obtain PATTERN from FILE", true)); // FIXME: FILE
+        opts.add(stdOption('e', "regexp", "Specify one or more patterns to be used during the search for input.", true)); // FIXME: PATTERN
+
+        return opts;
     }
     protected List<GeneralizedFile> getArgs(String[] shellArgs) {
         parseCommandLine(shellArgs);
-        List<String> args = new ArrayList<String>(Arrays.asList(getRawArgs().getArgs()));
+        List<String> args = getArgs();
         { // Set pattern
-            if (hasOption("e")) {
-                pattern = getOptionValue("e");
+            if (hasOption('e')) {
+                pattern = getOptionValue('e');
             }
-            else if (hasOption("f")) {
+            else if (hasOption('f')) {
                 try {
-                    pattern = DKUFileUtils.fileToString(new File(getOptionValue("f")));
+                    pattern = DKUFileUtils.fileToString(new File(getOptionValue('f')));
                 }
                 catch (Exception e) {
                     // FIXME: If -s, be quiet
-                    error("Unexpected error while reading " + getOptionValue("f"), e, 3);
+                    error("Unexpected error while reading " + getOptionValue('f'), e, 3);
                 }
             }
             else {
@@ -92,7 +96,7 @@ public class Grep extends Command {
     }
     public boolean printFileError() {
         if (printFileError == null) {
-            printFileError = !hasOption("s");
+            printFileError = !hasOption('s');
         }
         return printFileError;
     }
@@ -153,15 +157,15 @@ public class Grep extends Command {
 
     public void buildMe(boolean header) {
         GrepStrategyFactory fact = new GrepStrategyFactory()
-            .withInverse(!hasOption("v"))
-            .withFullLine(hasOption("x"))
-            .withIgnoreCase(hasOption("i"))
-            .withLinum(hasOption("n"))
-            .withRatexp(hasOption("E"))
+            .withInverse(!hasOption('v'))
+            .withFullLine(hasOption('x'))
+            .withIgnoreCase(hasOption('i'))
+            .withLinum(hasOption('n'))
+            .withRatexp(hasOption('E'))
             .withHeader(header)
-            .withColor(hasOption("G"))
-            .withListing(hasOption("l"))
-            .withCount(hasOption("c"))
+            .withColor(hasOption('G'))
+            .withListing(hasOption('l'))
+            .withCount(hasOption('c'))
             ;
         matcher = fact.buildMatcher(pattern.split(eol()));
         this.header = fact.buildHeaderPrinter();

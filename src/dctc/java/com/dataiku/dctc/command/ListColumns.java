@@ -4,9 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.cli.Options;
-
 import com.dataiku.dctc.AutoGZip;
+import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dctc.file.GeneralizedFileInputSplit;
@@ -29,12 +28,13 @@ public class ListColumns extends Command {
     public String tagline() {
         return "List the name of the column.";
     }
-    public Options setOptions() {
-        Options opt = new Options();
-        opt.addOption("m", "minimal", false, "Set to minimal the display scheme.");
-        longOpt(opt, "Set the separator", "separator", "s", "sep");
+    public List<Option> setOptions() {
+        List<Option> opts = new ArrayList<Option>();
 
-        return opt;
+        opts.add(stdOption('m', "minimal", "Set to minimal the display scheme."));
+        opts.add(stdOption('s', "separator", "Set the separator.")); // FIXME: sep
+
+        return opts;
     }
     public String cmdname() {
         return "list-columns";
@@ -89,8 +89,8 @@ public class ListColumns extends Command {
 
     // private
     private String getSeparator() {
-        if (hasOption("s")) {
-            return getOptionValue("s");
+        if (hasOption('s')) {
+            return getOptionValue('s');
         }
         else {
             return ",";
@@ -99,7 +99,7 @@ public class ListColumns extends Command {
     private PrettyArray initArray() {
         PrettyArray array = new PrettyArray();
 
-        if (hasOption("m")) {
+        if (hasOption('m')) {
             array.setTab(" ");
             array.setBeginChar("");
             array.setBetweenChar(" ");

@@ -3,10 +3,10 @@ package com.dataiku.dctc.command;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.cli.Options;
-
+import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
@@ -32,7 +32,7 @@ public class Rmdir extends Command {
                     continue;
                 }
                 arg.delete();
-                if (hasOption("v")) {
+                if (hasOption('v')) {
                     System.out.println("rmdir: removing directory, `" + arg.givenName() + "'");
                 }
             }
@@ -47,9 +47,8 @@ public class Rmdir extends Command {
     }
 
     @Override
-    protected Options setOptions() {
-        Options options = new Options();
-        return options;
+    protected List<Option> setOptions() {
+        return new ArrayList<Option>();
     }
     @Override
     protected String proto() {

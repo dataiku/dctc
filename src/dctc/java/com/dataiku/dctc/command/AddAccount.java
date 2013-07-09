@@ -4,13 +4,14 @@ import static com.dataiku.dip.utils.PrettyString.eol;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.cli.Options;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.configuration.Configuration;
 import com.dataiku.dctc.configuration.CredentialProviderBank;
@@ -146,8 +147,8 @@ public class AddAccount extends Command {
         return "protocol [account-name]";
     }
     @Override
-    protected Options setOptions() {
-        return new Options();
+    protected List<Option> setOptions() {
+        return new ArrayList<Option>();
     }
     @Override
     public String cmdname() {

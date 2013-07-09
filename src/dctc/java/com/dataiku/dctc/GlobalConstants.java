@@ -13,11 +13,11 @@ public class GlobalConstants {
     public final static long FIVE_TIO = 5497558138880l;
 
     // Opt
-    public final static String ARCHIVE_OPT = "a";
-    public final static String UNARCHIVE_OPT = "t";
-    public final static String COMPRESS_OPT = "c";
-    public final static String UNCOMPRESS_OPT = "u";
-    public final static String HELP_OPT = "h";
+    public final static char ARCHIVE_OPT = 'a';
+    public final static char UNARCHIVE_OPT = 't';
+    public final static char COMPRESS_OPT = 'c';
+    public final static char UNCOMPRESS_OPT = 'u';
+    public final static char HELP_OPT = 'h';
 
     public final static String ESCAPE_CHARACTER = "."; // Mainly use for the alias management.
 

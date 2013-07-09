@@ -3,11 +3,10 @@ package com.dataiku.dctc.command;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.cli.Options;
-
-import com.dataiku.dctc.GlobalConstants;
+import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.ListFilesCommand;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.copy.CopyTask;
@@ -40,43 +39,43 @@ public class Cp extends ListFilesCommand {
     }
     /// Getters
     public boolean noClobber() {
-        return hasOption("n");
+        return hasOption('n');
     }
     public boolean recur() {
         if (recur == null) {
-            recur = hasOption("r") || hasOption("R");
+            recur = hasOption('r');
         }
         return recur;
     }
     public boolean interactive() {
         if (interactive == null) {
-            interactive = hasOption("i");
+            interactive = hasOption('i');
         }
         return interactive;
     }
 
     // Protected
     @Override
-    protected Options setOptions() {
-        Options opt = new Options();
-        opt.addOption("R", false, "Copy directories recursively.");
-        opt.addOption("r", "recursive", false, "Copy directories recursively.");
-        opt.addOption("c", "compress", false, "Compress all input files and add .gz extension.");
-        opt.addOption("u", "uncompress", false, "Uncompress all compressed (ie, .gz) input files (strips .gz extension)");
-        opt.addOption(GlobalConstants.UNARCHIVE_OPT, "unarchive", false, "Uncompress all archives found in the command line.");
-        opt.addOption("i", "interactive", false, "Prompt before overwrite");
-        opt.addOption("a", "archive", false, "Archives all input files into a single destination file using the destination file extension as identifier for the archive method. Supported archive methods are 'zip'");
-        opt.addOption("p", "preserve", false, "Preserve the time stamp");
-        opt.addOption("s", "sequential", false, "Make the copy with only one thread.");
-        longOpt(opt, "Set the number of thread.", "thread_number", "n", "number");
+    protected List<Option> setOptions() {
+        List<Option> opts = new ArrayList<Option>();
+        opts.add(stdOption("rR", "recursive", "Copy directories recursively."));
+        opts.add(stdOption('c', "compress", "Compress all input files and add .gz extension."));
+        opts.add(stdOption('u', "uncompress", "Uncompress all compressed (ie, .gz) input files (strips .gz extension)"));
+        opts.add(stdOption('l', "unarchive", "Uncompress all archives found in the command line."));
+        opts.add(stdOption('i', "interactive", "Prompt before overwrite"));
+        opts.add(stdOption('a', "archive", "Archives all input files into a single destination file using the destination file extension as identifier for the archive method. Supported archive methods are 'zip'"));
+        opts.add(stdOption('p', "preserve", "Preserve the time stamp"));
+        opts.add(stdOption('s', "sequential", "Make the copy with only one thread."));
+        opts.add(stdOption('n', "thread-number", "Set the number of thread.", true)); // FIXME: NUMBER
 
-        return opt;
+
+        return opts;
     }
     @Override
     public void execute(List<CopyTask> tasks) {
         SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(unarchive(),
                                                                                archive(),
-                                                                               hasOption("p"));
+                                                                               hasOption('p'));
         ThreadedDisplay display = GlobalConf.getDisplay();
         CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, getThreadLimit());
         try {

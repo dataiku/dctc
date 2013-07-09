@@ -1,7 +1,9 @@
 package com.dataiku.dctc.command;
 
-import org.apache.commons.cli.Options;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dip.utils.IndentedWriter;
 
@@ -22,8 +24,8 @@ public class Version extends Command {
         return "";
     }
     @Override
-    protected Options setOptions() {
-        return new Options();
+    protected List<Option> setOptions() {
+        return new ArrayList<Option>();
     }
     @Override
     public String cmdname() {

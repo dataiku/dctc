@@ -1,9 +1,9 @@
 package com.dataiku.dctc.command;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.cli.Options;
-
+import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.command.cat.AlgorithmType;
 import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
@@ -18,13 +18,14 @@ public class Head extends Command {
     public void longDescription(IndentedWriter printer) {
         printer.print("Output the first N lines of the input files");
     }
-    protected Options setOptions() {
-        Options options = new Options();
+    protected List<Option> setOptions() {
+        List<Option> opts = new ArrayList<Option>();
 
-        longOpt(options, "Display the first `number' lines of each file", "n", "lines", "K");
-        longOpt(options, "Print the first k bytes  of each file.", "c", "bytes", "K");
-        options.addOption("q", "quiet", false, "Never print headers giving file names");
-        return options;
+        opts.add(stdOption('n', "lines", "Display the first `number' lines of each file", true)); // FIXME: K
+        opts.add(stdOption('c', "bytes", "Print the first k bytes  of each file.", true)); // FIXME: K
+        opts.add(stdOption('q', "quiet", "Never print headers giving file names"));
+
+        return opts;
     }
 
     @Override
@@ -43,7 +44,7 @@ public class Head extends Command {
     }
     public boolean getQuiet() {
         if (quiet == null) {
-            quiet = hasOption("q");
+            quiet = hasOption('q');
         }
         return quiet;
     }
@@ -56,8 +57,10 @@ public class Head extends Command {
 
     public void nbLines() {
         if (isLine()) {
-            if (hasOption("n")) {
-                number = Long.parseLong(getOptionValue("n"));
+            if (hasOption('n')) {
+                assert getOptionValue('n') != null
+                    : "getOptionValue('n') != null";
+                number = Long.parseLong(getOptionValue('n'));
             } else {
                 number = 10;
             }
@@ -65,7 +68,7 @@ public class Head extends Command {
     }
     public void nbBytes() {
         if (!isLine()) {
-            number = Long.parseLong(getOptionValue("c"));
+            number = Long.parseLong(getOptionValue('c'));
         }
     }
     @Override
@@ -74,7 +77,7 @@ public class Head extends Command {
     }
     private boolean isLine() {
         if (isLine == null) {
-            isLine = !hasOption("c");
+            isLine = !hasOption('c');
         }
 
         return isLine;

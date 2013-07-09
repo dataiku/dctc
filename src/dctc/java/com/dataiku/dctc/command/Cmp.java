@@ -1,13 +1,15 @@
 package com.dataiku.dctc.command;
 
 import static com.dataiku.dip.utils.PrettyString.pquoted;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.apache.commons.cli.Options;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.dataiku.dctc.AutoGZip;
+import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
@@ -44,9 +46,8 @@ public class Cmp extends Command {
     }
     // Protected
     @Override
-    protected Options setOptions() {
-        Options options = new Options();
-        return options;
+    protected List<Option> setOptions() {
+        return new ArrayList<Option>();
     }
     @Override
     protected final String proto() {
