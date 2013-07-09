@@ -1,20 +1,12 @@
 package com.dataiku.dctc.command.cat;
 
 abstract class LinumCatHeader implements CatHeader {
-    public void indent(int indentSize, String sep) {
-        for (int i = 0; i < indentSize; ++i) {
-            System.out.print(sep);
+    public void indent() {
+        for (int i = numberOfCol - ((int) Math.log10(lineNumber) + 1);
+             i > 0;
+             --i) {
+            System.out.print(indentSeparator);
         }
-    }
-    public void indent(int indentSize) {
-        indent(indentSize, " ");
-    }
-    public void indent(long number) {
-        indent(number, " ");
-        indent(numberOfCol - (int) Math.log10(number) + 1);
-    }
-    public void indent(long number, String sep) {
-        indent(numberOfCol - (int) Math.log10(number) + 1, sep);
     }
     public abstract void print();
 
@@ -52,9 +44,20 @@ abstract class LinumCatHeader implements CatHeader {
     public void incr() {
         lineNumber += numberIncrement;
     }
+    public String getIndentSeparator() {
+        return indentSeparator;
+    }
+    public void setIndentSeparator(String indentSeparator) {
+        this.indentSeparator = indentSeparator;
+    }
+    public LinumCatHeader withIndentSeparator(String indentSeparator) {
+        setIndentSeparator(indentSeparator);
+        return this;
+    }
 
     // Attributes
+    private String indentSeparator;
     private long lineNumber = 1;
-    private int numberIncrement = 1;
-    private int numberOfCol = 6;
+    private int numberIncrement;
+    private int numberOfCol;
 }
