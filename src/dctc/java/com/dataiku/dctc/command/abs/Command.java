@@ -1,6 +1,7 @@
 package com.dataiku.dctc.command.abs;
 
 import static com.dataiku.dip.utils.PrettyString.pquoted;
+import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.lang.NotImplementedException;
@@ -21,6 +21,7 @@ import com.dataiku.dctc.clo.LongOption;
 import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.clo.Parser;
 import com.dataiku.dctc.clo.ShortOption;
+import com.dataiku.dctc.clo.Usage;
 import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.command.policy.YellPolicyFactory;
 import com.dataiku.dctc.configuration.GlobalConf;
@@ -71,10 +72,10 @@ public abstract class Command {
             System.setOut(System.err);
         }
         initOptions();
-        HelpFormatter formatter = new HelpFormatter();
-        /*formatter.printHelp(scat("dctc"
-                                 , cmdname()
-                                 , proto()), opt);*/
+        System.out.println(scat("dctc"
+                                , cmdname()
+                                , proto()));
+        Usage.print(opts);
     }
     public FileBuilder getFileBuilder() {
         return builder;
