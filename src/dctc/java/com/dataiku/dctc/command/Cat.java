@@ -7,6 +7,7 @@ import java.util.List;
 import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.command.cat.AlgorithmType;
+import com.dataiku.dctc.command.cat.NeverCatHeaderSelector;
 import com.dataiku.dctc.command.cat.CatAlgorithm;
 import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
 import com.dataiku.dctc.command.cat.CatRunner;
@@ -31,8 +32,9 @@ public class Cat extends Command {
             .withLinum(hasOption('n'))
             .withDollar(hasOption('E'));
 
-        CatRunner runner = new CatRunner();
-        runner.perform(args, true, fact, getExitCode(), true);
+        CatRunner runner = new CatRunner()
+            .withHeader(new NeverCatHeaderSelector());
+        runner.perform(args, true, fact, getExitCode(), false);
     }
     @Override
     public final String cmdname() {

@@ -16,22 +16,13 @@ public class CatRunner {
         if (args.size() == 0) {
             args.add(new StandardFile());
         }
-        boolean first = true;
-        boolean header = args.size() > 1
-            && printHeader
-            && fact.getAlgo() != AlgorithmType.CAT;
+        // boolean header = args.size() > 1
+        //     && printHeader
+        //     && fact.getAlgo() != AlgorithmType.CAT;
         long nbLinePrinted = 0;
 
         for (GeneralizedFile arg: args) {
-            if (header) {
-                if (first) {
-                    first = false;
-                }
-                else {
-                    System.out.println();
-                }
-                header(arg);
-            }
+            header.print(arg);
             CatAlgorithm runner;
             try {
                 if (!resetLineNumbering) {
@@ -69,12 +60,18 @@ public class CatRunner {
         setExitCode(exitCode);
         return this;
     }
-
-    // Privates
-    private void header(GeneralizedFile file) {
-        System.out.println("==> " + file.givenName() + " <==");
+    public CatHeaderPrinter getHeader() {
+        return header;
+    }
+    public void setHeader(CatHeaderPrinter header) {
+        this.header = header;
+    }
+    public CatRunner withHeader(CatHeaderPrinter header) {
+        setHeader(header);
+        return this;
     }
 
     // Attributes
+    private CatHeaderPrinter header;
     private ExitCode exitCode;
 }

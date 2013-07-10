@@ -5,6 +5,7 @@ import java.util.List;
 import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.command.cat.AlgorithmType;
+import com.dataiku.dctc.command.cat.AlwaysCatHeaderSelector;
 import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
 import com.dataiku.dctc.command.cat.CatRunner;
 import com.dataiku.dctc.file.GeneralizedFile;
@@ -32,7 +33,9 @@ public class Head extends Command {
             .withSkipLast(number())
             .withIsLineAlgo(isLine());
 
-        CatRunner runner = new CatRunner();
+        CatRunner runner = new CatRunner()
+            .withHeader(new AlwaysCatHeaderSelector());
+
         runner.perform(args, !hasOption("quiet"), fact, getExitCode(), true);
     }
     @Override
