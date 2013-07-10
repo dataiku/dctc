@@ -39,7 +39,11 @@ public class CatAlgorithmFactory {
             }
             { // Set Header
                 if (linum) {
-                    cat.getPrinter().setHeader(new LeftLinumCatHeader());
+                    cat.getPrinter().setHeader(new LeftLinumCatHeader()
+                                               .withIndentSeparator(" ")
+                                               .withLineNumber(1)
+                                               .withNumberIncrement(1)
+                                               .withNumberOfCol(6));
                 }
                 else {
                     cat.getPrinter().setHeader(new EmptyCatHeader());
