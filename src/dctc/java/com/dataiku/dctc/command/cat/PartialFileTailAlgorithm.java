@@ -37,7 +37,9 @@ class PartialFileTailAlgorithm extends AbstractCatAlgorithm {
         }
         String[] lines = line.split("\n");
         for (int i = Math.max(0, lines.length - getNbLine()); i < lines.length; ++i) {
-            System.out.println(lines[i]);
+            if (lines[i] != null) {
+                System.out.println(lines[i]);
+            }
         }
 
         return Math.min(lines.length, nbLine);
