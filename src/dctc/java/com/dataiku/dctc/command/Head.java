@@ -8,6 +8,7 @@ import com.dataiku.dctc.command.cat.AlgorithmType;
 import com.dataiku.dctc.command.cat.AlwaysCatHeaderSelector;
 import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
 import com.dataiku.dctc.command.cat.CatRunner;
+import com.dataiku.dctc.command.cat.NeverCatHeaderSelector;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
@@ -33,10 +34,15 @@ public class Head extends Command {
             .withSkipLast(number())
             .withIsLineAlgo(isLine());
 
-        CatRunner runner = new CatRunner()
-            .withHeader(new AlwaysCatHeaderSelector());
+        CatRunner runner = new CatRunner();
+        if (args.size() > 1 && !hasOption("quiet")) {
+            runner.setHeader(new AlwaysCatHeaderSelector());
+        }
+        else {
+            runner.setHeader(new NeverCatHeaderSelector());
+        }
 
-        runner.perform(args, !hasOption("quiet"), fact, getExitCode(), true);
+        runner.perform(args, fact, getExitCode(), true);
     }
     @Override
     public String cmdname() {

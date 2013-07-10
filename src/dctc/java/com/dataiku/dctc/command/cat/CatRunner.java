@@ -10,13 +10,14 @@ import com.dataiku.dctc.utils.ExitCode;
 
 public class CatRunner {
 
-    public void perform(List<GeneralizedFile> args, boolean printHeader,
-                        CatAlgorithmFactory fact, ExitCode exitCode,
-                        boolean resetLineNumbering) {
+    public void perform(List<GeneralizedFile> args
+                        ,CatAlgorithmFactory fact,
+                        ExitCode exitCode
+                        , boolean resetLineNumbering) {
         if (args.size() == 0) {
             args.add(new StandardFile());
         }
-        // boolean header = args.size() > 1
+        // FIXME: boolean header = args.size() > 1
         //     && printHeader
         //     && fact.getAlgo() != AlgorithmType.CAT;
         long nbLinePrinted = 0;

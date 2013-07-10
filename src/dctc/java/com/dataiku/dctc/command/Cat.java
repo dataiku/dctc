@@ -34,7 +34,7 @@ public class Cat extends Command {
 
         CatRunner runner = new CatRunner()
             .withHeader(new NeverCatHeaderSelector());
-        runner.perform(args, true, fact, getExitCode(), false);
+        runner.perform(args, fact, getExitCode(), false);
     }
     @Override
     public final String cmdname() {
