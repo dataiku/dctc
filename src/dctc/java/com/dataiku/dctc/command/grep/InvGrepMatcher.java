@@ -9,8 +9,7 @@ class InvGrepMatcher implements GrepMatcher {
         return matcher.match(line);
     }
     public int begin(String line) {
-        return -1; // FIXME: Maybe false, did we need to color the
-                   // inverse?
+        return -1;
     }
     public int end(int start, String line) {
         return 0; // Return the length of the matching group.
