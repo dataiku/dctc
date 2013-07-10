@@ -30,7 +30,8 @@ public class Cat extends Command {
         fact = new CatAlgorithmFactory()
             .withAlgo(AlgorithmType.CAT)
             .withLinum(hasOption('n'))
-            .withDollar(hasOption('E'));
+            .withDollar(hasOption('E'))
+            .withYell(getYell());
 
         CatRunner runner = new CatRunner()
             .withHeader(new NeverCatHeaderSelector());

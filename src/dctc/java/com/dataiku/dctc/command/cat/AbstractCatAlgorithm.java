@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.dataiku.dctc.AutoGZip;
+import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dctc.utils.ExitCode;
 
@@ -24,9 +25,12 @@ abstract class AbstractCatAlgorithm implements CatAlgorithm {
     }
 
     // Helper methods
-    protected void yell(String error, Throwable exception, int exitCode) {
-        // FIXME: Need to be extended
-        System.err.println(error);
+    protected void yell(String error
+                        , Throwable exception
+                        , int exitCode) {
+        assert yell != null
+            : "yell != null";
+        yell.yell(cmdname(), error, exception);
         setExitCode(exitCode);
     }
     protected InputStream open() {
@@ -35,7 +39,7 @@ abstract class AbstractCatAlgorithm implements CatAlgorithm {
             i = AutoGZip.buildInput(file);
         }
         catch (FileNotFoundException e) {
-            yell("dctc " + cmdname() + ": " + file.givenName() + ": No such file or directory", e, 1);
+            yell(file.givenName() + ": No such file or directory", e, 1);
             return null;
         }
         catch (IOException e) {
@@ -70,7 +74,18 @@ abstract class AbstractCatAlgorithm implements CatAlgorithm {
         exit.setExitCode(exitCode);
     }
 
+    public YellPolicy getYell() {
+        return yell;
+    }
+    public void setYell(YellPolicy yell) {
+        this.yell = yell;
+    }
+    public AbstractCatAlgorithm withYell(YellPolicy yell) {
+        setYell(yell);
+        return this;
+    }
     // Attributes
+    private YellPolicy yell;
     private GeneralizedFile file;
     private ExitCode exit;
     private String cmdname;

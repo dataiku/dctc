@@ -44,7 +44,8 @@ public class Nl extends Command {
             .withLineIncrement(getIntOption('i', 1))
             .withIndentSeparator(" ")
             .withIndentSize(getIntOption('w', 6))
-            .withStartingLine(getIntOption('v', 1));
+            .withStartingLine(getIntOption('v', 1))
+            .withYell(getYell());
 
         CatRunner runner = new CatRunner()
             .withHeader(new NeverCatHeaderSelector());

@@ -40,7 +40,8 @@ public class Tail extends Command {
         CatAlgorithmFactory fact = new CatAlgorithmFactory()
             .withAlgo(AlgorithmType.TAIL)
             .withSkipFirst(number())
-            .withIsLineAlgo(isLine());
+            .withIsLineAlgo(isLine())
+            .withYell(getYell());
 
         CatRunner runner = new CatRunner();
 

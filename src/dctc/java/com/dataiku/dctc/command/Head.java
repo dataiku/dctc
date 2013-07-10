@@ -32,7 +32,8 @@ public class Head extends Command {
         CatAlgorithmFactory fact = new CatAlgorithmFactory()
             .withAlgo(AlgorithmType.HEAD)
             .withSkipLast(number())
-            .withIsLineAlgo(isLine());
+            .withIsLineAlgo(isLine())
+            .withYell(getYell());
 
         CatRunner runner = new CatRunner();
         if (args.size() > 1 && !hasOption("quiet")) {

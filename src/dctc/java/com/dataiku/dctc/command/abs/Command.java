@@ -293,6 +293,16 @@ public abstract class Command {
             setOptions(opts);
         }
     }
+    public YellPolicy getYell() {
+        return yell;
+    }
+    public void setYell(YellPolicy yell) {
+        this.yell = yell;
+    }
+    public Command withYell(YellPolicy yell) {
+        setYell(yell);
+        return this;
+    }
 
     // Attributes
     private Parser parser;

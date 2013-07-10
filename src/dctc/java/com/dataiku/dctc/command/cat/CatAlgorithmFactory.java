@@ -2,6 +2,7 @@ package com.dataiku.dctc.command.cat;
 
 import java.io.IOException;
 
+import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.file.GeneralizedFile;
 
 public class CatAlgorithmFactory {
@@ -35,6 +36,7 @@ public class CatAlgorithmFactory {
                                   , long lineNumber) {
         if (linum || dollar || squeezeMultipleEmpty) {
             LinumCatAlgorithm cat = new LinumCatAlgorithm(file, "cat");
+            cat.setYell(getYell());
             { // Set the cat printer
                 cat.setPrinter(new SimpleCatPrinter());
             }
@@ -77,7 +79,8 @@ public class CatAlgorithmFactory {
             // This implementation make a full dump of the file to the
             // standard output. It's an optimization for the standard
             // usage case.
-            return new BytesCatAlgorithm(file, "cat");
+            return new BytesCatAlgorithm(file, "cat")
+                .withYell(getYell());
         }
     }
     private CatAlgorithm buildHead(GeneralizedFile file) throws IOException {
@@ -89,7 +92,7 @@ public class CatAlgorithmFactory {
         if (isLine) {
             LinumCatAlgorithm linum = new LinumCatAlgorithm(file, "head")
                 .withSelect(new FullCatLineSelector());
-
+            linum.setYell(getYell());
             if (skipLast > 0) {
                 linum.withPrinter(new SimpleCatPrinter()
                                   .withHeader(new EmptyCatHeader())
@@ -137,6 +140,7 @@ public class CatAlgorithmFactory {
                 }
             }
             LinumCatAlgorithm linum = new LinumCatAlgorithm(file, "tail");
+            linum.setYell(getYell());
 
             if (skipFirst > 0) {
                 linum.withSelect(new FullCatLineSelector())
@@ -192,7 +196,8 @@ public class CatAlgorithmFactory {
                                      .withNumberOfCol(minIndentSize)
                                      .withLineNumber(startingLine))
                          .withEol(new NewLineEOLCatPrinter()))
-            .withStop(new ContinueCatStop());
+            .withStop(new ContinueCatStop())
+            .withYell(getYell());
     }
     // Getters-Setters
     public AlgorithmType getAlgo() {
@@ -307,7 +312,19 @@ public class CatAlgorithmFactory {
         setStartingLine(startingLine);
         return this;
     }
+    public YellPolicy getYell() {
+        return yell;
+    }
+    public void setYell(YellPolicy yell) {
+        this.yell = yell;
+    }
+    public CatAlgorithmFactory withYell(YellPolicy yell) {
+        setYell(yell);
+        return this;
+    }
+
     // Attributes
+    private YellPolicy yell;
     private long startingLine;
     private int indentSize;
     private String indentSeparator;
