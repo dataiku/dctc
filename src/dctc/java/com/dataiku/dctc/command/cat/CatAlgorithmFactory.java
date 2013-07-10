@@ -25,13 +25,14 @@ public class CatAlgorithmFactory {
         }
     }
     private CatAlgorithm buildCat(GeneralizedFile file) {
-        return buildCat(file, getLinum(), getDollar(),
-                        getSqueezeMultipleEmpty());
+        return buildCat(file, getLinum(), getDollar()
+                        , getSqueezeMultipleEmpty(), getStartingLine());
     }
     private CatAlgorithm buildCat(GeneralizedFile file
                                   , boolean linum
                                   , boolean dollar
-                                  , boolean squeezeMultipleEmpty) {
+                                  , boolean squeezeMultipleEmpty
+                                  , long lineNumber) {
         if (linum || dollar || squeezeMultipleEmpty) {
             LinumCatAlgorithm cat = new LinumCatAlgorithm(file);
             { // Set the cat printer
@@ -41,7 +42,7 @@ public class CatAlgorithmFactory {
                 if (linum) {
                     cat.getPrinter().setHeader(new LeftLinumCatHeader()
                                                .withIndentSeparator(" ")
-                                               .withLineNumber(1)
+                                               .withLineNumber(lineNumber)
                                                .withNumberIncrement(1)
                                                .withNumberOfCol(6));
                 }
