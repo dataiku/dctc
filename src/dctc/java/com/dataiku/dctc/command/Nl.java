@@ -23,9 +23,15 @@ public class Nl extends Command {
         return "Numbered input files on the standard output.";
     }
     public void setOptions(List<Option> opts) {
-        opts.add(stdOption('i', "line-increment", "Line number increment at each line.", true)); // FIXME: NUMBER
-        opts.add(stdOption('w', "number-width", "Use NUMBER columns for line numbers.", true)); // FIXME: NUMBER
-        opts.add(stdOption('v', "starting-line", "First line number on each logical page.", true)); // FIXME: NUMBER
+        opts.add(stdOption('i', "line-increment"
+                           , "Line number increment at each line."
+                           , true, "NUMBER"));
+        opts.add(stdOption('w', "number-width"
+                           , "Use NUMBER columns for line numbers."
+                           , true, "NUMBER"));
+        opts.add(stdOption('v', "starting-line"
+                           , "First line number on each logical page."
+                           , true, "NUMBER"));
     }
     public void longDescription(IndentedWriter writer) {
         writer.print("Write each FILE to standard output, with line "
