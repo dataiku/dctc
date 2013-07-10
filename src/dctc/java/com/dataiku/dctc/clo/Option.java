@@ -63,8 +63,19 @@ public class Option {
         setArg(arg);
         return this;
     }
+    public String getArgName() {
+        return argName;
+    }
+    public void setArgName(String argName) {
+        this.argName = argName;
+    }
+    public Option withArgName(String argName) {
+        setArgName(argName);
+        return this;
+    }
 
     // Attribute
+    private String argName;
     private String arg;
     private boolean hasOption;
     private int count;
