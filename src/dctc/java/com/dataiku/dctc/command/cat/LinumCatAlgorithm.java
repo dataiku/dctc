@@ -13,13 +13,15 @@ class LinumCatAlgorithm extends AbstractCatAlgorithm {
     }
 
     protected long _run(GeneralizedFile file) {
-        InputStream in = open();
-        if (in == null) {
-            return -1;
+        BufferedReader reader; { // open
+            InputStream in = open();
+            if (in == null) {
+                return -1;
+            }
+            reader = StreamUtils.readStream(in);
         }
-        long lineCount = 0;
 
-        BufferedReader reader = StreamUtils.readStream(in);
+        long lineCount = 0;
         String line;
         try {
             while (!stop.stop() && ((line = reader.readLine()) != null)) {
@@ -73,4 +75,3 @@ class LinumCatAlgorithm extends AbstractCatAlgorithm {
     private CatPrinter printer;
     private CatStop stop;
 }
-
