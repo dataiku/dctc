@@ -64,8 +64,10 @@ public class Grep extends Command {
                     pattern = DKUFileUtils.fileToString(new File(getOptionValue('f')));
                 }
                 catch (Exception e) {
-                    // FIXME: If -s, be quiet
-                    error("Unexpected error while reading " + getOptionValue('f'), e, 3);
+                    if (!hasOption("no-messages")) {
+                        error("Unexpected error while reading "
+                              + getOptionValue('f'), e, 3);
+                    }
                 }
             }
             else {
