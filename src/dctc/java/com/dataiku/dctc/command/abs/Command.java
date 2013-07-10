@@ -234,6 +234,13 @@ public abstract class Command {
                                String longOpt,
                                String descrip,
                                boolean hasArg) {
+        return stdOption(shortOpt, longOpt, descrip, hasArg, null);
+    }
+    protected Option stdOption(char shortOpt,
+                               String longOpt,
+                               String descrip,
+                               boolean hasArg,
+                               String argName) {
         ShortOption sopt = new ShortOption();
         sopt.addOpt(shortOpt);
         LongOption lopt = new LongOption();
@@ -242,12 +249,20 @@ public abstract class Command {
             .withShortOption(sopt)
             .withLongOption(lopt)
             .withDescription(descrip)
-            .withHasOption(hasArg);
+            .withHasOption(hasArg)
+            .withArgName(argName);
     }
     protected Option stdOption(String shortOpts,
                                String longOpt,
                                String descrip,
                                boolean hasArg) {
+        return stdOption(shortOpts, longOpt, descrip, hasArg, null);
+    }
+    protected Option stdOption(String shortOpts,
+                               String longOpt,
+                               String descrip,
+                               boolean hasArg,
+                               String argName) {
         ShortOption sopt = new ShortOption();
         sopt.addOpts(shortOpts);
         LongOption lopt = new LongOption();
@@ -256,8 +271,10 @@ public abstract class Command {
             .withShortOption(sopt)
             .withLongOption(lopt)
             .withDescription(descrip)
-            .withHasOption(hasArg);
+            .withHasOption(hasArg)
+            .withArgName(argName);
     }
+
     protected List<String> getArgs() {
         return parser.getArgs();
     }
