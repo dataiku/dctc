@@ -23,21 +23,35 @@ public class CatRunner {
 
         for (GeneralizedFile arg: args) {
             header.print(arg);
-            CatAlgorithm runner;
+            boolean isDirectory;
             try {
-                if (!resetLineNumbering) {
-                    fact.setStartingLine(nbLinePrinted + 1);
-                }
-                runner = fact.build(arg);
-            }
-            catch (IOException e) {
-                DCTCLog.error(fact.getAlgo().toString(),
-                              "Error while reading the file", e);
+                isDirectory = arg.isDirectory();
+            } catch (IOException e) {
+                DCTCLog.error(fact.getAlgo().toString().toLowerCase()
+                              , arg.givenName()+ ": Unexpected error.", e);
                 continue;
             }
-            runner.setExitCode(exitCode);
-            nbLinePrinted += runner.run();
-            setExitCode(runner.getExitCode());
+            if (!isDirectory) {
+                CatAlgorithm runner;
+                try {
+                    if (!resetLineNumbering) {
+                        fact.setStartingLine(nbLinePrinted + 1);
+                    }
+                    runner = fact.build(arg);
+                }
+                catch (IOException e) {
+                    DCTCLog.error(fact.getAlgo().toString().toLowerCase()
+                                  , "Error while reading the file", e);
+                    continue;
+                }
+                runner.setExitCode(exitCode);
+                nbLinePrinted += runner.run();
+                setExitCode(runner.getExitCode());
+            }
+            else {
+                DCTCLog.error(fact.getAlgo().toString().toLowerCase()
+                              , arg.givenName() + ": Is a directory");
+            }
         }
     }
 
