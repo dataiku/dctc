@@ -16,7 +16,9 @@ public class CatRunner {
             args.add(new StandardFile());
         }
         boolean first = true;
-        boolean header = args.size() > 1 && printHeader;
+        boolean header = args.size() > 1
+            && printHeader
+            && fact.getAlgo() != AlgorithmType.CAT;
 
         for (GeneralizedFile arg: args) {
             if (header) {
