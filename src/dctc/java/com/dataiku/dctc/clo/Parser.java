@@ -98,6 +98,10 @@ public class Parser {
                 }
             }
         }
+        else {
+            error = ErrorType.INVALID_OPTION;
+            optError = args[idx].substring(2);
+        }
 
         return false;
     }
