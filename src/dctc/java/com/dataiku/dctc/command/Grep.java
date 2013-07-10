@@ -120,13 +120,16 @@ public class Grep extends Command {
 
                     }
                     for (GeneralizedFile son: sons) {
+                        boolean canGrep;
                         try {
-                            if (son.exists() && son.isFile()) { // FIXME: Catch this
-                                grep(son); // FIXME: Not this
-                            }
+                             canGrep = son.exists() && son.isFile();
                         }
                         catch (IOException e) {
                             failRead(arg, e);
+                            continue;
+                        }
+                        if (canGrep) {
+                            grep(son);
                         }
                     }
 
