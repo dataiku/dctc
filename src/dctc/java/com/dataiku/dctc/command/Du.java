@@ -1,7 +1,6 @@
 package com.dataiku.dctc.command;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.dataiku.dctc.clo.Option;
@@ -23,16 +22,12 @@ public class Du extends Command {
     public String proto() {
         return "[FILE]...";
     }
-    public List<Option> setOptions() {
-        List<Option> opts = new ArrayList<Option>();
-
+    public void setOptions(List<Option> opts) {
         opts.add(stdOption('h', "human-readable", "print sizes in human readable format."));
         opts.add(stdOption('s', "summarize", "Display only a total for each argument."));
         opts.add(stdOption('c', "total", "Produce a grand total."));
         opts.add(stdOption('a', "all", "Write counts for all files, not just directories."));
         opts.add(stdOption('d', "max-depth", "Print the total for a directory (or file, with --all) only if it is N or fewer levels below the command line argument; --max-depth=0 is the same as --summarize.", true, "NUMBER"));
-
-        return opts;
     }
     public void longDescription(IndentedWriter printer) {
         printer.print("Compute file space usage.");

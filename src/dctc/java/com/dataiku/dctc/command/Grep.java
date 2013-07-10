@@ -6,7 +6,6 @@ import static com.dataiku.dip.utils.PrettyString.scat;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -36,9 +35,7 @@ public class Grep extends Command {
                                 , "do not offer a native grep (eg, Microsoft Windows). For UNIX"
                                 , "systems, use dctc cat|grep"));
     }
-    protected List<Option> setOptions() {
-        List<Option> opts = new ArrayList<Option>();
-
+    protected void setOptions(List<Option> opts) {
         opts.add(stdOption('r', "recursive", "Read all files under each directory, recursively."));
         opts.add(stdOption('v', "invert-match", "Invert the sense of matching, to select non-matching lines."));
         opts.add(stdOption('i', "ignore-case", "Ignore case distinctions in both the PATTERN and the input files."));
@@ -54,8 +51,6 @@ public class Grep extends Command {
 
         opts.add(stdOption('f', "file", "obtain PATTERN from FILE", true, "FILE"));
         opts.add(stdOption('e', "regexp", "Specify one or more patterns to be used during the search for input.", true, "PATTERN"));
-
-        return opts;
     }
     protected List<GeneralizedFile> getArgs(String[] shellArgs) {
         parseCommandLine(shellArgs);

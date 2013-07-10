@@ -3,7 +3,6 @@ package com.dataiku.dctc.command;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.dataiku.dctc.clo.Option;
@@ -56,8 +55,7 @@ public class Cp extends ListFilesCommand {
 
     // Protected
     @Override
-    protected List<Option> setOptions() {
-        List<Option> opts = new ArrayList<Option>();
+    protected void setOptions(List<Option> opts) {
         opts.add(stdOption("rR", "recursive", "Copy directories recursively."));
         opts.add(stdOption('c', "compress", "Compress all input files and add .gz extension."));
         opts.add(stdOption('u', "uncompress", "Uncompress all compressed (ie, .gz) input files (strips .gz extension)"));
@@ -67,9 +65,6 @@ public class Cp extends ListFilesCommand {
         opts.add(stdOption('p', "preserve", "Preserve the time stamp"));
         opts.add(stdOption('s', "sequential", "Make the copy with only one thread."));
         opts.add(stdOption('n', "thread-number", "Set the number of thread.", true, "NUMBER"));
-
-
-        return opts;
     }
     @Override
     public void execute(List<CopyTask> tasks) {

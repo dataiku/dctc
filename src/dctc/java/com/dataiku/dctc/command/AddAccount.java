@@ -4,7 +4,6 @@ import static com.dataiku.dip.utils.PrettyString.eol;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,8 +146,7 @@ public class AddAccount extends Command {
         return "protocol [account-name]";
     }
     @Override
-    protected List<Option> setOptions() {
-        return new ArrayList<Option>();
+    protected void setOptions(List<Option> opts) {
     }
     @Override
     public String cmdname() {

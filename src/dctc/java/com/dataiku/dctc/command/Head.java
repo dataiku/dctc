@@ -1,6 +1,5 @@
 package com.dataiku.dctc.command;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.dataiku.dctc.clo.Option;
@@ -18,16 +17,12 @@ public class Head extends Command {
     public void longDescription(IndentedWriter printer) {
         printer.print("Output the first N lines of the input files");
     }
-    protected List<Option> setOptions() {
-        List<Option> opts = new ArrayList<Option>();
-
+    protected void setOptions(List<Option> opts) {
         opts.add(stdOption('n', "lines", "Display the first `number' lines of each file", true, "K"));
         opts.add(stdOption('c', "bytes", "Print the first k bytes  of each file.", true, "K"));
         Option quiet = stdOption('q', "quiet", "Never output headers giving file names.");
         quiet.getLongOption().addOpt("silent");
         opts.add(quiet);
-
-        return opts;
     }
 
     @Override

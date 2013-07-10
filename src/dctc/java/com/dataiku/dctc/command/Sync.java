@@ -4,7 +4,6 @@ import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.dataiku.dctc.GlobalConstants;
@@ -63,17 +62,13 @@ public class Sync extends Command {
     }
 
     @Override
-    protected List<Option> setOptions() {
-        List<Option> opts = new ArrayList<Option>();
-
+    protected void setOptions(List<Option> opts) {
         opts.add(stdOption('t', "time", "Check whether sync is required using file size and modification time (default: size only). Incompatible with -m"));
         opts.add(stdOption('m', "hash", "Check whether sync is required using file hash (default: size only). Incompatible with -t"));
         opts.add(stdOption('n', "dry-run", "Perform a trial run with no changes made."));
         opts.add(stdOption('c', "compress", "Compress the output files and appends .gz extension. Disables -t and -m"));
         opts.add(stdOption('s', "sequential", "Make the copy with only one thread."));
         opts.add(stdOption('n', "thread-number", "Set the number of thread.", true, "NUMBER"));
-
-        return opts;
     }
 
     public void perform(List<GeneralizedFile> args) {

@@ -1,6 +1,5 @@
 package com.dataiku.dctc.command;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.dataiku.dctc.clo.Option;
@@ -24,8 +23,7 @@ public class Version extends Command {
         return "";
     }
     @Override
-    protected List<Option> setOptions() {
-        return new ArrayList<Option>();
+    protected void setOptions(List<Option> opts) {
     }
     @Override
     public String cmdname() {

@@ -1,6 +1,5 @@
 package com.dataiku.dctc.command;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.dataiku.dctc.clo.Option;
@@ -27,16 +26,12 @@ public class Tail extends Command {
         return "[OPTIONS...] [FILE...]";
     }
     @Override
-    protected List<Option> setOptions() {
-        List<Option> opts = new ArrayList<Option>();
-
+    protected void setOptions(List<Option> opts) {
         opts.add(stdOption('b', "bytes", "Output the last K bytes.", true, "K"));
         opts.add(stdOption('n', "lines", "Output the last K lines.", true, "K"));
         Option quiet = stdOption('q', "quiet", "Never output headers giving file names.");
         quiet.getLongOption().addOpt("silent");
         opts.add(quiet);
-
-        return opts;
     }
     @Override
     public void perform(List<GeneralizedFile> args) {

@@ -135,11 +135,8 @@ public class Edit extends Command {
 
     // Protected
     @Override
-    protected List<Option> setOptions() {
-        List<Option> opts = new ArrayList<Option>();
+    protected void setOptions(List<Option> opts) {
         opts.add(stdOption('e', "editor", "Override the EDITOR variable.", true, "BIN-NAME"));
-
-        return opts;
     }
 
     @Override

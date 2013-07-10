@@ -2,7 +2,6 @@ package com.dataiku.dctc.command;
 
 import static com.dataiku.dip.utils.PrettyString.scat;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.dataiku.dctc.clo.Option;
@@ -33,7 +32,7 @@ public class Cat extends Command {
             .withDollar(hasOption('E'));
 
         CatRunner runner = new CatRunner();
-        runner.perform(args, true, fact, getExitCode(), false);
+        runner.perform(args, true, fact, getExitCode(), true);
     }
     @Override
     public final String cmdname() {
@@ -41,14 +40,10 @@ public class Cat extends Command {
     }
     // Protected
     @Override
-    protected List<Option> setOptions() {
-        List<Option> options = new ArrayList<Option>();
-
+    protected void setOptions(List<Option> options) {
         options.add(stdOption('n', "number", "Number all output lines."));
         options.add(stdOption('E', "show-ends", "Display $ at end of each line."));
         options.add(stdOption('s', "squeeze-blank", "Suppress repeated empty output lines."));
-
-        return options;
     }
     @Override
     protected final String proto() {

@@ -1,6 +1,5 @@
 package com.dataiku.dctc.command;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.dataiku.dctc.clo.Option;
@@ -22,14 +21,10 @@ public class Nl extends Command {
     public String tagline() {
         return "Numbered input files on the standard output.";
     }
-    public List<Option> setOptions() {
-        List<Option> opts = new ArrayList<Option>();
-
+    public void setOptions(List<Option> opts) {
         opts.add(stdOption('i', "line-increment", "Line number increment at each line.", true)); // FIXME: NUMBER
         opts.add(stdOption('w', "number-width", "Use NUMBER columns for line numbers.", true)); // FIXME: NUMBER
         opts.add(stdOption('v', "starting-line", "First line number on each logical page.", true)); // FIXME: NUMBER
-
-        return opts;
     }
     public void longDescription(IndentedWriter writer) {
         writer.print("Write each FILE to standard output, with line "

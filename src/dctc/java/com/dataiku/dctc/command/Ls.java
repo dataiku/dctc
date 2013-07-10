@@ -471,9 +471,7 @@ public class Ls extends Command {
 
     // Protected
     @Override
-    protected List<Option> setOptions() {
-        List<Option> opts = new ArrayList<Option>();
-
+    protected void setOptions(List<Option> opts) {
         opts.add(stdOption("rR", "recursive", "Recursive display of path given as arguments."));
         opts.add(stdOption('a', "all", "Do not hide entries starting with."));
         opts.add(stdOption('U', "Do not sort; list entries in directory order."));
@@ -483,8 +481,6 @@ public class Ls extends Command {
         opts.add(stdOption('G', "color", "Colorize the output."));
         opts.add(stdOption('1', "List one file per line."));
         opts.add(stdOption('f', "Do not sort")); // FIXME: What???
-
-        return opts;
     }
     @Override
     protected String proto() {

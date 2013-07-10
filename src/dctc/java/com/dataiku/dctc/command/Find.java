@@ -1,7 +1,6 @@
 package com.dataiku.dctc.command;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -70,14 +69,9 @@ public class Find extends Command {
 
     // Protected
     @Override
-    protected List<Option> setOptions() {
-        List<Option> opts = new ArrayList<Option>();
-
+    protected void setOptions(List<Option> opts) {
         opts.add(stdOption("", "name", "Print the file only if its name contains the specified pattern.", true, "PATTERN"));
-
         opts.add(stdOption("", "type", "Select the type of the file to print (d(irectory), f(ile), a(all)).", true, "c"));
-
-        return opts;
     }
     @Override
     protected String proto() {

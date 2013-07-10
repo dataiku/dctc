@@ -3,7 +3,6 @@ package com.dataiku.dctc.command;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.NotImplementedException;
@@ -46,9 +45,7 @@ public class Dispatch extends ListFilesCommand {
                           ,scat("Dispatch supports delimited files (CSV, TSV)."));
     }
     @Override
-    protected List<Option> setOptions() {
-        List<Option> opts = new ArrayList<Option>();
-
+    protected void setOptions(List<Option> opts) {
         opts.add(stdOption('c', "compress", "Compress all files (add a .gz extension)."));
         opts.add(stdOption('p', "prefix", "Prefix the names of output files with a constant string", true, "PREFIX"));
         opts.add(stdOption('s', "suffix", "Suffix the names of output files with a constant string", true, "SUFFIX"));
@@ -60,8 +57,6 @@ public class Dispatch extends ListFilesCommand {
         opts.add(stdOption("", "input-format", "Format type for the input files. Only supports 'csv'.", true, "FILE-FORMAT"));
         opts.add(stdOption("", "input-separator", "Separator character for CSV format", true, "SEPARATOR"));
         opts.add(stdOption("", "input-quote", "Quote character for CSV format", true, "QUOTE-CHAR"));
-
-        return opts;
     }
 
     @Override

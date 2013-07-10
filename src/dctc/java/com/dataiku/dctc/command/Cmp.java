@@ -5,7 +5,6 @@ import static com.dataiku.dip.utils.PrettyString.pquoted;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.dataiku.dctc.AutoGZip;
@@ -46,8 +45,7 @@ public class Cmp extends Command {
     }
     // Protected
     @Override
-    protected List<Option> setOptions() {
-        return new ArrayList<Option>();
+    protected void setOptions(List<Option> opts) {
     }
     @Override
     protected final String proto() {

@@ -62,13 +62,9 @@ public class Mv extends ListFilesCommand {
     }
 
     @Override
-    protected List<Option> setOptions() {
-        List<Option> opts = new ArrayList<Option>();
-
+    protected void setOptions(List<Option> opts) {
         opts.add(stdOption('s', "sequential", "Make the copy with only one thread"));
         opts.add(stdOption('n', "thread-number", "Set the number of thread", true, "NUMBER"));
-
-        return opts;
     }
     @Override
     protected boolean shouldAdd(GeneralizedFile src, GeneralizedFile dst, String root) {

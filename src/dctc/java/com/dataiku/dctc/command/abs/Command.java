@@ -45,7 +45,7 @@ public abstract class Command {
     public abstract String tagline();
     protected abstract String proto();
     public abstract void longDescription(IndentedWriter printer);
-    protected abstract List<Option> setOptions();
+    protected abstract void setOptions(List<Option> opts);
     public void perform(String[] args) {
         resetExitCode();
         // Default implementation could be override
@@ -288,8 +288,9 @@ public abstract class Command {
     // Private methods
     private void initOptions() {
         if (opts == null) {
-            opts = setOptions();
+            opts = new ArrayList<Option>();
             opts.add(stdOption("h?", "help", "Display this help message."));
+            setOptions(opts);
         }
     }
 

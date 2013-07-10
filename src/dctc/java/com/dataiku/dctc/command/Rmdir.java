@@ -3,7 +3,6 @@ package com.dataiku.dctc.command;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.dataiku.dctc.clo.Option;
@@ -47,8 +46,7 @@ public class Rmdir extends Command {
     }
 
     @Override
-    protected List<Option> setOptions() {
-        return new ArrayList<Option>();
+    protected void setOptions(List<Option> opts) {
     }
     @Override
     protected String proto() {

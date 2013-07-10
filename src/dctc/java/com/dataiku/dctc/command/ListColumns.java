@@ -28,13 +28,9 @@ public class ListColumns extends Command {
     public String tagline() {
         return "List the name of the column.";
     }
-    public List<Option> setOptions() {
-        List<Option> opts = new ArrayList<Option>();
-
+    public void setOptions(List<Option> opts) {
         opts.add(stdOption('m', "minimal", "Set to minimal the display scheme."));
         opts.add(stdOption('s', "separator", "Set the separator.", true, "SEP"));
-
-        return opts;
     }
     public String cmdname() {
         return "list-columns";
