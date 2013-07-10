@@ -17,9 +17,6 @@ public class CatRunner {
         if (args.size() == 0) {
             args.add(new StandardFile());
         }
-        // FIXME: boolean header = args.size() > 1
-        //     && printHeader
-        //     && fact.getAlgo() != AlgorithmType.CAT;
         long nbLinePrinted = 0;
 
         for (GeneralizedFile arg: args) {
