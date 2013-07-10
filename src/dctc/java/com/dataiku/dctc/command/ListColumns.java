@@ -32,7 +32,7 @@ public class ListColumns extends Command {
         List<Option> opts = new ArrayList<Option>();
 
         opts.add(stdOption('m', "minimal", "Set to minimal the display scheme."));
-        opts.add(stdOption('s', "separator", "Set the separator.")); // FIXME: sep
+        opts.add(stdOption('s', "separator", "Set the separator.", true, "SEP"));
 
         return opts;
     }

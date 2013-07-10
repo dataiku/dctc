@@ -21,8 +21,8 @@ public class Head extends Command {
     protected List<Option> setOptions() {
         List<Option> opts = new ArrayList<Option>();
 
-        opts.add(stdOption('n', "lines", "Display the first `number' lines of each file", true)); // FIXME: K
-        opts.add(stdOption('c', "bytes", "Print the first k bytes  of each file.", true)); // FIXME: K
+        opts.add(stdOption('n', "lines", "Display the first `number' lines of each file", true, "K"));
+        opts.add(stdOption('c', "bytes", "Print the first k bytes  of each file.", true, "K"));
         opts.add(stdOption('q', "quiet", "Never print headers giving file names"));
 
         return opts;

@@ -73,9 +73,9 @@ public class Find extends Command {
     protected List<Option> setOptions() {
         List<Option> opts = new ArrayList<Option>();
 
-        opts.add(stdOption("", "name", "Print the file only if its name contains the specified pattern.", true)); // FIXME: PATTERN
+        opts.add(stdOption("", "name", "Print the file only if its name contains the specified pattern.", true, "PATTERN"));
 
-        opts.add(stdOption("", "type", "Select the type of the file to print (d(irectory), f(ile), a(all))."));
+        opts.add(stdOption("", "type", "Select the type of the file to print (d(irectory), f(ile), a(all)).", true, "c"));
 
         return opts;
     }

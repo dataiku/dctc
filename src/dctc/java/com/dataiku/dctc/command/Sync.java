@@ -71,7 +71,7 @@ public class Sync extends Command {
         opts.add(stdOption('n', "dry-run", "Perform a trial run with no changes made."));
         opts.add(stdOption('c', "compress", "Compress the output files and appends .gz extension. Disables -t and -m"));
         opts.add(stdOption('s', "sequential", "Make the copy with only one thread."));
-        opts.add(stdOption('n', "thread-number", "Set the number of thread.", true)); // FIXME: NUMBER
+        opts.add(stdOption('n', "thread-number", "Set the number of thread.", true, "NUMBER"));
 
         return opts;
     }

@@ -50,16 +50,16 @@ public class Dispatch extends ListFilesCommand {
         List<Option> opts = new ArrayList<Option>();
 
         opts.add(stdOption('c', "compress", "Compress all files (add a .gz extension)."));
-        opts.add(stdOption('p', "prefix", "Prefix the names of output files with a constant string", true)); // FIXME: prefix
-        opts.add(stdOption('s', "suffix", "Suffix the names of output files with a constant string", true)); // FIXME: suf
-        opts.add(stdOption("", "column", "Column to use for 'value', 'hash' and 'time' functions.", true)); // FIXME: column-name
-        opts.add(stdOption('f', "function", "Function to use to dispatch (one of 'random', 'value', 'hash', or 'time').", true)); // FIXME: fct-name
-        opts.add(stdOption("", "nb-files", "Number of output files to create for 'hash' and 'random' functions", true)); // FIXME: number
-        opts.add(stdOption("", "time-format", "Time format string for the 'time' function.", true)); // FIXME
-        opts.add(stdOption("", "time-period", "Dispatch time period for the 'time' function (one of 'year', 'month', 'day' or 'hour').", true)); // FIXME: period
-        opts.add(stdOption("", "input-format", "Format type for the input files. Only supports 'csv'.", true)); // FIXME: file-format
-        opts.add(stdOption("", "input-separator", "Separator character for CSV format", true)); // FIXME: separator
-        opts.add(stdOption("", "input-quote", "Quote character for CSV format", true)); // FIXME: quote-character
+        opts.add(stdOption('p', "prefix", "Prefix the names of output files with a constant string", true, "PREFIX"));
+        opts.add(stdOption('s', "suffix", "Suffix the names of output files with a constant string", true, "SUFFIX"));
+        opts.add(stdOption("", "column", "Column to use for 'value', 'hash' and 'time' functions.", true, "COLUMN-NAME"));
+        opts.add(stdOption('f', "function", "Function to use to dispatch (one of 'random', 'value', 'hash', or 'time').", true, "FUNCTION_NAME"));
+        opts.add(stdOption("", "nb-files", "Number of output files to create for 'hash' and 'random' functions", true, "NUMBER"));
+        opts.add(stdOption("", "time-format", "Time format string for the 'time' function.", true, "FORMAT"));
+        opts.add(stdOption("", "time-period", "Dispatch time period for the 'time' function (one of 'year', 'month', 'day' or 'hour').", true, "PERIOD"));
+        opts.add(stdOption("", "input-format", "Format type for the input files. Only supports 'csv'.", true, "FILE-FORMAT"));
+        opts.add(stdOption("", "input-separator", "Separator character for CSV format", true, "SEPARATOR"));
+        opts.add(stdOption("", "input-quote", "Quote character for CSV format", true, "QUOTE-CHAR"));
 
         return opts;
     }

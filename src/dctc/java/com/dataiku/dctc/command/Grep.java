@@ -52,8 +52,8 @@ public class Grep extends Command {
         opts.add(stdOption('l', "files-with-matches", "print only names of FILEs containing matches"));
         opts.add(stdOption('x', "Consider only input lines that use all characters in the line excluding the terminating <newline> to match an entire fixed string or regular expression to be matching lines."));
 
-        opts.add(stdOption('f', "file", "obtain PATTERN from FILE", true)); // FIXME: FILE
-        opts.add(stdOption('e', "regexp", "Specify one or more patterns to be used during the search for input.", true)); // FIXME: PATTERN
+        opts.add(stdOption('f', "file", "obtain PATTERN from FILE", true, "FILE"));
+        opts.add(stdOption('e', "regexp", "Specify one or more patterns to be used during the search for input.", true, "PATTERN"));
 
         return opts;
     }

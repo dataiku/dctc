@@ -30,8 +30,8 @@ public class Tail extends Command {
     protected List<Option> setOptions() {
         List<Option> opts = new ArrayList<Option>();
 
-        opts.add(stdOption('b', "bytes", "Output the last K bytes.", true)); // FIXME: K
-        opts.add(stdOption('n', "lines", "Output the last K lines.", true)); // FIXME: K
+        opts.add(stdOption('b', "bytes", "Output the last K bytes.", true, "K"));
+        opts.add(stdOption('n', "lines", "Output the last K lines.", true, "K"));
 
         return opts;
     }

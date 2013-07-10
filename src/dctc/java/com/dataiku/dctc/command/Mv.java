@@ -66,7 +66,7 @@ public class Mv extends ListFilesCommand {
         List<Option> opts = new ArrayList<Option>();
 
         opts.add(stdOption('s', "sequential", "Make the copy with only one thread"));
-        opts.add(stdOption('n', "thread-number", "Set the number of thread", true)); // FIXME: NUMBER
+        opts.add(stdOption('n', "thread-number", "Set the number of thread", true, "NUMBER"));
 
         return opts;
     }

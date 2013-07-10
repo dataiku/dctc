@@ -66,7 +66,7 @@ public class Cp extends ListFilesCommand {
         opts.add(stdOption('a', "archive", "Archives all input files into a single destination file using the destination file extension as identifier for the archive method. Supported archive methods are 'zip'"));
         opts.add(stdOption('p', "preserve", "Preserve the time stamp"));
         opts.add(stdOption('s', "sequential", "Make the copy with only one thread."));
-        opts.add(stdOption('n', "thread-number", "Set the number of thread.", true)); // FIXME: NUMBER
+        opts.add(stdOption('n', "thread-number", "Set the number of thread.", true, "NUMBER"));
 
 
         return opts;

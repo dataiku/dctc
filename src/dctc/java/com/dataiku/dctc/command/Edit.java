@@ -137,7 +137,7 @@ public class Edit extends Command {
     @Override
     protected List<Option> setOptions() {
         List<Option> opts = new ArrayList<Option>();
-        opts.add(stdOption('e', "editor", "Override the EDITOR variable.", true)); // FIXME: EDITOR
+        opts.add(stdOption('e', "editor", "Override the EDITOR variable.", true, "BIN-NAME"));
 
         return opts;
     }
