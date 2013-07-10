@@ -23,7 +23,9 @@ public class Head extends Command {
 
         opts.add(stdOption('n', "lines", "Display the first `number' lines of each file", true, "K"));
         opts.add(stdOption('c', "bytes", "Print the first k bytes  of each file.", true, "K"));
-        opts.add(stdOption('q', "quiet", "Never print headers giving file names"));
+        Option quiet = stdOption('q', "quiet", "Never output headers giving file names.");
+        quiet.getLongOption().addOpt("silent");
+        opts.add(quiet);
 
         return opts;
     }
@@ -36,17 +38,11 @@ public class Head extends Command {
             .withIsLineAlgo(isLine());
 
         CatRunner runner = new CatRunner();
-        runner.perform(args, !getQuiet(), fact, getExitCode(), true);
+        runner.perform(args, !hasOption("quiet"), fact, getExitCode(), true);
     }
     @Override
     public String cmdname() {
         return "head";
-    }
-    public boolean getQuiet() {
-        if (quiet == null) {
-            quiet = hasOption('q');
-        }
-        return quiet;
     }
     public long number() {
         nbLines();
@@ -84,7 +80,6 @@ public class Head extends Command {
     }
 
     // Attributes
-    private Boolean quiet;
     private Boolean isLine;
     private long number;
 }

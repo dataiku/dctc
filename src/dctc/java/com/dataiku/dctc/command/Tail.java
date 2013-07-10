@@ -32,6 +32,9 @@ public class Tail extends Command {
 
         opts.add(stdOption('b', "bytes", "Output the last K bytes.", true, "K"));
         opts.add(stdOption('n', "lines", "Output the last K lines.", true, "K"));
+        Option quiet = stdOption('q', "quiet", "Never output headers giving file names.");
+        quiet.getLongOption().addOpt("silent");
+        opts.add(quiet);
 
         return opts;
     }
@@ -44,7 +47,7 @@ public class Tail extends Command {
 
         CatRunner runner = new CatRunner();
 
-        runner.perform(args, true, fact, getExitCode(), true);
+        runner.perform(args, !hasOption("quiet"), fact, getExitCode(), true);
     }
     public long number() {
         nbLines();
