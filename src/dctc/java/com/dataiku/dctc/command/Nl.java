@@ -8,6 +8,7 @@ import com.dataiku.dctc.command.cat.AlgorithmType;
 import com.dataiku.dctc.command.cat.AlwaysCatHeaderSelector;
 import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
 import com.dataiku.dctc.command.cat.CatRunner;
+import com.dataiku.dctc.command.cat.NeverCatHeaderSelector;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
 import com.dataiku.dip.utils.IntegerUtils;
@@ -41,9 +42,9 @@ public class Nl extends Command {
             .withStartingLine(getIntOption('v', 1));
 
         CatRunner runner = new CatRunner()
-            .withHeader(new AlwaysCatHeaderSelector());
+            .withHeader(new NeverCatHeaderSelector());
 
-        runner.perform(args, fact, getExitCode(), true);
+        runner.perform(args, fact, getExitCode(), false);
     }
 
     // Private
