@@ -14,7 +14,11 @@ class BytesCatAlgorithm extends AbstractCatAlgorithm {
         super(file, cmdname);
     }
     protected long _run(GeneralizedFile file) {
-        InputStream i = bound(open());
+        InputStream i = open();
+        if (i == null) {
+            return -1;
+        }
+        i = bound(i);
 
         { // Skip the beginning file.
 
