@@ -31,4 +31,3 @@ public class LongOption {
     // private
     List<String> opts = new ArrayList<String>();
 }
-

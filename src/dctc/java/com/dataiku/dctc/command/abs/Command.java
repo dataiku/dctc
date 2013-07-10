@@ -35,7 +35,7 @@ public abstract class Command {
         yell = fact.build();
     }
     // The goal of this exception is to abort a command by bubbling up to main
-    public static class EndOfCommand extends Error {
+    public static class EndOfCommand extends Error { // FIXME: Most of the time useless
 
         private static final long serialVersionUID = 1L;
     }

@@ -9,4 +9,3 @@ class NlCatLineSelector implements CatLineSelector {
         return true;
     }
 }
-
