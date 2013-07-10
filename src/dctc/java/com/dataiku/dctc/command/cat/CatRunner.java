@@ -11,7 +11,8 @@ import com.dataiku.dctc.utils.ExitCode;
 public class CatRunner {
 
     public void perform(List<GeneralizedFile> args, boolean printHeader,
-                        CatAlgorithmFactory fact, ExitCode exitCode) {
+                        CatAlgorithmFactory fact, ExitCode exitCode,
+                        boolean resetLineNumbering) {
         if (args.size() == 0) {
             args.add(new StandardFile());
         }
@@ -19,6 +20,7 @@ public class CatRunner {
         boolean header = args.size() > 1
             && printHeader
             && fact.getAlgo() != AlgorithmType.CAT;
+        long nbLinePrinted = 0;
 
         for (GeneralizedFile arg: args) {
             if (header) {
@@ -32,14 +34,18 @@ public class CatRunner {
             }
             CatAlgorithm runner;
             try {
+                if (!resetLineNumbering) {
+                    fact.setStartingLine(nbLinePrinted + 1);
+                }
                 runner = fact.build(arg);
             }
             catch (IOException e) {
-                DCTCLog.error("cat,head,tail", "Error while reading the file", e);
+                DCTCLog.error(fact.getAlgo().toString(),
+                              "Error while reading the file", e);
                 continue;
             }
             runner.setExitCode(exitCode);
-            runner.run();
+            nbLinePrinted += runner.run();
             setExitCode(runner.getExitCode());
         }
     }

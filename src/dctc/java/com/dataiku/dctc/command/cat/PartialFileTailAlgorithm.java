@@ -12,14 +12,14 @@ class PartialFileTailAlgorithm extends AbstractCatAlgorithm {
     PartialFileTailAlgorithm(GeneralizedFile file) {
         super(file);
     }
-    protected void _run(GeneralizedFile file) {
+    protected long _run(GeneralizedFile file) {
         long size; {
             try {
                 size = file.getSize();
             }
             catch (IOException e) {
                 yell("Unexpected error while getting the size of " + file.givenName(), e, 1);
-                return;
+                return -1;
             }
         }
         String line = "";
@@ -39,6 +39,8 @@ class PartialFileTailAlgorithm extends AbstractCatAlgorithm {
         for (int i = Math.max(0, lines.length - getNbLine()); i < lines.length; ++i) {
             System.out.println(lines[i]);
         }
+
+        return Math.min(lines.length, nbLine);
     }
 
     // Getters - Setters

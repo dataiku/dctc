@@ -12,12 +12,12 @@ abstract class AbstractCatAlgorithm implements CatAlgorithm {
     public AbstractCatAlgorithm(GeneralizedFile file) {
         this.file = file;
     }
-    public void run() {
-        _run(file);
+    public long run() {
+        return _run(file);
     }
 
     // Abstract method
-    protected abstract void _run(GeneralizedFile file);
+    protected abstract long _run(GeneralizedFile file);
 
     // Helper methods
     protected void yell(String error, Throwable exception, int exitCode) {
@@ -31,7 +31,7 @@ abstract class AbstractCatAlgorithm implements CatAlgorithm {
             i = AutoGZip.buildInput(file);
         }
         catch (FileNotFoundException e) {
-            yell("dctc cat: " + file.givenName() + "No such file or directory", e, 1);
+            yell("dctc cat: " + file.givenName() + ": No such file or directory", e, 1);
             return null;
         }
         catch (IOException e) {

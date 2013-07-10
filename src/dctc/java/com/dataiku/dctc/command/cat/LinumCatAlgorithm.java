@@ -12,12 +12,12 @@ class LinumCatAlgorithm extends AbstractCatAlgorithm {
         super(file);
     }
 
-    protected void _run(GeneralizedFile file) {
-
+    protected long _run(GeneralizedFile file) {
         InputStream in = open();
         if (in == null) {
-            return;
+            return -1;
         }
+        long lineCount = 0;
 
         BufferedReader reader = StreamUtils.readStream(in);
         String line;
@@ -25,6 +25,7 @@ class LinumCatAlgorithm extends AbstractCatAlgorithm {
             while (!stop.stop() && ((line = reader.readLine()) != null)) {
                 if (select.needPrint(line)) {
                     printer.print(line);
+                    ++lineCount;
                 }
             }
             printer.end();
@@ -32,6 +33,8 @@ class LinumCatAlgorithm extends AbstractCatAlgorithm {
         catch (IOException e) {
             yell("Unexpected error", e, 2);
         }
+
+        return lineCount;
     }
 
     public CatLineSelector getSelect() {
@@ -70,3 +73,4 @@ class LinumCatAlgorithm extends AbstractCatAlgorithm {
     private CatPrinter printer;
     private CatStop stop;
 }
+

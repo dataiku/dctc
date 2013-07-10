@@ -10,13 +10,16 @@ class LatestLineCatAlgorithm extends AbstractCatAlgorithm {
     public LatestLineCatAlgorithm(GeneralizedFile file) {
         super(file);
     }
-    protected void _run(GeneralizedFile file) {
+    protected long _run(GeneralizedFile file) {
         try {
             IOUtils.copyLarge(file.getLastLines(getNbLine()), System.out);
         }
         catch (IOException e) {
             yell("Unexpected error on " + file.givenName(), e, 1);
         }
+
+        return -1; // End of line not counted, should not consider
+                   // this result.
     }
 
     public long getNbLine() {

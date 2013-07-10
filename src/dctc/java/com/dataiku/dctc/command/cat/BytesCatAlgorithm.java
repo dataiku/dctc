@@ -13,7 +13,7 @@ class BytesCatAlgorithm extends AbstractCatAlgorithm {
     public BytesCatAlgorithm(GeneralizedFile file) {
         super(file);
     }
-    protected void _run(GeneralizedFile file) {
+    protected long _run(GeneralizedFile file) {
         InputStream i = bound(open());
 
         { // Skip the beginning file.
@@ -33,6 +33,8 @@ class BytesCatAlgorithm extends AbstractCatAlgorithm {
         catch (IOException e) {
             yell("Unexpected error while reading " + file.givenName(), e, 2);
         }
+
+        return -1; // Line not counted, must not consider this return.
     }
 
     // Getters-Setters
