@@ -289,13 +289,7 @@ public abstract class Command {
     private void initOptions() {
         if (opts == null) {
             opts = setOptions();
-            Option help = new Option()
-            .withDescription("Display this help message.");
-            LongOption longHelp = new LongOption();
-            longHelp.addOpt("help");
-            help.setLongOption(longHelp);
-
-            opts.add(help);
+            opts.add(stdOption("h?", "help", "Display this help message."));
         }
     }
 
