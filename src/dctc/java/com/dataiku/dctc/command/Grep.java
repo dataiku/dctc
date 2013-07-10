@@ -148,7 +148,6 @@ public class Grep extends Command {
 
             }
         }
-        //printCount();
     }
     @Override
     public String cmdname() {
