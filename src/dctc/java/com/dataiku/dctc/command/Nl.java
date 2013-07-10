@@ -10,7 +10,6 @@ import com.dataiku.dctc.command.cat.CatRunner;
 import com.dataiku.dctc.command.cat.NeverCatHeaderSelector;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
-import com.dataiku.dip.utils.IntegerUtils;
 
 public class Nl extends Command {
     public String cmdname() {
@@ -55,24 +54,5 @@ public class Nl extends Command {
             .withHeader(new NeverCatHeaderSelector());
 
         runner.perform(args, fact, getExitCode(), false);
-    }
-
-    // Private
-    private int getIntOption(char option, int defaultValue) {
-        if (hasOption(option)) {
-            String val = getOptionValue(option);
-            System.err.println("debug: val: " + val);
-            if (IntegerUtils.isNumeric(val)) {
-                return IntegerUtils.toInt(val);
-            }
-            else {
-                error("For the option `" + option + "', `"
-                      + val + "' must be an integer.", 1);
-                return defaultValue;
-            }
-        }
-        else {
-            return defaultValue;
-        }
     }
 }

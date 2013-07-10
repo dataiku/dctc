@@ -29,6 +29,7 @@ import com.dataiku.dctc.file.FileBuilder;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dctc.utils.ExitCode;
 import com.dataiku.dip.utils.IndentedWriter;
+import com.dataiku.dip.utils.IntegerUtils;
 public abstract class Command {
     public Command() {
         YellPolicyFactory fact = new YellPolicyFactory();
@@ -283,6 +284,22 @@ public abstract class Command {
     }
     protected List<String> getArgs() {
         return parser.getArgs();
+    }
+    protected int getIntOption(char option, int defaultValue) {
+        if (hasOption(option)) {
+            String val = getOptionValue(option);
+            if (IntegerUtils.isNumeric(val)) {
+                return IntegerUtils.toInt(val);
+            }
+            else {
+                error("For the option `" + option + "', `"
+                      + val + "' must be an integer.", 1);
+                return defaultValue;
+            }
+        }
+        else {
+            return defaultValue;
+        }
     }
 
     // Private methods

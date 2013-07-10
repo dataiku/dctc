@@ -58,18 +58,12 @@ public class Head extends Command {
 
     public void nbLines() {
         if (isLine()) {
-            if (hasOption('n')) {
-                assert getOptionValue('n') != null
-                    : "getOptionValue('n') != null";
-                number = Long.parseLong(getOptionValue('n'));
-            } else {
-                number = 10;
-            }
+            number = getIntOption('n', 10);
         }
     }
     public void nbBytes() {
         if (!isLine()) {
-            number = Long.parseLong(getOptionValue('c'));
+            number = getIntOption('c', 10);
         }
     }
     @Override
