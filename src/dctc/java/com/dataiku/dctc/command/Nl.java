@@ -45,7 +45,7 @@ public class Nl extends Command {
             .withStartingLine(getIntOption('v', 1));
 
         CatRunner runner = new CatRunner();
-        runner.perform(args, false, fact, getExitCode());
+        runner.perform(args, false, fact, getExitCode(), true);
     }
 
     // Private

@@ -44,7 +44,7 @@ public class Tail extends Command {
 
         CatRunner runner = new CatRunner();
 
-        runner.perform(args, true, fact, getExitCode());
+        runner.perform(args, true, fact, getExitCode(), true);
     }
     public long number() {
         nbLines();

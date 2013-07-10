@@ -36,7 +36,7 @@ public class Head extends Command {
             .withIsLineAlgo(isLine());
 
         CatRunner runner = new CatRunner();
-        runner.perform(args, !getQuiet(), fact, getExitCode());
+        runner.perform(args, !getQuiet(), fact, getExitCode(), true);
     }
     @Override
     public String cmdname() {
