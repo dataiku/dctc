@@ -47,6 +47,10 @@ public class Nl extends Command {
             .withStartingLine(getIntOption('v', 1))
             .withYell(getYell());
 
+        if (getExitCode().getExitCode() != 0) {
+            return;
+        }
+
         CatRunner runner = new CatRunner()
             .withHeader(new NeverCatHeaderSelector());
 
@@ -56,8 +60,16 @@ public class Nl extends Command {
     // Private
     private int getIntOption(char option, int defaultValue) {
         if (hasOption(option)) {
-            // FIXME: Should make a better management.
-            return IntegerUtils.toInt(getOptionValue(option));
+            String val = getOptionValue(option);
+            System.err.println("debug: val: " + val);
+            if (IntegerUtils.isNumeric(val)) {
+                return IntegerUtils.toInt(val);
+            }
+            else {
+                error("For the option `" + option + "', `"
+                      + val + "' must be an integer.", 1);
+                return defaultValue;
+            }
         }
         else {
             return defaultValue;
