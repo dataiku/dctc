@@ -35,17 +35,16 @@ public abstract class Command {
         yell = fact.build();
     }
     // The goal of this exception is to abort a command by bubbling up to main
-    public static class EndOfCommand extends Error { // FIXME: Most of the time useless
-
+    public static class EndOfCommand extends Error {
+        // FIXME: Most of the time useless
         private static final long serialVersionUID = 1L;
     }
 
-    // Description of what the command does
+    // Abstract methods
     public abstract String cmdname();
     public abstract String tagline();
     protected abstract String proto();
     public abstract void longDescription(IndentedWriter printer);
-    // Abstract methods
     protected abstract List<Option> setOptions();
     public void perform(String[] args) {
         resetExitCode();
@@ -66,8 +65,8 @@ public abstract class Command {
     public void perform(List<GeneralizedFile> args) {
         throw new NotImplementedException();
     }
-    /** Prints the usage in case of bad usage by the user */
-    public void usage() { // FIXME
+    public void usage() {
+        /** Prints the usage in case of bad usage by the user */
         if (exitCode.getExitCode() != 0) {
             System.setOut(System.err);
         }
@@ -88,16 +87,6 @@ public abstract class Command {
         resetExitCode();
         perform(Arrays.asList(args));
     }
-    public ExitCode getExitCode() {
-        return exitCode;
-    }
-    public void setExitCode(ExitCode exitCode) {
-        this.exitCode = exitCode;
-    }
-    public Command withExitCode(ExitCode exitCode) {
-        setExitCode(exitCode);
-        return this;
-    }
 
     // Protected methods
     protected void parseCommandLine(String[] shellargs) {
@@ -111,6 +100,12 @@ public abstract class Command {
         }
         if (parser.hasOption('v')) {
             Logger.getRootLogger().setLevel(Level.INFO);
+        }
+        if (parser.hasError()) {
+            System.out.println(scat("dctc"
+                                    , cmdname() + ":"
+                                    , parser.prettyPrintError()));
+            throw new EndOfCommand();
         }
     }
     protected List<GeneralizedFile> getArgs(String[] shellargs) {
@@ -147,6 +142,17 @@ public abstract class Command {
         this.exitCode.resetExitCode();
     }
 
+    /// Error Management
+    public ExitCode getExitCode() {
+        return exitCode;
+    }
+    public void setExitCode(ExitCode exitCode) {
+        this.exitCode = exitCode;
+    }
+    public Command withExitCode(ExitCode exitCode) {
+        setExitCode(exitCode);
+        return this;
+    }
     protected void error(String msg, int exitCode) {
         yell.yell(cmdname(), msg, null);
         setExitCode(exitCode);
@@ -179,7 +185,6 @@ public abstract class Command {
             error(msg, exception, exitCode);
         }
     }
-
     protected void warn(String msg) {
         error(msg, 0);
     }
@@ -194,6 +199,8 @@ public abstract class Command {
         GeneralizedFile[] array = getFileBuilder().buildFile(paths);
         return Arrays.asList(array);
     }
+
+    /// Option Management
     protected boolean hasOption(char opt) {
         return parser != null && parser.hasOption(opt);
     }
@@ -274,10 +281,10 @@ public abstract class Command {
             .withHasOption(hasArg)
             .withArgName(argName);
     }
-
     protected List<String> getArgs() {
         return parser.getArgs();
     }
+
     // Private methods
     private void initOptions() {
         if (opts == null) {
@@ -291,6 +298,7 @@ public abstract class Command {
             opts.add(help);
         }
     }
+
     // Attributes
     private Parser parser;
     private List<Option> opts;
