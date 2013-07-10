@@ -399,7 +399,7 @@ public class Ls extends Command {
     /// Getters
     public boolean hidden() {
         if (hidden == null) {
-            hidden = hasOption('a');
+            hidden = hasOption('a') || hasOption('f');
         }
         return hidden;
     }
@@ -429,7 +429,7 @@ public class Ls extends Command {
     }
     public boolean sort() {
         if (sort == null) {
-            sort = !hasOption('f');
+            sort = !hasOption('f') && !hasOption('U');
         }
         return sort;
     }
@@ -480,7 +480,7 @@ public class Ls extends Command {
         opts.add(stdOption('e', "temp", "Hide temporary files (*~, #*)."));
         opts.add(stdOption('G', "color", "Colorize the output."));
         opts.add(stdOption('1', "List one file per line."));
-        opts.add(stdOption('f', "Do not sort")); // FIXME: What???
+        opts.add(stdOption('f', "do not sort, enable -aU."));
     }
     @Override
     protected String proto() {
