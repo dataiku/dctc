@@ -9,7 +9,8 @@ import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dctc.utils.ExitCode;
 
 abstract class AbstractCatAlgorithm implements CatAlgorithm {
-    public AbstractCatAlgorithm(GeneralizedFile file) {
+    public AbstractCatAlgorithm(GeneralizedFile file, String cmdname) {
+        this.cmdname = cmdname;
         this.file = file;
     }
     public long run() {
@@ -18,6 +19,9 @@ abstract class AbstractCatAlgorithm implements CatAlgorithm {
 
     // Abstract method
     protected abstract long _run(GeneralizedFile file);
+    protected String cmdname() {
+        return cmdname;
+    }
 
     // Helper methods
     protected void yell(String error, Throwable exception, int exitCode) {
@@ -31,7 +35,7 @@ abstract class AbstractCatAlgorithm implements CatAlgorithm {
             i = AutoGZip.buildInput(file);
         }
         catch (FileNotFoundException e) {
-            yell("dctc cat: " + file.givenName() + ": No such file or directory", e, 1);
+            yell("dctc " + cmdname() + ": " + file.givenName() + ": No such file or directory", e, 1);
             return null;
         }
         catch (IOException e) {
@@ -69,4 +73,5 @@ abstract class AbstractCatAlgorithm implements CatAlgorithm {
     // Attributes
     private GeneralizedFile file;
     private ExitCode exit;
+    private String cmdname;
 }

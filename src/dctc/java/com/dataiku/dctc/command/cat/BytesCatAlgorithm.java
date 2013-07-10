@@ -10,8 +10,8 @@ import com.dataiku.dip.utils.StreamUtils;
 import org.apache.commons.io.input.BoundedInputStream;
 
 class BytesCatAlgorithm extends AbstractCatAlgorithm {
-    public BytesCatAlgorithm(GeneralizedFile file) {
-        super(file);
+    public BytesCatAlgorithm(GeneralizedFile file, String cmdname) {
+        super(file, cmdname);
     }
     protected long _run(GeneralizedFile file) {
         InputStream i = bound(open());

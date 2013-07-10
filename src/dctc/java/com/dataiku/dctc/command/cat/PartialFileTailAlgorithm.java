@@ -9,8 +9,8 @@ import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.file.GeneralizedFile;
 
 class PartialFileTailAlgorithm extends AbstractCatAlgorithm {
-    PartialFileTailAlgorithm(GeneralizedFile file) {
-        super(file);
+    PartialFileTailAlgorithm(GeneralizedFile file, String cmdname) {
+        super(file, cmdname);
     }
     protected long _run(GeneralizedFile file) {
         long size; {

@@ -34,7 +34,7 @@ public class CatAlgorithmFactory {
                                   , boolean squeezeMultipleEmpty
                                   , long lineNumber) {
         if (linum || dollar || squeezeMultipleEmpty) {
-            LinumCatAlgorithm cat = new LinumCatAlgorithm(file);
+            LinumCatAlgorithm cat = new LinumCatAlgorithm(file, "cat");
             { // Set the cat printer
                 cat.setPrinter(new SimpleCatPrinter());
             }
@@ -77,7 +77,7 @@ public class CatAlgorithmFactory {
             // This implementation make a full dump of the file to the
             // standard output. It's an optimization for the standard
             // usage case.
-            return new BytesCatAlgorithm(file);
+            return new BytesCatAlgorithm(file, "cat");
         }
     }
     private CatAlgorithm buildHead(GeneralizedFile file) throws IOException {
@@ -87,7 +87,7 @@ public class CatAlgorithmFactory {
                                    , long skipLast
                                    , boolean isLine) throws IOException {
         if (isLine) {
-            LinumCatAlgorithm linum = new LinumCatAlgorithm(file)
+            LinumCatAlgorithm linum = new LinumCatAlgorithm(file, "head")
                 .withSelect(new FullCatLineSelector());
 
             if (skipLast > 0) {
@@ -109,12 +109,12 @@ public class CatAlgorithmFactory {
         }
         else {
             if (skipLast > 0) {
-                return new BytesCatAlgorithm(file)
+                return new BytesCatAlgorithm(file, "head")
                     .withSkipLast(skipLast);
             }
             else {
                 long fileSize = file.getSize();
-                return new BytesCatAlgorithm(file)
+                return new BytesCatAlgorithm(file, "head")
                     .withSkipLast(fileSize + skipLast);
             }
         }
@@ -128,15 +128,15 @@ public class CatAlgorithmFactory {
         if (isLine) {
             if (skipFirst > 0) {
                 if (file.canGetLastLines()) {
-                    return new LatestLineCatAlgorithm(file)
+                    return new LatestLineCatAlgorithm(file, "tail")
                         .withNbLine(skipFirst);
                 }
                 else if (file.canGetPartialFile()) {
-                    return new PartialFileTailAlgorithm(file)
+                    return new PartialFileTailAlgorithm(file, "tail")
                         .withNbLine(skipFirst);
                 }
             }
-            LinumCatAlgorithm linum = new LinumCatAlgorithm(file);
+            LinumCatAlgorithm linum = new LinumCatAlgorithm(file, "tail");
 
             if (skipFirst > 0) {
                 linum.withSelect(new FullCatLineSelector())
@@ -162,11 +162,11 @@ public class CatAlgorithmFactory {
             // bytes
             if (skipFirst > 0) {
                 long fileSize = file.getSize();
-                return new BytesCatAlgorithm(file)
+                return new BytesCatAlgorithm(file, "tail")
                     .withSkipFirst(fileSize - skipFirst);
             }
             else {
-                return new BytesCatAlgorithm(file)
+                return new BytesCatAlgorithm(file, "tail")
                     .withSkipFirst(-skipFirst);
             }
         }
@@ -183,7 +183,7 @@ public class CatAlgorithmFactory {
                                  , String indentSeparator
                                  , int minIndentSize
                                  , long startingLine) {
-        return new LinumCatAlgorithm(file)
+        return new LinumCatAlgorithm(file, "nl")
             .withSelect(new NlCatLineSelector())
             .withPrinter(new SimpleCatPrinter()
                          .withHeader(new LeftLinumCatHeader()

@@ -8,8 +8,8 @@ import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.StreamUtils;
 
 class LinumCatAlgorithm extends AbstractCatAlgorithm {
-    LinumCatAlgorithm(GeneralizedFile file) {
-        super(file);
+    LinumCatAlgorithm(GeneralizedFile file, String cmdname) {
+        super(file, cmdname);
     }
 
     protected long _run(GeneralizedFile file) {

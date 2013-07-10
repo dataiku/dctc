@@ -7,8 +7,8 @@ import org.apache.commons.io.IOUtils;
 import com.dataiku.dctc.file.GeneralizedFile;
 
 class LatestLineCatAlgorithm extends AbstractCatAlgorithm {
-    public LatestLineCatAlgorithm(GeneralizedFile file) {
-        super(file);
+    public LatestLineCatAlgorithm(GeneralizedFile file, String cmdname) {
+        super(file, cmdname);
     }
     protected long _run(GeneralizedFile file) {
         try {
