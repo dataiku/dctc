@@ -31,6 +31,12 @@ public class Usage {
             sb.setLength(sb.length() - 2); // Delete the latest comma
                                            // space.
 
+            // Print the argument name if existing.
+            if (opt.hasOption() && opt.getArgName() != null) {
+                sb.append("=");
+                sb.append(opt.getArgName());
+            }
+
             prettyOpts.add(sb.toString());
             descriptions.add(opt.getDescription());
         }
