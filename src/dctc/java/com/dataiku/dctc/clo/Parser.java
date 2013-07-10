@@ -123,7 +123,7 @@ public class Parser {
             else {
                 opt.dec(); // First character is a minus.
                 if (opt.hasOption()) {
-                    if (i == arg.length()) {
+                    if (i + 1  == arg.length()) {
                         if (idx == args.length) {
                             error = ErrorType.TOO_FEW_ARGUMENT;
                             optError = new String(arg.substring(i, i + 1));
@@ -134,7 +134,7 @@ public class Parser {
                     }
                     else {
                         opt.setArg(arg.substring(i + 1));
-                        return false;
+                        return true;
                     }
                 }
             }
