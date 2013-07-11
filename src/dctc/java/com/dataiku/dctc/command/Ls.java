@@ -33,15 +33,15 @@ public class Ls extends Command {
     // Public
     @Override
     public void perform(String[] args) {
-            List<GeneralizedFile> arguments = getArgs(args);
-            if (arguments != null) {
-                if (arguments.size() == 0) {
-                    String[] dot = { "." };
-                    perform(build(dot));
-                } else {
-                    perform(arguments);
-                }
+        List<GeneralizedFile> arguments = getArgs(args);
+        if (arguments != null) {
+            if (arguments.size() == 0) {
+                String[] dot = { "." };
+                perform(build(dot));
+            } else {
+                perform(arguments);
             }
+        }
         return;
         // Set options.
     }
