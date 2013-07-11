@@ -77,19 +77,16 @@ public class Main {
         printer.setTermSize(Math.min(GlobalConf.getColNumber(), 80));
         return printer;
     }
-    private static void commandHelp(int exitCode, String command) {
-        if (exitCode != 0) {
-            System.setOut(System.err);
-        }
+    private static void commandHelp(ExitCode exitCode, String command) {
         IndentedWriter printer = getIndentedWriter();
         for (Command cmd: cmds.values()) {
             if (cmd.cmdname().equals(command)) {
                 commandHelp(cmd, printer);
-                System.exit(exitCode);
+                return;
             }
         }
         System.out.println("Command not found: " + command);
-        globalUsage(1);
+        exitCode.setExitCode(1);
     }
     public static void commandHelp(Command cmd, IndentedWriter printer) {
         cmd.setExitCode(new ExitCode());
@@ -189,7 +186,11 @@ public class Main {
 
                 if (help(usercmd)) {
                     if (cmdargs.length > 0) {
-                        commandHelp(0, cmdargs[0]);
+                        ExitCode exit = new ExitCode();
+                        for (String cmdarg: cmdargs) {
+                            commandHelp(exit, cmdarg);
+                        }
+                        System.exit(exit.getExitCode());
                     }
                     else {
                         globalUsage(0);
