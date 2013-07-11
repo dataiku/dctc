@@ -72,7 +72,6 @@ public abstract class Command {
         usage(Main.getIndentedWriter());
     }
     public void usage(IndentedWriter writer) {
-        /** Prints the usage in case of bad usage by the user */
         if (exitCode.getExitCode() != 0) {
             System.setOut(System.err);
         }
