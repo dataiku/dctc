@@ -79,7 +79,7 @@ public class CatAlgorithmFactory {
             // This implementation make a full dump of the file to the
             // standard output. It's an optimization for the standard
             // usage case.
-            return new BytesCatAlgorithm(file, "cat")
+            return new CopyBytesCatAlgorithm(file, "cat")
                 .withYell(getYell());
         }
     }
@@ -112,12 +112,12 @@ public class CatAlgorithmFactory {
         }
         else {
             if (skipLast > 0) {
-                return new BytesCatAlgorithm(file, "head")
+                return new CopyBytesCatAlgorithm(file, "head")
                     .withSkipLast(skipLast);
             }
             else {
                 long fileSize = file.getSize();
-                return new BytesCatAlgorithm(file, "head")
+                return new CopyBytesCatAlgorithm(file, "head")
                     .withSkipLast(fileSize + skipLast);
             }
         }
@@ -166,11 +166,11 @@ public class CatAlgorithmFactory {
             // bytes
             if (skipFirst > 0) {
                 long fileSize = file.getSize();
-                return new BytesCatAlgorithm(file, "tail")
+                return new CopyBytesCatAlgorithm(file, "tail")
                     .withSkipFirst(fileSize - skipFirst);
             }
             else {
-                return new BytesCatAlgorithm(file, "tail")
+                return new CopyBytesCatAlgorithm(file, "tail")
                     .withSkipFirst(-skipFirst);
             }
         }

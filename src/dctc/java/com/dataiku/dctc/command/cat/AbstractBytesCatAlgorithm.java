@@ -3,17 +3,16 @@ package com.dataiku.dctc.command.cat;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.BoundedInputStream;
 
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.StreamUtils;
-import org.apache.commons.io.input.BoundedInputStream;
 
-class BytesCatAlgorithm extends AbstractCatAlgorithm {
-    public BytesCatAlgorithm(GeneralizedFile file, String cmdname) {
+abstract class AbstractBytesCatAlgorithm extends AbstractCatAlgorithm {
+    public AbstractBytesCatAlgorithm(GeneralizedFile file, String cmdname) {
         super(file, cmdname);
     }
-    protected long _run(GeneralizedFile file) {
+    protected final long _run(GeneralizedFile file) {
         InputStream i = open();
         if (i == null) {
             return -1;
@@ -31,35 +30,30 @@ class BytesCatAlgorithm extends AbstractCatAlgorithm {
             }
         }
 
-        try {
-            IOUtils.copy(i, System.out);
-        }
-        catch (IOException e) {
-            yell("Unexpected error while reading " + file.givenName(), e, 2);
-        }
-
+        copy(i, file);
         return -1; // Line not counted, must not consider this return.
-    }
 
-    // Getters-Setters
-    public long getSkipLast() {
-        return skipLast;
     }
-    public void setSkipLast(long skipLast) {
-        this.skipLast = skipLast;
-    }
-    public BytesCatAlgorithm withSkipLast(long skipLast) {
-        setSkipLast(skipLast);
-        return this;
-    }
+    protected abstract void copy(InputStream inputStream, GeneralizedFile file);
+    // Getters Setters
     public long getSkipFirst() {
         return skipFirst;
     }
     public void setSkipFirst(long skipFirst) {
         this.skipFirst = skipFirst;
     }
-    public BytesCatAlgorithm withSkipFirst(long skipFirst) {
+    public AbstractBytesCatAlgorithm withSkipFirst(long skipFirst) {
         setSkipFirst(skipFirst);
+        return this;
+    }
+    public long getSkipLast() {
+        return skipLast;
+    }
+    public void setSkipLast(long skipLast) {
+        this.skipLast = skipLast;
+    }
+    public AbstractBytesCatAlgorithm withSkipLast(long skipLast) {
+        setSkipLast(skipLast);
         return this;
     }
     public InputStream bound(InputStream i) {
@@ -70,3 +64,4 @@ class BytesCatAlgorithm extends AbstractCatAlgorithm {
     private long skipFirst;
     private long skipLast = Long.MAX_VALUE;
 }
+
