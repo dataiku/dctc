@@ -1,4 +1,4 @@
-package com.dataiku.dip.utils;
+package com.dataiku.dctc.utils;
 
 public class Color {
     public final static String blue = "\u001B[01;34m";
