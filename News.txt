@@ -1,6 +1,22 @@
 # -*- mode: org eval: (auto-fill-mode) -*-
 
 * 0.3
+** Usage
+
+   New usage formats, with color or not.
+
+   For more color put the following block on the configuration file:
+   #+BEGIN_EXAMPLE
+   [global]
+     usage = colored
+   #+END_EXAMPLE
+
+   For no color put the following bloc on the configuration file:
+   #+BEGIN_EXAMPLE
+   [global]
+     usage = simple
+   #+END_EXAMPLE
+
 ** Nl command
 
    Nl command copy the unix nl command.
