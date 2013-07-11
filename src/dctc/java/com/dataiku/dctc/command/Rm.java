@@ -137,7 +137,6 @@ public class Rm extends Command {
                                 del(son);
                             }
                         }
-
                         else {
                             if (fileAsk(son)) {
                                 del(son);
