@@ -71,8 +71,9 @@ public class Head extends Command {
         return "[OPT...] PATHS...";
     }
     private boolean isLine() {
-        if (isLine == null) {
-            isLine = !hasOption('c');
+        String line = getLastPosition("lines", "bytes");
+        if (line != null) {
+            isLine = line.equals("lines");
         }
 
         return isLine;
