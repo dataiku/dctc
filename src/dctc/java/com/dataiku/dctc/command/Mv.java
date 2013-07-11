@@ -37,9 +37,9 @@ public class Mv extends ListFilesCommand {
 
             try {
                 exec.run(tasks, archive());
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            }
+            catch (IOException e) {
+                error("Error while moving files", e, 2);
             }
             if (exec.hasFail()) {
                 setExitCode(2);
@@ -52,9 +52,9 @@ public class Mv extends ListFilesCommand {
                         if (!dir.delete()) {
                             error(dir, "Cannot delete directory", 2);
                         }
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                    }
+                    catch (IOException e) {
+                        error(dir, "Error while deleting the directory", e, 2);
                     }
                 }
             }
@@ -85,7 +85,8 @@ public class Mv extends ListFilesCommand {
         try {
             dst.mkdirs();
             return true;
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             error(dst, e.getMessage(), 3);
             return false;
         }
