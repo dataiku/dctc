@@ -469,6 +469,8 @@ public class Ls extends Command {
     // Protected
     @Override
     protected void setOptions(List<Option> opts) {
+        opts.clear();
+        opts.add(stdOption('?', "help", "Display this help message."));
         opts.add(stdOption("rR", "recursive", "Recursive display of path given as arguments."));
         opts.add(stdOption('a', "all", "Do not hide entries starting with."));
         opts.add(stdOption('U', "Do not sort; list entries in directory order."));
