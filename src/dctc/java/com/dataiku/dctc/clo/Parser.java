@@ -3,6 +3,8 @@ package com.dataiku.dctc.clo;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dataiku.dctc.file.FileManipulation;
+
 public class Parser {
     public enum ErrorType {
         INVALID_OPTION
@@ -83,13 +85,22 @@ public class Parser {
         assert args[idx].length() > 2
             : "args[idx].length() > 2";
 
-        Option opt = getLong(args[idx].substring(2));
+        String arg = args[idx].substring(2);
+        String[] option = FileManipulation.split(arg, "=", 2, false);
+
+        Option opt = getLong(option[0]);
         if (opt != null) {
             dec(opt);
             if (opt.hasOption()) {
-                if (idx == args.length) {
+                if (option[1] != null) {
+                    opt.setArg(option[1]);
+
+                    return false;
+                }
+                else if (idx == args.length) {
                     error = ErrorType.TOO_FEW_ARGUMENT;
-                    optError = args[idx].substring(2);
+                    optError = option[1];
+
                     return false;
                 }
                 else {
