@@ -11,6 +11,7 @@ public class Parser {
     }
 
     public void parser(String[] args) {
+        pos = 0;
         notOption = new ArrayList<String>();
         for (int i = 0; i < args.length; ++i) {
             String arg = args[i];
@@ -108,6 +109,8 @@ public class Parser {
     public boolean parseShort(int idx, String[] args) {
         assert args[idx].startsWith("-")
             : "args[idx].startsWith(\"-\")";
+        assert (!args[idx].startsWith("--"))
+            : "(!args[idx].startsWith(\"--\"))";
         assert args[idx].length() > 1
             : "args[idx].length() > 1";
 
@@ -213,9 +216,14 @@ public class Parser {
     }
     public void dec(Option opt) {
         opt.dec();
+        touch(opt);
+    }
+    public void touch(Option opt) {
+        opt.setPosition(++pos);
     }
 
     // Attributes
+    private int pos;
     private List<Option> options;
     private ErrorType error = ErrorType.NONE;
     private String optError;

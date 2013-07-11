@@ -73,8 +73,19 @@ public class Option {
         setArgName(argName);
         return this;
     }
+    public int getPosition() {
+        return position;
+    }
+    public void setPosition(int position) {
+        this.position = position;
+    }
+    public Option withPosition(int position) {
+        setPosition(position);
+        return this;
+    }
 
     // Attribute
+    private int position;
     private String argName;
     private String arg;
     private boolean hasOption;
