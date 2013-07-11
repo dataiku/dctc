@@ -3,11 +3,14 @@ package com.dataiku.dctc.clo;
 public class PrinterFactory {
     public enum Type {
         COLORED
+        , SIMPLE
     }
     public Printer build() {
         switch (getType()) {
         case COLORED:
             return new ColorPrinter();
+        case SIMPLE:
+            return new SimplePrinter();
         default:
             throw new Error("Never reached");
         }
