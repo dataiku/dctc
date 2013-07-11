@@ -10,29 +10,37 @@ public class Usage {
         printer.start();
         for (Option opt: opts) {
             printer.newOption();
-            // Short
-            String shortOpts = opt.getShortOption() != null
-                ? opt.getShortOption().getOpts() : "";
-            for (int i = 0; i < shortOpts.length(); ++i) {
-                printer.add(shortOpts.charAt(i));
+
+            { // Options
+                { // Short
+                    String shortOpts = opt.getShortOption() != null
+                        ? opt.getShortOption().getOpts() : "";
+                    for (int i = 0; i < shortOpts.length(); ++i) {
+                        printer.add(shortOpts.charAt(i));
+                    }
+                }
+
+                { // Long
+                    List<String> longOpts = opt.getLongOption() != null
+                        ? opt.getLongOption().getOpts() : new ArrayList<String>();
+                    for (String longOpt: longOpts) {
+                        printer.add(longOpt);
+                    }
+                    printer.endOptionListing();
+                }
             }
-            // Long
-            List<String> longOpts = opt.getLongOption() != null
-                ? opt.getLongOption().getOpts() : new ArrayList<String>();
-            for (String longOpt: longOpts) {
-                printer.add(longOpt);
+
+            { // Options
+                if (opt.hasOption() && opt.getArgName() != null) {
+                    printer.addParam(opt.getArgName());
+                }
             }
-            printer.endOptionListing();
-            // Options
-            if (opt.hasOption() && opt.getArgName() != null) {
-                printer.addParam(opt.getArgName());
+
+            { // Description
+                printer.endOption();
+                printer.addDescription(opt.getDescription());
             }
-            // Description
-            printer.endOption();
-            printer.addDescription(opt.getDescription());
         }
         printer.print();
     }
-
 }
-
