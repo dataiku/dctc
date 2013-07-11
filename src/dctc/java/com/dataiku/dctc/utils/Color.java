@@ -8,6 +8,7 @@ public class Color {
     public final static String grey = "90m";
     public final static String red = "31m";
     public final static String reset = "0m";
+    public final static String bold = "1m";
     private final static String colorChar = "u001B[";
 
     public static String color(String color, String msg) {
@@ -30,6 +31,25 @@ public class Color {
     }
     public static String grey(String msg) {
         return color(grey, msg);
+    }
+
+    public static String bpurple(String msg) {
+        return color(bold + ";" + purple, msg);
+    }
+    public static String bblue(String msg) {
+        return color(bold + ";" + blue, msg);
+    }
+    public static String byellow(String msg) {
+        return color(bold + ";" + yellow, msg);
+    }
+    public static String bgreen(String msg) {
+        return color(bold + ";" + green, msg);
+    }
+    public static String bred(String msg) {
+        return color(bold + ";" + red, msg);
+    }
+    public static String bgrey(String msg) {
+        return color(bold + ";" + grey, msg);
     }
 
     public static boolean getColor() {
