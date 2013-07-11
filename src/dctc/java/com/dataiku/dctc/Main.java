@@ -70,14 +70,18 @@ public class Main {
                                  "http://dctc.io"));
         System.exit(exitCode);
     }
-    private static void commandHelp(int exitCode, String command) {
-        if (exitCode != 0) {
-            System.setOut(System.err);
-        }
+    public static IndentedWriter getIndentedWriter() {
         IndentedWriter printer = new IndentedWriter();
         printer.setFirstLineIndentsize(2);
         printer.setIndentSize(2);
         printer.setTermSize(Math.min(GlobalConf.getColNumber(), 80));
+        return printer;
+    }
+    private static void commandHelp(int exitCode, String command) {
+        if (exitCode != 0) {
+            System.setOut(System.err);
+        }
+        IndentedWriter printer = getIndentedWriter();
         for (Command cmd: cmds.values()) {
             if (cmd.cmdname().equals(command)) {
                 commandHelp(cmd, printer);
@@ -88,12 +92,8 @@ public class Main {
         globalUsage(1);
     }
     public static void commandHelp(Command cmd, IndentedWriter printer) {
-        System.out.println("dctc " + cmd.cmdname() + " -- " + cmd.tagline());
-        System.out.println();
-        cmd.longDescription(printer);
-        System.out.println();
         cmd.setExitCode(new ExitCode());
-        cmd.usage();
+        cmd.usage(printer);
     }
 
     public static void setLogger() {
