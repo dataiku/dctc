@@ -84,7 +84,7 @@ public class Parser {
 
         Option opt = getLong(args[idx].substring(2));
         if (opt != null) {
-            opt.dec();
+            dec(opt);
             if (opt.hasOption()) {
                 if (idx == args.length) {
                     error = ErrorType.TOO_FEW_ARGUMENT;
@@ -121,7 +121,7 @@ public class Parser {
                 return false;
             }
             else {
-                opt.dec(); // First character is a minus.
+                dec(opt);
                 if (opt.hasOption()) {
                     if (i + 1  == arg.length()) {
                         if (idx == args.length) {
@@ -210,6 +210,9 @@ public class Parser {
         }
         System.err.println("debug: null");
         return null;
+    }
+    public void dec(Option opt) {
+        opt.dec();
     }
 
     // Attributes
