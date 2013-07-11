@@ -26,14 +26,21 @@ public class CatAlgorithmFactory {
         }
     }
     private CatAlgorithm buildCat(GeneralizedFile file) {
-        return buildCat(file, getLinum(), getDollar()
-                        , getSqueezeMultipleEmpty(), getStartingLine());
+        return buildCat(file
+                        , getLinum()
+                        , getDollar()
+                        , getSqueezeMultipleEmpty()
+                        , getStartingLine()
+                        , getShowTabulation()
+                        , getPrettyChar());
     }
     private CatAlgorithm buildCat(GeneralizedFile file
                                   , boolean linum
                                   , boolean dollar
                                   , boolean squeezeMultipleEmpty
-                                  , long lineNumber) {
+                                  , long lineNumber
+                                  , boolean showTabulation
+                                  , boolean prettyChar) {
         if (linum || dollar || squeezeMultipleEmpty) {
             LinumCatAlgorithm cat = new LinumCatAlgorithm(file, "cat");
             cat.setYell(getYell());
@@ -76,11 +83,18 @@ public class CatAlgorithmFactory {
             return cat;
         }
         else {
-            // This implementation make a full dump of the file to the
-            // standard output. It's an optimization for the standard
-            // usage case.
-            return new CopyBytesCatAlgorithm(file, "cat")
-                .withYell(getYell());
+            if (prettyChar) {
+                return new PrettyBytesCatAlgorithm(file, "cat")
+                    .withShowTabulation(showTabulation)
+                    .withYell(getYell());
+            }
+            else {
+                // This implementation make a full dump of the file to the
+                // standard output. It's an optimization for the standard
+                // usage case.
+                return new CopyBytesCatAlgorithm(file, "cat")
+                    .withYell(getYell());
+            }
         }
     }
     private CatAlgorithm buildHead(GeneralizedFile file) throws IOException {
@@ -322,8 +336,30 @@ public class CatAlgorithmFactory {
         setYell(yell);
         return this;
     }
+    public boolean getPrettyChar() {
+        return prettyChar;
+    }
+    public void setPrettyChar(boolean prettyChar) {
+        this.prettyChar = prettyChar;
+    }
+    public CatAlgorithmFactory withPrettyChar(boolean prettyChar) {
+        setPrettyChar(prettyChar);
+        return this;
+    }
+    public boolean getShowTabulation() {
+        return showTabulation;
+    }
+    public void setShowTabulation(boolean showTabulation) {
+        this.showTabulation = showTabulation;
+    }
+    public CatAlgorithmFactory withShowTabulation(boolean showTabulation) {
+        setShowTabulation(showTabulation);
+        return this;
+    }
 
     // Attributes
+    private boolean showTabulation;
+    private boolean prettyChar;
     private YellPolicy yell;
     private long startingLine;
     private int indentSize;
