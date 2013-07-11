@@ -1,20 +1,17 @@
 package com.dataiku.dctc.utils;
 
 public class Color {
-    public final static String blue = "\u001B[01;34m";
-    public final static String purple = "\u001B[01;35m";
-    public final static String yellow = "\u001B[01;93m";
-    public final static String green = "\u001B[01;32m";
-    public final static String grey = "\u001B[01;90m";
-    public final static String red = "\u001B[01;31m";
-    public final static String reset = "\u001B[0m";
+    public final static String blue = "34m";
+    public final static String purple = "35m";
+    public final static String yellow = "93m";
+    public final static String green = "32m";
+    public final static String grey = "90m";
+    public final static String red = "31m";
+    public final static String reset = "0m";
+    private final static String colorChar = "u001B[";
 
     public static String color(String color, String msg) {
-        if (getColor()) {
-            return color + msg + reset;
-        } else {
-            return msg;
-        }
+        return colorChar + color + msg + colorChar + reset;
     }
     public static String purple(String msg) {
         return color(purple, msg);
