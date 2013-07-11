@@ -222,7 +222,7 @@ public class Parser {
         if (opt != null) {
             return opt.getArg();
         }
-        System.err.println("debug: null");
+
         return null;
     }
     public void dec(Option opt) {
