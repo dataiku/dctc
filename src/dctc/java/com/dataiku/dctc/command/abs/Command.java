@@ -78,7 +78,7 @@ public abstract class Command {
         initOptions();
 
         Printer printer = new PrinterFactory()
-            .withType(PrinterFactory.Type.COLORED)
+            .withType(GlobalConf.getPrinterType())
             .build();
 
         { // name

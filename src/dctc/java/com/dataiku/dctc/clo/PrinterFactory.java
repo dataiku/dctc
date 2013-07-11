@@ -1,7 +1,7 @@
 package com.dataiku.dctc.clo;
 
 public class PrinterFactory {
-    public enum Type {
+    public enum PrinterType {
         COLORED
         , SIMPLE
     }
@@ -16,18 +16,17 @@ public class PrinterFactory {
         }
     }
     // Getters - Setters
-    public Type getType() {
+    public PrinterType getType() {
         return type;
     }
-    public void setType(Type type) {
+    public void setType(PrinterType type) {
         this.type = type;
     }
-    public PrinterFactory withType(Type type) {
+    public PrinterFactory withType(PrinterType type) {
         setType(type);
         return this;
     }
 
     // Attributes
-    private Type type;
+    private PrinterType type;
 }
-

@@ -6,12 +6,13 @@ import java.util.Map.Entry;
 
 import com.dataiku.dctc.DCTCLog;
 import com.dataiku.dctc.GlobalConstants;
+import com.dataiku.dctc.clo.PrinterFactory.PrinterType;
 import com.dataiku.dctc.display.DisplayFactory;
 import com.dataiku.dctc.display.ThreadedDisplay;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dip.utils.BooleanUtils;
-import com.dataiku.dip.utils.IntegerUtils;
 import com.dataiku.dip.utils.DKUtils;
+import com.dataiku.dip.utils.IntegerUtils;
 
 public class GlobalConf {
     public static File confFile() {
@@ -39,6 +40,14 @@ public class GlobalConf {
             }
             else if (key.equals("globbing")) {
                 resolveGlobbing = BooleanUtils.toBoolean(value, false);
+            }
+            else if (key.equals("usage")) {
+                if (value.equals("simple")) {
+                    setPrinterType(PrinterType.SIMPLE);
+                }
+                else if (value.equals("colored")) {
+                    setPrinterType(PrinterType.COLORED);
+                }
             }
             else {
                 throw new UserException("dctc conf: Invalid option '" + key + "' in [global] section");
@@ -85,8 +94,15 @@ public class GlobalConf {
             return ":";
         }
     }
+    public static PrinterType getPrinterType() {
+        return printerType;
+    }
+    public static void setPrinterType(PrinterType printerType_) {
+        printerType = printerType_;
+    }
 
     // Attributes
+    static private PrinterType printerType = PrinterType.COLORED;
     static private int colNumber;
     static private String display = "auto";
     static private int threadLimit = Runtime.getRuntime().availableProcessors();
