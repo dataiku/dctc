@@ -29,8 +29,10 @@ public abstract class StringOutputFormatter implements OutputFormatter {
     public abstract void format(Row row, ColumnFactory cf, Writer wr) throws IOException;
 
     public void footer(ColumnFactory cf, OutputStream os) throws IOException {
-        footer(cf, bwr);
-        bwr.close();
+        if (bwr != null) {
+            footer(cf, bwr);
+            bwr.close();
+        }
     }
     public abstract void footer(ColumnFactory cf, Writer wr) throws IOException;
 }
