@@ -170,7 +170,7 @@ public class Rm extends Command {
     private boolean couldDelDir(GeneralizedFile arg) throws IOException {
         if (arg.isDirectory() && !recursiveDeletion()) {
             if (!force()) {
-                error(arg, "Cannot remove, is a diretory", 2);
+                error(arg, "Cannot remove, is a directory", 2);
             }
             return false;
         }
