@@ -38,15 +38,16 @@ class ColorPrinter implements Printer {
         size += 4 + l.length();
     }
     public void addParam(String p) {
-        sb.setLength(sb.length() - 2);
         sb.append('=');
         sb.append(bold(green(p)));
-        size = size - 1 + p.length();
+        size += 1 + p.length();
     }
     public void addDescription(String descrip) {
         descriptions.add(descrip);
     }
     public void endOptionListing() {
+        size -= 2;
+        sb.setLength(sb.length() - 2);
         sb.setLength(Math.max(0, sb.length()));
     }
     public void endOption() {
