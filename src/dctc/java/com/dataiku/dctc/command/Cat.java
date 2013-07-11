@@ -30,9 +30,14 @@ public class Cat extends Command {
         fact = new CatAlgorithmFactory()
             .withAlgo(AlgorithmType.CAT)
             .withLinum(hasOption('n'))
-            .withDollar(hasOption('E'))
+            .withDollar(hasOption('E')
+                        || hasOption('e'))
             .withYell(getYell())
-            .withPrettyChar(hasOption("show-nonprinting"));
+            .withPrettyChar(hasOption("show-nonprinting")
+                            || hasOption('t')
+                            || hasOption('e'))
+            .withShowTabulation(hasOption("show-tabs")
+                                || hasOption('t'));
 
         CatRunner runner = new CatRunner()
             .withHeader(new NeverCatHeaderSelector());
@@ -49,6 +54,9 @@ public class Cat extends Command {
         options.add(stdOption('E', "show-ends", "Display $ at end of each line."));
         options.add(stdOption('s', "squeeze-blank", "Suppress repeated empty output lines."));
         options.add(stdOption('v', "show-nonprinting", "Use ^ and M- notation exception for LFD and TAB."));
+        options.add(stdOption('T', "show-tabs", "display TAB characters as ^I"));
+        options.add(stdOption('t', "Equivalent to -vT"));
+        options.add(stdOption('e', "Equivalent to -vE"));
     }
     @Override
     protected final String proto() {
