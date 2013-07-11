@@ -72,7 +72,8 @@ public class Ls extends Command {
             errorWithHandlingOfKnownExceptions(null, "", e, 2);
         }
     }
-    private void optimizeBucketRecursion(List<GeneralizedFile> args, boolean recursion) {
+    private void optimizeBucketRecursion(List<GeneralizedFile> args,
+                                         boolean recursion) {
         for (GeneralizedFile arg: args) {
             if (arg instanceof BucketBasedFile) {
                 ((BucketBasedFile) arg).setAutoRecursion(recursion);
@@ -126,7 +127,8 @@ public class Ls extends Command {
         printDirectoryList(args, nbPrinted == 0);
     }
 
-    private int printList(List<GeneralizedFile> args, boolean onlyFile) throws IOException {
+    private int printList(List<GeneralizedFile> args,
+                          boolean onlyFile) throws IOException {
         List<GeneralizedFile> toPrint = new ArrayList<GeneralizedFile>();
         int nbPrinted = 0;
         for (GeneralizedFile arg: args) {
@@ -140,7 +142,8 @@ public class Ls extends Command {
         givenName(toPrint);
         return nbPrinted;
     }
-    private void printDirectoryList(List<GeneralizedFile> args, boolean isFirst) throws IOException {
+    private void printDirectoryList(List<GeneralizedFile> args,
+                                    boolean isFirst) throws IOException {
         boolean header = args.size() > 1 || !isFirst;
         for (GeneralizedFile arg: args) {
             if (!arg.isDirectory()) {
@@ -157,7 +160,8 @@ public class Ls extends Command {
             }
         }
     }
-    private void printDirectory(GeneralizedFile arg, boolean header) throws IOException {
+    private void printDirectory(GeneralizedFile arg,
+                                boolean header) throws IOException {
         List<GeneralizedFile> toPrint = new ArrayList<GeneralizedFile>();
 
         assert arg.isDirectory()
@@ -259,7 +263,8 @@ public class Ls extends Command {
             System.out.print("     ");
         }
     }
-    private void printSize(PrintTask task, int maxSizeLength) throws IOException {
+    private void printSize(PrintTask task,
+                           int maxSizeLength) throws IOException {
         String size = getPrettySize(task.first.getSize());
         for (int i = size.length(); i < maxSizeLength; ++i) {
             System.out.print(" ");
@@ -491,7 +496,8 @@ public class Ls extends Command {
         System.out.println(f.givenName() + ":");
     }
 
-    private boolean hide(GeneralizedFile f, boolean forcePrint) throws IOException {
+    private boolean hide(GeneralizedFile f,
+                         boolean forcePrint) throws IOException {
         return !(forcePrint || ((hidden() || !f.isHidden()) && (!temp() || !f.isTempFile())));
     }
     private void initColor() {
@@ -527,7 +533,8 @@ public class Ls extends Command {
             System.out.print(f);
         }
     }
-    private void printName(GeneralizedFile g, String f) throws IOException {
+    private void printName(GeneralizedFile g,
+                           String f) throws IOException {
         if (color()) {
             initColor();
             for (Map.Entry<String, String> c: extensionColor.entrySet()) {
