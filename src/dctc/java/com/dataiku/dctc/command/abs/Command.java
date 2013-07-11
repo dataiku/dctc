@@ -92,7 +92,7 @@ public abstract class Command {
             longDescription(writer);
 
             // And display the options
-            Usage.print(opts);
+            Usage.print(opts, printer);
             System.out.println();
         }
     }

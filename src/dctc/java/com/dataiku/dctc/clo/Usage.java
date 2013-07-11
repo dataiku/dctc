@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Usage {
-    public static void print(List<Option> opts) {
-        Printer printer = new ColorPrinter();
-
+    public static void print(List<Option> opts, Printer printer) {
         printer.start();
         for (Option opt: opts) {
             printer.newOption();
