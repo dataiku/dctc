@@ -11,8 +11,8 @@ import com.dataiku.dctc.utils.ExitCode;
 public class CatRunner {
 
     public void perform(List<GeneralizedFile> args
-                        ,CatAlgorithmFactory fact,
-                        ExitCode exitCode
+                        , CatAlgorithmFactory fact
+                        , ExitCode exitCode
                         , boolean resetLineNumbering) {
         if (args.size() == 0) {
             args.add(new StandardFile());

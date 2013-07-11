@@ -297,9 +297,6 @@ public class Ls extends Command {
         }
     }
     private void prettyPrint(List<PrintTask> tasks) throws IOException {
-        // if (sort()) {
-        //     Collections.sort(tasks);
-        // }
         if (columnPrint()) {
             for (PrintTask file: tasks) {
                 printName(file.first, file.second);
