@@ -20,6 +20,8 @@ import com.dataiku.dctc.Main;
 import com.dataiku.dctc.clo.LongOption;
 import com.dataiku.dctc.clo.Option;
 import com.dataiku.dctc.clo.Parser;
+import com.dataiku.dctc.clo.Printer;
+import com.dataiku.dctc.clo.PrinterFactory;
 import com.dataiku.dctc.clo.ShortOption;
 import com.dataiku.dctc.clo.Usage;
 import com.dataiku.dctc.command.policy.YellPolicy;
@@ -67,15 +69,32 @@ public abstract class Command {
         throw new NotImplementedException();
     }
     public void usage() {
+        usage(Main.getIndentedWriter());
+    }
+    public void usage(IndentedWriter writer) {
         /** Prints the usage in case of bad usage by the user */
         if (exitCode.getExitCode() != 0) {
             System.setOut(System.err);
         }
         initOptions();
-        System.out.println(scat("dctc"
-                                , cmdname()
-                                , proto()));
-        Usage.print(opts);
+
+        Printer printer = new PrinterFactory()
+            .withType(PrinterFactory.Type.COLORED)
+            .build();
+
+        { // name
+            printer.name(cmdname(), tagline());
+        }
+        { // synopsis
+            printer.synopsis(cmdname() , proto());
+        }
+        { // Description
+            printer.description();
+            longDescription(writer);
+
+            // And display the options
+            Usage.print(opts);
+        }
     }
     public FileBuilder getFileBuilder() {
         return builder;

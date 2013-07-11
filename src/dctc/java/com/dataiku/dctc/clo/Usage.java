@@ -3,11 +3,6 @@ package com.dataiku.dctc.clo;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dataiku.dctc.configuration.GlobalConf;
-import com.dataiku.dip.utils.IndentedWriter;
-
-import static com.dataiku.dctc.utils.Color.*;
-
 public class Usage {
     public static void print(List<Option> opts) {
         Printer printer = new ColorPrinter();
