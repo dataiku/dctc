@@ -232,6 +232,20 @@ public class Parser {
     public void touch(Option opt) {
         opt.setPosition(++pos);
     }
+    public int getPostiion(char optName) {
+        Option opt = getShort(optName);
+        return getPosition(opt);
+    }
+    public int getPosition(String optName) {
+        Option opt = getLong(optName);
+        return getPosition(opt);
+    }
+    public int getPosition(Option opt) {
+        if (opt != null) {
+            return opt.getPosition();
+        }
+        return -1;
+    }
 
     // Attributes
     private int pos;
