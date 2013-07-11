@@ -211,6 +211,9 @@ public abstract class Command {
     protected String getOptionValue(String opt) {
         return parser.getOptionValue(opt);
     }
+    protected int getPosition(String opt) {
+        return parser.getPosition(opt);
+    }
     protected String getOptionValue(String opt, String defaultValue) {
         return hasOption(opt) ? getOptionValue(opt) : defaultValue;
     }
@@ -300,6 +303,21 @@ public abstract class Command {
         else {
             return defaultValue;
         }
+    }
+    protected String getLastPosition(String... opts) {
+        String last = null;
+        int lastPos = Integer.MIN_VALUE;
+
+        for (String opt: opts) {
+            if (hasOption(opt)) {
+                int pos = getPosition(opt);
+                if (lastPos < pos) {
+                    lastPos = pos;
+                    last = opt;
+                }
+            }
+        }
+        return last;
     }
 
     // Private methods
