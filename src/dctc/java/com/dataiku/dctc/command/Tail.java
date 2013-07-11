@@ -75,8 +75,9 @@ public class Tail extends Command {
         }
     }
     private boolean isLine() {
-        if (isLine == null) {
-            isLine = !hasOption('b');
+        String line = getLastPosition("lines", "bytes");
+        if (line != null) {
+            isLine = line.equals("lines");
         }
 
         return isLine;
