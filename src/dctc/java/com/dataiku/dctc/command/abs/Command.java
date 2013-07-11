@@ -95,11 +95,11 @@ public abstract class Command {
         parser = new Parser()
             .withOptions(opts);
         parser.parser(shellargs);
-        if (parser.hasOption("help")) {
+        if (hasOption("help")) {
             Main.commandHelp(this, new IndentedWriter());
             throw new EndOfCommand();
         }
-        if (parser.hasOption('v')) {
+        if (hasOption('v')) {
             Logger.getRootLogger().setLevel(Level.INFO);
         }
         if (parser.hasError()) {
