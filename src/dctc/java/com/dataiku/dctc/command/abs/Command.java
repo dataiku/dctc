@@ -94,6 +94,7 @@ public abstract class Command {
 
             // And display the options
             Usage.print(opts);
+            System.out.println();
         }
     }
     public FileBuilder getFileBuilder() {
