@@ -144,11 +144,11 @@ public class Parser {
                             return false;
                         }
                         opt.setArg(args[idx + 1]);
-                        return false;
+                        return true;
                     }
                     else {
                         opt.setArg(arg.substring(i + 1));
-                        return true;
+                        return false;
                     }
                 }
             }
