@@ -28,6 +28,9 @@ public class Alias {
             cmdargs.set(0, cmd.substring(1));
             return;
         }
+        if (!PrettyString.isInteractif()) {
+            return;
+        }
         if (unusedAlias.containsKey(cmd)) {
             cmdargs.remove(0);
             int idx = 0;
@@ -41,9 +44,6 @@ public class Alias {
         }
     }
     public String[] resolve(String[] cmdargs) {
-        if (!PrettyString.isInteractif()) {
-            return cmdargs;
-        }
         List<String> args = new ArrayList<String>(Arrays.asList(cmdargs));
 
         resolve(args, cloneAlias());
