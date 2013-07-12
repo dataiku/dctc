@@ -74,7 +74,10 @@ public class DirectCopyTaskRunnable extends CopyTaskRunnable {
             i.close();
             o.close();
             if (preserveDate) {
-                out.setDate(in.getDate());
+                long date = in.getDate();
+                if (date > 0) {
+                    out.setDate(date);
+                }
             }
             if (deleteSrc) {
                 in.delete();
