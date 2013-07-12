@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.ISODateTimeFormat;
@@ -231,6 +232,21 @@ public class DKUtils {
 
     public static Map<String, String> parseKVStringArray(Collection<String> array) {
         return parseKVStringArray(array.toArray(new String[0]));
+    }
+    
+    public static byte[] getResourceFileContent(String file) throws IOException {
+        InputStream  is = DKUtils.class.getClassLoader().getResourceAsStream(file);
+        if (is == null) {
+            throw new Error("Can't open resource file " + file);
+        }
+        return  IOUtils.toByteArray(is);
+    }
+    public static String getResourceFileContentUTF8(String file) throws IOException {
+        InputStream  is = DKUtils.class.getClassLoader().getResourceAsStream(file);
+        if (is == null) {
+            throw new Error("Can't open resource file " + file);
+        }
+        return  IOUtils.toString(is, "utf8");
     }
 
     private static Logger logger = Logger.getLogger("dku.utils");
