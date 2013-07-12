@@ -1,0 +1,19 @@
+#! /bin/sh
+
+. ./utils
+
+rapport_head
+
+run_ls() {
+    echo "$@"
+    run 0 - "ls $*" dctc ls "$@" <<EOF
+$(ls $@)
+EOF
+}
+
+run_ls /
+run_ls /var
+run_ls / /var
+run_ls /tmp
+
+rapport_tail

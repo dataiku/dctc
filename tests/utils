@@ -1,0 +1,190 @@
+#! /bin/sh
+
+set -e
+
+out=sum.org
+out_tmp=sum.org.tmp
+out_fail=sum.org.fail
+out_pass=sum.org.pass
+test_number=0
+
+me=$0
+
+stderr ()
+{
+  local i
+  for i
+  do
+    echo "$i"
+  done | sed -e "s,^,$me: ," >&2
+}
+
+rapport_head() {
+    # Initialize the output file
+    cat >"$out"<<.
+#+OPTIONS: toc:2
+#+TODO: FAIL EPIC-FAIL | PASS SKIP
+.
+    cat >$out_pass<<.
+* Passed Tests
+.
+    cat >$out_fail<<.
+* Failed Test
+.
+    rm -f $out_tmp
+}
+rapport_tail() {
+    cat $out_fail >>$out
+    cat $out_pass >>$out
+    rm -f $out_fail $out_pass $out_tmp out.exp out.eff
+}
+test_header() {
+        cat <<.
+** $1 =$2=
+#+BEGIN_SRC sh
+  $3
+#+END_SRC
+.
+
+}
+
+#######
+# run #
+#######
+run() {
+    test_number=$(($test_number + 1))
+    local sta_exp=$1
+    shift
+    echo sta_exp: $sta_exp
+    local out_exp=$1
+    shift
+    echo out_exp: $out_exp
+    case $out_exp in
+        ('') : >out.exp;;
+        (-) cat >out.exp;;
+        (out.exp|stdout);;
+        (*)
+            cat >out.exp <<.
+$out_exp
+.
+            ;;
+    esac
+    echo ok
+    local name="$1"
+    shift
+    echo name: "$name"
+    local cmd="$1"
+    shift
+    echo cmd: $cmd
+    local sta_eff=0
+    local fail=false
+    # Run and check the output code
+    ($cmd "$@")>out.eff 2>err.eff          \
+        || staf_eff=$?
+
+    # Check the diff
+    if [ ! $sta_eff -eq $sta_exp ]; then
+        fail=true
+    fi
+    if ! cmp -s out.eff out.exp; then
+        fail=true
+    fi
+
+    ####################
+    # Write the report #
+    ####################
+    if $fail; then
+        {
+            ###############
+            # Fail Status #
+            ###############
+            cat <<.
+** FAIL =$name=
+#+BEGIN_SRC sh
+  $cmd $@
+#+END_SRC
+.
+            # Exit Code
+            if [ ! $sta_eff -eq $sta_exp ]; then
+                cat <<.
+*** Exit Codes
+    - Expected :: $sta_exp
+    - Effective :: $sta_eff
+.
+            else
+                cat <<.
+*** Exit Code
+    - Expected :: $sta_exp
+.
+            fi
+
+            # Outputs
+            # Display the expected standard output
+            cat <<.
+*** Expected Standard Output
+#+BEGIN_EXAMPLE
+$(if test "x$(stat -c%s "out.exp")" = "x0"; then
+      echo No output
+  else
+      cat out.exp
+  fi
+)
+#+END_EXAMPLE
+.
+            # If an error appends display the effective one and the
+            # error output.
+            if ! cmp -s out.eff out.exp; then
+                cat <<.
+*** Effective Standard Output
+#+BEGIN_EXAMPLE
+$(if test "x$(stat -c%s "out.eff")" = "x0"; then
+      echo No output
+  else
+      cat out.eff
+  fi
+)
+#+END_EXAMPLE
+*** Diff Between Effective and Expected Outputs
+#+BEGIN_EXAMPLE
+$(diff out.eff out.exp && echo No diff)
+#+END_EXAMPLE
+
+*** Effective Error Output
+#+BEGIN_EXAMPLE
+$(if test "x$(stat -c%s "err.eff")" = "x0"; then
+      echo No output
+  else
+      cat err.eff
+  fi
+)
+#+END_EXAMPLE
+.
+            fi
+        }>>$out_fail
+    else
+        {
+            ##################
+            # Success Status #
+            ##################
+            cat <<.
+** PASS =$name=
+#+BEGIN_SRC sh
+     $cmd $@
+#+END_SRC
+*** Exit Code
+    - Expected :: $sta_exp
+*** Standard Output
+#+BEGIN_EXAMPLE
+$(if test "x$stat -c%s "out.exp")" = "x0"; then
+      echo No Output
+  else
+      cat out.exp
+  fi
+)
+#+END_EXAMPLE
+*** Error Output
+    FIXME
+.
+        }>>$out_pass
+    fi
+}
