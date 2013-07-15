@@ -23,6 +23,8 @@ public class Du extends Command {
         return "[FILE]...";
     }
     public void setOptions(List<Option> opts) {
+        opts.clear();
+        opts.add(stdOption('?', "help", "Display this help message."));
         opts.add(stdOption('h', "human-readable", "print sizes in human readable format."));
         opts.add(stdOption('s', "summarize", "Display only a total for each argument."));
         opts.add(stdOption('c', "total", "Produce a grand total."));
