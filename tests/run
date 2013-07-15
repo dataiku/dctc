@@ -1,0 +1,37 @@
+#! /bin/bash
+
+. ./utils
+rapport_head
+
+to_test='*.test'
+res() {
+    echo -e "\r[`tput setaf $1`$2`tput init`"
+}
+nb=0
+pass=0
+fail=0
+skip=
+for i in $to_test; do
+    nb=$(($nb + 1))
+    echo -n "[ .. ] $i"
+    exit_status=$(./$i) #> $i.log 2>&1
+    if [ "x$exit_status" != "x0" ]; then
+        if [ "x$exit_status" == "x77" ]; then
+            res 3 SKIP
+            skip=$(($skip + 1))
+        else
+            fail=$(($fail + 1))
+
+            if [ "x$exit_status" == "x99" ]; then
+                echo -e "\r[`tput bold``tput setaf 1`EPIC FAIL`tput init`] $i"
+            else
+                res 1 FAIL
+            fi
+        fi
+    else
+        pass=$(($pass + 1))
+        res 2 " OK"
+    fi
+done
+
+rapport_tail
