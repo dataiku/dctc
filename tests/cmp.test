@@ -5,10 +5,10 @@
 exit_status=0
 
 run_cmp() {
-    run 0 - "cmp $*" dctc cmp "$@" <<.
-$(cmp $@)
-.
+    $(cmp $@ > out.exp) || true
+    run 0 out.exp "cmp $*" dctc cmp "$@"
 }
+
 
 run_cmp /etc/bash.bashrc /etc/bash.bashrc
 run_cmp /etc/bash.bashrc /etc/bash.bashrc 0 1
