@@ -1,0 +1,19 @@
+#! /bin/sh
+
+. ./utils
+
+exit_status=0
+
+run_tail() {
+    run 0 - "tail $*" dctc tail "$@" <<.
+$(tail $@)
+.
+}
+
+run_tail /etc/bash.bashrc
+run_tail /etc/hosts
+run_tail -n12 /etc/bash.bashrc
+run_tail -n3 /etc/hosts
+run_tail -n4242 /etc/bash.bashrc
+
+echo $exit_status

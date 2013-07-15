@@ -1,0 +1,19 @@
+#! /bin/sh
+
+. ./utils
+
+exit_status=0
+
+run_head() {
+    run 0 - "head $*" dctc head "$@" <<.
+$(head $@)
+.
+}
+
+run_head /etc/bash.bashrc
+run_head /etc/hosts
+run_head -n12 /etc/bash.bashrc
+run_head -n3 /etc/hosts
+run_head -n4242 /etc/bash.bashrc
+
+echo $exit_status
