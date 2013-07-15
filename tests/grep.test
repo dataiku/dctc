@@ -1,0 +1,28 @@
+#! /bin/sh
+
+. ./utils
+
+exit_status=0
+
+run_grep() {
+    grep "$@" > out.exp
+    run 0 out.exp "grep $*" dctc grep "$@"
+    if $fail; then
+        exit_status=1
+    fi
+}
+
+unset GREP_OPTIONS # Delete this variable if set
+
+run_grep return /etc/bash.bashrc
+run_grep bin /etc/bash.bashrc
+run_grep bash /etc/bash.bashrc
+run_grep -i BASH /etc/bash.bashrc
+run_grep -i BIN /etc/bash.bashrc
+run_grep --color bin /etc/bash.bashrc
+run_grep --color -i BIN /etc/bash.bashrc
+run_grep -li BIN /etc/bash.bashrc
+run_grep -i --files-with-matches BIN /etc/bash.bashrc
+
+
+echo $exit_status
