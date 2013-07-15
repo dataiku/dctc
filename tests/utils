@@ -2,16 +2,14 @@
 
 set -e
 
-out=sum.org
+out_report=sum.org
 out_tmp=sum.org.tmp
-out_fail=sum.org.fail
-out_pass=sum.org.pass
-test_number=0
+out_report_fail=sum.org.fail
+out_report_pass=sum.org.pass
 
 me=$0
 
-stderr ()
-{
+stderr () {
   local i
   for i
   do
@@ -21,31 +19,22 @@ stderr ()
 
 rapport_head() {
     # Initialize the output file
-    cat >"$out"<<.
+    cat >"$out_report"<<.
 #+OPTIONS: toc:2
 #+TODO: FAIL EPIC-FAIL | PASS SKIP
 .
-    cat >$out_pass<<.
+    cat >$out_report_pass<<.
 * Passed Tests
 .
-    cat >$out_fail<<.
+    cat >$out_report_fail<<.
 * Failed Test
 .
-    rm -f $out_tmp
+    rm -f $out_report_tmp
 }
 rapport_tail() {
-    cat $out_fail >>$out
-    cat $out_pass >>$out
-    rm -f $out_fail $out_pass $out_tmp out.exp out.eff
-}
-test_header() {
-        cat <<.
-** $1 =$2=
-#+BEGIN_SRC sh
-  $3
-#+END_SRC
-.
-
+    cat $out_report_fail >>$out_report
+    cat $out_report_pass >>$out_report
+    rm -f $out_report_fail $out_report_pass $out_report_tmp out.exp out.eff
 }
 
 #######
@@ -55,29 +44,24 @@ run() {
     test_number=$(($test_number + 1))
     local sta_exp=$1
     shift
-    echo sta_exp: $sta_exp
-    local out_exp=$1
+    local out_report_exp=$1
     shift
-    echo out_exp: $out_exp
-    case $out_exp in
+    case $out_report_exp in
         ('') : >out.exp;;
         (-) cat >out.exp;;
         (out.exp|stdout);;
         (*)
             cat >out.exp <<.
-$out_exp
+$out_report_exp
 .
             ;;
     esac
-    echo ok
     local name="$1"
     shift
-    echo name: "$name"
     local cmd="$1"
     shift
-    echo cmd: $cmd
     local sta_eff=0
-    local fail=false
+    fail=false
     # Run and check the output code
     ($cmd "$@")>out.eff 2>err.eff          \
         || staf_eff=$?
@@ -86,6 +70,7 @@ $out_exp
     if [ ! $sta_eff -eq $sta_exp ]; then
         fail=true
     fi
+
     if ! cmp -s out.eff out.exp; then
         fail=true
     fi
@@ -160,7 +145,7 @@ $(if test "x$(stat -c%s "err.eff")" = "x0"; then
 #+END_EXAMPLE
 .
             fi
-        }>>$out_fail
+        }>>$out_report_fail
     else
         {
             ##################
@@ -185,6 +170,6 @@ $(if test "x$stat -c%s "out.exp")" = "x0"; then
 *** Error Output
     FIXME
 .
-        }>>$out_pass
+        }>>$out_report_pass
     fi
 }
