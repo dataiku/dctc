@@ -5,9 +5,8 @@
 exit_status=0
 
 run_tail() {
-    run 0 - "tail $*" dctc tail "$@" <<.
-$(tail $@)
-.
+    tail "$@" > out.exp
+    run 0 out.exp "tail $*" dctc tail "$@"
 }
 
 run_tail /etc/bash.bashrc
@@ -15,5 +14,9 @@ run_tail /etc/hosts
 run_tail -n12 /etc/bash.bashrc
 run_tail -n3 /etc/hosts
 run_tail -n4242 /etc/bash.bashrc
+run_tail --lines 4242 /etc/bash.bashrc
+run_tail --lines 12 /etc/bash.bashrc
+run_tail -c 12 /etc/bash.bashrc
+run_tail --bytes 424242 /etc/bash.bashrc
 
 echo $exit_status

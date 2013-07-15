@@ -5,9 +5,8 @@
 exit_status=0
 
 run_head() {
-    run 0 - "head $*" dctc head "$@" <<.
-$(head $@)
-.
+    head "$@" > out.exp
+    run 0 out.exp "head $*" dctc head "$@"
 }
 
 run_head /etc/bash.bashrc
@@ -15,5 +14,9 @@ run_head /etc/hosts
 run_head -n12 /etc/bash.bashrc
 run_head -n3 /etc/hosts
 run_head -n4242 /etc/bash.bashrc
+run_head --lines 4242 /etc/bash.bashrc
+run_head --lines 12 /etc/bash.bashrc
+run_head -c 12 /etc/bash.bashrc
+run_head --bytes 424242 /etc/bash.bashrc
 
 echo $exit_status
