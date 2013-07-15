@@ -35,3 +35,6 @@ for i in $to_test; do
 done
 
 rapport_tail
+
+emacs23 --batch --visit "sum.org" --funcall org-export-as-html
+emacs23 --batch --visit "sum.org" --funcall org-export-as-pdf
