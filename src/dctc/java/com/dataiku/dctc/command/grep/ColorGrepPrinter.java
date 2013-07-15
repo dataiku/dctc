@@ -10,9 +10,13 @@ class ColorGrepPrinter implements GrepPrinter {
         while(!line.isEmpty()) {
             if (matcher.match(line)) {
                 int begin = matcher.begin(line);
+                if (begin == -1) {
+                    break;
+                }
                 int end = matcher.end(begin, line);
                 System.out.print(line.substring(0, begin));
-                System.out.print("\u001B[1;31m" + line.substring(begin, end) + "\u001B[0m");
+                System.out.print("\u001B[1;31m" + line.substring(begin, end)
+                                 + "\u001B[0m");
                 line = line.substring(end);
             }
             else {
