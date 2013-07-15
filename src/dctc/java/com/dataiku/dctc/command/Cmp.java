@@ -53,7 +53,10 @@ public class Cmp extends Command {
     }
 
     // Private
-    private void compare(GeneralizedFile l, GeneralizedFile r, long lskip, long rskip) {
+    private void compare(GeneralizedFile l
+                         , GeneralizedFile r
+                         , long lskip
+                         , long rskip) {
         InputStream left = open(l);
         InputStream right = open(r);
         if (left == null || right == null) {
@@ -64,6 +67,7 @@ public class Cmp extends Command {
         }
 
         long count = 0;
+        long lineCount = 1;
         while (true) {
             ++count;
             int leftRead = read(l, left);
@@ -72,11 +76,14 @@ public class Cmp extends Command {
                 return;
             }
             else if (leftRead != rightRead) {
-                diff(l, r, count);
+                diff(l, r, count, lineCount);
                 return;
             }
             else if (leftRead == -1) {
                 return;
+            }
+            if (leftRead == '\n') {
+                ++lineCount;
             }
 
         }
@@ -117,8 +124,13 @@ public class Cmp extends Command {
             return true;
         }
     }
-    private void diff(GeneralizedFile l, GeneralizedFile r, long count) {
-        System.out.println(l.givenName() + " " + r.givenName() + " differ: byte " + count);
+    private void diff(GeneralizedFile l
+                      , GeneralizedFile r
+                      , long count
+                      , long lineCount) {
+        System.out.println(l.givenName() + " " + r.givenName()
+                           + " differ: byte " + count
+                           + ", line " + lineCount);
         setExitCode(1);
 
     }
