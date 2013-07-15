@@ -29,7 +29,7 @@ public class Tail extends Command {
     }
     @Override
     protected void setOptions(List<Option> opts) {
-        opts.add(stdOption('b', "bytes", "Output the last K bytes.", true, "K"));
+        opts.add(stdOption('c', "bytes", "Output the last K bytes.", true, "K"));
         opts.add(stdOption('n', "lines", "Output the last K lines.", true, "K"));
         Option quiet = stdOption('q', "quiet", "Never output headers giving file names.");
         quiet.getLongOption().addOpt("silent");
