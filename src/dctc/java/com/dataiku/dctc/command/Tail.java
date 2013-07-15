@@ -79,6 +79,9 @@ public class Tail extends Command {
         if (line != null) {
             isLine = line.equals("lines");
         }
+        else {
+            isLine = true;
+        }
 
         return isLine;
     }
