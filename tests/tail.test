@@ -7,6 +7,9 @@ exit_status=0
 run_tail() {
     tail "$@" > out.exp
     run 0 out.exp "tail $*" dctc tail "$@"
+    if $fail; then
+        exit_status=1
+    fi
 }
 
 run_tail /etc/bash.bashrc

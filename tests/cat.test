@@ -8,6 +8,9 @@ run_cat() {
     run 0 - "cat $*" dctc cat "$@" <<.
 $(cat $@)
 .
+    if $fail; then
+        exit_status=1
+    fi
 }
 
 

@@ -7,6 +7,9 @@ exit_status=0
 run_cmp() {
     $(cmp $@ > out.exp) || true
     run 0 out.exp "cmp $*" dctc cmp "$@"
+    if $fail; then
+        exit_status=1
+    fi
 }
 
 
