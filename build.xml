@@ -165,4 +165,9 @@
             </manifest>
         </jar>
     </target>
+    <target name="check" depends="tooljar, dctc-jar">
+      <exec executable="sh" newenvironment="false" dir="tests">
+        <arg value="run"/>
+      </exec>
+    </target>
 </project>
