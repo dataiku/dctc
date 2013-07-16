@@ -5,7 +5,7 @@
 exit_status=0
 
 run_cat() {
-    run 0 - "cat $*" dctc cat "$@" <<.
+    run 0 - "cat $*" ../dctc-jar.sh cat "$@" <<.
 $(cat $@)
 .
     if $fail; then

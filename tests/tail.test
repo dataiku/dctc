@@ -6,7 +6,7 @@ exit_status=0
 
 run_tail() {
     tail "$@" > out.exp
-    run 0 out.exp "tail $*" dctc tail "$@"
+    run 0 out.exp "tail $*" ../dctc-jar.sh tail "$@"
     if $fail; then
         exit_status=1
     fi

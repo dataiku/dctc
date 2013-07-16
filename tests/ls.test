@@ -5,7 +5,7 @@
 exit_status=0
 
 run_ls() {
-    run 0 - "ls $*" dctc ls "$@" <<EOF
+    run 0 - "ls $*" ../dctc-jar.sh ls "$@" <<EOF
 $(ls $@)
 EOF
     if $fail; then

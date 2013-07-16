@@ -6,7 +6,7 @@ exit_status=0
 
 run_grep() {
     grep "$@" > out.exp
-    run 0 out.exp "grep $*" dctc grep "$@"
+    run 0 out.exp "grep $*" ../dctc-jar.sh grep "$@"
     if $fail; then
         exit_status=1
     fi

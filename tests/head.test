@@ -6,7 +6,7 @@ exit_status=0
 
 run_head() {
     head "$@" > out.exp
-    run 0 out.exp "head $*" dctc head "$@"
+    run 0 out.exp "head $*" ../dctc-jar.sh head "$@"
     if $fail; then
         exit_status=1
     fi
