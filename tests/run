@@ -36,5 +36,17 @@ done
 
 rapport_tail
 
-emacs23 --batch --visit "sum.org" --funcall org-export-as-html
-emacs23 --batch --visit "sum.org" --funcall org-export-as-pdf
+echo Make html report
+emacs23 --batch --visit "sum.org" --funcall org-export-as-html > /dev/null 2>&1
+echo Make pdf report
+emacs23 --batch --visit "sum.org" --funcall org-export-as-pdf > /dev/null 2>&1
+
+echo $pass/$nb tests pass.
+
+if [ "x$fail" != "x0" ]; then
+    echo $fail tests has failed.
+    exit 1
+fi
+
+
+exit 0
