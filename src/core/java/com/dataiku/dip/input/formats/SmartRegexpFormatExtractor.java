@@ -56,7 +56,7 @@ public class SmartRegexpFormatExtractor extends AbstractFormatExtractor  {
                         System.err.println("Did not parse " + line);
                         Row r = rf.row();
                         r.put(cf.column("reject"), line);
-                        err.emitRow(r);
+                        if (err != null) err.emitRow(r);
                     } else {
                         Row r = rf.row();
                         for (int i = 0 ; i < values.size(); i++) {
