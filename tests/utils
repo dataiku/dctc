@@ -160,7 +160,7 @@ $(if test "x$(stat -c%s "err.eff")" = "x0"; then
     - Expected :: $sta_exp
 *** Standard Output
 #+BEGIN_EXAMPLE
-$(if test "x$stat -c%s "out.exp")" = "x0"; then
+$(if test "x$(stat -c%s "out.exp")" = "x0"; then
       echo No Output
   else
       cat out.exp
