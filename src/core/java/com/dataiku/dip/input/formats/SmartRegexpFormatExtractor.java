@@ -33,7 +33,13 @@ public class SmartRegexpFormatExtractor extends AbstractFormatExtractor  {
             columns.add(cf.column(columnName));
         }
 
+        long totalRecords = 0;
+
         while (true) {
+
+
+            if (limit.maxRecords > 0 && limit.maxRecords <= totalRecords) return false;
+
             EnrichedInputStream stream = in.nextStream();
             if (stream == null) break;
 
@@ -45,6 +51,7 @@ public class SmartRegexpFormatExtractor extends AbstractFormatExtractor  {
             try {
                 long nlines = 0;
                 while (true) {
+                    if (limit.maxRecords > 0 && limit.maxRecords <= totalRecords) return false;
                     String line = br.readLine();
                     if (line == null) {
                         break;
@@ -64,6 +71,8 @@ public class SmartRegexpFormatExtractor extends AbstractFormatExtractor  {
                         }
                         out.emitRow(r);
                     }
+                    totalRecords++;
+
                     if (listener != null && nlines++ % 50 == 0) {
                         synchronized (listener) {
                             listener.setErrorRecords(0);
