@@ -34,7 +34,7 @@ rapport_head() {
 rapport_tail() {
     cat $out_report_fail >>$out_report
     cat $out_report_pass >>$out_report
-    rm -f $out_report_fail $out_report_pass $out_report_tmp out.exp out.eff
+    rm -f $out_report_fail $out_report_pass $out_report_tmp out.exp out.eff err.eff
 }
 
 #######
@@ -168,7 +168,13 @@ $(if test "x$stat -c%s "out.exp")" = "x0"; then
 )
 #+END_EXAMPLE
 *** Error Output
-    FIXME
+$(if test "x$(stat -c%s "err.eff")" = "x0"; then
+      echo No Output
+  else
+      cat out.exp
+  fi
+)
+
 .
         }>>$out_report_pass
     fi
