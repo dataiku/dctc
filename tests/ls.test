@@ -18,7 +18,9 @@ run_ls /var
 run_ls / /var
 run_ls /tmp
 run_ls /bin
-run_ls /usr/bin
+run_ls data/
+run_ls data/ls
 run_ls /etc/bash.bashrc
+run_ls -a data/ls
 
 echo $exit_status
