@@ -122,7 +122,7 @@ public abstract class Command {
             Logger.getRootLogger().setLevel(Level.INFO);
         }
         if (parser.hasError()) {
-            System.out.println(scat("dctc"
+            System.err.println(scat("dctc"
                                     , cmdname() + ":"
                                     , parser.prettyPrintError()));
             throw new EndOfCommand();
