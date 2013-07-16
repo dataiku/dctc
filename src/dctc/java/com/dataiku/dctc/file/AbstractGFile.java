@@ -11,7 +11,11 @@ import org.apache.commons.io.IOUtils;
 public abstract class AbstractGFile implements GeneralizedFile {
     @Override
     public final int compareTo(GeneralizedFile arg) {
-        return getAbsoluteAddress().toLowerCase().replaceAll("[^a-z0-9]", "").compareTo(arg.getAbsoluteAddress().toLowerCase().replaceAll("[^a-z0-9]", ""));
+        int res = getAbsoluteAddress().toLowerCase().replaceAll("[^a-z0-9]", "").compareTo(arg.getAbsoluteAddress().toLowerCase().replaceAll("[^a-z0-9]", ""));
+        if (res == 0) {
+            res = - getAbsoluteAddress().replaceAll("[^A-Za-z0-9]", "").compareTo(arg.getAbsoluteAddress().replaceAll("[^A-Za-z0-9]", ""));
+        }
+        return res;
     }
     @Override // Should be override for no type lost.
     public List<? extends GeneralizedFile> createInstanceFor(List<String> paths) {
