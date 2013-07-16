@@ -22,5 +22,11 @@ run_ls data/
 run_ls data/ls
 run_ls /etc/bash.bashrc
 run_ls -a data/ls
+run_ls -A data/ls
+run_ls -d data/ls
+run_ls --color data/ls
+run_ls --hide=*~ data/ls
+run_ls -Q data/ls
+run_ls -R data/ls
 
 echo $exit_status
