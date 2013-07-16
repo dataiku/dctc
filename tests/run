@@ -19,13 +19,13 @@ for i in $to_test; do
     echo -n "[ .. ] $i"
     exit_status=$(./$i) #> $i.log 2>&1
     if [ "x$exit_status" != "x0" ]; then
-        if [ "x$exit_status" == "x77" ]; then
+        if [ "x$exit_status" = "x77" ]; then
             res 3 skip
             skip=$(($skip + 1))
         else
             fail=$(($fail + 1))
 
-            if [ "x$exit_status" == "x99" ]; then
+            if [ "x$exit_status" = "x99" ]; then
                 full_res 1 "epic fail" "$i"
             else
                 res 1 fail
