@@ -17,20 +17,20 @@ for i in $to_test; do
     exit_status=$(./$i) #> $i.log 2>&1
     if [ "x$exit_status" != "x0" ]; then
         if [ "x$exit_status" == "x77" ]; then
-            res 3 SKIP
+            res 3 skip
             skip=$(($skip + 1))
         else
             fail=$(($fail + 1))
 
             if [ "x$exit_status" == "x99" ]; then
-                echo -e "\r[`tput bold``tput setaf 1`EPIC FAIL`tput init`] $i"
+                echo -e "\r[`tput bold``tput setaf 1`epic fail`tput init`] $i"
             else
-                res 1 FAIL
+                res 1 fail
             fi
         fi
     else
         pass=$(($pass + 1))
-        res 2 " OK"
+        res 2 " ok"
     fi
 done
 
