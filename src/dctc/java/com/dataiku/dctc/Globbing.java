@@ -40,6 +40,7 @@ public class Globbing {
                                                 boolean showHidden) throws IOException {
         List<GeneralizedFile> res = new ArrayList<GeneralizedFile>();
         boolean first = true;
+
         if (hasGlobbing(globbing.givenName())) {
             String path = globbing.getAbsolutePath();
             String[] split = path.split(globbing.fileSeparator());
@@ -47,14 +48,16 @@ public class Globbing {
             for (int i = 0; i < split.length; ++i) {
                 String splitElt = split[i];
                 if (splitElt.isEmpty()) {
+                    // We have a path with // in, skip it.
                     continue;
                 }
+                String prevprev = prevPath;
                 prevPath += "/" + splitElt;
 
                 if (hasGlobbing(splitElt)) {
                     if (first) {
                         first = false;
-                        GeneralizedFile globResolve = globbing.createInstanceFor(prevPath);
+                        GeneralizedFile globResolve = globbing.createInstanceFor(prevprev);
                         for (GeneralizedFile f: globResolve.glist()) {
                             if (showHidden || !f.isHidden()) {
                                 if (matchPath(prevPath, f.getAbsolutePath(), "/")) {
@@ -86,6 +89,7 @@ public class Globbing {
         else {
             res.add(globbing);
         }
+
         return res;
     }
     static public boolean hasGlobbing(String f) {
