@@ -3,9 +3,11 @@ package com.dataiku.dip.datasets;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.dataiku.dip.utils.ErrorContext;
+import com.dataiku.dip.utils.Pair;
 
 public class Schema {
     public static enum Type {
@@ -34,6 +36,16 @@ public class Schema {
 
         public String getName() {
             return name;
+        }
+
+        public boolean isCore() {
+            switch(this)  {
+                case ARRAY:
+                case MAP:
+                    return false;
+                default:
+                    return true;
+            }
         }
 
         public static Type forName(String name) {
@@ -111,6 +123,17 @@ public class Schema {
 
     public final static Pattern ARRAY_PATTERN = Pattern.compile("array<([^,>]*)>");
     public final static Pattern MAP_PATTERN = Pattern.compile("map<\\s*([^,>]*)\\s*,\\s*([^,>]*)\\s*>");
+
+
+    public static String arrayContent(String type) {
+        Matcher matcher = ARRAY_PATTERN.matcher(type);
+        return matcher.group(1);
+    }
+
+    public static Pair<String, String> mapContent(String type) {
+        Matcher matcher = MAP_PATTERN.matcher(type);
+        return new Pair<String, String>(matcher.group(1), matcher.group(2));
+    }
 
     public Schema() {
     }
