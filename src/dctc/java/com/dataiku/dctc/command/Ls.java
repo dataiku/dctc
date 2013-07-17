@@ -70,6 +70,7 @@ public class Ls extends Command {
             }
         } catch (IOException e) {
             errorWithHandlingOfKnownExceptions(null, "", e, 2);
+            // FIXME: This code isn't really clear.
         }
     }
     private void optimizeBucketRecursion(List<GeneralizedFile> args,
