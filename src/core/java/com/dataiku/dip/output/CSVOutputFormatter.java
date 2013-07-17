@@ -33,7 +33,7 @@ public class CSVOutputFormatter extends StringOutputFormatter {
         if (outputSchema != null) {
             for (int i = 0; i < outputSchema.getColumns().size(); i++) {
                 String name = outputSchema.getColumns().get(i).getName();
-                if (i++ > 0 && printHeaderLine) sb.append(delimiter);
+                if (i > 0 && printHeaderLine) sb.append(delimiter);
                 headerColumns.add(cf.column(name));
                 if (printHeaderLine) sb.append(name);
             }
