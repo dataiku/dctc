@@ -117,7 +117,8 @@ public class Schema {
         case Types.TIMESTAMP:
         case Types.VARBINARY:
         default:
-            throw new IllegalArgumentException("Can't handle SQL type " + sqlType);
+            return Type.STRING; // defaulting to string
+            //throw new IllegalArgumentException("Can't handle SQL type " + sqlType);
         }
     }
 
