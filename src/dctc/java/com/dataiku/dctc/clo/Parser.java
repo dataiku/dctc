@@ -22,34 +22,18 @@ public class Parser {
             }
             else {
                 int arglen = arg.length();
-                if (arg.charAt(0) == '-') {
-                    if (arglen == 1) {
-                        notOption.add(arg); // "-"
-                    }
-                    else {
-                        if (arg.charAt(1) == '-') {
-                            if (arglen == 2) {
-                                // End of the options
-                                for (int j = i + 1; i < args.length; ++j) {
-                                    notOption.add(args[j]);
-                                }
-                                break;
+                if (arg.charAt(0) == '-' && arglen > 1) {
+                    if (arg.charAt(1) == '-') {
+                        if (arglen == 2) {
+                            // End of the options
+                            for (int j = i + 1; i < args.length; ++j) {
+                                notOption.add(args[j]);
                             }
-                            else {
-                                // Long options
-                                boolean skipNextArgument = parseLong(i, args);
-                                if (hasError()) {
-                                    return;
-                                }
-                                if (skipNextArgument) {
-                                    ++i;
-                                }
-                                continue;
-                            }
+                            break;
                         }
                         else {
-                            // Short options
-                            boolean skipNextArgument = parseShort(i, args);
+                            // Long options
+                            boolean skipNextArgument = parseLong(i, args);
                             if (hasError()) {
                                 return;
                             }
@@ -58,6 +42,17 @@ public class Parser {
                             }
                             continue;
                         }
+                    }
+                    else {
+                        // Short options
+                        boolean skipNextArgument = parseShort(i, args);
+                        if (hasError()) {
+                            return;
+                        }
+                        if (skipNextArgument) {
+                            ++i;
+                        }
+                        continue;
                     }
                 }
                 else {
