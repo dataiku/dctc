@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.configuration.StructuredConf;
@@ -21,7 +21,7 @@ public class Alias extends Command {
     public String tagline() {
         return "Display the alias";
     }
-    public void setOptions(List<Option> opts) {
+    public void setOptions(List<OptionAgregator> opts) {
     }
     public String proto() {
         return "";

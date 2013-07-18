@@ -2,7 +2,7 @@ package com.dataiku.dctc.command;
 
 import java.util.List;
 
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.command.cat.AlgorithmType;
 import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
@@ -21,7 +21,7 @@ public class Nl extends Command {
     public String tagline() {
         return "Numbered input files on the standard output.";
     }
-    public void setOptions(List<Option> opts) {
+    public void setOptions(List<OptionAgregator> opts) {
         opts.add(stdOption('i', "line-increment"
                            , "Line number increment at each line."
                            , true, "NUMBER"));

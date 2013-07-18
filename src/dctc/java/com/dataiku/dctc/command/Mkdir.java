@@ -3,7 +3,7 @@ package com.dataiku.dctc.command;
 import java.io.IOException;
 import java.util.List;
 
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
@@ -45,7 +45,7 @@ public class Mkdir extends Command {
 
     // Protected
     @Override
-    protected void setOptions(List<Option> opts) {
+    protected void setOptions(List<OptionAgregator> opts) {
         opts.add(stdOption('v', "verbose", "Print a message for each created directory."));
     }
     @Override

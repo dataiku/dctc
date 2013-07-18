@@ -26,7 +26,7 @@ class SimplePrinter implements Printer {
         sb.append(", ");
     }
     public void add(String l) {
-        sb.append("--");
+        sb.append("-");
         sb.append(l);
         sb.append(", ");
     }

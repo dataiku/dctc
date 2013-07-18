@@ -10,7 +10,7 @@ import java.util.Map;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.configuration.Configuration;
 import com.dataiku.dctc.configuration.CredentialProviderBank;
@@ -146,7 +146,7 @@ public class AddAccount extends Command {
         return "protocol [account-name]";
     }
     @Override
-    protected void setOptions(List<Option> opts) {
+    protected void setOptions(List<OptionAgregator> opts) {
     }
     @Override
     public String cmdname() {

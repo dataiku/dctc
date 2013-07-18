@@ -4,13 +4,13 @@ import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.util.List;
 
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.command.cat.AlgorithmType;
-import com.dataiku.dctc.command.cat.NeverCatHeaderSelector;
 import com.dataiku.dctc.command.cat.CatAlgorithm;
 import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
 import com.dataiku.dctc.command.cat.CatRunner;
+import com.dataiku.dctc.command.cat.NeverCatHeaderSelector;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
@@ -33,10 +33,10 @@ public class Cat extends Command {
             .withDollar(hasOption('E')
                         || hasOption('e'))
             .withYell(getYell())
-            .withPrettyChar(hasOption("show-nonprinting")
+            .withPrettyChar(hasOption("-show-nonprinting")
                             || hasOption('t')
                             || hasOption('e'))
-            .withShowTabulation(hasOption("show-tabs")
+            .withShowTabulation(hasOption("-show-tabs")
                                 || hasOption('t'));
 
         CatRunner runner = new CatRunner()
@@ -49,7 +49,7 @@ public class Cat extends Command {
     }
     // Protected
     @Override
-    protected void setOptions(List<Option> options) {
+    protected void setOptions(List<OptionAgregator> options) {
         options.add(stdOption('n', "number", "Number all output lines."));
         options.add(stdOption('E', "show-ends", "Display $ at end of each line."));
         options.add(stdOption('s', "squeeze-blank", "Suppress repeated empty output lines."));

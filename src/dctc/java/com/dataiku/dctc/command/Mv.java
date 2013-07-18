@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.ListFilesCommand;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.copy.CopyTask;
@@ -62,7 +62,7 @@ public class Mv extends ListFilesCommand {
     }
 
     @Override
-    protected void setOptions(List<Option> opts) {
+    protected void setOptions(List<OptionAgregator> opts) {
         opts.add(stdOption('s', "sequential", "Make the copy with only one thread"));
         opts.add(stdOption('n', "thread-number", "Set the number of thread", true, "NUMBER"));
     }

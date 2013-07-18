@@ -12,7 +12,7 @@ import java.util.Map;
 
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.Globbing;
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.display.Size;
@@ -474,7 +474,7 @@ public class Ls extends Command {
 
     // Protected
     @Override
-    protected void setOptions(List<Option> opts) {
+    protected void setOptions(List<OptionAgregator> opts) {
         opts.clear();
         opts.add(stdOption('?', "help", "Display this help message."));
         opts.add(stdOption("rR", "recursive", "Recursive display of path given as arguments."));
@@ -486,6 +486,7 @@ public class Ls extends Command {
         opts.add(stdOption('G', "color", "Colorize the output."));
         opts.add(stdOption('1', "List one file per line."));
         opts.add(stdOption('f', "do not sort, enable -aU."));
+        opts.add(stdOption('d', "directory", "List directory entries instead of contents."));
     }
     @Override
     protected String proto() {

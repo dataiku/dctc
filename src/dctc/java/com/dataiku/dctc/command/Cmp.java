@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import com.dataiku.dctc.AutoGZip;
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
@@ -45,7 +45,7 @@ public class Cmp extends Command {
     }
     // Protected
     @Override
-    protected void setOptions(List<Option> opts) {
+    protected void setOptions(List<OptionAgregator> opts) {
     }
     @Override
     protected final String proto() {

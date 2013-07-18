@@ -2,7 +2,7 @@ package com.dataiku.dctc.command;
 
 import java.util.List;
 
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dip.utils.IndentedWriter;
 
@@ -23,7 +23,7 @@ public class Version extends Command {
         return "";
     }
     @Override
-    protected void setOptions(List<Option> opts) {
+    protected void setOptions(List<OptionAgregator> opts) {
     }
     @Override
     public String cmdname() {

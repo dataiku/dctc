@@ -18,12 +18,14 @@ import org.apache.log4j.Logger;
 import com.dataiku.dctc.Globbing;
 import com.dataiku.dctc.Main;
 import com.dataiku.dctc.clo.LongOption;
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.clo.Parser;
 import com.dataiku.dctc.clo.Printer;
 import com.dataiku.dctc.clo.PrinterFactory;
 import com.dataiku.dctc.clo.ShortOption;
 import com.dataiku.dctc.clo.Usage;
+import com.dataiku.dctc.clo.WithArgOptionAgregator;
+import com.dataiku.dctc.clo.WithoutArgOptionAgregator;
 import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.command.policy.YellPolicyFactory;
 import com.dataiku.dctc.configuration.GlobalConf;
@@ -32,6 +34,7 @@ import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dctc.utils.ExitCode;
 import com.dataiku.dip.utils.IndentedWriter;
 import com.dataiku.dip.utils.IntegerUtils;
+
 public abstract class Command {
     public Command() {
         YellPolicyFactory fact = new YellPolicyFactory();
@@ -48,7 +51,7 @@ public abstract class Command {
     public abstract String tagline();
     protected abstract String proto();
     public abstract void longDescription(IndentedWriter printer);
-    protected abstract void setOptions(List<Option> opts);
+    protected abstract void setOptions(List<OptionAgregator> opts);
     public void perform(String[] args) {
         resetExitCode();
         // Default implementation could be override
@@ -111,17 +114,16 @@ public abstract class Command {
     // Protected methods
     protected void parseCommandLine(String[] shellargs) {
         initOptions();
-        parser = new Parser()
-            .withOptions(opts);
-        parser.parser(shellargs);
-        if (hasOption("help")) {
+        parser = new Parser();
+        boolean ok = parser.parser(shellargs, opts);
+        if (hasOption("-help")) {
             Main.commandHelp(this, new IndentedWriter());
             throw new EndOfCommand();
         }
         if (hasOption('v')) {
             Logger.getRootLogger().setLevel(Level.INFO);
         }
-        if (parser.hasError()) {
+        if (!ok) {
             System.err.println(scat("dctc"
                                     , cmdname() + ":"
                                     , parser.prettyPrintError()));
@@ -143,7 +145,8 @@ public abstract class Command {
                 }
                 catch (IOException e) {
                     error(garg.givenName(),
-                          "Couldn't resolve globbing for " + garg.givenName(), e, 2);
+                          "Couldn't resolve globbing for " + garg.givenName()
+                          , e, 2);
                     gargs.add(garg);
                 }
             }
@@ -199,7 +202,8 @@ public abstract class Command {
                                                       int exitCode) {
         msg = (fileName == null ? msg :  ("`" + fileName + "': " + msg));
         if (exception instanceof UnknownHostException) {
-            error(msg + ": Unknown host '" + exception.getMessage() + "'", exitCode);
+            error(msg + ": Unknown host '" + exception.getMessage() + "'"
+                  , exitCode);
         }
         else {
             error(msg, exception, exitCode);
@@ -221,88 +225,93 @@ public abstract class Command {
     }
 
     /// Option Management
-    protected boolean hasOption(char opt) {
-        return parser != null && parser.hasOption(opt);
+    protected boolean hasOption(char optName) {
+        return hasOption("" + optName);
     }
-    protected boolean hasOption(String opt) {
-        return parser != null && parser.hasOption(opt);
+    protected boolean hasOption(String optName) {
+        for (OptionAgregator opt: opts) {
+            if (opt.has(optName) != 0) {
+                return opt.count() != 0;
+            }
+        }
+        return false;
     }
-    protected String getOptionValue(String opt) {
-        return parser.getOptionValue(opt);
+    protected String getOptionValue(char opt) {
+        return getOptionValue("" + opt);
     }
-    protected int getPosition(String opt) {
-        return parser.getPosition(opt);
+    protected String getOptionValue(String optName) {
+        for (OptionAgregator opt: opts) {
+            if (opt.has(optName) != 0) {
+                if (opt.hasArgument()) {
+                    return opt.getArgument();
+                }
+                else {
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
+    protected int getPosition(String optName) {
+        for (OptionAgregator opt: opts) {
+            if (opt.has(optName) != 0) {
+                return opt.getPosition();
+            }
+        }
+        return -1;
     }
     protected String getOptionValue(String opt, String defaultValue) {
         return hasOption(opt) ? getOptionValue(opt) : defaultValue;
     }
-    protected String getOptionValue(char opt) {
-        return parser.getOptionValue(opt);
-    }
     protected String getOptionValue(char opt, String defaultValue) {
         return hasOption(opt) ? getOptionValue(opt) : defaultValue;
     }
-    protected Option stdOption(char shortOpt,
-                               String longOpt,
-                               String descrip) {
+    protected OptionAgregator stdOption(char shortOpt
+                                        , String longOpt
+                                        , String descrip) {
         return stdOption(shortOpt, longOpt, descrip, false);
     }
-    protected Option stdOption(String shortOpts,
-                               String longOpt,
-                               String descrip) {
-        return stdOption(shortOpts, longOpt, descrip, false);
+    protected OptionAgregator stdOption(String shortOpts
+                                        , String longOpt
+                                        , String descrip) {
+        return stdOption(shortOpts, longOpt, descrip, false, null);
     }
-    protected Option stdOption(char shortOpt,
-                               String descrip) {
-        ShortOption sopt = new ShortOption();
-        sopt.addOpt(shortOpt);
-        return new Option()
-            .withShortOption(sopt)
+    protected OptionAgregator stdOption(char shortOpt
+                                        , String descrip) {
+        return new WithoutArgOptionAgregator()
+            .withOpt(new ShortOption().withOpt(shortOpt))
             .withDescription(descrip);
     }
-    protected Option stdOption(char shortOpt,
-                               String longOpt,
-                               String descrip,
-                               boolean hasArg) {
+    protected OptionAgregator stdOption(char shortOpt
+                                        , String longOpt
+                                        , String descrip
+                                        , boolean hasArg) {
         return stdOption(shortOpt, longOpt, descrip, hasArg, null);
     }
-    protected Option stdOption(char shortOpt,
-                               String longOpt,
-                               String descrip,
-                               boolean hasArg,
-                               String argName) {
-        ShortOption sopt = new ShortOption();
-        sopt.addOpt(shortOpt);
-        LongOption lopt = new LongOption();
-        lopt.addOpt(longOpt);
-        return new Option()
-            .withShortOption(sopt)
-            .withLongOption(lopt)
-            .withDescription(descrip)
-            .withHasOption(hasArg)
-            .withArgName(argName);
+    protected OptionAgregator stdOption(char shortOpt
+                                        , String longOpt
+                                        , String descrip
+                                        , boolean hasArg
+                                        , String argName) {
+        return stdOption("" + shortOpt, longOpt, descrip, hasArg, argName);
     }
-    protected Option stdOption(String shortOpts,
-                               String longOpt,
-                               String descrip,
-                               boolean hasArg) {
-        return stdOption(shortOpts, longOpt, descrip, hasArg, null);
-    }
-    protected Option stdOption(String shortOpts,
-                               String longOpt,
-                               String descrip,
-                               boolean hasArg,
-                               String argName) {
-        ShortOption sopt = new ShortOption();
-        sopt.addOpts(shortOpts);
-        LongOption lopt = new LongOption();
-        lopt.addOpt(longOpt);
-        return new Option()
-            .withShortOption(sopt)
-            .withLongOption(lopt)
-            .withDescription(descrip)
-            .withHasOption(hasArg)
-            .withArgName(argName);
+    protected OptionAgregator stdOption(String shortOpts
+                                        , String longOpt
+                                        , String descrip
+                                        , boolean hasArg
+                                        , String argName) {
+        if (hasArg) {
+            return new WithArgOptionAgregator()
+                .withOpt(new ShortOption().withOpt(shortOpts))
+                .withOpt(new LongOption().withOpt(longOpt))
+                .withDescription(descrip)
+                .withArgumentName(argName);
+        } else {
+            return new WithoutArgOptionAgregator()
+                .withOpt(new ShortOption().withOpt(shortOpts))
+                .withOpt(new LongOption().withOpt(longOpt))
+                .withDescription(descrip);
+        }
     }
     protected List<String> getArgs() {
         return parser.getArgs();
@@ -342,7 +351,7 @@ public abstract class Command {
     // Private methods
     private void initOptions() {
         if (opts == null) {
-            opts = new ArrayList<Option>();
+            opts = new ArrayList<OptionAgregator>();
             opts.add(stdOption("h?", "help", "Display this help message."));
             setOptions(opts);
         }
@@ -360,7 +369,7 @@ public abstract class Command {
 
     // Attributes
     private Parser parser;
-    private List<Option> opts;
+    private List<OptionAgregator> opts;
     private FileBuilder builder;
     protected YellPolicy yell;
     private ExitCode exitCode;

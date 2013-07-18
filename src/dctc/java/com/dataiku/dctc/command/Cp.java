@@ -5,7 +5,7 @@ import static com.dataiku.dip.utils.PrettyString.scat;
 import java.io.IOException;
 import java.util.List;
 
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.ListFilesCommand;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.copy.CopyTask;
@@ -55,7 +55,7 @@ public class Cp extends ListFilesCommand {
 
     // Protected
     @Override
-    protected void setOptions(List<Option> opts) {
+    protected void setOptions(List<OptionAgregator> opts) {
         opts.add(stdOption("rR", "recursive", "Copy directories recursively."));
         opts.add(stdOption('c', "compress", "Compress all input files and add .gz extension."));
         opts.add(stdOption('u', "uncompress", "Uncompress all compressed (ie, .gz) input files (strips .gz extension)"));

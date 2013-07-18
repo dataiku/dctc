@@ -3,7 +3,7 @@ package com.dataiku.dctc.command;
 import java.io.IOException;
 import java.util.List;
 
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.display.Size;
 import com.dataiku.dctc.file.FileManipulation;
@@ -22,7 +22,7 @@ public class Du extends Command {
     public String proto() {
         return "[FILE]...";
     }
-    public void setOptions(List<Option> opts) {
+    public void setOptions(List<OptionAgregator> opts) {
         opts.clear();
         opts.add(stdOption('?', "help", "Display this help message."));
         opts.add(stdOption('h', "human-readable", "print sizes in human readable format."));

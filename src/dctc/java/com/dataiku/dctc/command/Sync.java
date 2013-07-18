@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.dataiku.dctc.GlobalConstants;
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.copy.CopyTask;
@@ -62,7 +62,7 @@ public class Sync extends Command {
     }
 
     @Override
-    protected void setOptions(List<Option> opts) {
+    protected void setOptions(List<OptionAgregator> opts) {
         opts.add(stdOption('t', "time", "Check whether sync is required using file size and modification time (default: size only). Incompatible with -m"));
         opts.add(stdOption('m', "hash", "Check whether sync is required using file hash (default: size only). Incompatible with -t"));
         opts.add(stdOption('n', "dry-run", "Perform a trial run with no changes made."));

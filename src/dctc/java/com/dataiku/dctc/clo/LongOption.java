@@ -1,33 +1,38 @@
 package com.dataiku.dctc.clo;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.dataiku.dctc.clo.Printer;
 
-public class LongOption {
-    public void addOpt(String opt) {
-        if (isValid(opt)) {
-            opts.add(opt);
+public class LongOption implements Option {
+    public int read(String optName) {
+        if (optName.equals(opt)) {
+            return optName.length();
+        }
+        return 0;
+    }
+    public String getArgument(String optLine) {
+        if (optLine.startsWith("=")) {
+            return optLine.substring(1);
         }
         else {
-            throw new Error("Invalid Long Option: `" + opt + "'");
+            return null;
         }
     }
-    public boolean isValid(String opt) {
-        return opt.indexOf("-") != 0;
-    }
-    public boolean has(String optName) {
-        for (String opt: opts) {
-            if (opt.equals(optName)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-    public List<String> getOpts() {
-        return opts;
+    public void print(Printer printer) {
+        printer.add(opt);
     }
 
-    // private
-    List<String> opts = new ArrayList<String>();
+    // Getters - Setters
+    public String getOpt() {
+        return opt;
+    }
+    public void setOpt(String opt) {
+        this.opt = "-" + opt;
+    }
+    public LongOption withOpt(String opt) {
+        setOpt(opt);
+        return this;
+    }
+
+    // Attributes
+    private String opt;
 }

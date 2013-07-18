@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dataiku.dctc.AutoGZip;
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dctc.file.GeneralizedFileInputSplit;
@@ -28,7 +28,7 @@ public class ListColumns extends Command {
     public String tagline() {
         return "List the name of the column.";
     }
-    public void setOptions(List<Option> opts) {
+    public void setOptions(List<OptionAgregator> opts) {
         opts.add(stdOption('m', "minimal", "Set to minimal the display scheme."));
         opts.add(stdOption('s', "separator", "Set the separator.", true, "SEP"));
     }

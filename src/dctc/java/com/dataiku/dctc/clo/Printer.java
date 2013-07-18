@@ -4,8 +4,8 @@ public interface Printer {
     public void start();
     public void newOption();
     public void add(char s);
-    public void add(String l);
     public void addParam(String p);
+    public void add(String l);
     public void addDescription(String descrip);
     public void endOptionListing();
     public void endOption();

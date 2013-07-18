@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.copy.CopyTask;
 import com.dataiku.dctc.copy.SimpleCopyTaskRunnableFactory;
@@ -34,8 +34,8 @@ public class Edit extends Command {
         return "edit";
     }
     public String getEditor() {
-        if (hasOption('e')) {
-            return getOptionValue('e');
+        if (hasOption("-editor")) {
+            return getOptionValue("-editor");
         }
         else {
             return System.getenv("EDITOR");
@@ -135,7 +135,7 @@ public class Edit extends Command {
 
     // Protected
     @Override
-    protected void setOptions(List<Option> opts) {
+    protected void setOptions(List<OptionAgregator> opts) {
         opts.add(stdOption('e', "editor", "Override the EDITOR variable.", true, "BIN-NAME"));
     }
 

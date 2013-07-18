@@ -5,7 +5,7 @@ import static com.dataiku.dip.utils.PrettyString.scat;
 import java.io.IOException;
 import java.util.List;
 
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.display.Interactive;
 import com.dataiku.dctc.file.GeneralizedFile;
@@ -82,7 +82,7 @@ public class Rm extends Command {
 
     // Protected
     @Override
-    protected void setOptions(List<Option> opts) {
+    protected void setOptions(List<OptionAgregator> opts) {
         opts.add(stdOption('v', "verbose", "Explain what i being done."));
         opts.add(stdOption("rR", "recursive", "Remove directories and their contents recursively."));
         opts.add(stdOption('f', "force", "Ignore nonexistent files and argumens, never prompt."));

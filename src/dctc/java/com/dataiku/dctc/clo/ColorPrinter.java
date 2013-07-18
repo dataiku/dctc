@@ -12,7 +12,7 @@ import com.dataiku.dip.utils.IndentedWriter;
 
 class ColorPrinter implements Printer {
     public void description() {
-        System.out.println(bold("DESCRIPTION"));
+        System.out.println(bold(red("DESCRIPTION")));
 
     }
     public void start() {
@@ -26,16 +26,14 @@ class ColorPrinter implements Printer {
         sb.setLength(0);
     }
     public void add(char s) {
-        sb.append('-');
-        sb.append(bold(red(s)));
+        sb.append(bold(red("-" + s)));
         sb.append(", ");
         size += 4;
     }
     public void add(String l) {
-        sb.append("--");
-        sb.append(bold(red(l)));
+        sb.append(bold(red("-" + l)));
         sb.append(", ");
-        size += 4 + l.length();
+        size += 3 + l.length();
     }
     public void addParam(String p) {
         sb.append('=');
@@ -55,7 +53,7 @@ class ColorPrinter implements Printer {
         lines.add(sb.toString());
     }
     public void synopsis(String cmdname, String syn) {
-        System.out.println(bold("SYNOPSIS"));
+        System.out.println(bold(red("SYNOPSIS")));
         System.out.print("    ");
         System.out.print(bold(red("dctc " + cmdname)));
         System.out.print(" ");
@@ -63,7 +61,7 @@ class ColorPrinter implements Printer {
         System.out.println();
     }
     public void name(String cmdname, String tagline) {
-        System.out.println(bold("NAME"));
+        System.out.println(bold(red("NAME")));
         System.out.println("    dctc " + cmdname
                            + " - " + tagline);
         System.out.println();

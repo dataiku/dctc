@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.apache.commons.lang.NotImplementedException;
 
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.ListFilesCommand;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.copy.CopyTask;
@@ -27,7 +27,6 @@ import com.dataiku.dip.input.formats.BasicFormatExtractorFactory;
 import com.dataiku.dip.partitioning.TimeDimension;
 import com.dataiku.dip.utils.IndentedWriter;
 
-
 public class Dispatch extends ListFilesCommand {
     public String tagline() {
         return "Dispatches the content of input files to output files.";
@@ -45,7 +44,7 @@ public class Dispatch extends ListFilesCommand {
                           ,scat("Dispatch supports delimited files (CSV, TSV)."));
     }
     @Override
-    protected void setOptions(List<Option> opts) {
+    protected void setOptions(List<OptionAgregator> opts) {
         opts.add(stdOption('c', "compress", "Compress all files (add a .gz extension)."));
         opts.add(stdOption('p', "prefix", "Prefix the names of output files with a constant string", true, "PREFIX"));
         opts.add(stdOption('s', "suffix", "Suffix the names of output files with a constant string", true, "SUFFIX"));
@@ -72,7 +71,7 @@ public class Dispatch extends ListFilesCommand {
     public String postfix() {
         String postfix = getOptionValue('s');
         if (postfix == null) postfix = "";
-        if (getOptionValue("if") != null && getOptionValue("if").equalsIgnoreCase("csv")) {
+        if (getOptionValue("-input-file") != null && getOptionValue("-input-file").equalsIgnoreCase("csv")) {
             postfix += ".csv";
         } else {
             postfix += ".txt";
@@ -87,18 +86,18 @@ public class Dispatch extends ListFilesCommand {
         return splitFunction;
     }
     public int fileNumber() {
-        String str = getOptionValue("nf");
+        String str = getOptionValue("-nb-files");
         if (str == null) return 8;
         return Integer.parseInt(str);
     }
     public String timeUnit() {
-        return  getOptionValue("tp");
+        return  getOptionValue("-time-period");
     }
     public String column() {
-        return getOptionValue("col");
+        return getOptionValue("-column");
     }
     public String timeFormat() {
-        return getOptionValue("tf");
+        return getOptionValue("-time-format");
     }
 
     @Override
@@ -194,12 +193,12 @@ public class Dispatch extends ListFilesCommand {
     }
     private Format buildFormat(String function, CopyTask sampleTask) {
         String defaultFormat = (function.equalsIgnoreCase("random") ? "line" : "csv");
-        String format = getOptionValue("if", defaultFormat);
+        String format = getOptionValue("-input-file", defaultFormat);
 
         if (format.equalsIgnoreCase("auto")) {
             throw new NotImplementedException("Auto format is not yet implemented");
         } else if (format.equalsIgnoreCase("csv")) {
-            String sep = getOptionValue("isep", ",");
+            String sep = getOptionValue("-input-separator", ",");
             System.out.println("Use isep : ---" + sep + "---");
             return new Format("csv").withParam("separator", sep);
         } else if (format.equalsIgnoreCase("line")) {

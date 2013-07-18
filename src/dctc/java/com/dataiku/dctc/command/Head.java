@@ -2,7 +2,8 @@ package com.dataiku.dctc.command;
 
 import java.util.List;
 
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.LongOption;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.command.cat.AlgorithmType;
 import com.dataiku.dctc.command.cat.AlwaysCatHeaderSelector;
@@ -19,11 +20,11 @@ public class Head extends Command {
     public void longDescription(IndentedWriter printer) {
         printer.print("Output the first N lines of the input files");
     }
-    protected void setOptions(List<Option> opts) {
+    protected void setOptions(List<OptionAgregator> opts) {
         opts.add(stdOption('n', "lines", "Display the first `number' lines of each file", true, "K"));
         opts.add(stdOption('c', "bytes", "Print the first k bytes  of each file.", true, "K"));
-        Option quiet = stdOption('q', "quiet", "Never output headers giving file names.");
-        quiet.getLongOption().addOpt("silent");
+        OptionAgregator quiet = stdOption('q', "quiet", "Never output headers giving file names.");
+        quiet.addOpt(new LongOption().withOpt("silent"));
         opts.add(quiet);
     }
 
@@ -36,7 +37,7 @@ public class Head extends Command {
             .withYell(getYell());
 
         CatRunner runner = new CatRunner();
-        if (args.size() > 1 && !hasOption("quiet")) {
+        if (args.size() > 1 && !hasOption("-quiet")) {
             runner.setHeader(new AlwaysCatHeaderSelector());
         }
         else {
@@ -71,12 +72,14 @@ public class Head extends Command {
         return "[OPT...] PATHS...";
     }
     private boolean isLine() {
-        String line = getLastPosition("lines", "bytes");
-        if (line != null) {
-            isLine = line.equals("lines");
-        }
-        else {
-            isLine = true;
+        if (isLine == null) {
+            String line = getLastPosition("-lines", "-bytes");
+            if (line != null) {
+                isLine = line.equals("-lines");
+            }
+            else {
+                isLine = true;
+            }
         }
 
         return isLine;

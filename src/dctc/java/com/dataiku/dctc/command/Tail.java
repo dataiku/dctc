@@ -2,7 +2,8 @@ package com.dataiku.dctc.command;
 
 import java.util.List;
 
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.LongOption;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.command.cat.AlgorithmType;
 import com.dataiku.dctc.command.cat.AlwaysCatHeaderSelector;
@@ -28,11 +29,11 @@ public class Tail extends Command {
         return "[OPTIONS...] [FILE...]";
     }
     @Override
-    protected void setOptions(List<Option> opts) {
+    protected void setOptions(List<OptionAgregator> opts) {
         opts.add(stdOption('c', "bytes", "Output the last K bytes.", true, "K"));
         opts.add(stdOption('n', "lines", "Output the last K lines.", true, "K"));
-        Option quiet = stdOption('q', "quiet", "Never output headers giving file names.");
-        quiet.getLongOption().addOpt("silent");
+        OptionAgregator quiet = stdOption('q', "quiet", "Never output headers giving file names.");
+        quiet.addOpt(new LongOption().withOpt("silent"));
         opts.add(quiet);
     }
     @Override
@@ -45,7 +46,7 @@ public class Tail extends Command {
 
         CatRunner runner = new CatRunner();
 
-        if (args.size() > 1 && !hasOption("quiet")) {
+        if (args.size() > 1 && !hasOption("-quiet")) {
             runner.setHeader(new AlwaysCatHeaderSelector());
         }
         else {
@@ -63,7 +64,7 @@ public class Tail extends Command {
     public void nbLines() {
         if (isLine()) {
             if (hasOption('n')) {
-                number = Long.parseLong(getOptionValue("lines"));
+                number = Long.parseLong(getOptionValue("-lines"));
             } else {
                 number = 10;
             }
@@ -71,16 +72,18 @@ public class Tail extends Command {
     }
     public void nbBytes() {
         if (!isLine()) {
-            number = Long.parseLong(getOptionValue("bytes"));
+            number = Long.parseLong(getOptionValue("-bytes"));
         }
     }
     private boolean isLine() {
-        String line = getLastPosition("lines", "bytes");
-        if (line != null) {
-            isLine = line.equals("lines");
-        }
-        else {
-            isLine = true;
+        if (isLine == null) {
+            String line = getLastPosition("-lines", "-bytes");
+            if (line != null) {
+                isLine = line.equals("-lines");
+            }
+            else {
+                isLine = true;
+            }
         }
 
         return isLine;

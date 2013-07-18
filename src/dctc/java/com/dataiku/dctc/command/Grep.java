@@ -11,7 +11,7 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 
 import com.dataiku.dctc.AutoGZip;
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.command.grep.GrepHeaderPrinter;
 import com.dataiku.dctc.command.grep.GrepLinePrinter;
@@ -35,7 +35,7 @@ public class Grep extends Command {
                                 , "do not offer a native grep (eg, Microsoft Windows). For UNIX"
                                 , "systems, use dctc cat|grep"));
     }
-    protected void setOptions(List<Option> opts) {
+    protected void setOptions(List<OptionAgregator> opts) {
         opts.add(stdOption('r', "recursive", "Read all files under each directory, recursively."));
         opts.add(stdOption('v', "invert-match", "Invert the sense of matching, to select non-matching lines."));
         opts.add(stdOption('i', "ignore-case", "Ignore case distinctions in both the PATTERN and the input files."));
@@ -64,7 +64,7 @@ public class Grep extends Command {
                     pattern = DKUFileUtils.fileToString(new File(getOptionValue('f')));
                 }
                 catch (Exception e) {
-                    if (!hasOption("no-messages")) {
+                    if (!hasOption("-no-messages")) {
                         error("Unexpected error while reading "
                               + getOptionValue('f'), e, 3);
                     }

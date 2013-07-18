@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import com.dataiku.dctc.clo.Option;
+import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.file.GeneralizedFile;
 import com.dataiku.dip.utils.IndentedWriter;
@@ -56,8 +56,8 @@ public class Find extends Command {
     }
     /// Getters
     public Pattern pattern() {
-        if (pattern == null && hasOption("name")) {
-            pattern = Pattern.compile(getOptionValue("name"));
+        if (pattern == null && hasOption("-name")) { // FIXME: Should be name
+            pattern = Pattern.compile(getOptionValue("-name")); // FIXME: Should be name
         }
         return pattern;
     }
@@ -69,7 +69,8 @@ public class Find extends Command {
 
     // Protected
     @Override
-    protected void setOptions(List<Option> opts) {
+    protected void setOptions(List<OptionAgregator> opts) {
+        // Fixme: Should use java option parser.
         opts.add(stdOption("", "name", "Print the file only if its name contains the specified pattern.", true, "PATTERN"));
         opts.add(stdOption("", "type", "Select the type of the file to print (d(irectory), f(ile), a(all)).", true, "c"));
     }
