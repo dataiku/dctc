@@ -35,4 +35,9 @@ public class OutputStreamOutputWriter extends OutputWriter{
     public void lastRowEmitted() throws Exception {
         formatter.footer(cf, os);
     }
+
+    @Override
+    public long writtenBytes() throws IOException {
+        return -1;
+    }
 }

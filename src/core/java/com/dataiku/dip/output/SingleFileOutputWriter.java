@@ -6,11 +6,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.apache.commons.io.output.CountingOutputStream;
+
+
 import com.dataiku.dip.datalayer.ColumnFactory;
 import com.dataiku.dip.datalayer.Row;
 import com.dataiku.dip.utils.DKUFileUtils;
 
 public class SingleFileOutputWriter extends OutputWriter{
+    private CountingOutputStream countingStream;
     private OutputStream finalOutputStream;
     private FileOutputStream fos;
     private boolean headerEmitted;
@@ -29,9 +33,10 @@ public class SingleFileOutputWriter extends OutputWriter{
         DKUFileUtils.mkdirsParent(new File(path));
         fos = new FileOutputStream(new File(path));
         if (path.contains(".gz")) {
-            finalOutputStream = new GZIPOutputStream(fos);
+            countingStream = new CountingOutputStream(fos);
+            finalOutputStream = new GZIPOutputStream(countingStream);
         } else {
-            finalOutputStream = fos;
+            finalOutputStream = countingStream = new CountingOutputStream(fos);
         }
     }
 
@@ -49,5 +54,10 @@ public class SingleFileOutputWriter extends OutputWriter{
         formatter.footer(cf, finalOutputStream);
         finalOutputStream.close();
         fos.close();
+    }
+
+    @Override
+    public long writtenBytes() throws IOException {
+        return countingStream.getByteCount();
     }
 }
