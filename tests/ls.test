@@ -27,6 +27,6 @@ run_ls -d data/ls
 run_ls --color data/ls
 run_ls --hide=*~ data/ls
 run_ls -Q data/ls
-run_ls -R data/ls
+run_ls -R data/
 
 echo $exit_status
