@@ -7,13 +7,16 @@ package com.dataiku.dip.datalayer;
  */
 public class SRPAdapter extends SingleInputSingleOutputRowProcessor{
     SingleRowProcessor p;
-
+    
     public SRPAdapter(SingleRowProcessor p) {
         this.p = p;
     }
 
     public String toString() {
         return "SRPAdapter[" + p.toString() + "]";
+    }
+    public SingleRowProcessor getProcessor() {
+        return p;
     }
 
     @Override
