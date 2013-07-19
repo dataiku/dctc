@@ -48,14 +48,14 @@ public class Dispatch extends ListFilesCommand {
         opts.add(stdOption('c', "compress", "Compress all files (add a .gz extension)."));
         opts.add(stdOption('p', "prefix", "Prefix the names of output files with a constant string", true, "PREFIX"));
         opts.add(stdOption('s', "suffix", "Suffix the names of output files with a constant string", true, "SUFFIX"));
-        opts.add(stdOption("", "column", "Column to use for 'value', 'hash' and 'time' functions.", true, "COLUMN-NAME"));
+        opts.add(stdOption("l", "column", "Column to use for 'value', 'hash' and 'time' functions.", true, "COLUMN-NAME"));
         opts.add(stdOption('f', "function", "Function to use to dispatch (one of 'random', 'value', 'hash', or 'time').", true, "FUNCTION_NAME"));
-        opts.add(stdOption("", "nb-files", "Number of output files to create for 'hash' and 'random' functions", true, "NUMBER"));
-        opts.add(stdOption("", "time-format", "Time format string for the 'time' function.", true, "FORMAT"));
-        opts.add(stdOption("", "time-period", "Dispatch time period for the 'time' function (one of 'year', 'month', 'day' or 'hour').", true, "PERIOD"));
-        opts.add(stdOption("", "input-format", "Format type for the input files. Only supports 'csv'.", true, "FILE-FORMAT"));
-        opts.add(stdOption("", "input-separator", "Separator character for CSV format", true, "SEPARATOR"));
-        opts.add(stdOption("", "input-quote", "Quote character for CSV format", true, "QUOTE-CHAR"));
+        opts.add(stdOption("n", "nb-files", "Number of output files to create for 'hash' and 'random' functions", true, "NUMBER"));
+        opts.add(stdOption("t", "time-format", "Time format string for the 'time' function.", true, "FORMAT"));
+        opts.add(stdOption("r", "time-period", "Dispatch time period for the 'time' function (one of 'year', 'month', 'day' or 'hour').", true, "PERIOD"));
+        opts.add(stdOption("o", "input-format", "Format type for the input files. Only supports 'csv'.", true, "FILE-FORMAT"));
+        opts.add(stdOption("e", "input-separator", "Separator character for CSV format", true, "SEPARATOR"));
+        opts.add(stdOption("q", "input-quote", "Quote character for CSV format", true, "QUOTE-CHAR"));
     }
 
     @Override
