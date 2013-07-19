@@ -18,7 +18,9 @@ run_tail -n12 /etc/bash.bashrc
 run_tail -n3 /etc/hosts
 run_tail -n4242 /etc/bash.bashrc
 run_tail --lines 4242 /etc/bash.bashrc
+run_tail --lines=4242 /etc/bash.bashrc
 run_tail --lines 12 /etc/bash.bashrc
+run_tail --lines=12 /etc/bash.bashrc
 run_tail -c 12 /etc/bash.bashrc
 run_tail --bytes 424242 /etc/bash.bashrc
 
