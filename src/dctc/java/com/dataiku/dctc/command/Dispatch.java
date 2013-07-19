@@ -150,7 +150,8 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
     @Override
     public final void execute(List<CopyTask> tasks) {
         if (tasks.isEmpty()) {
-            return; // FIXME: NO IT'S AN ERROR. See the prototype.
+            error("No missing operands.", 2);
+            return;
         }
 
         SplitFunction fct = buildDispatchFunction();
