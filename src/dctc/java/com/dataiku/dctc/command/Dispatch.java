@@ -64,64 +64,78 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
     }
     /// Getters
     public String prefix() {
-        String prefix = getOptionValue('p'); // FIXME: No
-
         if (prefix == null) {
-            prefix = "";
+            prefix = getOptionValue("-prefix");
+
+            if (prefix == null) {
+                prefix = "";
+            }
         }
 
         return prefix;
     }
     public String postfix() {
-        String postfix = getOptionValue('s'); // FIXME: No
-
         if (postfix == null) {
-            postfix = "";
-        }
-        if (getOptionValue("-input-file") != null
-            && getOptionValue("-input-file").equalsIgnoreCase("csv")) {
-            // FIXME: if condition is weird
-            postfix += ".csv";
-        }
-        else {
-            postfix += ".txt";
+            postfix = getOptionValue("-suffix");
+
+            if (postfix == null) {
+                postfix = "";
+            }
+            if (getOptionValue("-input-file") != null
+                && getOptionValue("-input-file").equalsIgnoreCase("csv")) {
+                // FIXME: if condition is weird
+                postfix += ".csv";
+            }
+            else {
+                postfix += ".txt";
+            }
         }
         return postfix;
     }
-    public String splitFunction() {
-        String splitFunction = getOptionValue('f'); // FIXME: No
-
+    public String splitFunction() { // FIXME: Should return an
+                                    // enumeration element.
         if (splitFunction == null) {
-            splitFunction = "random";
+            splitFunction = getOptionValue("-function");
+
+            if (splitFunction == null) {
+                splitFunction = "random";
+            }
         }
 
         return splitFunction;
     }
     public int fileNumber() {
-        String str = getOptionValue("-nb-files"); // FIXME: No
-
-        if (str == null) {
-            return 8;
+        if (fileNumber == -1) {
+            fileNumber = getIntOption("-nb-files", 8);
         }
 
-        return Integer.parseInt(str);
+        return fileNumber;
     }
     public String timeUnit() {
-        // FIXME: Why the others one have cache and not this one.
-        return  getOptionValue("-time-period");
+        if (timePeriod == null) {
+            timePeriod = getOptionValue("-time-period");
+        }
+
+        return timePeriod;
     }
     public String column() {
-        // FIXME: See upper FIXME
-        return getOptionValue("-column");
+        if (column == null) {
+            column = getOptionValue("-column");
+        }
+
+        return column;
     }
     public String timeFormat() {
-        // FIXME: Same.
-        return getOptionValue("-time-format");
+        if (timeFormat == null) {
+            timeFormat = getOptionValue("-time-format");
+        }
+
+        return timeFormat;
     }
 
     @Override
     public final void execute(List<CopyTask> tasks) {
-        if (tasks.size() == 0) { // FIXME: Use isEmpty!
+        if (tasks.isEmpty()) {
             return; // FIXME: NO IT'S AN ERROR. See the prototype.
         }
 
@@ -255,4 +269,11 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
 
     // Attributes
     private GeneralizedFile dst = null;
+    private String prefix;
+    private String postfix;
+    private int fileNumber;
+    private String splitFunction;
+    private String timePeriod;
+    private String column;
+    private String timeFormat;
 }
