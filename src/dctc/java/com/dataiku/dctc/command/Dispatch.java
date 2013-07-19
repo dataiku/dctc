@@ -27,21 +27,21 @@ import com.dataiku.dip.input.formats.BasicFormatExtractorFactory;
 import com.dataiku.dip.partitioning.TimeDimension;
 import com.dataiku.dip.utils.IndentedWriter;
 
-public class Dispatch extends ListFilesCommand {
+public class Dispatch extends ListFilesCommand { // FIXME: Why?
     public String tagline() {
         return "Dispatches the content of input files to output files.";
     }
     public void longDescription(IndentedWriter printer) {
         printer.paragraph(scat("This command split the input files to output files. Input files are"
-                               ,"split in records based on the specified format."
-                               ,"For each record, the target output file is computed according to"
-                               ,"a dispatch function, and the record is appended to the computed"
-                               ,"output.")
-                          ,scat("For example this uses the value of the first column of each line"
-                                ,"of each file in 'input/'. This value becomes the target file name"
-                                ,"within the 'dispatched/' folders:"
-                                ,"dctc dispatch inputs/ dispatched/ -function value -column col_0")
-                          ,scat("Dispatch supports delimited files (CSV, TSV)."));
+                               , "split in records based on the specified format."
+                               , "For each record, the target output file is computed according to"
+                               , "a dispatch function, and the record is appended to the computed"
+                               , "output.")
+                          , scat("For example this uses the value of the first column of each line"
+                                , "of each file in 'input/'. This value becomes the target file name"
+                                , "within the 'dispatched/' folders:"
+                                , "dctc dispatch inputs/ dispatched/ -function value -column col_0")
+                          , scat("Dispatch supports delimited files (CSV, TSV)."));
     }
     @Override
     protected void setOptions(List<OptionAgregator> opts) {
@@ -64,45 +64,66 @@ public class Dispatch extends ListFilesCommand {
     }
     /// Getters
     public String prefix() {
-        String prefix = getOptionValue('p');
-        if (prefix == null) prefix = "";
+        String prefix = getOptionValue('p'); // FIXME: No
+
+        if (prefix == null) {
+            prefix = "";
+        }
+
         return prefix;
     }
     public String postfix() {
-        String postfix = getOptionValue('s');
-        if (postfix == null) postfix = "";
-        if (getOptionValue("-input-file") != null && getOptionValue("-input-file").equalsIgnoreCase("csv")) {
+        String postfix = getOptionValue('s'); // FIXME: No
+
+        if (postfix == null) {
+            postfix = "";
+        }
+        if (getOptionValue("-input-file") != null
+            && getOptionValue("-input-file").equalsIgnoreCase("csv")) {
+            // FIXME: if condition is weird
             postfix += ".csv";
-        } else {
+        }
+        else {
             postfix += ".txt";
         }
         return postfix;
     }
     public String splitFunction() {
-        String splitFunction = getOptionValue('f');
+        String splitFunction = getOptionValue('f'); // FIXME: No
+
         if (splitFunction == null) {
             splitFunction = "random";
         }
+
         return splitFunction;
     }
     public int fileNumber() {
-        String str = getOptionValue("-nb-files");
-        if (str == null) return 8;
+        String str = getOptionValue("-nb-files"); // FIXME: No
+
+        if (str == null) {
+            return 8;
+        }
+
         return Integer.parseInt(str);
     }
     public String timeUnit() {
+        // FIXME: Why the others one have cache and not this one.
         return  getOptionValue("-time-period");
     }
     public String column() {
+        // FIXME: See upper FIXME
         return getOptionValue("-column");
     }
     public String timeFormat() {
+        // FIXME: Same.
         return getOptionValue("-time-format");
     }
 
     @Override
     public final void execute(List<CopyTask> tasks) {
-        if (tasks.size() == 0) return;
+        if (tasks.size() == 0) { // FIXME: Use isEmpty!
+            return; // FIXME: NO IT'S AN ERROR. See the prototype.
+        }
 
         SplitFunction fct = buildDispatchFunction();
 
@@ -110,14 +131,23 @@ public class Dispatch extends ListFilesCommand {
         // Test the format right away
         BasicFormatExtractorFactory.build(fmt);
 
-        SplitFactory fact = new SplitFactory(dst, prefix(), postfix(), fct, column(), fmt, compress());
+        SplitFactory fact = new SplitFactory(dst
+                                             , prefix()
+                                             , postfix()
+                                             , fct
+                                             , column()
+                                             , fmt
+                                             , compress());
         ThreadedDisplay display = GlobalConf.getDisplay();
-        CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, GlobalConf.getThreadLimit());
+        CopyTasksExecutor exec = new CopyTasksExecutor(fact
+                                                       , display
+                                                       , GlobalConf.getThreadLimit());
         try {
             exec.run(tasks, false);
             fact.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
+        }
+        catch (IOException e) {
+            // FIXME: TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -134,15 +164,18 @@ public class Dispatch extends ListFilesCommand {
         return true;
     }
     @Override
-    protected void dstRoot(GeneralizedFile dst) {
+    protected void dstRoot(GeneralizedFile dst) { // FIXME: No, maybe
+                                                  // need to be empty
         try {
             if (!dst.exists()) {
                 dst.mkpath();
             }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
+        }
+        catch (IOException e) {
+            // FIXME: TODO Auto-generated catch block
             e.printStackTrace();
         }
+
         this.dst = dst;
     }
     @Override
@@ -158,23 +191,27 @@ public class Dispatch extends ListFilesCommand {
         return false;
     }
     private SplitFunction buildDispatchFunction() {
-        String splitFunction = splitFunction();
-        if (splitFunction.equals("random")) {
-            if (fileNumber() == 0) {
+        String splitFunction = splitFunction(); // FIXME: Should use
+                                                // an enumeration
 
-            }
+        if (splitFunction.equals("random")) {
             return new RandomFunction(fileNumber());
-        } else if (splitFunction.equals("value")) {
+        }
+        else if (splitFunction.equals("value")) {
             if (column() == null) {
                 throw new UserException("'column' is required for 'value' dispatch");
             }
+
             return new ValueFunction();
-        } else if (splitFunction.equals("hash")) {
+        }
+        else if (splitFunction.equals("hash")) {
             if (column() == null) {
                 throw new UserException("'column' is required for 'hash' dispatch");
             }
+
             return new HashFunction(fileNumber());
-        } else if (splitFunction.equals("time")) {
+        }
+        else if (splitFunction.equals("time")) {
             if (column() == null) {
                 throw new UserException("'column' is required for 'time' dispatch");
             }
@@ -184,28 +221,36 @@ public class Dispatch extends ListFilesCommand {
             if (timeUnit() == null) {
                 throw new UserException("timePeriod is required for 'time' dispatch");
             }
+
             return new DateFunction(timeFormat(), TimeDimension.Period.valueOf(timeUnit().toUpperCase()));
-        } else if (splitFunction.equals("merge")) {
-            return new MergeFunction();
-        } else {
-            throw new UserException("Unknown dispatch function '" + splitFunction + "'.");
         }
+        else if (splitFunction.equals("merge")) {
+            return new MergeFunction();
+        }
+        throw new UserException("Unknown dispatch function '"
+                                + splitFunction + "'.");
     }
     private Format buildFormat(String function, CopyTask sampleTask) {
-        String defaultFormat = (function.equalsIgnoreCase("random") ? "line" : "csv");
+        String defaultFormat = function.equalsIgnoreCase("random")
+            ? "line"
+            : "csv";
         String format = getOptionValue("-input-file", defaultFormat);
 
         if (format.equalsIgnoreCase("auto")) {
             throw new NotImplementedException("Auto format is not yet implemented");
-        } else if (format.equalsIgnoreCase("csv")) {
-            String sep = getOptionValue("-input-separator", ",");
-            System.out.println("Use isep : ---" + sep + "---");
-            return new Format("csv").withParam("separator", sep);
-        } else if (format.equalsIgnoreCase("line")) {
-            return new Format("line");
-        } else {
-            throw new NotImplementedException("Format '" + format + "' is not implemented, use 'csv' or 'line'");
         }
+        else if (format.equalsIgnoreCase("csv")) {
+            String sep = getOptionValue("-input-separator", ",");
+            System.out.println("Use isep : ---" + sep + "---"); // FIXME: WTFF!
+
+            return new Format("csv").withParam("separator", sep);
+        }
+        else if (format.equalsIgnoreCase("line")) {
+            return new Format("line");
+        }
+        throw new NotImplementedException("Format '"
+                                          + format
+                                          + "' is not implemented, use 'csv' or 'line'");
     }
 
     // Attributes
