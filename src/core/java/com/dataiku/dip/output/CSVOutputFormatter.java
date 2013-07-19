@@ -71,6 +71,29 @@ public class CSVOutputFormatter extends StringOutputFormatter {
     @Override
     public void footer(ColumnFactory cf, Writer sb) throws IOException {
     }
+    
+    public static void appendEscapedAndQuoted(StringBuilder sb, String v, char sep, char quote, char escape) {
+        if (v != null) {
+            if (StringUtils.contains(v, sep)|| StringUtils.contains(v, quote)) {
+                sb.append(quote);
+                sb.append(StringUtils.replace(v, "" + quote, "" + escape + "" + quote));
+                sb.append(quote);
+            } else {
+                sb.append(v);
+            }
+        }
+    }
+    public static void appendEscapedAndQuoted(Writer wr, String v, char sep, char quote, char escape) throws IOException {
+        if (v != null) {
+            if (StringUtils.contains(v, sep)|| StringUtils.contains(v, quote)) {
+                wr.append(quote);
+                wr.append(StringUtils.replace(v, "" + quote, "" + escape + "" + quote));
+                wr.append(quote);
+            } else {
+                wr.append(v);
+            }
+        }
+    }
 
     private Schema outputSchema;
     private char delimiter;
