@@ -175,8 +175,7 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
             fact.close();
         }
         catch (IOException e) {
-            // FIXME: TODO Auto-generated catch block
-            e.printStackTrace();
+            error("Unexpected error while processing files", e, 2);
         }
     }
     @Override
@@ -192,18 +191,7 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
         return true;
     }
     @Override
-    protected void dstRoot(GeneralizedFile dst) { // FIXME: No, maybe
-                                                  // need to be empty
-        try {
-            if (!dst.exists()) {
-                dst.mkpath();
-            }
-        }
-        catch (IOException e) {
-            // FIXME: TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
+    protected void dstRoot(GeneralizedFile dst) {
         this.dst = dst;
     }
     @Override
