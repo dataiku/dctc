@@ -54,16 +54,7 @@ public class CSVOutputFormatter extends StringOutputFormatter {
         for (Column c : headerColumns) {
             String v = row.get(c);
             if (i++ > 0) sb.append(delimiter);
-            if (v != null && v.length() > 0) {
-                boolean needsEscape = v.indexOf('"') >= 0;
-                if (needsEscape) {
-                    sb.append('"');
-                    sb.append(StringUtils.replace(v, "\"", "\\\""));
-                    sb.append('"');
-                } else {
-                    sb.append(v);
-                }
-            }
+            appendEscapedAndQuoted(sb, v, delimiter, '"', '\\');
         }
         sb.append('\n');
     }
@@ -73,8 +64,9 @@ public class CSVOutputFormatter extends StringOutputFormatter {
     }
     
     public static void appendEscapedAndQuoted(StringBuilder sb, String v, char sep, char quote, char escape) {
-        if (v != null) {
-            if (StringUtils.contains(v, sep)|| StringUtils.contains(v, quote)) {
+        if (v != null && v.length() > 0) {
+            if (StringUtils.contains(v, sep)|| StringUtils.contains(v, quote) || StringUtils.contains(v, '\n') ||
+                    StringUtils.contains(v, '\r')) {
                 sb.append(quote);
                 sb.append(StringUtils.replace(v, "" + quote, "" + escape + "" + quote));
                 sb.append(quote);
@@ -84,8 +76,9 @@ public class CSVOutputFormatter extends StringOutputFormatter {
         }
     }
     public static void appendEscapedAndQuoted(Writer wr, String v, char sep, char quote, char escape) throws IOException {
-        if (v != null) {
-            if (StringUtils.contains(v, sep)|| StringUtils.contains(v, quote)) {
+        if (v != null && v.length() > 0)  {
+            if (StringUtils.contains(v, sep)|| StringUtils.contains(v, quote) || StringUtils.contains(v, '\n') ||
+                    StringUtils.contains(v, '\r')) {
                 wr.append(quote);
                 wr.append(StringUtils.replace(v, "" + quote, "" + escape + "" + quote));
                 wr.append(quote);
