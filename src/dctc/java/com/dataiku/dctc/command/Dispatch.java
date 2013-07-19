@@ -255,7 +255,6 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
         }
         else if (format.equalsIgnoreCase("csv")) {
             String sep = getOptionValue("-input-separator", ",");
-            System.out.println("Use isep : ---" + sep + "---"); // FIXME: WTFF!
 
             return new Format("csv").withParam("separator", sep);
         }
