@@ -28,6 +28,15 @@ import com.dataiku.dip.partitioning.TimeDimension;
 import com.dataiku.dip.utils.IndentedWriter;
 
 public class Dispatch extends ListFilesCommand { // FIXME: Why?
+    enum SplitFunctionNames {
+        HASH
+        , MERGE
+        , RANDOM
+        , TIME
+        , VALUE
+        ;
+    }
+
     public String tagline() {
         return "Dispatches the content of input files to output files.";
     }
@@ -90,15 +99,20 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
                 postfix += ".txt";
             }
         }
+
         return postfix;
     }
-    public String splitFunction() { // FIXME: Should return an
-                                    // enumeration element.
+    public SplitFunctionNames splitFunction() {
         if (splitFunction == null) {
-            splitFunction = getOptionValue("-function");
-
+            String fct = getOptionValue("-function").toLowerCase();
+            for (SplitFunctionNames name: SplitFunctionNames.values()) {
+                if (fct.equals(name.toString().toLowerCase())) {
+                    splitFunction = name;
+                    break;
+                }
+            }
             if (splitFunction == null) {
-                splitFunction = "random";
+                // FIXME: Error
             }
         }
 
@@ -205,9 +219,7 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
         return false;
     }
     private SplitFunction buildDispatchFunction() {
-        String splitFunction = splitFunction(); // FIXME: Should use
-                                                // an enumeration
-
+        SplitFunctionNames splitFunction = splitFunction();
         if (splitFunction.equals("random")) {
             return new RandomFunction(fileNumber());
         }
@@ -244,8 +256,8 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
         throw new UserException("Unknown dispatch function '"
                                 + splitFunction + "'.");
     }
-    private Format buildFormat(String function, CopyTask sampleTask) {
-        String defaultFormat = function.equalsIgnoreCase("random")
+    private Format buildFormat(SplitFunctionNames function, CopyTask sampleTask) {
+        String defaultFormat = function == SplitFunctionNames.RANDOM
             ? "line"
             : "csv";
         String format = getOptionValue("-input-file", defaultFormat);
@@ -272,7 +284,7 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
     private String prefix;
     private String postfix;
     private int fileNumber;
-    private String splitFunction;
+    private SplitFunctionNames splitFunction;
     private String timePeriod;
     private String column;
     private String timeFormat;
