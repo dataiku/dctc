@@ -92,7 +92,6 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
             }
             if (getOptionValue("-input-file") != null
                 && getOptionValue("-input-file").equalsIgnoreCase("csv")) {
-                // FIXME: if condition is weird
                 postfix += ".csv";
             }
             else {
@@ -112,7 +111,8 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
                 }
             }
             if (splitFunction == null) {
-                // FIXME: Error
+                error("Unknown function name: `" + fct + "'", 2);
+                throw new EndOfCommand();
             }
         }
 
