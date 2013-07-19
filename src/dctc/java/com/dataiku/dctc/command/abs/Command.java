@@ -316,7 +316,7 @@ public abstract class Command {
     protected List<String> getArgs() {
         return parser.getArgs();
     }
-    protected int getIntOption(char option, int defaultValue) {
+    protected int getIntOption(String option, int defaultValue) {
         if (hasOption(option)) {
             String val = getOptionValue(option);
             if (IntegerUtils.isNumeric(val)) {
@@ -331,6 +331,9 @@ public abstract class Command {
         else {
             return defaultValue;
         }
+    }
+    protected int getIntOption(char option, int defaultValue) {
+        return getIntOption("" + option, defaultValue);
     }
     protected String getLastPosition(String... opts) {
         String last = null;
