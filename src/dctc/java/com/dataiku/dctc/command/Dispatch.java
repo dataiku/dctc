@@ -208,42 +208,41 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
         return false;
     }
     private SplitFunction buildDispatchFunction() {
-        SplitFunctionNames splitFunction = splitFunction();
-        if (splitFunction.equals("random")) {
+        switch (splitFunction()) {
+        case RANDOM:
             return new RandomFunction(fileNumber());
-        }
-        else if (splitFunction.equals("value")) {
+        case VALUE:
             if (column() == null) {
-                throw new UserException("'column' is required for 'value' dispatch");
+                throw missingParam("column");
             }
 
             return new ValueFunction();
-        }
-        else if (splitFunction.equals("hash")) {
+
+        case HASH:
             if (column() == null) {
-                throw new UserException("'column' is required for 'hash' dispatch");
+                throw missingParam("column");
             }
 
             return new HashFunction(fileNumber());
-        }
-        else if (splitFunction.equals("time")) {
+        case TIME:
             if (column() == null) {
-                throw new UserException("'column' is required for 'time' dispatch");
+                throw missingParam("column");
             }
             if (timeFormat() == null) {
-                throw new UserException("timeFormat is required for 'time' dispatch");
+                throw missingParam("timeFormat");
             }
             if (timeUnit() == null) {
-                throw new UserException("timePeriod is required for 'time' dispatch");
+                throw missingParam("timePeriod");
             }
 
-            return new DateFunction(timeFormat(), TimeDimension.Period.valueOf(timeUnit().toUpperCase()));
-        }
-        else if (splitFunction.equals("merge")) {
+            return new DateFunction(timeFormat()
+                                    , TimeDimension.Period.valueOf(timeUnit().toUpperCase()));
+        case MERGE:
             return new MergeFunction();
+        default:
+            throw new UserException("Unknown dispatch function '"
+                                    + splitFunction + "'.");
         }
-        throw new UserException("Unknown dispatch function '"
-                                + splitFunction + "'.");
     }
     private Format buildFormat(SplitFunctionNames function, CopyTask sampleTask) {
         String defaultFormat = function == SplitFunctionNames.RANDOM
@@ -265,6 +264,10 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
         throw new NotImplementedException("Format '"
                                           + format
                                           + "' is not implemented, use 'csv' or 'line'");
+    }
+    private UserException missingParam(String paramName) {
+        return new UserException("'" + paramName + "'" + "is required for '"
+                                 + splitFunction + "dispatch function.");
     }
 
     // Attributes
