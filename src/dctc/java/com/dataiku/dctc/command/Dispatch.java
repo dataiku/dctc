@@ -240,8 +240,7 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
         case MERGE:
             return new MergeFunction();
         default:
-            throw new UserException("Unknown dispatch function '"
-                                    + splitFunction + "'.");
+            throw new Error("Never reached.");
         }
     }
     private Format buildFormat(SplitFunctionNames function, CopyTask sampleTask) {
