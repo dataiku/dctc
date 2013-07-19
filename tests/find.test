@@ -1,0 +1,22 @@
+#! /bin/sh
+
+. ./utils
+
+exit_status=0
+
+run_find() {
+    run 0 - "find $*" ../dctc-jar.sh find "$@" <<.
+$(find $@)
+.
+    if $fail; then
+        exit_status=1
+    fi
+}
+
+
+run_find .
+run_find /usr -name gcc
+run_find /bin -name bash
+run_find .. -type d
+
+echo $exit_status
