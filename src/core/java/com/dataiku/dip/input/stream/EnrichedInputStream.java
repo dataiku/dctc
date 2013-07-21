@@ -11,6 +11,7 @@ public interface EnrichedInputStream {
     public boolean repeatable();
     public long size() throws IOException;
     public Map<String, String> metas();
+    public String desc();
     public Partition getPartition();
     public InputStream stream() throws IOException;
     

@@ -12,9 +12,21 @@ public class BasicEnrichedInputStream implements EnrichedInputStream {
         this.in = in;
         this.size = size;
     }
+    public BasicEnrichedInputStream(InputStream in, long size, String desc) {
+        this(in, size);
+        this.desc = desc;
+    }
+    String desc = "InputStream";
+
     public boolean repeatable() {
         return false;
     }
+
+    @Override
+    public String desc() {
+        return desc;
+    }
+
     public long size() {
         return size;
     }
