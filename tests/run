@@ -39,10 +39,15 @@ done
 
 rapport_tail
 
-echo Make html report
-emacs23 --batch --visit "sum.org" --funcall org-export-as-html > /dev/null 2>&1
-echo Make pdf report
-emacs23 --batch --visit "sum.org" --funcall org-export-as-pdf > /dev/null 2>&1
+emacs=emacs23
+if which $emacs > /dev/null; then
+    echo Make html report
+    $emacs --batch --visit "sum.org" --funcall org-export-as-html > /dev/null 2>&1
+    echo Make pdf report
+    $emacs --batch --visit "sum.org" --funcall org-export-as-pdf > /dev/null 2>&1
+else
+    echo Don\'t generate html and pdf summary
+fi
 
 echo $pass/$nb tests pass.
 
