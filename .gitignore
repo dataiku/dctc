@@ -3,3 +3,4 @@
 /ivy/
 /lib/ivy/
 packager/dctc
+/tests/sum.*
