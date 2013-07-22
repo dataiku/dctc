@@ -40,7 +40,7 @@ public class HadoopUtils {
         conf.addResource(new Path(HadoopUtils.getCoreSiteLocation()));
         FileSystem fs =  FileSystem.get(conf);
         if (fs instanceof RawLocalFileSystem || fs  instanceof LocalFileSystem) {
-            throw new IOException("HDFS initialization returned a LocalFileSystem. Maybe you need to configure your HDFS location ?");
+            throw new IOException("HDFS initialization returned a LocalFileSystem. Maybe you need to configure your HDFS location?");
         }
         return fs;
     }
