@@ -58,8 +58,8 @@ public class Find extends Command {
     }
     /// Getters
     public Pattern pattern() {
-        if (pattern == null && hasOption("name")) { // FIXME: Should be name
-            pattern = Pattern.compile(getOptionValue("name")); // FIXME: Should be name
+        if (pattern == null && hasOption("name")) {
+            pattern = Pattern.compile(getOptionValue("name"));
         }
         return pattern;
     }
@@ -78,7 +78,6 @@ public class Find extends Command {
     // Protected
     @Override
     protected void setOptions(List<OptionAgregator> opts) {
-        // Fixme: Should use java option parser.
         opts.add(stdOpt("name", "Print the file only if its name contains the specified pattern.", "PATTERN"));
         opts.add(stdOpt("type", "Select the type of the file to print (d(irectory), f(ile), a(all)).", "c"));
     }
