@@ -3,20 +3,24 @@ package com.dataiku.dctc.clo;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dataiku.dctc.file.FileManipulation;
-
 public class WithArgOptionAgregator implements OptionAgregator {
-    public int inc(String optName, int position) {
-        int r = read(optName);
-        if (r != 0) {
+    public String inc(String optName, int position) {
+        return read(optName, 1);
+    }
+    public String inc(String optName, String argName, int position) {
+        String r = read(optName, argName, 1);
+        if (r != null && !r.isEmpty()) {
             this.position = position;
             ++count;
         }
         return r;
     }
-    public int dec(String optName, int position) {
-        int r = read(optName);
-        if (r != 0) {
+    public String dec(String optName, int position) {
+        return read(optName, -1);
+    }
+    public String dec(String optName, String argName, int position) {
+        String r = read(optName, argName, -1);
+        if (r != null && !r.isEmpty()) {
             this.position = position;
             --count;
         }
@@ -25,25 +29,48 @@ public class WithArgOptionAgregator implements OptionAgregator {
     public int count() {
         return count;
     }
-    public int read(String optName) {
-        String[] split = FileManipulation.split(optName, "=", 2);
+    public boolean match(String optName) {
         for (Option opt: opts) {
-            int r = opt.read(split[0]);
-            if (r != 0) {
-                String arg = opt.getArgument(optName.substring(r));
-                if (arg != null) {
-                    setArgument(arg);
-                    return optName.length();
-                }
-                else {
-                    return 0;
-                }
+            String r = opt.read(optName);
+            if (r == null || !r.isEmpty()) { // if needs more
+                                             // arguments or has read
+                                             // the optName
+                return true;
             }
         }
-        return 0;
+        return false;
     }
-    // Getters - Setter
+    public String read(String optName, int inc) {
+        for (Option opt: opts) {
+            String r = opt.read(optName);
+            if (r == null) {
+                return null; // Needs more argument
+            }
+            if (r.isEmpty()) {
+                continue;
+            }
+            setArgument(r);
+            count += inc;
 
+            return optName; // ok
+        }
+
+        return ""; // Not for me
+    }
+    public String read(String optName, String argName, int inc) {
+        for (Option opt: opts) {
+            String r = opt.read(optName, argName);
+            if (!r.isEmpty()) {
+                setArgument(r);
+                count += inc;
+                return r; // ok
+            }
+        }
+
+        return ""; // Not for me
+    }
+
+    // Getters - Setter
     public void addOpt(Option opt) {
         opts.add(opt);
     }
@@ -53,15 +80,6 @@ public class WithArgOptionAgregator implements OptionAgregator {
     }
     public List<Option> getOpts() {
         return opts;
-    }
-    public int has(String optName) {
-        for (Option opt: opts) {
-            int r = opt.read(optName);
-            if (r != 0) {
-                return r;
-            }
-        }
-        return 0;
     }
     public boolean hasArgument() {
         return true;
@@ -106,6 +124,7 @@ public class WithArgOptionAgregator implements OptionAgregator {
         setDescription(description);
         return this;
     }
+
     // Attributes
     private int count;
     private String description;

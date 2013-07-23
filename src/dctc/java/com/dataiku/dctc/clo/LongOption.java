@@ -3,22 +3,20 @@ package com.dataiku.dctc.clo;
 import com.dataiku.dctc.clo.Printer;
 
 public class LongOption implements Option {
-    public int read(String optName) {
+    public String read(String optName) {
         if (optName.equals(opt)) {
-            return optName.length();
+            return optName;
         }
-        return 0;
+        return "";
     }
-    public String getArgument(String optLine) {
-        if (optLine.startsWith("=")) {
-            return optLine.substring(1);
-        }
-        else {
-            return null;
-        }
+    public String read(String optName, String argName) {
+        return ""; // No arguments
     }
     public void print(Printer printer) {
         printer.add(opt);
+    }
+    public boolean print() {
+        return true;
     }
 
     // Getters - Setters

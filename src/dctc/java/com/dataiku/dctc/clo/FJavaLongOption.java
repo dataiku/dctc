@@ -1,11 +1,17 @@
 package com.dataiku.dctc.clo;
 
 public class FJavaLongOption implements Option {
-    public int read(String optName) {
+    public String read(String optName) {
         if (optName.equals(opt)) {
-            return optName.length();
+            return null;
         }
-        return 0;
+        return "";
+    }
+    public String read(String optName, String argName) {
+        if (optName.equals(opt)) {
+            return argName;
+        }
+        return "";
     }
     public String getArgument(String optLine) {
         if (optLine.startsWith("=")) {
@@ -17,6 +23,9 @@ public class FJavaLongOption implements Option {
     }
     public void print(Printer printer) {
         printer.add(opt);
+    }
+    public boolean print() {
+        return true;
     }
 
     // Getters - Setters
@@ -34,4 +43,3 @@ public class FJavaLongOption implements Option {
     // Attributes
     private String opt;
 }
-

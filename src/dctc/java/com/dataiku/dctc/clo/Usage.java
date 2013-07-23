@@ -10,7 +10,9 @@ public class Usage {
 
             { // Options
                 for (Option o: opt.getOpts()) {
-                    o.print(printer);
+                    if (o.print()) {
+                        o.print(printer);
+                    }
                 }
                 printer.endOptionListing();
             }

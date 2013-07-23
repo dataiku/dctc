@@ -18,11 +18,13 @@ import org.apache.log4j.Logger;
 import com.dataiku.dctc.Globbing;
 import com.dataiku.dctc.Main;
 import com.dataiku.dctc.clo.LongOption;
+import com.dataiku.dctc.clo.LongWithArgOption;
 import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.clo.Parser;
 import com.dataiku.dctc.clo.Printer;
 import com.dataiku.dctc.clo.PrinterFactory;
 import com.dataiku.dctc.clo.ShortOption;
+import com.dataiku.dctc.clo.ShortWithArgOption;
 import com.dataiku.dctc.clo.Usage;
 import com.dataiku.dctc.clo.WithArgOptionAgregator;
 import com.dataiku.dctc.clo.WithoutArgOptionAgregator;
@@ -88,7 +90,7 @@ public abstract class Command {
             printer.name(cmdname(), tagline());
         }
         { // synopsis
-            printer.synopsis(cmdname() , proto());
+            printer.synopsis(cmdname(), proto());
         }
         { // Description
             printer.description();
@@ -144,8 +146,8 @@ public abstract class Command {
                     gargs.addAll(Globbing.resolve(garg, false));
                 }
                 catch (IOException e) {
-                    error(garg.givenName(),
-                          "Couldn't resolve globbing for " + garg.givenName()
+                    error(garg.givenName()
+                          , "Couldn't resolve globbing for " + garg.givenName()
                           , e, 2);
                     gargs.add(garg);
                 }
@@ -230,7 +232,7 @@ public abstract class Command {
     }
     protected boolean hasOption(String optName) {
         for (OptionAgregator opt: opts) {
-            if (opt.has(optName) != 0) {
+            if (opt.match(optName)) {
                 return opt.count() != 0;
             }
         }
@@ -241,8 +243,8 @@ public abstract class Command {
     }
     protected String getOptionValue(String optName) {
         for (OptionAgregator opt: opts) {
-            if (opt.has(optName) != 0) {
-                if (opt.hasArgument()) {
+            if (opt.match(optName)) {
+                if (opt.count() != 0) {
                     return opt.getArgument();
                 }
                 else {
@@ -254,7 +256,7 @@ public abstract class Command {
     }
     protected int getPosition(String optName) {
         for (OptionAgregator opt: opts) {
-            if (opt.has(optName) != 0) {
+            if (opt.match(optName)) {
                 return opt.getPosition();
             }
         }
@@ -302,8 +304,8 @@ public abstract class Command {
                                         , String argName) {
         if (hasArg) {
             return new WithArgOptionAgregator()
-                .withOpt(new ShortOption().withOpt(shortOpts))
-                .withOpt(new LongOption().withOpt(longOpt))
+                .withOpt(new ShortWithArgOption().withOpt(shortOpts))
+                .withOpt(new LongWithArgOption().withOpt(longOpt))
                 .withDescription(descrip)
                 .withArgumentName(argName);
         } else {

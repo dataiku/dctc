@@ -10,62 +10,63 @@ public class Parser {
         for (int i = 0; i < args.length; ++i) {
             String arg = args[i];
             if (arg.isEmpty()) {
+                notOption.add("");
                 continue;
             }
-            else {
-                if (arg.charAt(0) == '-' && arg.length() > 1) {
-                    if (arg.length() == 2
-                        && arg.charAt(1) == '-') {
-                        // End of the option
-                        for (int j = i + 1; j < args.length; ++j) {
-                            notOption.add(args[j]);
-                        }
-                        return true;
+
+            if (arg.charAt(0) == '-' && arg.length() > 1) {
+                if (arg.length() == 2 && arg.charAt(1) == '-') {
+                    // End of the option
+                    for (int j = i + 1; j < args.length; ++j) {
+                        notOption.add(args[j]);
                     }
-                    else {
-                        // We are in case of option
-                        String optName = arg.substring(1);
-                        while (true) {
-                            if (optName.isEmpty()) {
+                    return true;
+                }
+
+                // We are in case of option
+                String optName = arg.substring(1);
+                while (true) {
+                    if (optName.isEmpty()) {
+                        break;
+                    }
+                    ++position;
+
+                    boolean br = false;
+                    for (OptionAgregator opt: opts) {
+                        String k = opt.dec(optName, position);
+                        if (k == null) {
+                            // Needs more arguments
+                            if (++i < args.length) {
+                                opt.dec(optName, args[i], position);
+                                optName = "";
+                                br = true;
                                 break;
                             }
-                            ++position;
-
-                            boolean br = false;
-                            for (OptionAgregator opt: opts) {
-                                int k = 0;
-
-                                if (opt.has(optName) == optName.length()
-                                    && opt.hasArgument()) {
-                                    // Need to put the next argument
-                                    if (i + 1 < args.length) {
-                                        optName += "=" + args[i + 1];
-                                        ++i;
-                                    }
-                                    else {
-                                        few(optName.substring(0, opt.has(optName)));
-                                    }
-                                }
-
-                                k = opt.dec(optName, position);
-
-                                if (k != 0) {
-                                    optName = optName.substring(k);
-                                    br = true;
-                                    break;
-                                }
-                            }
-                            if (!br) {
-                                unknown(optName);
+                            else {
+                                few(optName);
                                 return false;
                             }
                         }
 
+                        if (k.isEmpty()) {
+                            continue;
+                        }
+                        else {
+                            optName = optName.substring(k.length());
+                            br = true;
+                            break;
+                        }
+                    }
+
+                    if (!br) {
+                        unknown(optName);
+                        return false;
                     }
                 }
-                else {
-                    notOption.add(arg);
-                }
+
+            }
+            else {
+                notOption.add(arg);
             }
         }
         return true;

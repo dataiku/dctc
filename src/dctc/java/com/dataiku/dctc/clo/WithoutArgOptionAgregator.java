@@ -17,37 +17,39 @@ public class WithoutArgOptionAgregator implements OptionAgregator {
     public int count() {
         return count;
     }
-    public int inc(String optName, int position) {
-        int r = read(optName);
-        if (r != 0) {
-            ++count;
-            this.position = position;
-            return r;
-        }
-
-        return 0;
+    public String inc(String optName, int position) {
+        return read(optName, 1, position);
     }
-    public int dec(String optName, int position) {
-        int r = read(optName);
-        if (r != 0) {
-            --count;
-            this.position = position;
-            return r;
-        }
-
-        return 0;
+    public String inc(String optName, String argName, int position) {
+        throw new Error("Never reached.");
     }
-    public int has(String optName) {
-        return read(optName);
+    public String  dec(String optName, int position) {
+        return read(optName, -1, position);
     }
-    private int read(String optName) {
+    public String dec(String optName, String argName, int position) {
+        throw new Error("Never reached");
+    }
+    public boolean match(String optName) {
         for (Option opt: opts) {
-            int r = opt.read(optName);
-            if (r != 0) {
-                return r;
+            String r = opt.read(optName);
+            if (r == null || !r.isEmpty()) {
+                return true;
             }
         }
-        return 0;
+        return false;
+    }
+    public String read(String optName, int inc, int position) {
+        for (Option opt: opts) {
+            String r = opt.read(optName);
+            if (r.isEmpty()) {
+                continue;
+            }
+            count += inc;
+            this.position = position;
+            return r; // ok
+        }
+
+        return ""; // Not for me
     }
     public String getDescription() {
         return description;
