@@ -2,8 +2,12 @@ package com.dataiku.dctc.clo;
 
 import java.util.List;
 
+import com.dataiku.dctc.command.policy.YellPolicy;
+
 public class Usage {
-    public static void print(List<OptionAgregator> opts, Printer printer) {
+    public static void print(List<OptionAgregator> opts
+                             , Printer printer
+                             , YellPolicy yell) {
         printer.start();
         for (OptionAgregator opt: opts) {
             printer.newOption();
@@ -26,6 +30,6 @@ public class Usage {
                 printer.addDescription(opt.getDescription());
             }
         }
-        printer.print();
+        printer.print(yell);
     }
 }

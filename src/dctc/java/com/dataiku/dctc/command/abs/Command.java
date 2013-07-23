@@ -72,7 +72,7 @@ public abstract class Command {
         throw new NotImplementedException();
     }
     public void usage() {
-        usage(Main.getIndentedWriter());
+        usage(Main.getIndentedWriter(getYell()));
     }
     public void usage(IndentedWriter writer) {
         if (exitCode.getExitCode() != 0) {
@@ -95,7 +95,7 @@ public abstract class Command {
             longDescription(writer);
 
             // And display the options
-            Usage.print(opts, printer);
+            Usage.print(opts, printer, getYell());
             System.out.println();
         }
     }

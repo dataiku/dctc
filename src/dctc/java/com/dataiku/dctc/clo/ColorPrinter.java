@@ -7,6 +7,7 @@ import static com.dataiku.dctc.utils.Color.red;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dip.utils.IndentedWriter;
 
@@ -67,9 +68,9 @@ class ColorPrinter implements Printer {
         System.out.println();
     }
 
-    public void print() {
+    public void print(YellPolicy yell) {
         IndentedWriter indent = new IndentedWriter();
-        indent.setTermSize(Math.min(120, GlobalConf.getColNumber() - 2));
+        indent.setTermSize(Math.min(120, GlobalConf.getColNumber(yell) - 2));
 
         int maxLength = maxLength(sizes);
         indent.setIndentSize(maxLength + 4);

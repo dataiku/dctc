@@ -3,6 +3,7 @@ package com.dataiku.dctc.clo;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dip.utils.IndentedWriter;
 
@@ -56,9 +57,9 @@ class SimplePrinter implements Printer {
         System.out.println();
     }
 
-    public void print() {
+    public void print(YellPolicy yell) {
         IndentedWriter indent = new IndentedWriter();
-        indent.setTermSize(Math.min(120, GlobalConf.getColNumber() - 2));
+        indent.setTermSize(Math.min(120, GlobalConf.getColNumber(yell) - 2));
 
         int maxLength = maxLength(lines);
         indent.setIndentSize(maxLength + 4);
@@ -88,4 +89,3 @@ class SimplePrinter implements Printer {
     private List<String> lines;
     private List<String> descriptions;
 }
-

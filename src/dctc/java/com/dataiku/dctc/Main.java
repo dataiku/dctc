@@ -13,7 +13,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
-import com.dataiku.dctc.DCTCLog.Mode;
 import com.dataiku.dctc.command.AddAccount;
 import com.dataiku.dctc.command.Alias;
 import com.dataiku.dctc.command.Cat;
@@ -36,6 +35,8 @@ import com.dataiku.dctc.command.Sync;
 import com.dataiku.dctc.command.Tail;
 import com.dataiku.dctc.command.Version;
 import com.dataiku.dctc.command.abs.Command;
+import com.dataiku.dctc.command.policy.HowlPolicy;
+import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.configuration.StructuredConf;
 import com.dataiku.dctc.exception.UserException;
@@ -70,15 +71,15 @@ public class Main {
                                  "http://dctc.io"));
         System.exit(exitCode);
     }
-    public static IndentedWriter getIndentedWriter() {
+    public static IndentedWriter getIndentedWriter(YellPolicy yell) {
         IndentedWriter printer = new IndentedWriter();
         printer.setFirstLineIndentsize(2);
         printer.setIndentSize(2);
-        printer.setTermSize(Math.min(GlobalConf.getColNumber(), 80));
+        printer.setTermSize(Math.min(GlobalConf.getColNumber(yell), 80));
         return printer;
     }
-    private static void commandHelp(ExitCode exitCode, String command) {
-        IndentedWriter printer = getIndentedWriter();
+    private static void commandHelp(ExitCode exitCode, String command, YellPolicy yell) {
+        IndentedWriter printer = getIndentedWriter(yell);
         for (Command cmd: cmds.values()) {
             if (cmd.cmdname().equals(command)) {
                 commandHelp(cmd, printer);
@@ -162,8 +163,6 @@ public class Main {
         atExit();
         atBegin();
         try {
-            DCTCLog.setMode(Mode.STDERR);
-
             StructuredConf conf;
             try {
                 conf = new StructuredConf();
@@ -187,8 +186,9 @@ public class Main {
                 if (help(usercmd)) {
                     if (cmdargs.length > 0) {
                         ExitCode exit = new ExitCode();
+                        YellPolicy yell = new HowlPolicy().withOut(System.err);
                         for (String cmdarg: cmdargs) {
-                            commandHelp(exit, cmdarg);
+                            commandHelp(exit, cmdarg, yell);
                         }
                         System.exit(exit.getExitCode());
                     }

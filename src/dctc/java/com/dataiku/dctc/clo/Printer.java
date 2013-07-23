@@ -1,5 +1,7 @@
 package com.dataiku.dctc.clo;
 
+import com.dataiku.dctc.command.policy.YellPolicy;
+
 public interface Printer {
     public void start();
     public void newOption();
@@ -12,6 +14,5 @@ public interface Printer {
     public void description();
     public void synopsis(String cmdname, String syn);
     public void name(String cmdname, String tagline);
-
-    public void print();
+    public void print(YellPolicy yell);
 }

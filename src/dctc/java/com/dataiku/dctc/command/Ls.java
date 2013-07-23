@@ -344,7 +344,7 @@ public class Ls extends Command {
             for (int i = 0; i < nbCol; ++i) {
                 lineLength += colLength.get(i);
             }
-            if (lineLength <= GlobalConf.getColNumber()) {
+            if (lineLength <= GlobalConf.getColNumber(getYell())) {
                 break;
             }
             ++nbLine;
