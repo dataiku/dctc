@@ -28,9 +28,9 @@ import com.dataiku.dctc.file.FileBuilder.Protocol;
 public class S3File extends BucketBasedFile {
     public S3File(String path, AmazonS3 s3) {
         super(true);
-        path = FileManipulation.trimBegin(path, fileSeparator());
+        path = PathManip.trimBegin(path, fileSeparator());
         this.s3 = s3;
-        String[] split = FileManipulation.split(path, fileSeparator(), 2);
+        String[] split = PathManip.split(path, fileSeparator(), 2);
         this.bucket = split[0];
         this.path = split[1];
     }
@@ -52,12 +52,12 @@ public class S3File extends BucketBasedFile {
         grecursiveList = sons;
         glist = new ArrayList<S3File>();
         for (S3File s: sons) {
-            if (FileManipulation.isDirectSon(directoryPath, s.getAbsolutePath(), fileSeparator())) {
+            if (PathManip.isDirectSon(directoryPath, s.getAbsolutePath(), fileSeparator())) {
                 glist.add(s);
             }
         }
-        directoryPath = FileManipulation.trimBegin(directoryPath, "/");
-        String[] split = FileManipulation.split(directoryPath, fileSeparator(), 2);
+        directoryPath = PathManip.trimBegin(directoryPath, "/");
+        String[] split = PathManip.split(directoryPath, fileSeparator(), 2);
         this.bucket = split[0];
         this.path = split[1];
     }
@@ -67,7 +67,7 @@ public class S3File extends BucketBasedFile {
         this.s3 = s3;
         this.type = Type.FILE;
         this.objectSummary = objectSummary;
-        String[] split = FileManipulation.split(directoryPath, fileSeparator(), 2);
+        String[] split = PathManip.split(directoryPath, fileSeparator(), 2);
         this.bucket = split[0];
         this.path = split[1];
     }
@@ -87,7 +87,7 @@ public class S3File extends BucketBasedFile {
     public S3File createSubFile(String path, String separator) {
         /* If this file is resolved, and we already have the list,
          * then maybe we can reuse a storage object / type */
-        String subNameWithBucket = FileManipulation.concat(getAbsolutePath(),
+        String subNameWithBucket = PathManip.concat(getAbsolutePath(),
                                                            path, fileSeparator(), separator);
 
         if (type == Type.DIR && recursiveFileList != null) {
@@ -130,11 +130,11 @@ public class S3File extends BucketBasedFile {
         else if (isDirectory()) {
             glist = new ArrayList<S3File>();
             for (S3ObjectSummary f: recursiveFileList) {
-                if (FileManipulation.isDirectSon(path, f.getKey(), fileSeparator())) {
+                if (PathManip.isDirectSon(path, f.getKey(), fileSeparator())) {
                     glist.add(new S3File(f, s3));
                 }
                 else {
-                    String directSon = FileManipulation.getDirectSon(path, f.getKey(), fileSeparator());
+                    String directSon = PathManip.getDirectSon(path, f.getKey(), fileSeparator());
                     String son = "/" + bucket + "/" + directSon;
                     boolean br = false;
                     for (S3File file: glist) {
@@ -198,7 +198,7 @@ public class S3File extends BucketBasedFile {
                     break;
                 }
                 if (!contains(grecursiveList, parent)) {
-                    grecursiveList.add(new S3File(FileManipulation.concat(bucket
+                    grecursiveList.add(new S3File(PathManip.concat(bucket
                                                                           , parent
                                                                           , fileSeparator())
                                                   , s3
@@ -314,7 +314,7 @@ public class S3File extends BucketBasedFile {
     }
     @Override
     public boolean delete() throws IOException {
-        if (FileManipulation.getDepth(getAbsolutePath(), fileSeparator()) == 1) {
+        if (PathManip.getDepth(getAbsolutePath(), fileSeparator()) == 1) {
             // We have just the bucket.
             try {
                 for (S3File content: grecursiveList()) {
@@ -543,7 +543,7 @@ public class S3File extends BucketBasedFile {
             }
             if (grecursiveList != null) {
                 for (S3File e: grecursiveList) {
-                    if (FileManipulation.isSon(path, e.path, fileSeparator())) {
+                    if (PathManip.isSon(path, e.path, fileSeparator())) {
                         res.add(e);
                     }
                 }

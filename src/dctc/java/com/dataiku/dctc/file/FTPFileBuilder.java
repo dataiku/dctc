@@ -44,7 +44,7 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
             if (rawPath.isEmpty() || rawPath.equals("/")) {
                 throw new UserException("No account given for FTP, host is mandatory");
             }
-            String[/*host/path*/] path = FileManipulation.split(rawPath, "/", 2);
+            String[/*host/path*/] path = PathManip.split(rawPath, "/", 2);
 
             return build(path[0], "anonymous", "anonymous", path[1]);
         }
@@ -52,8 +52,8 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
             if (rawPath.isEmpty() || rawPath.equals("/")) {
                 throw new UserException("No account given for FTP, host is mandatory");
             }
-            String[/*host/path*/] path = FileManipulation.split(rawPath, "/", 2);
-            String[] accountChunks = FileManipulation.split(accountSettings, ":", 2);
+            String[/*host/path*/] path = PathManip.split(rawPath, "/", 2);
+            String[] accountChunks = PathManip.split(accountSettings, ":", 2);
 
             return build(path[0], accountChunks[0], accountChunks[1], path[1]);
         }
@@ -74,7 +74,7 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
     private FTPFile build(String host, String username, String password, String path) {
         int port = GlobalConstants.FTP_PORT;
         if (host.indexOf(":") != -1) {
-            String[/*port/host*/] splittedHost = FileManipulation.invSplit(host, ":", 2);
+            String[/*port/host*/] splittedHost = PathManip.invSplit(host, ":", 2);
             port = getCheckedPort(splittedHost[0]);
             host = splittedHost[1];
         }

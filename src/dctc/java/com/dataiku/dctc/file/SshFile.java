@@ -170,7 +170,7 @@ public class SshFile extends AbstractGFile {
             recursiveList = new ArrayList<SshFile>();
             recursiveList.add(this);
             String path = this.path.replaceAll("'", "\\'");
-            path = FileManipulation.trimEnd(path, "/");
+            path = PathManip.trimEnd(path, "/");
             path = path.replaceAll("#", "\\#");
             list(recursiveList, realpath + "; find -- \"" + path + "\"| grep -v \"^" + path + "$\" | " + format);
         }
@@ -188,7 +188,7 @@ public class SshFile extends AbstractGFile {
             throw new RuntimeException("Unexpected error", e);
         }
 
-        String childPathWithoutHost = FileManipulation.concat(path, subpath, fileSeparator(), fileSeparator);
+        String childPathWithoutHost = PathManip.concat(path, subpath, fileSeparator(), fileSeparator);
 
         if (exists != null && exists == false) {
             return newNotFound(this, childPathWithoutHost);
@@ -203,7 +203,7 @@ public class SshFile extends AbstractGFile {
 
             return newNotFound(this, childPathWithoutHost);
         }
-        return new SshFile(FileManipulation.concat(path, subpath,
+        return new SshFile(PathManip.concat(path, subpath,
                                                    fileSeparator(), fileSeparator), this);
     }
     @Override
@@ -272,7 +272,7 @@ public class SshFile extends AbstractGFile {
     }
     @Override
     public void mkpath() throws IOException {
-        String mkdirPath = FileManipulation.getPath(path, fileSeparator());
+        String mkdirPath = PathManip.getPath(path, fileSeparator());
         if (! exec("mkdir -p '" + mkdirPath + "'; echo $?").equals("0\n")) {
             throw new IOException("Failed to mkdir " + path);
         }

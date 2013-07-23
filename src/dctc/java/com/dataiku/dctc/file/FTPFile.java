@@ -22,7 +22,7 @@ public class FTPFile extends AbstractGFile {
         this.username = username;
         this.password = password;
         this.port = port;
-        this.path = FileManipulation.trimEnd(path, fileSeparator());
+        this.path = PathManip.trimEnd(path, fileSeparator());
         if (this.path.length() == 0) {
             this.path = "/";
         }
@@ -33,7 +33,7 @@ public class FTPFile extends AbstractGFile {
         this.username = username;
         this.password = password;
         this.port = port;
-        this.path = FileManipulation.trimEnd(path, fileSeparator());
+        this.path = PathManip.trimEnd(path, fileSeparator());
         if (this.path.length() == 0) {
             this.path = "/";
         }
@@ -69,12 +69,12 @@ public class FTPFile extends AbstractGFile {
     @Override
     public FTPFile createSubFile(String path, String separator) {
         return new FTPFile(server, username, password,
-                           FileManipulation.concat(this.path, path, fileSeparator(), separator),
+                           PathManip.concat(this.path, path, fileSeparator(), separator),
                            port);
     }
     public FTPFile createSubFile(String path, String separator, org.apache.commons.net.ftp.FTPFile file) {
         return new FTPFile(server, username, password,
-                           FileManipulation.concat(this.path, path, fileSeparator(), separator),
+                           PathManip.concat(this.path, path, fileSeparator(), separator),
                            port, file);
     }
 
@@ -135,7 +135,7 @@ public class FTPFile extends AbstractGFile {
     }
     @Override
     public String getAbsoluteAddress() {
-        return FileManipulation.concat(getProtocol() + "://" + username + ":*****@"
+        return PathManip.concat(getProtocol() + "://" + username + ":*****@"
                                        + server, path, fileSeparator());
     }
     @Override
@@ -192,7 +192,7 @@ public class FTPFile extends AbstractGFile {
     }
     @Override
     public String givenName() {
-        return "ftp://" + FileManipulation.concat(server, path, fileSeparator());
+        return "ftp://" + PathManip.concat(server, path, fileSeparator());
     }
     @Override
     public String givenPath() {

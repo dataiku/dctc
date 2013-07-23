@@ -55,7 +55,7 @@ public abstract class BucketBasedFile extends AbstractGFile {
     }
     @Override
     public String givenName() {
-        return getProtocol() + "://" + FileManipulation.concat(bucket, path, fileSeparator());
+        return getProtocol() + "://" + PathManip.concat(bucket, path, fileSeparator());
     }
     @Override
     public String givenPath() {
@@ -63,7 +63,7 @@ public abstract class BucketBasedFile extends AbstractGFile {
     }
     @Override
     public String getAbsolutePath() {
-        return fileSeparator() + FileManipulation.concat(bucket, path, fileSeparator());
+        return fileSeparator() + PathManip.concat(bucket, path, fileSeparator());
     }
     @Override
     public boolean hasAcl() {

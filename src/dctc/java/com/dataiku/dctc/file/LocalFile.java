@@ -50,7 +50,7 @@ public class LocalFile extends AbstractGFile {
             return createInstanceFor(path);
         }
         else {
-            return createInstanceFor(FileManipulation.concat(fileName, path, fileSeparator()));
+            return createInstanceFor(PathManip.concat(fileName, path, fileSeparator()));
         }
     }
 
@@ -114,7 +114,7 @@ public class LocalFile extends AbstractGFile {
 //                throw new IOException(givenName() + ": Access denied.");
             }
             for (String file: files) {
-                l.add(FileManipulation.concat(fileName, file, fileSeparator()));
+                l.add(PathManip.concat(fileName, file, fileSeparator()));
             }
         }
         else if (isFile()) {

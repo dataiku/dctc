@@ -60,13 +60,13 @@ public class HttpFile extends AbstractGFile {
                         list.add(create(href.substring(7)));
                     }
                     else if (!href.startsWith("http://")) {
-                        list.add(create(FileManipulation.concat(path, href, "/")));
+                        list.add(create(PathManip.concat(path, href, "/")));
                     }
                 }
                 else {
                     if (!href.startsWith("//")) {
-                        if (FileManipulation.getDepth(path, "/") < 1) {
-                            list.add(create(FileManipulation.concat(path, href, "/")));
+                        if (PathManip.getDepth(path, "/") < 1) {
+                            list.add(create(PathManip.concat(path, href, "/")));
                         }
                     }
                 }

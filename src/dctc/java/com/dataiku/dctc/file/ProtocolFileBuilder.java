@@ -61,10 +61,10 @@ public abstract class ProtocolFileBuilder {
         if (defaultPath.isEmpty()) {
             return protocolData;
         }
-        if (FileManipulation.isAbsolute(protocolData, fileSeparator())) {
+        if (PathManip.isAbsolute(protocolData, fileSeparator())) {
             return protocolData;
         }
-        return FileManipulation.concat(defaultPath, protocolData, fileSeparator());
+        return PathManip.concat(defaultPath, protocolData, fileSeparator());
     }
     protected UserException invalidAccountSettings(String account) {
         return new UserException(scat("For the protocol", getProtocol()

@@ -57,7 +57,7 @@ public class HdfsFile extends AbstractGFile {
     }
     @Override
     public HdfsFile createSubFile(String path, String separator) {
-        return createInstanceFor(FileManipulation.concat(this.path,
+        return createInstanceFor(PathManip.concat(this.path,
                                                          path,
                                                          fileSeparator(),
                                                          separator));
@@ -100,7 +100,7 @@ public class HdfsFile extends AbstractGFile {
         }
         else {
             for (FileStatus st: status) {
-                list.add(FileManipulation.concat(path, st.getPath().getName(), fileSeparator()));
+                list.add(PathManip.concat(path, st.getPath().getName(), fileSeparator()));
             }
             return list;
         }
@@ -118,7 +118,7 @@ public class HdfsFile extends AbstractGFile {
             while (!task.empty()) {
                 FileStatus status = task.pop();
                 Path path = status.getPath().getParent();
-                recursiveList.add(FileManipulation.concat(path == null ? "" : path.toString().substring(7), status.getPath().getName(), fileSeparator()));
+                recursiveList.add(PathManip.concat(path == null ? "" : path.toString().substring(7), status.getPath().getName(), fileSeparator()));
                 if (status.isDir()) {
                     for (FileStatus st: fileSystem.listStatus(status.getPath())) {
                         task.add(st);

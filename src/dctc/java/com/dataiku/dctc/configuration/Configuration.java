@@ -18,7 +18,7 @@ import java.util.Set;
 import org.apache.commons.io.IOUtils;
 
 import com.dataiku.dctc.exception.UserException;
-import com.dataiku.dctc.file.FileManipulation;
+import com.dataiku.dctc.file.PathManip;
 import com.dataiku.dip.utils.Params;
 import com.dataiku.dip.utils.StreamUtils;
 
@@ -112,7 +112,7 @@ public class Configuration {
                             stream.close();
                             throw ue("variables must be defined in a protocol.");
                         }
-                        String[] split = FileManipulation.split(line, "=", 2);
+                        String[] split = PathManip.split(line, "=", 2);
 
                         protocol.put(split[0].trim(), split[1].trim());
                     }

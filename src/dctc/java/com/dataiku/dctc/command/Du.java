@@ -6,7 +6,7 @@ import java.util.List;
 import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.display.Size;
-import com.dataiku.dctc.file.FileManipulation;
+import com.dataiku.dctc.file.PathManip;
 import com.dataiku.dctc.file.GFile;
 import com.dataiku.dctc.file.LocalFile;
 import com.dataiku.dip.utils.IndentedWriter;
@@ -64,7 +64,7 @@ public class Du extends Command {
             for (GFile son: arg.grecursiveList()) {
                 size += son.getSize();
                 if ((all() || son.isDirectory())
-                    && FileManipulation.isDirectSon(arg.givenName(), son.givenName(), "/")
+                    && PathManip.isDirectSon(arg.givenName(), son.givenName(), "/")
                     && !first) {
                     perform(son, depth + 1);
                 }

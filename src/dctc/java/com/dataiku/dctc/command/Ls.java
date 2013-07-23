@@ -18,7 +18,7 @@ import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.display.Size;
 import com.dataiku.dctc.file.Acl;
 import com.dataiku.dctc.file.BucketBasedFile;
-import com.dataiku.dctc.file.FileManipulation;
+import com.dataiku.dctc.file.PathManip;
 import com.dataiku.dctc.file.GFile;
 import com.dataiku.dip.utils.IndentedWriter;
 import com.dataiku.dip.utils.PrettyString;
@@ -104,7 +104,7 @@ public class Ls extends Command {
                 GFile dir = sons.get(0); sons.remove(0);
                 for (int i = 0; i < sons.size(); ++i) {
                     GFile son = sons.get(i);
-                    if (FileManipulation.isDirectSon(dir.givenName(), son.givenName(), dir.fileSeparator())) {
+                    if (PathManip.isDirectSon(dir.givenName(), son.givenName(), dir.fileSeparator())) {
                         print.add(new PrintTask(son, son.getFileName()));
                         if (son.isFile()) {
                             sons.remove(i);
@@ -283,7 +283,7 @@ public class Ls extends Command {
         if (humanReadable()) {
             DateFormat dateFormat = new SimpleDateFormat("yyyy MMM d h:mm");
             String[/*year/month/day/hour/minutes*/] split
-                = FileManipulation.split(dateFormat.format(date), " ", 4);
+                = PathManip.split(dateFormat.format(date), " ", 4);
             System.out.print(split[0] + " " + split[1]);
             if (split[2].length() == 1) {
                 System.out.print("  ");
@@ -513,7 +513,7 @@ public class Ls extends Command {
             }
             String[] colorSplit = envColor.split(":");
             for (String c: colorSplit) {
-                String[] split = FileManipulation.split(c, "=", 2);
+                String[] split = PathManip.split(c, "=", 2);
                 if (split[0].startsWith("*")) {
                     extensionColor.put(split[0].substring(1), split[1]);
                 }

@@ -8,7 +8,7 @@ import java.util.List;
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.copy.CopyTask;
-import com.dataiku.dctc.file.FileManipulation;
+import com.dataiku.dctc.file.PathManip;
 import com.dataiku.dctc.file.GFile;
 
 public abstract class ListFilesCommand extends Command {
@@ -190,10 +190,10 @@ public abstract class ListFilesCommand extends Command {
     }
     private void addQueue(GFile root, GFile src,
                           GFile dst, boolean mergeRoot) {
-        String dstRoot = FileManipulation.getSonPath(root.givenName(), src.givenName(), root.fileSeparator());
+        String dstRoot = PathManip.getSonPath(root.givenName(), src.givenName(), root.fileSeparator());
 
         if (!mergeRoot) {
-            dstRoot = FileManipulation.concat(root.getFileName(), dstRoot, root.fileSeparator());
+            dstRoot = PathManip.concat(root.getFileName(), dstRoot, root.fileSeparator());
         }
 
         addQueue(src, dst, dstRoot);

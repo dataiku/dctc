@@ -4,7 +4,7 @@ import static com.dataiku.dip.utils.PrettyString.quoted;
 
 import org.apache.commons.lang.StringUtils;
 
-public class FileManipulation {
+public class PathManip {
     public static String extension(String file,
                                    String extensionSeparator) {
         int dot = file.lastIndexOf(extensionSeparator);

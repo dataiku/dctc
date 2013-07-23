@@ -40,7 +40,7 @@ public class GSFile extends BucketBasedFile {
     private void __init(String userMail, String keyPath, String path) {
         this.userMail = userMail;
         this.keyPath = keyPath;
-        String[] split = FileManipulation.split(path, fileSeparator(), 2);
+        String[] split = PathManip.split(path, fileSeparator(), 2);
         this.bucket = split[0];
         this.path = split[1];
     }
@@ -96,7 +96,7 @@ public class GSFile extends BucketBasedFile {
         this.grecursiveList = children;
         this.list = new ArrayList<GSFile>();
         for (GSFile child: children) {
-            if (FileManipulation.isDirectSon(path, child.path, fileSeparator())) {
+            if (PathManip.isDirectSon(path, child.path, fileSeparator())) {
                 list.add(child);
             }
         }
@@ -143,7 +143,7 @@ public class GSFile extends BucketBasedFile {
     @Override
     public GSFile createSubFile(String path, String separator) throws IOException {
         /* If this file is resolved, and we already have the list, then maybe we can reuse a storage object / type */
-        String subName = FileManipulation.concat(getAbsolutePath(),
+        String subName = PathManip.concat(getAbsolutePath(),
                                                  path,
                                                  fileSeparator(),
                                                  separator);
@@ -193,10 +193,10 @@ public class GSFile extends BucketBasedFile {
         }
         else if (isDirectory()) {
             for (StorageObject f: recursiveFileList) {
-                if (FileManipulation.isDirectSon(path, f.getName(), fileSeparator())) {
+                if (PathManip.isDirectSon(path, f.getName(), fileSeparator())) {
                     list.add(file(f));
                 } else {
-                    String directSon = FileManipulation.getDirectSon(path, f.getName(), fileSeparator());
+                    String directSon = PathManip.getDirectSon(path, f.getName(), fileSeparator());
                     if (!contains(list, directSon)) {
                         list.add(createPath(directSon));
                     }
@@ -296,7 +296,7 @@ public class GSFile extends BucketBasedFile {
         InputStreamContent mediaContent = new InputStreamContent("text/plain",
                                                                  new BufferedInputStream(contentStream));
 
-        String url = "http://storage.googleapis.com/" + URLEncoder.encode(FileManipulation.concat(bucket, path, fileSeparator()), "UTF-8");
+        String url = "http://storage.googleapis.com/" + URLEncoder.encode(PathManip.concat(bucket, path, fileSeparator()), "UTF-8");
 
         initRequestFactory();
         HttpRequest req = requestFactory.buildPutRequest(new GenericUrl(url), mediaContent);
@@ -473,7 +473,7 @@ public class GSFile extends BucketBasedFile {
 
                 if (objs != null) {
                     for(StorageObject o: objs) {
-                        if (FileManipulation.isSon(path, o.getName(), fileSeparator())) {
+                        if (PathManip.isSon(path, o.getName(), fileSeparator())) {
                             recursiveFileList.add(o);
                         }
                     }
@@ -498,7 +498,7 @@ public class GSFile extends BucketBasedFile {
     }
 
     private GenericUrl url() throws UnsupportedEncodingException {
-        return new GenericUrl("https://storage.googleapis.com/" + URLEncoder.encode(FileManipulation.concat(bucket, path, "/"), "UTF-8"));
+        return new GenericUrl("https://storage.googleapis.com/" + URLEncoder.encode(PathManip.concat(bucket, path, "/"), "UTF-8"));
     }
     @Override
     public Acl getAcl() throws IOException {
@@ -541,7 +541,7 @@ public class GSFile extends BucketBasedFile {
             }
             if (grecursiveList != null) {
                 for (GSFile e: grecursiveList) {
-                    if (FileManipulation.isSon(path, e.path, fileSeparator())) {
+                    if (PathManip.isSon(path, e.path, fileSeparator())) {
                         res.add(e);
                     }
                 }

@@ -14,7 +14,7 @@ import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.copy.CopyTask;
 import com.dataiku.dctc.copy.SimpleCopyTaskRunnableFactory;
-import com.dataiku.dctc.file.FileManipulation;
+import com.dataiku.dctc.file.PathManip;
 import com.dataiku.dctc.file.GFile;
 import com.dataiku.dctc.file.LocalFile;
 import com.dataiku.dip.utils.DKUtils;
@@ -67,7 +67,7 @@ public class Edit extends Command {
                 }
                 else {
                     String fileName = f.getFileName() + "-tmp";
-                    String extension = FileManipulation.extension(fileName);
+                    String extension = PathManip.extension(fileName);
                     if (extension.isEmpty()) {
                         extension = "empty";
                     }

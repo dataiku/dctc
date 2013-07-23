@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.dataiku.dctc.file.FileManipulation;
+import com.dataiku.dctc.file.PathManip;
 import com.dataiku.dip.utils.StreamUtils;
 
 public class SshConfig {
@@ -38,10 +38,10 @@ public class SshConfig {
                     hostParam = get(currentHost);
                 }
                 else {
-                    String[/*param/value*/] parameter = FileManipulation.split(line, " ", 2,
+                    String[/*param/value*/] parameter = PathManip.split(line, " ", 2,
                                                                                false);
                     if (parameter[1] == null) {
-                        parameter = FileManipulation.split(line, "	", 2, false);
+                        parameter = PathManip.split(line, "	", 2, false);
                     }
                     if (parameter[1] == null) {
                         throw new IOException(scat("dctc ssh config:"

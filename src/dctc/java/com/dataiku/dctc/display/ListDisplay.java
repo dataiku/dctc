@@ -10,14 +10,17 @@ class ListDisplay extends AbstractThreadedDisplay {
         if (task.isDone()) {
             try {
                 if (task.getException() != null) {
-                    System.out.print("failed: ");
+                    System.out.print("failed: "); // FIXME
                 }
                 System.out.println(task.print());
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 System.out.println(task.getInputFile().givenName());
             }
+
             return true;
         }
+
         return false;
     }
 }

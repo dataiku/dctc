@@ -31,7 +31,7 @@ public class SshFileBuilder extends ProtocolFileBuilder {
     @Override
     public synchronized GFile buildFile(String account, String rawPath) {
         if (account == null) {
-            String[] hostPath = FileManipulation.split(rawPath, ":", 2);
+            String[] hostPath = PathManip.split(rawPath, ":", 2);
             Params p = getBank().getAccountParamsIfExists(getProtocol().getCanonicalName(), account);
             return new SshFile(sshConfig, hostPath[0], hostPath[1], p);
         }
@@ -41,7 +41,7 @@ public class SshFileBuilder extends ProtocolFileBuilder {
             if (validateAccountParams(account, p)) {
                 throw invalidAccountSettings(account);
             }
-            String[] path = FileManipulation.split(rawPath, ":", 2, false);
+            String[] path = PathManip.split(rawPath, ":", 2, false);
             if (path[0].isEmpty()) {
                 path[0] = p.getMandParam("host");
             }
@@ -52,9 +52,9 @@ public class SshFileBuilder extends ProtocolFileBuilder {
             return new SshFile(sshConfig, path[0], path[1], p);
         }
         else {
-            String[] user = FileManipulation.split(account, ":", 2, false);
-            String[] path = FileManipulation.split(rawPath, ":", 2);
-            if (FileManipulation.contains(path[0], "[")) {
+            String[] user = PathManip.split(account, ":", 2, false);
+            String[] path = PathManip.split(rawPath, ":", 2);
+            if (PathManip.contains(path[0], "[")) {
                 throw new IllegalArgumentException("Doesn't manage ipv6 address");
             }
             if (path[0].isEmpty()) {

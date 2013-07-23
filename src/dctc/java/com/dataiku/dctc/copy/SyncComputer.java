@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.dataiku.dctc.file.FileManipulation;
+import com.dataiku.dctc.file.PathManip;
 import com.dataiku.dctc.file.GFile;
 
 public class SyncComputer {
@@ -125,12 +125,12 @@ public class SyncComputer {
                         if (subfile.givenName().equals(source.givenName())) {
                             continue;
                         }
-                        String dstRoot = FileManipulation.getSonPath(source.givenName(),
+                        String dstRoot = PathManip.getSonPath(source.givenName(),
                                                                      subfile.givenName(),
                                                                      source.fileSeparator());
                         if (includeLastPathElementInTarget &&
                             (target.exists() || sources.size() > 1)) {
-                            dstRoot = FileManipulation.concat(source.getFileName(),
+                            dstRoot = PathManip.concat(source.getFileName(),
                                                               dstRoot, source.fileSeparator());
                         }
                         addCandidate(subfile, target, dstRoot);

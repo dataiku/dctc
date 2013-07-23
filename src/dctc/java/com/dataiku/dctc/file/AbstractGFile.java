@@ -45,11 +45,11 @@ public abstract class AbstractGFile implements GFile {
     }
     @Override
     public final boolean isHidden() throws IOException {
-        return FileManipulation.isHidden(getAbsolutePath(), fileSeparator());
+        return PathManip.isHidden(getAbsolutePath(), fileSeparator());
     }
     @Override
     public final boolean isTempFile() throws IOException {
-        return FileManipulation.isTempFile(getAbsolutePath(), fileSeparator());
+        return PathManip.isTempFile(getAbsolutePath(), fileSeparator());
     }
     @Override
     public boolean isEmpty() throws IOException {
@@ -60,7 +60,7 @@ public abstract class AbstractGFile implements GFile {
     }
     @Override
     public final String getFileName() {
-        return FileManipulation.getFileName(givenPath(), fileSeparator());
+        return PathManip.getFileName(givenPath(), fileSeparator());
     }
     @Override
     public String getAbsoluteAddress() {
@@ -76,7 +76,7 @@ public abstract class AbstractGFile implements GFile {
     }
     @Override
     public final String pathToFile() throws IOException {
-        return FileManipulation.getPath(getAbsolutePath(), fileSeparator());
+        return PathManip.getPath(getAbsolutePath(), fileSeparator());
     }
 
     @Override
@@ -157,7 +157,7 @@ public abstract class AbstractGFile implements GFile {
 
     // Protected methods
     protected String clean(String path) {
-        if (FileManipulation.isAbsolute(path, absolutePattern())) {
+        if (PathManip.isAbsolute(path, absolutePattern())) {
             return getProtocol() + ":/" + path;
         }
         else {

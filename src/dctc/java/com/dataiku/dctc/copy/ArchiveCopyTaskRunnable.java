@@ -6,7 +6,7 @@ import java.io.OutputStream;
 
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.archive.OutputArchiveEntry;
-import com.dataiku.dctc.file.FileManipulation;
+import com.dataiku.dctc.file.PathManip;
 import com.dataiku.dctc.file.GFile;
 
 public class ArchiveCopyTaskRunnable extends CopyTaskRunnable {
@@ -59,7 +59,7 @@ public class ArchiveCopyTaskRunnable extends CopyTaskRunnable {
             return task.src.getFileName();
         }
         else {
-            return FileManipulation.makeRelative(task.dstFileName,
+            return PathManip.makeRelative(task.dstFileName,
                                                  task.src.absolutePattern());
         }
     }

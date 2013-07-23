@@ -3,7 +3,7 @@ package com.dataiku.dctc.clo;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dataiku.dctc.file.FileManipulation;
+import com.dataiku.dctc.file.PathManip;
 
 public class WithArgOptionAgregator implements OptionAgregator {
     public int inc(String optName, int position) {
@@ -26,7 +26,7 @@ public class WithArgOptionAgregator implements OptionAgregator {
         return count;
     }
     public int read(String optName) {
-        String[] split = FileManipulation.split(optName, "=", 2);
+        String[] split = PathManip.split(optName, "=", 2);
         for (Option opt: opts) {
             int r = opt.read(split[0]);
             if (r != 0) {

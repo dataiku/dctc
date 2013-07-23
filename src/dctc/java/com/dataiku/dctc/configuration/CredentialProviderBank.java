@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.dataiku.dctc.exception.UserException;
-import com.dataiku.dctc.file.FileManipulation;
+import com.dataiku.dctc.file.PathManip;
 import com.dataiku.dip.utils.Params;
 
 public class CredentialProviderBank {
@@ -33,7 +33,7 @@ public class CredentialProviderBank {
             String value = setting.getValue();
 
             if (key.contains(".")) {
-                String[/*user/option*/] opt = FileManipulation.split(key, ".", 2);
+                String[/*user/option*/] opt = PathManip.split(key, ".", 2);
                 if (firstAccount == null) {
                     firstAccount = opt[0];
                 }
