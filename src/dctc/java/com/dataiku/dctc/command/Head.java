@@ -36,7 +36,9 @@ public class Head extends Command {
             .withIsLineAlgo(isLine())
             .withYell(getYell());
 
-        CatRunner runner = new CatRunner();
+        CatRunner runner = new CatRunner()
+            .withYell(getYell());
+
         if (args.size() > 1 && !hasOption("-quiet")) {
             runner.setHeader(new AlwaysCatHeaderSelector());
         }

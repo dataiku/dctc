@@ -40,7 +40,8 @@ public class Cat extends Command {
                                 || hasOption('t'));
 
         CatRunner runner = new CatRunner()
-            .withHeader(new NeverCatHeaderSelector());
+            .withHeader(new NeverCatHeaderSelector())
+            .withYell(getYell());
         runner.perform(args, fact, getExitCode(), false);
     }
     @Override
