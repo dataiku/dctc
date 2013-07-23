@@ -5,10 +5,18 @@ rapport_head
 
 to_test='*.test'
 res() {
-    echo -e "\r[`tput setaf $1`$2`tput init`"
+    if [ "x$-" = "x" ]; then
+        echo -e "\r[$2"
+    else
+        echo -e "\r[`tput setaf $1`$2`tput init`"
+    fi
 }
 full_res() {
-    echo -e "\r[`tput setaf $1`$2`tput init`] $3"
+    if [ "x$-" = "x" ]; then
+        echo -e "\r[$2] $3"
+    else
+        echo -e "\r[`tput setaf $1`$2`tput init`] $3"
+    fi
 }
 nb=0
 pass=0
