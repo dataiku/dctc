@@ -16,7 +16,11 @@ public class SplitProcessorOutput implements ProcessorOutput {
     @Override
     public void lastRowEmitted() throws Exception {
     }
+    public StreamColumnFactory getColumnFactory() {
+        return columnFactory;
+    }
 
-     StreamColumnFactory columnFactory = new StreamColumnFactory();
+    // Attributes
+    private StreamColumnFactory columnFactory = new StreamColumnFactory();
     private SplitStreamFactory factory;
 }

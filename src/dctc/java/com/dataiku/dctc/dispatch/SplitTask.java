@@ -38,9 +38,16 @@ public class SplitTask extends CopyTaskRunnable {
         else {
             realStream = countable = new CountingInputStream(in.inputStream());
         }
-        GeneralizedFileInputSplit inputStream = new GeneralizedFileInputSplit(in, realStream);
+        GeneralizedFileInputSplit inputStream
+            = new GeneralizedFileInputSplit(in, realStream);
         try {
-            formatExtractor.run(inputStream, out, null, out.columnFactory, new StreamRowFactory(), null, null);
+            formatExtractor.run(inputStream
+                                , out
+                                , null
+                                , out.getColumnFactory()
+                                , new StreamRowFactory()
+                                , null
+                                , null);
         }
         catch (Exception e) {
             throw new IOException("Error while extracting", e);

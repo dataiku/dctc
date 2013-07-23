@@ -28,9 +28,13 @@ public class SplitStreamFactory {
         public OutputFormatter outputFormatter;
     }
 
-    public SplitStreamFactory(GFile dir, String prefix,
-            String suffix, SplitFunction fct, String selectedColumn, Format inputFormat,
-            boolean compress) {
+    public SplitStreamFactory(GFile dir
+                              , String prefix
+                              , String suffix
+                              , SplitFunction fct
+                              , String selectedColumn
+                              , Format inputFormat
+                              , boolean compress) {
         this.dir = dir;
         this.prefix = prefix;
         this.suffix = suffix;
@@ -42,30 +46,38 @@ public class SplitStreamFactory {
 
     // Called under lock, no need to relock
     private Output get(ColumnFactory sourceCF, Row row) throws IOException {
-        String splitIndex = fct.split(row, selectedColumn  == null ?  null : sourceCF.column(selectedColumn));
-
+        String splitIndex = fct.split(row, selectedColumn  == null
+                                      ?  null
+                                      : sourceCF.column(selectedColumn));
         Output out = outputStreams.get(splitIndex);
+
         if (out == null) {
             out = newStream(splitIndex);
             out.cf = sourceCF;
             outputStreams.put(splitIndex, out);
             out.outputFormatter.header(sourceCF, out.outputStream);
         }
+
         return out;
     }
 
     // Called when we see a new file
     protected Output newStream(String splitIndex) throws IOException {
-        String fileName = prefix + splitIndex + suffix + (compress ? ".gz" : "");
+        String fileName = prefix
+            + splitIndex
+            + suffix
+            + (compress ? ".gz" : "");
         fileName = fileName.replaceAll("/", "`_");
         GFile out = dir.createSubFile(fileName, dir.fileSeparator());
         out.mkpath();
-        System.out.println("CREATE OUT " + out.getAbsoluteAddress());
 
         OutputFormatter formatter = null;
         if (inputFormat.getType().equals("csv")) {
-            formatter = new CSVOutputFormatter(inputFormat.getCharParam("separator"), true, false);
-        } else if (inputFormat.getType().equals("line")) {
+            formatter = new CSVOutputFormatter(inputFormat.getCharParam("separator")
+                                               , true
+                                               , false);
+        }
+        else if (inputFormat.getType().equals("line")) {
             formatter = new LineOutputFormatter();
         }
         return new Output(AutoGZip.buildOutput(out), formatter);
@@ -73,7 +85,8 @@ public class SplitStreamFactory {
 
     // Called by the processor output.
     // Synchronized because we directly write in the output files
-    synchronized void emitRow(ColumnFactory sourceCF, Row row) throws IOException {
+    synchronized void emitRow(ColumnFactory sourceCF
+                              , Row row) throws IOException {
         Output o = get(sourceCF, row);
         o.outputFormatter.format(row, sourceCF, o.outputStream);
     }
@@ -90,7 +103,8 @@ public class SplitStreamFactory {
     protected String prefix;
     protected String suffix;
     private Format inputFormat;
-    private Map<String, Output> outputStreams = new HashMap<String, SplitStreamFactory.Output>();
+    private Map<String, Output> outputStreams
+        = new HashMap<String, SplitStreamFactory.Output>();
     private SplitFunction fct;
     private String selectedColumn;
     private boolean compress;

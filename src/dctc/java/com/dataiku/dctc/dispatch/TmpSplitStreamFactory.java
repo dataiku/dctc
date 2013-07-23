@@ -13,8 +13,13 @@ import com.dataiku.dip.output.CSVOutputFormatter;
 import com.dataiku.dip.output.OutputFormatter;
 
 public class TmpSplitStreamFactory extends SplitStreamFactory {
-    public TmpSplitStreamFactory(GFile dir, String prefix, String postfix, SplitFunction fct,
-                                String selectedColumn, Format format, boolean compress) {
+    public TmpSplitStreamFactory(GFile dir
+                                 , String prefix
+                                 , String postfix
+                                 , SplitFunction fct
+                                 , String selectedColumn
+                                 , Format format
+                                 , boolean compress) {
         super(dir, prefix, postfix, fct, selectedColumn, format, compress);
         this.map = new HashMap<String, TmpOutput>();
     }
@@ -22,15 +27,16 @@ public class TmpSplitStreamFactory extends SplitStreamFactory {
     @Override
     protected Output newStream(String splitIndex) throws IOException {
         GFile out = dir.createSubFile(prefix
-                + splitIndex + suffix,
-                dir.fileSeparator());
+                                      + splitIndex
+                                      + suffix
+                                      , dir.fileSeparator());
         out.mkpath();
         OutputFormatter formatter = new CSVOutputFormatter(',', true, false);
         File tmpFile = File.createTempFile("Foo", "bar.toto");
         tmpFile.deleteOnExit();
 
         Output output = new Output(new FileOutputStream(tmpFile), formatter);
-        TmpOutput tmpOutput = new TmpOutput(output, tmpFile);
+        TmpOutput tmpOutput = new TmpOutput().withOutput(output).withLocalTmp(tmpFile);
         map.put(splitIndex, tmpOutput);
 
         return tmpOutput.output;
@@ -42,10 +48,14 @@ public class TmpSplitStreamFactory extends SplitStreamFactory {
             LocalFile f = new LocalFile(elt.getValue().localTmp.getAbsolutePath());
             if (f.exists()) {
                 try {
-                    GFile out = dir.createSubFile(prefix + elt.getKey() + suffix, "/");
+                    GFile out = dir.createSubFile(prefix
+                                                  + elt.getKey()
+                                                  + suffix, "/");
                     out.copy(f);
                 } catch (IOException ex) {
-                    System.err.println("dctc TmpSplitStreamFactory: " + ex.getMessage());
+                    // FIXME: Should use YellPolicy
+                    System.err.println("dctc TmpSplitStreamFactory: "
+                                       + ex.getMessage());
                 }
                 f.delete();
             }
@@ -53,12 +63,31 @@ public class TmpSplitStreamFactory extends SplitStreamFactory {
     }
 
     public static class TmpOutput {
-        TmpOutput(Output output, File localTmp) {
+        public Output getOutput() {
+            return output;
+        }
+        public void setOutput(Output output) {
             this.output = output;
+        }
+        public TmpOutput withOutput(Output output) {
+            setOutput(output);
+            return this;
+        }
+
+        public File getLocalTmp() {
+            return localTmp;
+        }
+        public void setLocalTmp(File localTmp) {
             this.localTmp = localTmp;
         }
-        public Output output;
-        public File localTmp;
+        public TmpOutput withLocalTmp(File localTmp) {
+            setLocalTmp(localTmp);
+            return this;
+        }
+
+        // Attributes
+        private File localTmp;
+        private Output output;
     }
 
     // Attributes

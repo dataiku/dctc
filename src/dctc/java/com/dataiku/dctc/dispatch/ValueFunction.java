@@ -8,10 +8,13 @@ public class ValueFunction implements SplitFunction {
     }
     public String split(Row row, Column column) {
         assert(column != null);
+
         String splitData = row.get(column);
+
         if (splitData == null) {
             return "__no_value__";
         }
+
         return splitData;
     }
 }

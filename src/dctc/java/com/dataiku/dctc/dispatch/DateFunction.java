@@ -14,7 +14,9 @@ public class DateFunction implements SplitFunction {
     public DateFunction(String dateFormat, TimeDimension.Period period) {
         this.format = new SimpleDateFormat(dateFormat);
         // "DateFunction" is a magic value and is not used.
-        this.dimension = new TimeDimensionValue(new TimeDimension("DateFunction", period));
+        this.dimension
+            = new TimeDimensionValue(new TimeDimension("DateFunction"
+                                                       , period));
     }
 
     public String split(Row row, Column column) {
@@ -22,6 +24,7 @@ public class DateFunction implements SplitFunction {
             : "(column != null)";
 
         String splitData = row.get(column);
+
         if (splitData == null) {
             return "no_value";
         }
@@ -36,11 +39,13 @@ public class DateFunction implements SplitFunction {
 
             return dimension.id();
 
-        } catch (ParseException e) {
+        }
+        catch (ParseException e) {
             return "invalid_value";
         }
     }
 
+    // Attributes
     private SimpleDateFormat format;
     private TimeDimensionValue dimension;
 }

@@ -12,6 +12,7 @@ public class RandomFunction implements SplitFunction {
         return Integer.toString(ct);
     }
 
+    // Attributes
     private int outputSize;
     private int ct = 0;
 }
