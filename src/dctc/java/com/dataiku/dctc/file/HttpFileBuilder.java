@@ -1,5 +1,6 @@
 package com.dataiku.dctc.file;
 
+import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.dataiku.dip.utils.Params;
 
@@ -16,7 +17,7 @@ public class HttpFileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public HttpFile buildFile(String accountSettings, String rawPath) {
+    public HttpFile buildFile(String accountSettings, String rawPath, YellPolicy yell) {
         return new HttpFile(rawPath);
     }
     @Override

@@ -1,5 +1,6 @@
 package com.dataiku.dctc.file;
 
+import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.dataiku.dip.utils.Params;
 
@@ -13,7 +14,7 @@ public class LocalFileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public GFile buildFile(String accountSettings, String rawPath) {
+    public GFile buildFile(String accountSettings, String rawPath, YellPolicy yell) {
         return new LocalFile(rawPath);
     }
     @Override

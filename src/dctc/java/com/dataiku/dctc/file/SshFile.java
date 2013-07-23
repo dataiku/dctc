@@ -23,9 +23,10 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 
 import com.dataiku.dctc.AuthenticationFailedException;
-import com.dataiku.dctc.DCTCLog;
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.command.abs.Command.EndOfCommand;
+import com.dataiku.dctc.command.policy.HowlPolicy;
+import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.configuration.SshConfig;
 import com.dataiku.dctc.configuration.SshUserInfo;
 import com.dataiku.dctc.exception.UserException;
@@ -63,13 +64,13 @@ public class SshFile extends AbstractGFile {
 
     private ConnectionData connData;
 
-    private int parseInt(String integer, int low, int high) {
+    private int parseInt(String integer, int low, int high, YellPolicy yell) {
         int i = 0;
         try {
             i = Integer.parseInt(integer);
         }
         catch (NumberFormatException e) {
-            DCTCLog.error("ssh file", scat(pquoted(integer), "is not a number."));
+            yell.yell("ssh file", scat(pquoted(integer), "is not a number."), e);
             throw new EndOfCommand();
         }
         if (low > i || i > high) {
@@ -88,11 +89,11 @@ public class SshFile extends AbstractGFile {
         }
         this.connData = new ConnectionData();
         this.connData.host = config.get(host, "HostName", host);
-        this.connData.port = parseInt(config.get(host, "Port", "22"), 1, 65535);
+        this.connData.port = parseInt(config.get(host, "Port", "22"), 1, 65535, new HowlPolicy().withOut(System.err));
         this.connData.username = config.get(host, "User", p.getMandParam("username"));
         this.connData.skipHostKeyCheck = p.getBoolParam("skip_host_key_check", false);
         this.connData.identity = config.get(host, "IdentityFile", p.getParam("identity"));
-        this.connData.compressionLevel = parseInt(config.get(host, "CompressionLevel", "6"), 0, 9);
+        this.connData.compressionLevel = parseInt(config.get(host, "CompressionLevel", "6"), 0, 9, new HowlPolicy().withOut(System.err));
         this.connData.password = p.getParam("password");
 
         this.host = host;

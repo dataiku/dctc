@@ -217,10 +217,10 @@ public abstract class Command {
     }
 
     protected GFile build(String path) {
-        return getFileBuilder().buildFile(path);
+        return getFileBuilder().buildFile(path, getYell());
     }
     protected List<GFile> build(String[] paths) {
-        GFile[] array = getFileBuilder().buildFile(paths);
+        GFile[] array = getFileBuilder().buildFile(paths, getYell());
         return Arrays.asList(array);
     }
 

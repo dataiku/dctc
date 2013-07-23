@@ -3,6 +3,7 @@ package com.dataiku.dctc.file;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.configuration.CredentialProviderBank;
 import com.dataiku.dctc.configuration.SshConfig;
 import com.dataiku.dctc.exception.UserException;
@@ -63,26 +64,26 @@ public class FileBuilder {
         return failed;
     }
 
-    public GFile buildFile(String uri) {
+    public GFile buildFile(String uri, YellPolicy yell) {
         int protocolSeparator = uri.indexOf("://");
         if (protocolSeparator == -1) {
             if (uri.equals("-")) {
                 return new StandardFile();
             }
             else {
-                return Protocol.FILE.builder.buildFile(null, uri);
+                return Protocol.FILE.builder.buildFile(null, uri, yell);
             }
         }
 
         Protocol protocol = Protocol.forName(uri.substring(0, protocolSeparator));
         String path  = uri.substring(protocolSeparator + 3, uri.length());
 
-        return buildFile(protocol, path);
+        return buildFile(protocol, path, yell);
     }
-    public GFile buildFile(String proto, String path) {
-        return buildFile(Protocol.forName(proto), path);
+    public GFile buildFile(String proto, String path, YellPolicy yell) {
+        return buildFile(Protocol.forName(proto), path, yell);
     }
-    public GFile buildFile(Protocol proto, String path) {
+    public GFile buildFile(Protocol proto, String path, YellPolicy yell) {
         String account = null;
         int atIndex = path.indexOf("@");
         if (atIndex > 0) {
@@ -94,12 +95,12 @@ public class FileBuilder {
             ((SshFileBuilder) proto.builder).setSshConfig(sshConfig);
         }
 
-        return proto.builder.buildFile(account, path);
+        return proto.builder.buildFile(account, path, yell);
     }
-    public GFile[] buildFile(String[] paths) {
+    public GFile[] buildFile(String[] paths, YellPolicy yell) {
         GFile[] res = new GFile[paths.length];
         for (int i = 0; i < paths.length; ++i) {
-            res[i] = buildFile(paths[i]);
+            res[i] = buildFile(paths[i], yell);
         }
         return res;
     }

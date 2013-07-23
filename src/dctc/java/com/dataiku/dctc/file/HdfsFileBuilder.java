@@ -4,6 +4,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 
 import com.dataiku.dctc.HadoopDistributionClassLoader;
+import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.dataiku.dip.hadoop.HadoopUtils;
 import com.dataiku.dip.utils.ErrorContext;
@@ -23,7 +24,7 @@ public class HdfsFileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public GFile buildFile(String accountSettings, String rawPath) {
+    public GFile buildFile(String accountSettings, String rawPath, YellPolicy yell) {
         HadoopDistributionClassLoader.addLibraries();
         Params p;
         if (accountSettings != null) {
@@ -37,7 +38,7 @@ public class HdfsFileBuilder extends ProtocolFileBuilder {
                 if (System.getenv("HADOOP_HOME") == null
                     && System.getenv("HADOOP_PREFIX") == null
                     && HadoopDistributionClassLoader.guessHadoopHome() == null) {
-                    throw ErrorContext.iaef("Neither configured credential nor HADOOP_HOME nor HADOOP_PREFIX variable found, can't configure HDFS access");
+                    throw ErrorContext.iaef("Neither configured credential nor HADOOP_HOME nor HADOOP_PREFIX variable found, can't configure HDFS access"); // FIXME: No
                 }
             }
         }

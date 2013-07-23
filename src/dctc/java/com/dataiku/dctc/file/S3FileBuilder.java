@@ -7,6 +7,7 @@ import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.dataiku.dip.utils.Params;
 
@@ -25,7 +26,7 @@ public class S3FileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public synchronized GFile buildFile(String accountSettings, String rawPath) {
+    public synchronized GFile buildFile(String accountSettings, String rawPath, YellPolicy yell) {
         String accountName = getBank().getResolvedAccountName(getProtocol().getCanonicalName(), accountSettings);
         Params p = getBank().getAccountParams(getProtocol().getCanonicalName(), accountSettings);
         if (validateAccountParams(accountSettings, p)) {

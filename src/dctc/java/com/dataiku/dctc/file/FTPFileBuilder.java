@@ -1,8 +1,11 @@
 package com.dataiku.dctc.file;
 
-import com.dataiku.dctc.DCTCLog;
+import static com.dataiku.dip.utils.PrettyString.pquoted;
+
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.command.abs.Command.EndOfCommand;
+import com.dataiku.dctc.command.policy.HowlPolicy;
+import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.dataiku.dip.utils.Params;
@@ -30,23 +33,28 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
 
     @Override
     public boolean validateAccountParams(String account, Params p) {
-        getCheckedPort(p.getParam("port", "22"));
-        return checkAllowedOnly(account, p, new String[]{"host", "port", "username", "password",
-                                                         "default_path"})
+        getCheckedPort(p.getParam("port", "22"), new HowlPolicy().withOut(System.err));
+        return checkAllowedOnly(account, p, new String[]{"host"
+                                                         , "port"
+                                                         , "username"
+                                                         , "password"
+                                                         , "default_path"})
             || checkMandatory(account, p, "host")
             || checkMandatory(account, p, "username")
             || checkMandatory(account, p, "password");
     }
 
     @Override
-    public synchronized FTPFile buildFile(String accountSettings, String rawPath) {
+    public synchronized FTPFile buildFile(String accountSettings
+                                          , String rawPath
+                                          , YellPolicy yell) {
         if (accountSettings == null) {
             if (rawPath.isEmpty() || rawPath.equals("/")) {
                 throw new UserException("No account given for FTP, host is mandatory");
             }
             String[/*host/path*/] path = PathManip.split(rawPath, "/", 2);
 
-            return build(path[0], "anonymous", "anonymous", path[1]);
+            return build(path[0], "anonymous", "anonymous", path[1], yell);
         }
         else if (accountSettings.contains(":")) {
             if (rawPath.isEmpty() || rawPath.equals("/")) {
@@ -55,7 +63,7 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
             String[/*host/path*/] path = PathManip.split(rawPath, "/", 2);
             String[] accountChunks = PathManip.split(accountSettings, ":", 2);
 
-            return build(path[0], accountChunks[0], accountChunks[1], path[1]);
+            return build(path[0], accountChunks[0], accountChunks[1], path[1], yell);
         }
         else {
             Params p = getBank().getAccountParams(getProtocol().getCanonicalName(), accountSettings);
@@ -71,11 +79,15 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
         return Protocol.FTP;
     }
 
-    private FTPFile build(String host, String username, String password, String path) {
+    private FTPFile build(String host
+                          , String username
+                          , String password
+                          , String path
+                          , YellPolicy yell) {
         int port = GlobalConstants.FTP_PORT;
         if (host.indexOf(":") != -1) {
             String[/*port/host*/] splittedHost = PathManip.invSplit(host, ":", 2);
-            port = getCheckedPort(splittedHost[0]);
+            port = getCheckedPort(splittedHost[0], yell);
             host = splittedHost[1];
         }
         return new FTPFile(host, username, password, path, port);
@@ -86,15 +98,13 @@ public class FTPFileBuilder extends ProtocolFileBuilder {
     }
 
     // Private
-    private int getCheckedPort(String strPort) {
+    private int getCheckedPort(String strPort, YellPolicy yell) {
         int port;
         try {
             port = Integer.parseInt(strPort);
         }
         catch (NumberFormatException e) {
-            DCTCLog.error("FTP file builder", "`"
-                          + strPort
-                          + "' is not a Number. Need a number between 1 and 65536 (included) for the ftp port.");
+            yell.yell("ftp file builder", pquoted(strPort) + "is not a Number. Need a number between 1 and 65536 (included) for the ftp port.", e);
             throw new EndOfCommand();
         }
         if (port < 1 || port > 65535) {

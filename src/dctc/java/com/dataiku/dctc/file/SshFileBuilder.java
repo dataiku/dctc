@@ -4,6 +4,7 @@ import static com.dataiku.dip.utils.PrettyString.pquoted;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
 import com.dataiku.dctc.GlobalConstants;
+import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.configuration.SshConfig;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.dataiku.dip.utils.Params;
@@ -29,7 +30,7 @@ public class SshFileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public synchronized GFile buildFile(String account, String rawPath) {
+    public synchronized GFile buildFile(String account, String rawPath, YellPolicy yell) {
         if (account == null) {
             String[] hostPath = PathManip.split(rawPath, ":", 2);
             Params p = getBank().getAccountParamsIfExists(getProtocol().getCanonicalName(), account);

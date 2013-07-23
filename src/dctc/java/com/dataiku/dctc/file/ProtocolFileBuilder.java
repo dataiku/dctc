@@ -6,6 +6,7 @@ import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.util.Set;
 
+import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.configuration.CredentialProviderBank;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
@@ -33,6 +34,7 @@ public abstract class ProtocolFileBuilder {
         }
         System.err.print(sb.toString());
         System.err.flush();
+
         return failed;
     }
     protected boolean checkMandatory(String account, Params p, String key) {
@@ -75,7 +77,7 @@ public abstract class ProtocolFileBuilder {
 
     // Abstract
     public abstract Protocol getProtocol();
-    public abstract GFile buildFile(String accountData, String protocolData);
+    public abstract GFile buildFile(String accountData, String protocolData, YellPolicy yell);
     public abstract boolean validateAccountParams(String account, Params p);
     public abstract String fileSeparator();
 

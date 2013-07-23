@@ -1,5 +1,6 @@
 package com.dataiku.dctc.file;
 
+import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.dataiku.dip.utils.Params;
 
@@ -14,7 +15,7 @@ public class GSFileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public synchronized GFile buildFile(String accountSettings, String rawPath) {
+    public synchronized GFile buildFile(String accountSettings, String rawPath, YellPolicy yell) {
         assert getBank() != null;
         Params p = getBank().getAccountParams(getProtocol().getCanonicalName(), accountSettings);
         if (validateAccountParams(accountSettings, p)) {
