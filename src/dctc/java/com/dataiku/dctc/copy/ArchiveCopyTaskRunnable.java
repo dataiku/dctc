@@ -7,7 +7,7 @@ import java.io.OutputStream;
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.archive.OutputArchiveEntry;
 import com.dataiku.dctc.file.FileManipulation;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 
 public class ArchiveCopyTaskRunnable extends CopyTaskRunnable {
     public ArchiveCopyTaskRunnable(CopyTask task, OutputArchiveEntry entry) {
@@ -24,7 +24,7 @@ public class ArchiveCopyTaskRunnable extends CopyTaskRunnable {
         if (task.dstDir.hasOutputStream()) {
             byte[] b = new byte[GlobalConstants.ONE_MIO];
 
-            GeneralizedFile input = task.src;
+            GFile input = task.src;
             entry.create(getEntryName());
 
             OutputStream out = entry.getContentStream();

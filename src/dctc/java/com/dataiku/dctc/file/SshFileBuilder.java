@@ -29,7 +29,7 @@ public class SshFileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public synchronized GeneralizedFile buildFile(String account, String rawPath) {
+    public synchronized GFile buildFile(String account, String rawPath) {
         if (account == null) {
             String[] hostPath = FileManipulation.split(rawPath, ":", 2);
             Params p = getBank().getAccountParamsIfExists(getProtocol().getCanonicalName(), account);

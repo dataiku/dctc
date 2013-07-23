@@ -5,14 +5,14 @@ import java.io.InputStream;
 
 import org.apache.commons.io.input.BoundedInputStream;
 
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dip.utils.StreamUtils;
 
 abstract class AbstractBytesCatAlgorithm extends AbstractCatAlgorithm {
-    public AbstractBytesCatAlgorithm(GeneralizedFile file, String cmdname) {
+    public AbstractBytesCatAlgorithm(GFile file, String cmdname) {
         super(file, cmdname);
     }
-    protected final long _run(GeneralizedFile file) {
+    protected final long _run(GFile file) {
         InputStream i = open();
         if (i == null) {
             return -1;
@@ -34,7 +34,7 @@ abstract class AbstractBytesCatAlgorithm extends AbstractCatAlgorithm {
         return -1; // Line not counted, must not consider this return.
 
     }
-    protected abstract void copy(InputStream inputStream, GeneralizedFile file);
+    protected abstract void copy(InputStream inputStream, GFile file);
     // Getters Setters
     public long getSkipFirst() {
         return skipFirst;

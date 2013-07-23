@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
 public class Rmdir extends Command {
@@ -19,8 +19,8 @@ public class Rmdir extends Command {
                            ,"rmdir will error out."));
     }
     @Override
-    public void perform(List<GeneralizedFile> args) {
-        for (GeneralizedFile arg: args) {
+    public void perform(List<GFile> args) {
+        for (GFile arg: args) {
             try {
                 if (!arg.exists()) {
                     error(arg, "No such file or directory", 2);

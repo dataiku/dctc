@@ -13,7 +13,7 @@ public class LocalFileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public GeneralizedFile buildFile(String accountSettings, String rawPath) {
+    public GFile buildFile(String accountSettings, String rawPath) {
         return new LocalFile(rawPath);
     }
     @Override

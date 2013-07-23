@@ -75,7 +75,7 @@ public abstract class ProtocolFileBuilder {
 
     // Abstract
     public abstract Protocol getProtocol();
-    public abstract GeneralizedFile buildFile(String accountData, String protocolData);
+    public abstract GFile buildFile(String accountData, String protocolData);
     public abstract boolean validateAccountParams(String account, Params p);
     public abstract String fileSeparator();
 

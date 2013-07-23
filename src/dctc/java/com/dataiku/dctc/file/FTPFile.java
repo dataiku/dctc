@@ -249,7 +249,7 @@ public class FTPFile extends AbstractGFile {
         return ftp.storeFileStream(path);
     }
     @Override
-    public boolean directMove(GeneralizedFile ginput) throws IOException {
+    public boolean directMove(GFile ginput) throws IOException {
         if (!(ginput instanceof FTPFile)) {
             return false;
         }

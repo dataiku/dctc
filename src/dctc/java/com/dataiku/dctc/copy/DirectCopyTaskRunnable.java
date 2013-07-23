@@ -10,11 +10,11 @@ import org.apache.commons.io.input.CountingInputStream;
 import org.apache.log4j.Logger;
 
 import com.dataiku.dctc.GlobalConstants;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 
 // This shouldn't be used as is.
 public class DirectCopyTaskRunnable extends CopyTaskRunnable {
-    DirectCopyTaskRunnable(GeneralizedFile in, GeneralizedFile out,
+    DirectCopyTaskRunnable(GFile in, GFile out,
                            boolean deleteSrc, boolean preserveDate) {
         super(in);
 
@@ -112,7 +112,7 @@ public class DirectCopyTaskRunnable extends CopyTaskRunnable {
 
     private CountingInputStream inputStream;
     private boolean readIndirection = false;
-    private GeneralizedFile out;
+    private GFile out;
     private boolean deleteSrc;
     private boolean preserveDate;
     private static Logger logger = Logger.getLogger("dctc.copy");

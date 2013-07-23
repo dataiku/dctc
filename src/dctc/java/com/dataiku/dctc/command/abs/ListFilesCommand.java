@@ -9,7 +9,7 @@ import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.copy.CopyTask;
 import com.dataiku.dctc.file.FileManipulation;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 
 public abstract class ListFilesCommand extends Command {
     // Abstract methods from Command class
@@ -20,16 +20,16 @@ public abstract class ListFilesCommand extends Command {
     protected abstract boolean deleteSource();
     public abstract void execute(List<CopyTask> tasks);
     protected abstract boolean recursion();
-    protected abstract boolean shouldAdd(GeneralizedFile src, GeneralizedFile dst, String root);
-    protected abstract void dstRoot(GeneralizedFile dst);
+    protected abstract boolean shouldAdd(GFile src, GFile dst, String root);
+    protected abstract void dstRoot(GFile dst);
     protected abstract boolean includeLastPathElementInTarget();
     // Tell to the implementation that ListCommand leave `sourceDir'
     // directory.
-    protected abstract void leave(GeneralizedFile sourceDir);
+    protected abstract void leave(GFile sourceDir);
 
     @Override
     public void perform(String[] args) {
-        List<GeneralizedFile> arguments = getArgs(args);
+        List<GFile> arguments = getArgs(args);
 
         // Check if enough argument
         if (arguments.size() < 2) {
@@ -44,7 +44,7 @@ public abstract class ListFilesCommand extends Command {
         execute(taskList);
     }
 
-    public void perform(List<GeneralizedFile> args) {
+    public void perform(List<GFile> args) {
         if (args.size() < 2) {
             setExitCode(1);
             System.setOut(System.err);
@@ -70,9 +70,9 @@ public abstract class ListFilesCommand extends Command {
     }
 
     @SuppressWarnings("unchecked")
-    private void computeTasksList(List<GeneralizedFile> args) {
-        GeneralizedFile[] sources = getSources(args);
-        GeneralizedFile dst = args.get(args.size() - 1);
+    private void computeTasksList(List<GFile> args) {
+        GFile[] sources = getSources(args);
+        GFile dst = args.get(args.size() - 1);
 
         if (!checkArgs(sources, dst)) {
             return;
@@ -91,7 +91,7 @@ public abstract class ListFilesCommand extends Command {
 
         dstRoot(dst);
         // src contains at least one element.
-        for (GeneralizedFile source: sources) {
+        for (GFile source: sources) {
             // If not exists, continue.
             try  {
                 if (!source.exists()) {
@@ -118,9 +118,9 @@ public abstract class ListFilesCommand extends Command {
                     ommit(source);
                     continue;
                 }
-                List<GeneralizedFile> subfiles; {
+                List<GFile> subfiles; {
                     try {
-                         subfiles = (List<GeneralizedFile>) source.grecursiveList();
+                         subfiles = (List<GFile>) source.grecursiveList();
                     }
                     catch (IOException e) {
                         unexpected(source, e);
@@ -128,7 +128,7 @@ public abstract class ListFilesCommand extends Command {
                     }
                 }
 
-                for (GeneralizedFile subfile: subfiles) {
+                for (GFile subfile: subfiles) {
                     if (subfile.givenName().equals(source.givenName())) {
                         // subfiles contains the source directory.
                         continue;
@@ -143,22 +143,22 @@ public abstract class ListFilesCommand extends Command {
             }
         }
     }
-    private GeneralizedFile[] getSources(List<GeneralizedFile> args) {
-        GeneralizedFile[] sources = new GeneralizedFile[args.size() - 1];
-        System.arraycopy(args.toArray(new GeneralizedFile[0]), 0, sources, 0, args.size() - 1);
+    private GFile[] getSources(List<GFile> args) {
+        GFile[] sources = new GFile[args.size() - 1];
+        System.arraycopy(args.toArray(new GFile[0]), 0, sources, 0, args.size() - 1);
 
         return sources;
     }
-    private void noSuch(GeneralizedFile file) {
+    private void noSuch(GFile file) {
         error(file, "No such file or directory", 2);
     }
-    private void unexpected(GeneralizedFile file, Throwable  e) {
+    private void unexpected(GFile file, Throwable  e) {
         error(file, "Unexpected error", e, 2);
     }
-    private void ommit(GeneralizedFile dir) {
+    private void ommit(GFile dir) {
         error(dir, "Ommit directory", 2);
     }
-    private boolean checkArgs(GeneralizedFile[] src, GeneralizedFile dst) {
+    private boolean checkArgs(GFile[] src, GFile dst) {
         String dstAddress = dst.getAbsoluteAddress();
         java.util.Arrays.sort(src);
         for (int i = 0; i < src.length; ++i) {
@@ -188,8 +188,8 @@ public abstract class ListFilesCommand extends Command {
 
         return true;
     }
-    private void addQueue(GeneralizedFile root, GeneralizedFile src,
-                          GeneralizedFile dst, boolean mergeRoot) {
+    private void addQueue(GFile root, GFile src,
+                          GFile dst, boolean mergeRoot) {
         String dstRoot = FileManipulation.getSonPath(root.givenName(), src.givenName(), root.fileSeparator());
 
         if (!mergeRoot) {
@@ -198,7 +198,7 @@ public abstract class ListFilesCommand extends Command {
 
         addQueue(src, dst, dstRoot);
     }
-    private void addQueue(GeneralizedFile src, GeneralizedFile dst, String root) {
+    private void addQueue(GFile src, GFile dst, String root) {
         if (compress() && !root.endsWith(".gz")) {
             root += ".gz";
         }

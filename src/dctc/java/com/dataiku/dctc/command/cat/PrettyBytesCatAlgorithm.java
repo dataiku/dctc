@@ -3,14 +3,14 @@ package com.dataiku.dctc.command.cat;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import static com.dataiku.dctc.utils.CharUtils.showNonPrintable;
 
 class PrettyBytesCatAlgorithm extends AbstractBytesCatAlgorithm {
-    public PrettyBytesCatAlgorithm(GeneralizedFile file, String cmdname) {
+    public PrettyBytesCatAlgorithm(GFile file, String cmdname) {
         super(file, cmdname);
     }
-    protected void copy(InputStream inputStream, GeneralizedFile file) {
+    protected void copy(InputStream inputStream, GFile file) {
         try {
             byte[] buf = new byte[1024];
             int nbRead;

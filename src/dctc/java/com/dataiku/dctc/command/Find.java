@@ -8,7 +8,7 @@ import com.dataiku.dctc.clo.FJavaLongOption;
 import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.clo.WithArgOptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
 public class Find extends Command {
@@ -22,7 +22,7 @@ public class Find extends Command {
     @Override
     public final void perform(String[] args) {
         resetExitCode();
-        List<GeneralizedFile> arguments = getArgs(args);
+        List<GFile> arguments = getArgs(args);
         if (arguments != null) {
             if (arguments.size() == 0) {
                 String[] l = { "." };
@@ -33,14 +33,14 @@ public class Find extends Command {
         }
     }
     @Override
-    public void perform(List<GeneralizedFile> args) {
+    public void perform(List<GFile> args) {
         try {
-            for (GeneralizedFile arg: args) {
+            for (GFile arg: args) {
                 if (!arg.exists()) {
                     notFind(arg);
                 } else {
                     if (arg.isDirectory()) {
-                        for (GeneralizedFile f: arg.grecursiveList()) {
+                        for (GFile f: arg.grecursiveList()) {
                             accept(f);
                         }
                     } else {
@@ -87,7 +87,7 @@ public class Find extends Command {
     }
 
     // Private
-    private void accept(GeneralizedFile path) throws IOException {
+    private void accept(GFile path) throws IOException {
         if (!hasName() || pattern.matcher(path.getFileName()).matches()) {
             switch (kind()) {
             case ALL:
@@ -108,7 +108,7 @@ public class Find extends Command {
             System.out.println(path.givenName());
         }
     }
-    private void notFind(GeneralizedFile file) {
+    private void notFind(GFile file) {
         error(file, "No such file or directory", 2);
     }
     private boolean hasName() {

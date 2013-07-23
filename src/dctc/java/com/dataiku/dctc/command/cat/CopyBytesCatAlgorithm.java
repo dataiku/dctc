@@ -5,13 +5,13 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 
 class CopyBytesCatAlgorithm extends AbstractBytesCatAlgorithm {
-    public CopyBytesCatAlgorithm(GeneralizedFile file, String cmdname) {
+    public CopyBytesCatAlgorithm(GFile file, String cmdname) {
         super(file, cmdname);
     }
-    protected void copy(InputStream inputStream, GeneralizedFile file) {
+    protected void copy(InputStream inputStream, GFile file) {
         try {
             IOUtils.copy(inputStream, System.out);
         }

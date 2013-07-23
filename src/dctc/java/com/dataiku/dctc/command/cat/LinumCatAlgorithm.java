@@ -4,15 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dip.utils.StreamUtils;
 
 class LinumCatAlgorithm extends AbstractCatAlgorithm {
-    LinumCatAlgorithm(GeneralizedFile file, String cmdname) {
+    LinumCatAlgorithm(GFile file, String cmdname) {
         super(file, cmdname);
     }
 
-    protected long _run(GeneralizedFile file) {
+    protected long _run(GFile file) {
         BufferedReader reader; { // open
             InputStream in = open();
             if (in == null) {

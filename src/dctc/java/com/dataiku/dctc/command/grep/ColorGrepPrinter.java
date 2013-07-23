@@ -1,6 +1,6 @@
 package com.dataiku.dctc.command.grep;
 
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 
 class ColorGrepPrinter implements GrepPrinter {
     ColorGrepPrinter(GrepMatcher matcher) {
@@ -25,7 +25,7 @@ class ColorGrepPrinter implements GrepPrinter {
         }
         System.out.println(line);
     }
-    public void end(GeneralizedFile file) {
+    public void end(GFile file) {
     }
 
     public GrepMatcher getMatcher() {

@@ -8,19 +8,28 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
-public abstract class AbstractGFile implements GeneralizedFile {
+public abstract class AbstractGFile implements GFile {
     @Override
-    public final int compareTo(GeneralizedFile arg) {
-        int res = getAbsoluteAddress().toLowerCase().replaceAll("[^a-z0-9]", "").compareTo(arg.getAbsoluteAddress().toLowerCase().replaceAll("[^a-z0-9]", ""));
-        if (res == 0) {
-            res = - getAbsoluteAddress().replaceAll("[^A-Za-z0-9]", "").compareTo(arg.getAbsoluteAddress().replaceAll("[^A-Za-z0-9]", ""));
+    public final int compareTo(GFile arg) {
+        String l = tr(getAbsoluteAddress());
+        String r = tr(arg.getAbsoluteAddress());
+
+        return l.compareTo(r);
+    }
+    private String tr(String f) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < f.length(); ++i) {
+            char c = f.charAt(i);
+
+            sb.append(c);
         }
-        return res;
+
+        return sb.toString();
     }
     @Override // Should be override for no type lost.
-    public List<? extends GeneralizedFile> createInstanceFor(List<String> paths) {
+    public List<? extends GFile> createInstanceFor(List<String> paths) {
         if (paths != null) {
-            List<GeneralizedFile> res = new ArrayList<GeneralizedFile>();
+            List<GFile> res = new ArrayList<GFile>();
             for (int i = 0; i < paths.size(); ++i) {
                 res.add(createInstanceFor(paths.get(i)));
             }
@@ -31,7 +40,7 @@ public abstract class AbstractGFile implements GeneralizedFile {
         }
     }
     @Override
-    public final GeneralizedFile createSubFile(String path) throws IOException {
+    public final GFile createSubFile(String path) throws IOException {
         return createSubFile(path, fileSeparator());
     }
     @Override
@@ -83,7 +92,7 @@ public abstract class AbstractGFile implements GeneralizedFile {
         return true;
     }
     @Override // Could be override.
-    public boolean copy(GeneralizedFile input) throws IOException {
+    public boolean copy(GFile input) throws IOException {
         if (input.hasSize()) {
             copy(input.inputStream(), input.getSize());
         } else {
@@ -98,11 +107,11 @@ public abstract class AbstractGFile implements GeneralizedFile {
         return true;
     }
     @Override // Should be override if needed.
-    public boolean directMove(GeneralizedFile ginput) throws IOException {
+    public boolean directMove(GFile ginput) throws IOException {
         return false;
     }
     @Override // Should be override if needed.
-    public boolean directCopy(GeneralizedFile ginput) throws IOException {
+    public boolean directCopy(GFile ginput) throws IOException {
         return false;
     }
     @Override
@@ -160,7 +169,7 @@ public abstract class AbstractGFile implements GeneralizedFile {
     public abstract void mkpath() throws IOException;
 
     // Abstract Method.
-    public abstract GeneralizedFile createSubFile(String path, String fileSeparator) throws IOException;
+    public abstract GFile createSubFile(String path, String fileSeparator) throws IOException;
     public abstract boolean exists() throws IOException;
     public abstract boolean isDirectory() throws IOException;
     public abstract boolean isFile() throws IOException;

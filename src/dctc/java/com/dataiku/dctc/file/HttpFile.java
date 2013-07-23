@@ -98,7 +98,7 @@ public class HttpFile extends AbstractGFile {
     }
 
     @Override
-    public GeneralizedFile createSubFile(String path, String fileSeparator) {
+    public GFile createSubFile(String path, String fileSeparator) {
         throw new NotImplementedException();
     }
     @Override

@@ -19,7 +19,7 @@ import com.dataiku.dctc.display.Size;
 import com.dataiku.dctc.file.Acl;
 import com.dataiku.dctc.file.BucketBasedFile;
 import com.dataiku.dctc.file.FileManipulation;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dip.utils.IndentedWriter;
 import com.dataiku.dip.utils.PrettyString;
 
@@ -33,7 +33,7 @@ public class Ls extends Command {
     // Public
     @Override
     public void perform(String[] args) {
-        List<GeneralizedFile> arguments = getArgs(args);
+        List<GFile> arguments = getArgs(args);
         if (arguments != null) {
             if (arguments.size() == 0) {
                 String[] dot = { "." };
@@ -46,7 +46,7 @@ public class Ls extends Command {
         // Set options.
     }
     @Override
-    public void perform(List<GeneralizedFile> args) {
+    public void perform(List<GFile> args) {
         optimizeBucketRecursion(args, recursion());
         try {
             for (int i = 0; i < args.size(); ++i) {
@@ -73,25 +73,25 @@ public class Ls extends Command {
             // FIXME: This code isn't really clear.
         }
     }
-    private void optimizeBucketRecursion(List<GeneralizedFile> args,
+    private void optimizeBucketRecursion(List<GFile> args,
                                          boolean recursion) {
-        for (GeneralizedFile arg: args) {
+        for (GFile arg: args) {
             if (arg instanceof BucketBasedFile) {
                 ((BucketBasedFile) arg).setAutoRecursion(recursion);
             }
         }
     }
 
-    public void recursivePerform(List<GeneralizedFile> args) throws IOException {
+    public void recursivePerform(List<GFile> args) throws IOException {
         int nbPrinted = printList(args, true);
         printRecursiveDirectoryList(args, nbPrinted == 0);
     }
 
-    private void printRecursiveDirectoryList(List<GeneralizedFile> args,
+    private void printRecursiveDirectoryList(List<GFile> args,
                                              boolean isFirst) throws IOException {
-        for (GeneralizedFile arg: args) {
+        for (GFile arg: args) {
             @SuppressWarnings("unchecked")
-            List<GeneralizedFile> sons = (List<GeneralizedFile>) arg.grecursiveList();
+            List<GFile> sons = (List<GFile>) arg.grecursiveList();
             Collections.sort(sons);
             List<PrintTask> print = new ArrayList<PrintTask>();
 
@@ -101,9 +101,9 @@ public class Ls extends Command {
             }
             while (true) {
                 print = new ArrayList<PrintTask>();
-                GeneralizedFile dir = sons.get(0); sons.remove(0);
+                GFile dir = sons.get(0); sons.remove(0);
                 for (int i = 0; i < sons.size(); ++i) {
-                    GeneralizedFile son = sons.get(i);
+                    GFile son = sons.get(i);
                     if (FileManipulation.isDirectSon(dir.givenName(), son.givenName(), dir.fileSeparator())) {
                         print.add(new PrintTask(son, son.getFileName()));
                         if (son.isFile()) {
@@ -123,16 +123,16 @@ public class Ls extends Command {
         }
     }
 
-    public void nonRecursivePerform(List<GeneralizedFile> args) throws IOException {
+    public void nonRecursivePerform(List<GFile> args) throws IOException {
         int nbPrinted = printList(args, true);
         printDirectoryList(args, nbPrinted == 0);
     }
 
-    private int printList(List<GeneralizedFile> args,
+    private int printList(List<GFile> args,
                           boolean onlyFile) throws IOException {
-        List<GeneralizedFile> toPrint = new ArrayList<GeneralizedFile>();
+        List<GFile> toPrint = new ArrayList<GFile>();
         int nbPrinted = 0;
-        for (GeneralizedFile arg: args) {
+        for (GFile arg: args) {
             if (!(onlyFile && arg.isDirectory())) {
                 if (!hide(arg, true)) {
                     ++nbPrinted;
@@ -143,10 +143,10 @@ public class Ls extends Command {
         givenName(toPrint);
         return nbPrinted;
     }
-    private void printDirectoryList(List<GeneralizedFile> args,
+    private void printDirectoryList(List<GFile> args,
                                     boolean isFirst) throws IOException {
         boolean header = args.size() > 1 || !isFirst;
-        for (GeneralizedFile arg: args) {
+        for (GFile arg: args) {
             if (!arg.isDirectory()) {
                 continue;
             }
@@ -161,9 +161,9 @@ public class Ls extends Command {
             }
         }
     }
-    private void printDirectory(GeneralizedFile arg,
+    private void printDirectory(GFile arg,
                                 boolean header) throws IOException {
-        List<GeneralizedFile> toPrint = new ArrayList<GeneralizedFile>();
+        List<GFile> toPrint = new ArrayList<GFile>();
 
         assert arg.isDirectory()
             : "arg.isDirectory()";
@@ -171,27 +171,27 @@ public class Ls extends Command {
         if (header) {
             header(arg);
         }
-        List<? extends GeneralizedFile> files = arg.glist();
+        List<? extends GFile> files = arg.glist();
         if (sort()) {
             Collections.sort(files);
         }
-        for (GeneralizedFile file: files) {
+        for (GFile file: files) {
             if (!hide(file, false)) {
                 toPrint.add(file);
             }
         }
         fileName(toPrint);
     }
-    private void fileName(List<GeneralizedFile> files) throws IOException {
+    private void fileName(List<GFile> files) throws IOException {
         List<PrintTask> tasks = new ArrayList<PrintTask>();
-        for (GeneralizedFile file: files) {
+        for (GFile file: files) {
             tasks.add(new PrintTask(file, file.getFileName()));
         }
         print(tasks);
     }
-    private void givenName(List<GeneralizedFile> files) throws IOException {
+    private void givenName(List<GFile> files) throws IOException {
         List<PrintTask> tasks = new ArrayList<PrintTask>();
-        for (GeneralizedFile file: files) {
+        for (GFile file: files) {
             tasks.add(new PrintTask(file, file.givenName()));
         }
         print(tasks);
@@ -272,7 +272,7 @@ public class Ls extends Command {
         }
         System.out.print(size);
     }
-    private void printDate(GeneralizedFile f) {
+    private void printDate(GFile f) {
         Date date = new Date();
         try {
             date.setTime(f.getDate());
@@ -494,11 +494,11 @@ public class Ls extends Command {
     }
 
     // Private
-    private void header(GeneralizedFile f) {
+    private void header(GFile f) {
         System.out.println(f.givenName() + ":");
     }
 
-    private boolean hide(GeneralizedFile f,
+    private boolean hide(GFile f,
                          boolean forcePrint) throws IOException {
         return !(forcePrint || ((hidden() || !f.isHidden()) && (!temp() || !f.isTempFile())));
     }
@@ -535,7 +535,7 @@ public class Ls extends Command {
             System.out.print(f);
         }
     }
-    private void printName(GeneralizedFile g,
+    private void printName(GFile g,
                            String f) throws IOException {
         if (color()) {
             initColor();
@@ -582,7 +582,7 @@ public class Ls extends Command {
         return colorize;
     }
     static class PrintTask implements Comparable<PrintTask> {
-        public PrintTask(GeneralizedFile first, String second) {
+        public PrintTask(GFile first, String second) {
             this.first = first;
             this.second = second;
         }
@@ -590,7 +590,7 @@ public class Ls extends Command {
             return second.toLowerCase().replaceAll("[^a-z]", "").compareTo(r.second.toLowerCase().replaceAll("[^a-z]", ""));
         }
 
-        public GeneralizedFile first;
+        public GFile first;
         public String second;
     }
 

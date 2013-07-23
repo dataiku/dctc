@@ -10,7 +10,7 @@ import java.util.List;
 import com.dataiku.dctc.AutoGZip;
 import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
 public class Cmp extends Command {
@@ -28,8 +28,8 @@ public class Cmp extends Command {
             error("Missing operands", 2);
             return;
         }
-        GeneralizedFile left = build(args[0]);
-        GeneralizedFile right = build(args[1]);
+        GFile left = build(args[0]);
+        GFile right = build(args[1]);
         long lskip = parseSkip(args, 2);
         long rskip = parseSkip(args, 3);
 
@@ -53,8 +53,8 @@ public class Cmp extends Command {
     }
 
     // Private
-    private void compare(GeneralizedFile l
-                         , GeneralizedFile r
+    private void compare(GFile l
+                         , GFile r
                          , long lskip
                          , long rskip) {
         InputStream left = open(l);
@@ -112,7 +112,7 @@ public class Cmp extends Command {
         }
         return Long.parseLong(number) * exp;
     }
-    private boolean skip(GeneralizedFile file, InputStream stream, long skip){
+    private boolean skip(GFile file, InputStream stream, long skip){
         try {
             while (skip != 0) {
                 skip -= stream.skip(skip);
@@ -124,8 +124,8 @@ public class Cmp extends Command {
             return true;
         }
     }
-    private void diff(GeneralizedFile l
-                      , GeneralizedFile r
+    private void diff(GFile l
+                      , GFile r
                       , long count
                       , long lineCount) {
         System.out.println(l.givenName() + " " + r.givenName()
@@ -134,7 +134,7 @@ public class Cmp extends Command {
         setExitCode(1);
 
     }
-    private int read(GeneralizedFile file, InputStream stream) {
+    private int read(GFile file, InputStream stream) {
         int res;
         try {
             res = stream.read();
@@ -145,7 +145,7 @@ public class Cmp extends Command {
         }
         return res;
     }
-    private InputStream open(GeneralizedFile file) {
+    private InputStream open(GFile file) {
         InputStream stream;
         try {
             stream = AutoGZip.buildInput(file);

@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 import org.apache.commons.io.IOUtils;
 
 import com.dataiku.dctc.AutoGZip;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dip.datalayer.ColumnFactory;
 import com.dataiku.dip.datalayer.Row;
 import com.dataiku.dip.input.Format;
@@ -28,7 +28,7 @@ public class SplitStreamFactory {
         public OutputFormatter outputFormatter;
     }
 
-    public SplitStreamFactory(GeneralizedFile dir, String prefix,
+    public SplitStreamFactory(GFile dir, String prefix,
             String suffix, SplitFunction fct, String selectedColumn, Format inputFormat,
             boolean compress) {
         this.dir = dir;
@@ -58,7 +58,7 @@ public class SplitStreamFactory {
     protected Output newStream(String splitIndex) throws IOException {
         String fileName = prefix + splitIndex + suffix + (compress ? ".gz" : "");
         fileName = fileName.replaceAll("/", "`_");
-        GeneralizedFile out = dir.createSubFile(fileName, dir.fileSeparator());
+        GFile out = dir.createSubFile(fileName, dir.fileSeparator());
         out.mkpath();
         System.out.println("CREATE OUT " + out.getAbsoluteAddress());
 
@@ -86,7 +86,7 @@ public class SplitStreamFactory {
         }
     }
 
-    protected GeneralizedFile dir;
+    protected GFile dir;
     protected String prefix;
     protected String suffix;
     private Format inputFormat;

@@ -6,13 +6,13 @@ import java.io.StringWriter;
 import org.apache.commons.io.IOUtils;
 
 import com.dataiku.dctc.GlobalConstants;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 
 class PartialFileTailAlgorithm extends AbstractCatAlgorithm {
-    PartialFileTailAlgorithm(GeneralizedFile file, String cmdname) {
+    PartialFileTailAlgorithm(GFile file, String cmdname) {
         super(file, cmdname);
     }
-    protected long _run(GeneralizedFile file) {
+    protected long _run(GFile file) {
         long size; {
             try {
                 size = file.getSize();

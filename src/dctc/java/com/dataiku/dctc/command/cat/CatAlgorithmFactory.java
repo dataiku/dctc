@@ -3,14 +3,14 @@ package com.dataiku.dctc.command.cat;
 import java.io.IOException;
 
 import com.dataiku.dctc.command.policy.YellPolicy;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 
 public class CatAlgorithmFactory {
     // Building methods.
-    public CatAlgorithm build(GeneralizedFile file) throws IOException {
+    public CatAlgorithm build(GFile file) throws IOException {
         return build(file, getAlgo());
     }
-    public CatAlgorithm build(GeneralizedFile file,
+    public CatAlgorithm build(GFile file,
                               AlgorithmType algo) throws IOException {
         switch (algo) {
         case CAT:
@@ -25,7 +25,7 @@ public class CatAlgorithmFactory {
             throw new Error("Never reached");
         }
     }
-    private CatAlgorithm buildCat(GeneralizedFile file) {
+    private CatAlgorithm buildCat(GFile file) {
         return buildCat(file
                         , getLinum()
                         , getDollar()
@@ -34,7 +34,7 @@ public class CatAlgorithmFactory {
                         , getShowTabulation()
                         , getPrettyChar());
     }
-    private CatAlgorithm buildCat(GeneralizedFile file
+    private CatAlgorithm buildCat(GFile file
                                   , boolean linum
                                   , boolean dollar
                                   , boolean squeezeMultipleEmpty
@@ -97,10 +97,10 @@ public class CatAlgorithmFactory {
             }
         }
     }
-    private CatAlgorithm buildHead(GeneralizedFile file) throws IOException {
+    private CatAlgorithm buildHead(GFile file) throws IOException {
         return buildHead(file, getSkipLast(), getIsLineAlgo());
     }
-    private CatAlgorithm buildHead(GeneralizedFile file
+    private CatAlgorithm buildHead(GFile file
                                    , long skipLast
                                    , boolean isLine) throws IOException {
         if (isLine) {
@@ -136,10 +136,10 @@ public class CatAlgorithmFactory {
             }
         }
     }
-    private CatAlgorithm buildTail(GeneralizedFile file) throws IOException {
+    private CatAlgorithm buildTail(GFile file) throws IOException {
         return buildTail(file, skipFirst, getIsLineAlgo());
     }
-    private CatAlgorithm buildTail(GeneralizedFile file
+    private CatAlgorithm buildTail(GFile file
                                    , long skipFirst
                                    , boolean isLine) throws IOException {
         if (isLine) {
@@ -189,14 +189,14 @@ public class CatAlgorithmFactory {
             }
         }
     }
-    private CatAlgorithm buildNl(GeneralizedFile file) {
+    private CatAlgorithm buildNl(GFile file) {
         return buildNl(file
                        , getLineIncrement()
                        , getIndentSeparator()
                        , getIndentSize()
                        , getStartingLine());
     }
-    private CatAlgorithm buildNl(GeneralizedFile file
+    private CatAlgorithm buildNl(GFile file
                                  , int lineIncrement
                                  , String indentSeparator
                                  , int minIndentSize

@@ -8,12 +8,12 @@ import com.dataiku.dip.input.stream.EnrichedInputStream;
 import com.dataiku.dip.input.stream.StreamsInputSplit;
 
 public class GeneralizedFileInputSplit extends StreamsInputSplit {
-    public GeneralizedFileInputSplit(GeneralizedFile f, InputStream stream) throws IOException {
+    public GeneralizedFileInputSplit(GFile f, InputStream stream) throws IOException {
         this.in = new BasicEnrichedInputStream(stream,
                                                f.getSize());
         this.desc = f.getAbsoluteAddress();
     }
-    public GeneralizedFileInputSplit(GeneralizedFile f) throws IOException {
+    public GeneralizedFileInputSplit(GFile f) throws IOException {
         this(f, f.inputStream());
     }
     public EnrichedInputStream nextStream() throws IOException {

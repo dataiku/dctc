@@ -310,11 +310,11 @@ public class GSFile extends BucketBasedFile {
         return true;
     }
     @Override
-    public boolean directCopy(GeneralizedFile ginput) throws IOException {
+    public boolean directCopy(GFile ginput) throws IOException {
         return false;
     }
     @Override
-    public boolean directMove(GeneralizedFile ginput) throws IOException {
+    public boolean directMove(GFile ginput) throws IOException {
         return false;
     }
     @Override

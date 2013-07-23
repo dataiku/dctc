@@ -5,11 +5,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-public interface GeneralizedFile extends Comparable<GeneralizedFile> {
-    public GeneralizedFile createInstanceFor(String path);
-    public List<? extends GeneralizedFile> createInstanceFor(List<String> paths);
-    public GeneralizedFile createSubFile(String path) throws IOException;
-    public GeneralizedFile createSubFile(String path, String fileSeparator) throws IOException;
+public interface GFile extends Comparable<GFile> {
+    public GFile createInstanceFor(String path);
+    public List<? extends GFile> createInstanceFor(List<String> paths);
+    public GFile createSubFile(String path) throws IOException;
+    public GFile createSubFile(String path, String fileSeparator) throws IOException;
 
     // MetaData and Naming.
     public boolean exists() throws IOException;
@@ -33,8 +33,8 @@ public interface GeneralizedFile extends Comparable<GeneralizedFile> {
     public InputStream getLastLines(long lineNumber) throws IOException;
     public InputStream getLastBytes(long byteNumber) throws IOException;
     public InputStream getRange(long begin, long length) throws IOException;
-    public List<? extends GeneralizedFile> glist() throws IOException;
-    public List<? extends GeneralizedFile> grecursiveList() throws IOException;
+    public List<? extends GFile> glist() throws IOException;
+    public List<? extends GFile> grecursiveList() throws IOException;
 
     public String givenName();
     public String givenPath();
@@ -60,10 +60,10 @@ public interface GeneralizedFile extends Comparable<GeneralizedFile> {
     public boolean hasOutputStream();
     public InputStream inputStream() throws IOException;
     public OutputStream outputStream() throws IOException;
-    public boolean copy(GeneralizedFile input) throws IOException;
+    public boolean copy(GFile input) throws IOException;
     public boolean copy(InputStream contentStream, long size) throws IOException;
-    public boolean directMove(GeneralizedFile ginput) throws IOException;
-    public boolean directCopy(GeneralizedFile ginput) throws IOException;
+    public boolean directMove(GFile ginput) throws IOException;
+    public boolean directCopy(GFile ginput) throws IOException;
     public boolean delete() throws IOException;
 
     public boolean hasHash();

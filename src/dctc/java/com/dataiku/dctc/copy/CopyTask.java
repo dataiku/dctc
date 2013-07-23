@@ -1,9 +1,9 @@
 package com.dataiku.dctc.copy;
 
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 
 public class CopyTask {
-    public CopyTask(GeneralizedFile src, GeneralizedFile dstDir,
+    public CopyTask(GFile src, GFile dstDir,
                     String dstFileName, boolean deleteSrc) {
         this.src = src;
         this.dstDir = dstDir;
@@ -12,9 +12,9 @@ public class CopyTask {
     }
 
     // The source file.
-    public GeneralizedFile src;
+    public GFile src;
     // The destination directory.
-    public GeneralizedFile dstDir;
+    public GFile dstDir;
     // The destination file name. This attribute is a relative
     // path and could be empty. This argument is the source file
     // without the prefix given by the user.

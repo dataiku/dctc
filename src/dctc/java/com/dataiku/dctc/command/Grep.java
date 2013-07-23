@@ -18,7 +18,7 @@ import com.dataiku.dctc.command.grep.GrepLinePrinter;
 import com.dataiku.dctc.command.grep.GrepMatcher;
 import com.dataiku.dctc.command.grep.GrepPrinter;
 import com.dataiku.dctc.command.grep.GrepStrategyFactory;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dip.utils.DKUFileUtils;
 import com.dataiku.dip.utils.IndentedWriter;
 import com.dataiku.dip.utils.StreamUtils;
@@ -52,7 +52,7 @@ public class Grep extends Command {
         opts.add(stdOption('f', "file", "obtain PATTERN from FILE", true, "FILE"));
         opts.add(stdOption('e', "regexp", "Specify one or more patterns to be used during the search for input.", true, "PATTERN"));
     }
-    protected List<GeneralizedFile> getArgs(String[] shellArgs) {
+    protected List<GFile> getArgs(String[] shellArgs) {
         parseCommandLine(shellArgs);
         List<String> args = getArgs();
         { // Set pattern
@@ -85,7 +85,7 @@ public class Grep extends Command {
     @Override
     public void perform(String[] args) {
         resetExitCode();
-        List<GeneralizedFile> arguments = getArgs(args);
+        List<GFile> arguments = getArgs(args);
         if (arguments != null) {
             buildMe(arguments.size() > 1);
             perform(arguments);
@@ -97,13 +97,13 @@ public class Grep extends Command {
         }
         return printFileError;
     }
-    public void perform(List<GeneralizedFile> args) {
+    public void perform(List<GFile> args) {
         if (args.size() < 1) {
             usage();
             setExitCode(2);
         }
 
-        for (GeneralizedFile arg: args) {
+        for (GFile arg: args) {
             try {
                 if (!arg.exists()) {
                     noSuch(arg);
@@ -114,12 +114,12 @@ public class Grep extends Command {
                         isADirectory(arg);
                         continue;
                     }
-                    List<? extends GeneralizedFile> sons = arg.grecursiveList();
+                    List<? extends GFile> sons = arg.grecursiveList();
                     if (sons == null) {
                         continue;
 
                     }
-                    for (GeneralizedFile son: sons) {
+                    for (GFile son: sons) {
                         boolean canGrep;
                         try {
                              canGrep = son.exists() && son.isFile();
@@ -181,7 +181,7 @@ public class Grep extends Command {
     }
 
     // Private
-    private void grep(GeneralizedFile file) throws IOException {
+    private void grep(GFile file) throws IOException {
         long lineNumber = 0;
         BufferedReader i = StreamUtils.readStream(AutoGZip.buildInput(file), "UTF-8");
         try {
@@ -201,7 +201,7 @@ public class Grep extends Command {
             IOUtils.closeQuietly(i);
         }
     }
-    private void match(GeneralizedFile file, long lineNumber, String line) {
+    private void match(GFile file, long lineNumber, String line) {
         if (matcher.match(line)) {
             hasMatch = true;
             header.print(file);
@@ -213,7 +213,7 @@ public class Grep extends Command {
     private boolean recursive() {
         return false;
     }
-    private void noSuch(GeneralizedFile file) {
+    private void noSuch(GFile file) {
         if (printFileError()) {
             error(file, "No such file or directory", 2);
         }
@@ -221,7 +221,7 @@ public class Grep extends Command {
             setExitCode(2);
         }
     }
-    private void isADirectory(GeneralizedFile dir) {
+    private void isADirectory(GFile dir) {
         if (printFileError()) {
             error(dir, "Is a directory", 2);
         }
@@ -229,7 +229,7 @@ public class Grep extends Command {
             setExitCode(2);
         }
     }
-    private void failRead(GeneralizedFile file, Throwable e) {
+    private void failRead(GFile file, Throwable e) {
         if (printFileError()) {
             error(file, "Failed to read file", e, 2);
         }

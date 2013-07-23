@@ -30,7 +30,7 @@ import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.command.policy.YellPolicyFactory;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.file.FileBuilder;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dctc.utils.ExitCode;
 import com.dataiku.dip.utils.IndentedWriter;
 import com.dataiku.dip.utils.IntegerUtils;
@@ -55,7 +55,7 @@ public abstract class Command {
     public void perform(String[] args) {
         resetExitCode();
         // Default implementation could be override
-        List<GeneralizedFile> arguments = getArgs(args);
+        List<GFile> arguments = getArgs(args);
         if (arguments != null) {
             perform(arguments);
         }
@@ -68,7 +68,7 @@ public abstract class Command {
         OptionBuilder.withLongOpt(longName);
         opt.addOption(OptionBuilder.create(shortName));
     }
-    public void perform(List<GeneralizedFile> args) {
+    public void perform(List<GFile> args) {
         throw new NotImplementedException();
     }
     public void usage() {
@@ -106,7 +106,7 @@ public abstract class Command {
         this.builder = builder;
         return this;
     }
-    public void perform(GeneralizedFile[] args) {
+    public void perform(GFile[] args) {
         resetExitCode();
         perform(Arrays.asList(args));
     }
@@ -130,15 +130,15 @@ public abstract class Command {
             throw new EndOfCommand();
         }
     }
-    protected List<GeneralizedFile> getArgs(String[] shellargs) {
+    protected List<GFile> getArgs(String[] shellargs) {
         parseCommandLine(shellargs);
         return resolveGlobbing(parser.getArgs());
     }
-    protected List<GeneralizedFile> resolveGlobbing(List<String> args) {
-        List<GeneralizedFile> gargs = new ArrayList<GeneralizedFile>();
+    protected List<GFile> resolveGlobbing(List<String> args) {
+        List<GFile> gargs = new ArrayList<GFile>();
 
         for (String arg: args) {
-            GeneralizedFile garg = build(arg);
+            GFile garg = build(arg);
             if (GlobalConf.getResolveGlobbing()) {
                 try {
                     gargs.addAll(Globbing.resolve(garg, false));
@@ -188,11 +188,11 @@ public abstract class Command {
                          Throwable exception, int exitCode) {
         error(pquoted(fileName) + ": " + msg, exception, exitCode);
     }
-    protected void error(GeneralizedFile file, String msg,
+    protected void error(GFile file, String msg,
                          Throwable exception, int exitCode) {
         error(file.givenName(), msg, exception, exitCode);
     }
-    protected void error(GeneralizedFile file, String msg, int exitCode) {
+    protected void error(GFile file, String msg, int exitCode) {
         error(file, msg, null, exitCode);
     }
 
@@ -216,11 +216,11 @@ public abstract class Command {
         error(msg, exception, 0);
     }
 
-    protected GeneralizedFile build(String path) {
+    protected GFile build(String path) {
         return getFileBuilder().buildFile(path);
     }
-    protected List<GeneralizedFile> build(String[] paths) {
-        GeneralizedFile[] array = getFileBuilder().buildFile(paths);
+    protected List<GFile> build(String[] paths) {
+        GFile[] array = getFileBuilder().buildFile(paths);
         return Arrays.asList(array);
     }
 

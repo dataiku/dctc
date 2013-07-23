@@ -8,11 +8,11 @@ import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.archive.ArchiveFactory;
 import com.dataiku.dctc.archive.InputArchiveEntry;
 import com.dataiku.dctc.archive.InputArchiveIterator;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 
 public class UnarchiveCopyTask extends CopyTaskRunnable {
 
-    public UnarchiveCopyTask(GeneralizedFile input, GeneralizedFile outputDir) throws IOException {
+    public UnarchiveCopyTask(GFile input, GFile outputDir) throws IOException {
         super(input);
 
         if (!outputDir.isDirectory() && outputDir.exists()) {
@@ -29,7 +29,7 @@ public class UnarchiveCopyTask extends CopyTaskRunnable {
         InputArchiveEntry elt = i.next();
         while (elt != null) {
             if (!elt.isDirectory()) {
-                GeneralizedFile o = out.createSubFile(elt.getName(), "/");
+                GFile o = out.createSubFile(elt.getName(), "/");
                 o.mkpath();
                 if (o.hasOutputStream()) {
                     InputStream inputStream = elt.getContentStream();
@@ -64,5 +64,5 @@ public class UnarchiveCopyTask extends CopyTaskRunnable {
         return in.givenName() + " -* " + out.givenName();
     }
 
-    private GeneralizedFile out;
+    private GFile out;
 }

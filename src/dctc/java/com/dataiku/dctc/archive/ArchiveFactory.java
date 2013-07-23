@@ -7,7 +7,7 @@ import java.io.OutputStream;
 import com.dataiku.dctc.AutoGZip;
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.exception.UserException;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 
 public class ArchiveFactory {
     public static InputArchiveIterable build(InputStream stream,
@@ -25,7 +25,7 @@ public class ArchiveFactory {
         throw new UserException("Unknown archive file extension for '"
                                 + streamName +"'. Expected 'zip', 'tar', 'tar.gz', or 'tar.gz2'");
     }
-    public static InputArchiveIterable buildInput(GeneralizedFile file) throws IOException {
+    public static InputArchiveIterable buildInput(GFile file) throws IOException {
         return build(file.inputStream(), file.givenName());
     }
 
@@ -35,7 +35,7 @@ public class ArchiveFactory {
         }
         throw new UserException("Unknown archive file extension for '" + streamName + "'. Expected 'zip'");
     }
-    public static OutputArchiveIterable buildOutput(GeneralizedFile file) throws IOException {
+    public static OutputArchiveIterable buildOutput(GFile file) throws IOException {
         return build(file.outputStream(), file.givenName());
     }
 }

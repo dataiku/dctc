@@ -4,13 +4,13 @@ import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
 
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 
 class LatestLineCatAlgorithm extends AbstractCatAlgorithm {
-    public LatestLineCatAlgorithm(GeneralizedFile file, String cmdname) {
+    public LatestLineCatAlgorithm(GFile file, String cmdname) {
         super(file, cmdname);
     }
-    protected long _run(GeneralizedFile file) {
+    protected long _run(GFile file) {
         try {
             IOUtils.copyLarge(file.getLastLines(getNbLine()), System.out);
         }

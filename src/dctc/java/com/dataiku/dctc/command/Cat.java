@@ -11,7 +11,7 @@ import com.dataiku.dctc.command.cat.CatAlgorithm;
 import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
 import com.dataiku.dctc.command.cat.CatRunner;
 import com.dataiku.dctc.command.cat.NeverCatHeaderSelector;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
 public class Cat extends Command {
@@ -25,7 +25,7 @@ public class Cat extends Command {
 
     // Public
     @Override
-    public void perform(List<GeneralizedFile> args) {
+    public void perform(List<GFile> args) {
         // Set the option to the factory.
         fact = new CatAlgorithmFactory()
             .withAlgo(AlgorithmType.CAT)

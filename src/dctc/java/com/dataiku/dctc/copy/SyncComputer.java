@@ -9,11 +9,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.dataiku.dctc.file.FileManipulation;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 
 public class SyncComputer {
     public static abstract class Filter {
-        public abstract boolean accept(GeneralizedFile src, GeneralizedFile dst,
+        public abstract boolean accept(GFile src, GFile dst,
                                        String root) throws IOException;
     }
 
@@ -27,27 +27,27 @@ public class SyncComputer {
         }
         public Type type = Type.SIZE_ONLY;
 
-        private void createDst(GeneralizedFile src, GeneralizedFile dst) throws IOException {
+        private void createDst(GFile src, GFile dst) throws IOException {
             if (src.isDirectory() && !(dst.exists() && dst.isFile())) {
                 dst.mkdirs();
             }
         }
-        private static boolean hashIsDifferent(GeneralizedFile src,
-                                               GeneralizedFile dst) throws IOException {
+        private static boolean hashIsDifferent(GFile src,
+                                               GFile dst) throws IOException {
             return !(src.hasHash() && dst.hasHash()
                     && src.supportHashAlgorithm(dst.getHashAlgorithm())
                     && src.getHash().equals(dst.getHash()));
         }
-        private static boolean dateIsDifferent(GeneralizedFile src,
-                                               GeneralizedFile dst) throws IOException {
+        private static boolean dateIsDifferent(GFile src,
+                                               GFile dst) throws IOException {
             return !(src.hasDate() && dst.hasDate()
                     && src.getDate() == dst.getDate());
         }
 
         @Override
-        public boolean accept(GeneralizedFile src, GeneralizedFile dstRoot,
+        public boolean accept(GFile src, GFile dstRoot,
                               String destination) throws IOException {
-            GeneralizedFile dst = dstRoot.createSubFile(destination, src.fileSeparator());
+            GFile dst = dstRoot.createSubFile(destination, src.fileSeparator());
             if (dst.isDirectory()) {
                 return false;
             }
@@ -89,7 +89,7 @@ public class SyncComputer {
         }
     }
 
-    public SyncComputer(List<GeneralizedFile> sources, GeneralizedFile target) {
+    public SyncComputer(List<GFile> sources, GFile target) {
         this.sources = sources;
         this.target = target;
     }
@@ -101,8 +101,8 @@ public class SyncComputer {
     public boolean deleteSources;
     public Filter filter;
 
-    private List<GeneralizedFile> sources;
-    private GeneralizedFile target;
+    private List<GFile> sources;
+    private GFile target;
 
     public List<CopyTask> computeTasksList() throws IOException {
         checkArgs(sources, target);
@@ -112,7 +112,7 @@ public class SyncComputer {
             target.grecursiveList();
         }
 
-        for (GeneralizedFile source: sources) {
+        for (GFile source: sources) {
             logger.info("Check " + source.getAbsoluteAddress());
             if (!source.exists()) {
                 throw new FileNotFoundException(source.getAbsoluteAddress());
@@ -120,8 +120,8 @@ public class SyncComputer {
 
             if (source.isDirectory()) {
                 if (recurseInSources) {
-                    List<? extends GeneralizedFile> subfiles = source.grecursiveList();
-                    for (GeneralizedFile subfile: subfiles) {
+                    List<? extends GFile> subfiles = source.grecursiveList();
+                    for (GFile subfile: subfiles) {
                         if (subfile.givenName().equals(source.givenName())) {
                             continue;
                         }
@@ -150,7 +150,7 @@ public class SyncComputer {
     }
 
 
-    private boolean checkArgs(List<GeneralizedFile> src, GeneralizedFile dst) throws IOException {
+    private boolean checkArgs(List<GFile> src, GFile dst) throws IOException {
         String prevSrcAddress = null;
         String dstAddress = dst.getAbsoluteAddress();
         Collections.sort(src);
@@ -175,7 +175,7 @@ public class SyncComputer {
         return false;
     }
 
-    private void addCandidate(GeneralizedFile src, GeneralizedFile dst, String root) throws IOException {
+    private void addCandidate(GFile src, GFile dst, String root) throws IOException {
         // Syncing empty folders still causes trouble ...
         if (src.isDirectory()) return;
 

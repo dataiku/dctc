@@ -7,7 +7,7 @@ import java.util.List;
 import com.dataiku.dctc.AutoGZip;
 import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dctc.file.GeneralizedFileInputSplit;
 import com.dataiku.dip.datalayer.Column;
 import com.dataiku.dip.datalayer.DevNullProcessorOutput;
@@ -37,7 +37,7 @@ public class ListColumns extends Command {
     }
 
     @Override
-    public void perform(List<GeneralizedFile> args) {
+    public void perform(List<GFile> args) {
         Format csv = new Format("csv").withParam("separator", getSeparator());
         FormatExtractor extractor = BasicFormatExtractorFactory.build(csv);
         StreamColumnFactory stream = null;
@@ -46,7 +46,7 @@ public class ListColumns extends Command {
         limit.maxRecords = 1;
         PrettyArray array = initArray();
 
-        for (GeneralizedFile arg: args) {
+        for (GFile arg: args) {
             GeneralizedFileInputSplit inputStream;
 
             stream = new StreamColumnFactory();

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 
 public class Globbing {
     static public boolean match(String pattern, String filename) {
@@ -36,9 +36,9 @@ public class Globbing {
         }
         return true;
     }
-    static public List<GeneralizedFile> resolve(GeneralizedFile globbing,
+    static public List<GFile> resolve(GFile globbing,
                                                 boolean showHidden) throws IOException {
-        List<GeneralizedFile> res = new ArrayList<GeneralizedFile>();
+        List<GFile> res = new ArrayList<GFile>();
         boolean first = true;
 
         if (hasGlobbing(globbing.givenName())) {
@@ -57,8 +57,8 @@ public class Globbing {
                 if (hasGlobbing(splitElt)) {
                     if (first) {
                         first = false;
-                        GeneralizedFile globResolve = globbing.createInstanceFor(prevprev);
-                        for (GeneralizedFile f: globResolve.glist()) {
+                        GFile globResolve = globbing.createInstanceFor(prevprev);
+                        for (GFile f: globResolve.glist()) {
                             if (showHidden || !f.isHidden()) {
                                 if (matchPath(prevPath, f.getAbsolutePath(), "/")) {
                                     res.add(f);
@@ -71,10 +71,10 @@ public class Globbing {
                         }
                     }
                     else {
-                        List<GeneralizedFile> prevList = res;
-                        res = new ArrayList<GeneralizedFile>();
-                        for (GeneralizedFile parentElt: prevList) {
-                            for (GeneralizedFile nextElt: parentElt.glist()) {
+                        List<GFile> prevList = res;
+                        res = new ArrayList<GFile>();
+                        for (GFile parentElt: prevList) {
+                            for (GFile nextElt: parentElt.glist()) {
                                 if (showHidden || !nextElt.isHidden()) {
                                     if (matchPath(prevPath, nextElt.getAbsolutePath(), "/")) {
                                         res.add(nextElt);

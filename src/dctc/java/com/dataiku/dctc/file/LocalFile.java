@@ -190,7 +190,7 @@ public class LocalFile extends AbstractGFile {
         return new FileOutputStream(path);
     }
     @Override
-    public boolean copy(GeneralizedFile input) throws IOException {
+    public boolean copy(GFile input) throws IOException {
         return false;
     }
     @Override
@@ -198,12 +198,12 @@ public class LocalFile extends AbstractGFile {
         return false;
     }
     @Override
-    public boolean directCopy(GeneralizedFile ginput) throws IOException {
+    public boolean directCopy(GFile ginput) throws IOException {
         // Possible, but hide the copy to the listener.
         return false;
     }
     @Override
-    public boolean directMove(GeneralizedFile ginput) throws IOException {
+    public boolean directMove(GFile ginput) throws IOException {
         if (!(ginput instanceof LocalFile)) {
             return false;
         }

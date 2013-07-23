@@ -6,11 +6,11 @@ import java.io.InputStream;
 
 import com.dataiku.dctc.AutoGZip;
 import com.dataiku.dctc.command.policy.YellPolicy;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dctc.utils.ExitCode;
 
 abstract class AbstractCatAlgorithm implements CatAlgorithm {
-    public AbstractCatAlgorithm(GeneralizedFile file, String cmdname) {
+    public AbstractCatAlgorithm(GFile file, String cmdname) {
         this.cmdname = cmdname;
         this.file = file;
     }
@@ -19,7 +19,7 @@ abstract class AbstractCatAlgorithm implements CatAlgorithm {
     }
 
     // Abstract method
-    protected abstract long _run(GeneralizedFile file);
+    protected abstract long _run(GFile file);
     protected String cmdname() {
         return cmdname;
     }
@@ -50,13 +50,13 @@ abstract class AbstractCatAlgorithm implements CatAlgorithm {
     }
 
     // Getters-Setters
-    public GeneralizedFile getFile() {
+    public GFile getFile() {
         return file;
     }
-    public void setFile(GeneralizedFile file) {
+    public void setFile(GFile file) {
         this.file = file;
     }
-    public AbstractCatAlgorithm withFile(GeneralizedFile file) {
+    public AbstractCatAlgorithm withFile(GFile file) {
         setFile(file);
         return this;
     }
@@ -86,7 +86,7 @@ abstract class AbstractCatAlgorithm implements CatAlgorithm {
     }
     // Attributes
     private YellPolicy yell;
-    private GeneralizedFile file;
+    private GFile file;
     private ExitCode exit;
     private String cmdname;
 }

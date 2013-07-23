@@ -1,9 +1,9 @@
 package com.dataiku.dctc.command.cat;
 
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 
 public class AlwaysCatHeaderSelector implements CatHeaderPrinter {
-    public void print(GeneralizedFile file) {
+    public void print(GFile file) {
         if (first) {
             first = false;
         }

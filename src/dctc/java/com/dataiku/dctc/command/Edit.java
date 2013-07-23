@@ -15,7 +15,7 @@ import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.copy.CopyTask;
 import com.dataiku.dctc.copy.SimpleCopyTaskRunnableFactory;
 import com.dataiku.dctc.file.FileManipulation;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dctc.file.LocalFile;
 import com.dataiku.dip.utils.DKUtils;
 import com.dataiku.dip.utils.IndentedWriter;
@@ -43,9 +43,9 @@ public class Edit extends Command {
     }
 
     @Override
-    public void perform(List<GeneralizedFile> files) {
+    public void perform(List<GFile> files) {
         List<CopyTask> tasks = new ArrayList<CopyTask>();
-        List<GeneralizedFile> localFiles = new ArrayList<GeneralizedFile>();
+        List<GFile> localFiles = new ArrayList<GFile>();
 
         if (files.size() == 0) {
             usage();
@@ -61,7 +61,7 @@ public class Edit extends Command {
 
         try {
             for (int i = 0; i < files.size(); i++) {
-                GeneralizedFile f = files.get(i);
+                GFile f = files.get(i);
                 if (f instanceof LocalFile) {
                     localFiles.add(f);
                 }
@@ -91,7 +91,7 @@ public class Edit extends Command {
             for (CopyTask task: tasks) {
                 args.add(task.dstDir.getAbsolutePath());
             }
-            for (GeneralizedFile file: localFiles) {
+            for (GFile file: localFiles) {
                 args.add(file.givenName());
             }
             if (new File("/dev/tty").exists()) {

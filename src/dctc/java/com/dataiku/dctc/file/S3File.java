@@ -263,12 +263,12 @@ public class S3File extends BucketBasedFile {
         return new AmazonS3OutputStream(s3, bucket, path, allocate);
     }
     @Override
-    public boolean copy(GeneralizedFile input) throws IOException {
+    public boolean copy(GFile input) throws IOException {
         IOUtils.copyLarge(input.inputStream(), outputStream());
         return true;
     }
     @Override
-    public boolean directCopy(GeneralizedFile ginput) throws IOException {
+    public boolean directCopy(GFile ginput) throws IOException {
         if (!(ginput instanceof S3File)) {
             return false;
         }
@@ -278,7 +278,7 @@ public class S3File extends BucketBasedFile {
         return true;
     }
     @Override
-    public boolean directMove(GeneralizedFile ginput) throws IOException {
+    public boolean directMove(GFile ginput) throws IOException {
         if (directCopy(ginput)) {
             ginput.delete();
             return true;
@@ -526,7 +526,7 @@ public class S3File extends BucketBasedFile {
     public AmazonS3 getAmazonS3() {
         return s3;
     }
-    public void put(GeneralizedFile file) throws IOException {
+    public void put(GFile file) throws IOException {
         s3.putObject(bucket
                      , path
                      , file.inputStream()

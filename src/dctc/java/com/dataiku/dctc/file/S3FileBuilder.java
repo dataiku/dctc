@@ -25,7 +25,7 @@ public class S3FileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public synchronized GeneralizedFile buildFile(String accountSettings, String rawPath) {
+    public synchronized GFile buildFile(String accountSettings, String rawPath) {
         String accountName = getBank().getResolvedAccountName(getProtocol().getCanonicalName(), accountSettings);
         Params p = getBank().getAccountParams(getProtocol().getCanonicalName(), accountSettings);
         if (validateAccountParams(accountSettings, p)) {

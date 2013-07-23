@@ -7,7 +7,7 @@ import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.display.Size;
 import com.dataiku.dctc.file.FileManipulation;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dctc.file.LocalFile;
 import com.dataiku.dip.utils.IndentedWriter;
 import com.dataiku.dip.utils.IntegerUtils;
@@ -34,12 +34,12 @@ public class Du extends Command {
     public void longDescription(IndentedWriter printer) {
         printer.print("Compute file space usage.");
     }
-    public void perform(List<GeneralizedFile> args) {
+    public void perform(List<GFile> args) {
         if (args.size() == 0) {
             args.add(new LocalFile("."));
         }
         long size = 0;
-        for (GeneralizedFile arg: args) {
+        for (GFile arg: args) {
             try {
                 size += perform(arg, 0);
             }
@@ -52,7 +52,7 @@ public class Du extends Command {
             print(size, "total");
         }
     }
-    public long perform(GeneralizedFile arg, int depth) throws IOException {
+    public long perform(GFile arg, int depth) throws IOException {
         long size;
         if (arg.isFile()) {
             size = arg.getSize();
@@ -61,7 +61,7 @@ public class Du extends Command {
         else {
             size = arg.getSize();
             boolean first = true;
-            for (GeneralizedFile son: arg.grecursiveList()) {
+            for (GFile son: arg.grecursiveList()) {
                 size += son.getSize();
                 if ((all() || son.isDirectory())
                     && FileManipulation.isDirectSon(arg.givenName(), son.givenName(), "/")

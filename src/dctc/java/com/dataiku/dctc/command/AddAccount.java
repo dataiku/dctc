@@ -18,7 +18,7 @@ import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.display.Interactive;
 import com.dataiku.dctc.exception.UserException;
 import com.dataiku.dctc.file.GSFile;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dctc.file.S3File;
 import com.dataiku.dip.utils.IndentedWriter;
 import com.dataiku.dip.utils.PrettyString;
@@ -74,7 +74,7 @@ public class AddAccount extends Command {
         }
 
         Map<String, String> parameters;
-        GeneralizedFile root = null;
+        GFile root = null;
         if (proto.equals("s3")) {
             while (true) {
                 parameters = ask("Please enter your AWS access key|access_key"

@@ -11,7 +11,7 @@ import com.dataiku.dctc.copy.CopyTask;
 import com.dataiku.dctc.copy.CopyTasksExecutor;
 import com.dataiku.dctc.copy.SimpleCopyTaskRunnableFactory;
 import com.dataiku.dctc.display.ThreadedDisplay;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
 public class Mv extends ListFilesCommand {
@@ -47,7 +47,7 @@ public class Mv extends ListFilesCommand {
             }
             else {
                 // No errors, delete the directory if needed.
-                for (GeneralizedFile dir: list) {
+                for (GFile dir: list) {
                     try {
                         if (!dir.delete()) {
                             error(dir, "Cannot delete directory", 2);
@@ -67,21 +67,21 @@ public class Mv extends ListFilesCommand {
         opts.add(stdOption('n', "thread-number", "Set the number of thread", true, "NUMBER"));
     }
     @Override
-    protected boolean shouldAdd(GeneralizedFile src, GeneralizedFile dst, String root) {
+    protected boolean shouldAdd(GFile src, GFile dst, String root) {
         return true;
     }
     @Override
     protected String proto() {
         return "[OPT...] SOURCE... DST";
     }
-    protected boolean recursion(GeneralizedFile dir) {
+    protected boolean recursion(GFile dir) {
         return true;
     }
     @Override
     protected boolean includeLastPathElementInTarget() {
         return true;
     }
-    protected boolean mkdirs(GeneralizedFile dst) {
+    protected boolean mkdirs(GFile dst) {
         try {
             dst.mkdirs();
             return true;
@@ -91,9 +91,9 @@ public class Mv extends ListFilesCommand {
             return false;
         }
     }
-    protected void dstRoot(GeneralizedFile dst) {
+    protected void dstRoot(GFile dst) {
     }
-    protected void leave(GeneralizedFile sourceDir) {
+    protected void leave(GFile sourceDir) {
         list.add(sourceDir);
     }
     @Override
@@ -106,5 +106,5 @@ public class Mv extends ListFilesCommand {
     }
 
     // Attributes
-    private List<GeneralizedFile> list = new ArrayList<GeneralizedFile>();
+    private List<GFile> list = new ArrayList<GFile>();
 }

@@ -10,7 +10,7 @@ import com.dataiku.dctc.command.cat.AlwaysCatHeaderSelector;
 import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
 import com.dataiku.dctc.command.cat.CatRunner;
 import com.dataiku.dctc.command.cat.NeverCatHeaderSelector;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
 public class Head extends Command {
@@ -29,7 +29,7 @@ public class Head extends Command {
     }
 
     @Override
-    public void perform(List<GeneralizedFile> args) {
+    public void perform(List<GFile> args) {
         CatAlgorithmFactory fact = new CatAlgorithmFactory()
             .withAlgo(AlgorithmType.HEAD)
             .withSkipLast(number())

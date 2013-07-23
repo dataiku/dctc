@@ -8,7 +8,7 @@ import java.util.List;
 import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.display.Interactive;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
 public class Rm extends Command {
@@ -21,9 +21,9 @@ public class Rm extends Command {
     }
     // Public
     @Override
-    public void perform(List<GeneralizedFile> args) {
+    public void perform(List<GFile> args) {
 
-        for (GeneralizedFile arg: args) {
+        for (GFile arg: args) {
             try {
                 if (exists(arg) && couldDelDir(arg)) {
                     rm(arg);
@@ -94,7 +94,7 @@ public class Rm extends Command {
     }
 
     // Private
-    private void del(GeneralizedFile arg) throws IOException {
+    private void del(GFile arg) throws IOException {
         if (recursiveDeletion() || arg.isFile() || arg.isEmpty()) {
             if (!arg.delete()) {
                 if (!force()) {
@@ -106,7 +106,7 @@ public class Rm extends Command {
             notEmpty(arg);
         }
     }
-    private boolean dirAsk(GeneralizedFile arg) throws IOException {
+    private boolean dirAsk(GFile arg) throws IOException {
         if (arg.isEmpty()) {
             return Interactive.ask("rm", "rm: remove directory `" + arg.givenName() + "'? ",
                                    "yY", "nN");
@@ -116,22 +116,22 @@ public class Rm extends Command {
                                    "yY", "nN");
         }
     }
-    private boolean fileAsk(GeneralizedFile arg) {
+    private boolean fileAsk(GFile arg) {
         return Interactive.ask("rm", "rm: remove regular file `" + arg.givenName() + "'? ",
                                "yY", "nN");
     }
-    private void notEmpty(GeneralizedFile arg) {
+    private void notEmpty(GFile arg) {
         error(arg, "Cannot remove, directory not empty", 1);
     }
-    private void rm(GeneralizedFile arg) throws IOException {
+    private void rm(GFile arg) throws IOException {
         if (arg.isDirectory()) {
             if (!interactive() || dirAsk(arg)) {
                 if (interactive()) {
                     // If one file is not delete, we must not delete
                     // the root.
-                    List<? extends GeneralizedFile> sons = arg.grecursiveList();
+                    List<? extends GFile> sons = arg.grecursiveList();
                     for (int i = sons.size() - 1; i != -1; --i) {
-                        GeneralizedFile son = sons.get(i);
+                        GFile son = sons.get(i);
                         if (son.isDirectory()) {
                             if (dirAsk(son)) {
                                 del(son);
@@ -147,9 +147,9 @@ public class Rm extends Command {
                 else {
                     if (verbose()) {
                         @SuppressWarnings("unchecked")
-                        List<GeneralizedFile> rlist = (List<GeneralizedFile>) arg.grecursiveList();
+                        List<GFile> rlist = (List<GFile>) arg.grecursiveList();
                         for (int i = rlist.size() - 1; i != -1; --i) {
-                            GeneralizedFile son = rlist.get(i);
+                            GFile son = rlist.get(i);
                             verbose(son.givenName());
                             del(son);
                         }
@@ -166,7 +166,7 @@ public class Rm extends Command {
             }
         }
     }
-    private boolean couldDelDir(GeneralizedFile arg) throws IOException {
+    private boolean couldDelDir(GFile arg) throws IOException {
         if (arg.isDirectory() && !recursiveDeletion()) {
             if (!force()) {
                 error(arg, "Cannot remove, is a directory", 2);
@@ -175,7 +175,7 @@ public class Rm extends Command {
         }
         return true;
     }
-    private boolean exists(GeneralizedFile arg) throws IOException {
+    private boolean exists(GFile arg) throws IOException {
         if (arg.exists() || force()) {
             return true;
         }

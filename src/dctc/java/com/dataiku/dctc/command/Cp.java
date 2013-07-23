@@ -13,7 +13,7 @@ import com.dataiku.dctc.copy.CopyTasksExecutor;
 import com.dataiku.dctc.copy.SimpleCopyTaskRunnableFactory;
 import com.dataiku.dctc.display.Interactive;
 import com.dataiku.dctc.display.ThreadedDisplay;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
 public class Cp extends ListFilesCommand {
@@ -93,7 +93,7 @@ public class Cp extends ListFilesCommand {
         return !archive();
     }
     @Override
-    protected boolean shouldAdd(GeneralizedFile src, GeneralizedFile dst, String root) {
+    protected boolean shouldAdd(GFile src, GFile dst, String root) {
         try {
             return !dst.exists() || noClobber() || ask(dst);
         } catch (IOException e) {
@@ -103,10 +103,10 @@ public class Cp extends ListFilesCommand {
         }
     }
     @Override
-    protected void dstRoot(GeneralizedFile dst) {
+    protected void dstRoot(GFile dst) {
     }
     @Override
-    protected void leave(GeneralizedFile sourceDir) {
+    protected void leave(GFile sourceDir) {
         // empty
     }
     @Override
@@ -115,7 +115,7 @@ public class Cp extends ListFilesCommand {
     }
 
     // Private
-    private boolean ask(GeneralizedFile file) {
+    private boolean ask(GFile file) {
         return !interactive()
                 || Interactive.ask("cp", "cp: overwrite `" + file.givenName()
                         + "'?", "yY", "nN");

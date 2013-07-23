@@ -21,7 +21,7 @@ import com.dataiku.dctc.dispatch.SplitFunction;
 import com.dataiku.dctc.dispatch.ValueFunction;
 import com.dataiku.dctc.display.ThreadedDisplay;
 import com.dataiku.dctc.exception.UserException;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dip.input.Format;
 import com.dataiku.dip.input.formats.BasicFormatExtractorFactory;
 import com.dataiku.dip.partitioning.TimeDimension;
@@ -188,15 +188,15 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
         return false;
     }
     @Override
-    protected final boolean shouldAdd(GeneralizedFile src, GeneralizedFile dst, String root) {
+    protected final boolean shouldAdd(GFile src, GFile dst, String root) {
         return true;
     }
     @Override
-    protected void dstRoot(GeneralizedFile dst) {
+    protected void dstRoot(GFile dst) {
         this.dst = dst;
     }
     @Override
-    protected void leave(GeneralizedFile sourceDir) {
+    protected void leave(GFile sourceDir) {
         // empty
     }
     @Override
@@ -270,7 +270,7 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
     }
 
     // Attributes
-    private GeneralizedFile dst = null;
+    private GFile dst = null;
     private String prefix;
     private String postfix;
     private int fileNumber;

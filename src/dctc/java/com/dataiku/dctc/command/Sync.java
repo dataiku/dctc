@@ -16,7 +16,7 @@ import com.dataiku.dctc.copy.SimpleCopyTaskRunnableFactory;
 import com.dataiku.dctc.copy.SyncComputer;
 import com.dataiku.dctc.copy.SyncComputer.IncrementalFilter.Type;
 import com.dataiku.dctc.display.ThreadedDisplay;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
 public class Sync extends Command {
@@ -71,7 +71,7 @@ public class Sync extends Command {
         opts.add(stdOption('n', "thread-number", "Set the number of thread.", true, "NUMBER"));
     }
 
-    public void perform(List<GeneralizedFile> args) {
+    public void perform(List<GFile> args) {
         if (args.size() < 2) {
             usage();
             setExitCode(1);

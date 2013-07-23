@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.util.List;
 
 import com.dataiku.dctc.DCTCLog;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dctc.file.StandardFile;
 import com.dataiku.dctc.utils.ExitCode;
 
 public class CatRunner {
 
-    public void perform(List<GeneralizedFile> args
+    public void perform(List<GFile> args
                         , CatAlgorithmFactory fact
                         , ExitCode exitCode
                         , boolean resetLineNumbering) {
@@ -19,7 +19,7 @@ public class CatRunner {
         }
         long nbLinePrinted = 0;
 
-        for (GeneralizedFile arg: args) {
+        for (GFile arg: args) {
             header.print(arg);
             boolean isDirectory;
             try {

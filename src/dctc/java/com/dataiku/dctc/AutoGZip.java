@@ -8,7 +8,7 @@ import java.util.zip.GZIPOutputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 
 public class AutoGZip {
     public static InputStream buildInput(String fileName, InputStream stream) throws IOException {
@@ -24,7 +24,7 @@ public class AutoGZip {
         }
     }
 
-    public static InputStream buildInput(GeneralizedFile g) throws IOException {
+    public static InputStream buildInput(GFile g) throws IOException {
         try {
             return buildInput(g.getFileName(), g.inputStream());
         }
@@ -49,7 +49,7 @@ public class AutoGZip {
             return stream;
         }
     }
-    public static OutputStream buildOutput(GeneralizedFile g) throws IOException {
+    public static OutputStream buildOutput(GFile g) throws IOException {
         assert g.hasOutputStream();
         try {
             return buildOutput(g.getFileName(), g.outputStream());

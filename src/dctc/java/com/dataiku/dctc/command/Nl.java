@@ -8,7 +8,7 @@ import com.dataiku.dctc.command.cat.AlgorithmType;
 import com.dataiku.dctc.command.cat.CatAlgorithmFactory;
 import com.dataiku.dctc.command.cat.CatRunner;
 import com.dataiku.dctc.command.cat.NeverCatHeaderSelector;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dip.utils.IndentedWriter;
 
 public class Nl extends Command {
@@ -37,7 +37,7 @@ public class Nl extends Command {
                      + "numbers added.  With no FILE, or when FILE is -, "
                      + "read standard input.");
     }
-    public void perform(List<GeneralizedFile> args) {
+    public void perform(List<GFile> args) {
         CatAlgorithmFactory fact = new CatAlgorithmFactory()
             .withAlgo(AlgorithmType.NL)
             .withLineIncrement(getIntOption('i', 1))

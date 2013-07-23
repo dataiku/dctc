@@ -5,7 +5,7 @@ import java.io.IOException;
 import com.dataiku.dctc.archive.ArchiveFactory;
 import com.dataiku.dctc.archive.OutputArchiveIterable;
 import com.dataiku.dctc.archive.OutputArchiveIterator;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 
 // Direct move with archiving/unarchiving management.
 public class SimpleCopyTaskRunnableFactory implements CopyTaskRunnableFactory {
@@ -26,7 +26,7 @@ public class SimpleCopyTaskRunnableFactory implements CopyTaskRunnableFactory {
                     return new UnarchiveCopyTask(task.src, task.dstDir);
 
                 } else {
-                    GeneralizedFile dst = task.dstDir;
+                    GFile dst = task.dstDir;
                     return new UnarchiveCopyTask(task.src, dst);
                 }
             }

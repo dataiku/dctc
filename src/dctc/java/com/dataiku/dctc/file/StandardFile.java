@@ -6,9 +6,9 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StandardFile implements GeneralizedFile {
+public class StandardFile implements GFile {
     @Override
-    public int compareTo(GeneralizedFile arg0) {
+    public int compareTo(GFile arg0) {
         if (arg0 instanceof StandardFile) {
             return 0;
         }
@@ -30,11 +30,11 @@ public class StandardFile implements GeneralizedFile {
         return list;
     }
     @Override
-    public GeneralizedFile createSubFile(String path) throws IOException {
+    public GFile createSubFile(String path) throws IOException {
         return createInstanceFor(path);
     }
     @Override
-    public GeneralizedFile createSubFile(String path, String fileSeparator) throws IOException {
+    public GFile createSubFile(String path, String fileSeparator) throws IOException {
         return createInstanceFor(path);
     }
     @Override
@@ -110,11 +110,11 @@ public class StandardFile implements GeneralizedFile {
         return null;
     }
     @Override
-    public List<? extends GeneralizedFile> glist() throws IOException {
+    public List<? extends GFile> glist() throws IOException {
         throw new IOException("Not a directory");
     }
     @Override
-    public List<? extends GeneralizedFile> grecursiveList() throws IOException {
+    public List<? extends GFile> grecursiveList() throws IOException {
         throw new IOException("Not a directory");
     }
     @Override
@@ -151,7 +151,7 @@ public class StandardFile implements GeneralizedFile {
         return System.out;
     }
     @Override
-    public boolean copy(GeneralizedFile input) throws IOException {
+    public boolean copy(GFile input) throws IOException {
         return false;
     }
     @Override
@@ -159,11 +159,11 @@ public class StandardFile implements GeneralizedFile {
         return false;
     }
     @Override
-    public boolean directMove(GeneralizedFile ginput) throws IOException {
+    public boolean directMove(GFile ginput) throws IOException {
         return false;
     }
     @Override
-    public boolean directCopy(GeneralizedFile ginput) throws IOException {
+    public boolean directCopy(GFile ginput) throws IOException {
         return false;
     }
     @Override

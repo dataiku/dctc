@@ -63,7 +63,7 @@ public class FileBuilder {
         return failed;
     }
 
-    public GeneralizedFile buildFile(String uri) {
+    public GFile buildFile(String uri) {
         int protocolSeparator = uri.indexOf("://");
         if (protocolSeparator == -1) {
             if (uri.equals("-")) {
@@ -79,10 +79,10 @@ public class FileBuilder {
 
         return buildFile(protocol, path);
     }
-    public GeneralizedFile buildFile(String proto, String path) {
+    public GFile buildFile(String proto, String path) {
         return buildFile(Protocol.forName(proto), path);
     }
-    public GeneralizedFile buildFile(Protocol proto, String path) {
+    public GFile buildFile(Protocol proto, String path) {
         String account = null;
         int atIndex = path.indexOf("@");
         if (atIndex > 0) {
@@ -96,8 +96,8 @@ public class FileBuilder {
 
         return proto.builder.buildFile(account, path);
     }
-    public GeneralizedFile[] buildFile(String[] paths) {
-        GeneralizedFile[] res = new GeneralizedFile[paths.length];
+    public GFile[] buildFile(String[] paths) {
+        GFile[] res = new GFile[paths.length];
         for (int i = 0; i < paths.length; ++i) {
             res[i] = buildFile(paths[i]);
         }

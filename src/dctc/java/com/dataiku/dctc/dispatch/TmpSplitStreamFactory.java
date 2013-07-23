@@ -6,14 +6,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dctc.file.LocalFile;
 import com.dataiku.dip.input.Format;
 import com.dataiku.dip.output.CSVOutputFormatter;
 import com.dataiku.dip.output.OutputFormatter;
 
 public class TmpSplitStreamFactory extends SplitStreamFactory {
-    public TmpSplitStreamFactory(GeneralizedFile dir, String prefix, String postfix, SplitFunction fct,
+    public TmpSplitStreamFactory(GFile dir, String prefix, String postfix, SplitFunction fct,
                                 String selectedColumn, Format format, boolean compress) {
         super(dir, prefix, postfix, fct, selectedColumn, format, compress);
         this.map = new HashMap<String, TmpOutput>();
@@ -21,7 +21,7 @@ public class TmpSplitStreamFactory extends SplitStreamFactory {
 
     @Override
     protected Output newStream(String splitIndex) throws IOException {
-        GeneralizedFile out = dir.createSubFile(prefix
+        GFile out = dir.createSubFile(prefix
                 + splitIndex + suffix,
                 dir.fileSeparator());
         out.mkpath();
@@ -42,7 +42,7 @@ public class TmpSplitStreamFactory extends SplitStreamFactory {
             LocalFile f = new LocalFile(elt.getValue().localTmp.getAbsolutePath());
             if (f.exists()) {
                 try {
-                    GeneralizedFile out = dir.createSubFile(prefix + elt.getKey() + suffix, "/");
+                    GFile out = dir.createSubFile(prefix + elt.getKey() + suffix, "/");
                     out.copy(f);
                 } catch (IOException ex) {
                     System.err.println("dctc TmpSplitStreamFactory: " + ex.getMessage());

@@ -1,6 +1,6 @@
 package com.dataiku.dctc.command.grep;
 
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 
 class CountGrepPrinter implements GrepPrinter {
     public CountGrepPrinter(GrepHeaderPrinter header) {
@@ -9,7 +9,7 @@ class CountGrepPrinter implements GrepPrinter {
     public void print(String line) {
         ++count;
     }
-    public void end(GeneralizedFile file) {
+    public void end(GFile file) {
         header.forcePrint(file);
         System.out.println(count);
     }

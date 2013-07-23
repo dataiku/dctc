@@ -6,7 +6,7 @@ import java.io.InputStream;
 import org.apache.commons.io.input.CountingInputStream;
 
 import com.dataiku.dctc.copy.CopyTaskRunnable;
-import com.dataiku.dctc.file.GeneralizedFile;
+import com.dataiku.dctc.file.GFile;
 import com.dataiku.dctc.file.GeneralizedFileInputSplit;
 import com.dataiku.dip.datalayer.streamimpl.StreamRowFactory;
 import com.dataiku.dip.input.Format;
@@ -15,7 +15,7 @@ import com.dataiku.dip.input.formats.FormatExtractor;
 import com.dataiku.dip.input.utils.AutoGZInputStream;
 
 public class SplitTask extends CopyTaskRunnable {
-    SplitTask(GeneralizedFile in, SplitStreamFactory fact, Format format) {
+    SplitTask(GFile in, SplitStreamFactory fact, Format format) {
         super(in);
         this.fact = fact;
         this.format = format;
