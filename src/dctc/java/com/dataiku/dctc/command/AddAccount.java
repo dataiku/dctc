@@ -62,7 +62,7 @@ public class AddAccount extends Command {
         }
         if (account == null) {
             System.err.println("You haven't enter an account name.");
-            account = Interactive.askString("Please enter the account name: ");
+            account = Interactive.askString("Please enter the account name: ", getYell());
         }
         if (account.isEmpty()) {
             account = "default_account";
@@ -134,7 +134,7 @@ public class AddAccount extends Command {
 
             String rep;
             do {
-                rep = Interactive.askString(ask.substring(0, pipe) + ": ");
+                rep = Interactive.askString(ask.substring(0, pipe) + ": ", getYell());
             } while (rep.isEmpty());
             res.put(ask.substring(pipe + 1), rep);
         }

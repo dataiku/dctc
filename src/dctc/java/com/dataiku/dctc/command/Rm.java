@@ -109,16 +109,16 @@ public class Rm extends Command {
     private boolean dirAsk(GFile arg) throws IOException {
         if (arg.isEmpty()) {
             return Interactive.ask("rm", "rm: remove directory `" + arg.givenName() + "'? ",
-                                   "yY", "nN");
+                                   "yY", "nN", getYell());
         }
         else {
             return Interactive.ask("rm", "rm: descend into directory `" + arg.givenName() + "'? ",
-                                   "yY", "nN");
+                                   "yY", "nN", getYell());
         }
     }
     private boolean fileAsk(GFile arg) {
         return Interactive.ask("rm", "rm: remove regular file `" + arg.givenName() + "'? ",
-                               "yY", "nN");
+                               "yY", "nN", getYell());
     }
     private void notEmpty(GFile arg) {
         error(arg, "Cannot remove, directory not empty", 1);

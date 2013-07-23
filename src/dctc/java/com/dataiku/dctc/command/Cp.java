@@ -118,7 +118,7 @@ public class Cp extends ListFilesCommand {
     private boolean ask(GFile file) {
         return !interactive()
                 || Interactive.ask("cp", "cp: overwrite `" + file.givenName()
-                        + "'?", "yY", "nN");
+                        + "'?", "yY", "nN", getYell());
     }
 
     // Attributes
