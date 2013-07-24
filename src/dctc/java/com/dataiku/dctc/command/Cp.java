@@ -76,12 +76,11 @@ public class Cp extends ListFilesCommand {
         try {
             exec.run(tasks, archive());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            getYell().yell("cp", "Unexpected error while copying files", e);
         }
         if (exec.hasFail()) {
             setExitCode(2);
-            exec.displayErrors();
+            exec.displayErrors(getYell());
         }
     }
     @Override
@@ -97,8 +96,7 @@ public class Cp extends ListFilesCommand {
         try {
             return !dst.exists() || noClobber() || ask(dst);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            getYell().yell("cp", "Unexpected error", e);
             return false;
         }
     }
