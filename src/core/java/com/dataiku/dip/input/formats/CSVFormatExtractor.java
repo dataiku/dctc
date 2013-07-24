@@ -28,11 +28,25 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
 
     private CSVFormatConfig conf;
 
+
+    long log_count = 0;
+    long max_log = 100;
+    protected void log_line_warn(String msg) {
+        log_count ++;
+        if (log_count == max_log) {
+            logger.warn("Maximum log count (other info ignore)");
+        } else if (log_count < max_log) {
+            logger.warn(msg);
+        }
+    }
+
     @Override
     public boolean run(StreamsInputSplit in, ProcessorOutput out, ProcessorOutput err,
             ColumnFactory cf, RowFactory rf, StreamInputSplitProgressListener listener,
             ExtractionLimit limit) throws Exception {
         long totalBytes = 0, totalRecords = 0;
+        long log_count = 0;
+        long max_log = 1000; // Maximum number of log per line.
         while (true) {
             EnrichedInputStream stream = in.nextStream();
             if (stream == null) break;
@@ -85,7 +99,7 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                         }
                     } else {
                         if (columns.size() > 0 && line.length != columns.size() && Math.abs(line.length - columns.size()) > 2) {
-                            logger.info("Line has an unexpected number of columns, line has " + line.length +
+                            log_line_warn("Line has an unexpected number of columns, line has " + line.length +
                                     " columns, extractor has " + columns.size());
                         }
 
@@ -105,7 +119,7 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                         for (int i = 0; i < line.length; i++) {
                             line[i] = line[i].trim();  // trim returns a reference and does not reallocate if there is no whitespace to trim
                             if (line[i].length() > 3000) {
-                                logger.info("Unusually large column (quoting issue ?) : " + line[i]);
+                                log_line_warn("Unusually large column (quoting issue ?) : " + line[i]);
                             }
                             String s = line[i];
 
