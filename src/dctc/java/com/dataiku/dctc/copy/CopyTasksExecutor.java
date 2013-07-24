@@ -7,8 +7,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
-import com.dataiku.dctc.DCTCLog;
+import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.display.ThreadedDisplay;
+import static com.dataiku.dip.utils.PrettyString.pquoted;
 
 public class CopyTasksExecutor {
     public CopyTasksExecutor(CopyTaskRunnableFactory fact, ThreadedDisplay display, int threadLimit) {
@@ -68,17 +69,17 @@ public class CopyTasksExecutor {
     public boolean hasFail() {
         return errors != null && errors.size() > 0;
     }
-    public void displayErrors() {
+    public void displayErrors(YellPolicy yell) {
         for (CopyTaskRunnable runnable: errors) {
             if (runnable.getException() != null) {
-                error(runnable.getInputFile().givenName(), runnable.getException());
+                error(runnable.getInputFile().givenName(), runnable.getException(), yell);
             }
         }
     }
 
     // Private
-    private void error(String fileName, Exception exception) {
-        DCTCLog.error("copy task executor", "`" + fileName + "': " + exception.getMessage());
+    private void error(String fileName, Exception exception, YellPolicy yell) {
+        yell.yell("copy task executor", pquoted(fileName) + ": Unexpected error" , exception);
     }
 
     // Attributes

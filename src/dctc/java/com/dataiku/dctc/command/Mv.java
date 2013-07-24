@@ -43,7 +43,7 @@ public class Mv extends ListFilesCommand {
             }
             if (exec.hasFail()) {
                 setExitCode(2);
-                exec.displayErrors();
+                exec.displayErrors(getYell());
             }
             else {
                 // No errors, delete the directory if needed.

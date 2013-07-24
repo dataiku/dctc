@@ -112,7 +112,7 @@ public class Sync extends Command {
         exec.run(tasks, false);
         if (exec.hasFail()) {
             setExitCode(2);
-            exec.displayErrors();
+            exec.displayErrors(getYell());
         }
     }
     @Override
