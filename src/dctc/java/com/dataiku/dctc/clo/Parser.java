@@ -99,6 +99,7 @@ public class Parser {
             error = "Unknown option: " + optName.substring(0, 1);
         }
     }
+
     // Attributes
     private List<String> notOption;
     private String error;

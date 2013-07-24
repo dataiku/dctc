@@ -11,8 +11,7 @@ import com.dataiku.dctc.archive.InputArchiveIterator;
 import com.dataiku.dctc.file.GFile;
 
 public class UnarchiveCopyTask extends CopyTaskRunnable {
-
-    public UnarchiveCopyTask(GFile input, GFile outputDir) throws IOException {
+    public UnarchiveCopyTask(GFile input, GFile outputDir) throws IOException { // FIXME
         super(input);
 
         if (!outputDir.isDirectory() && outputDir.exists()) {

@@ -11,19 +11,19 @@ import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream
 import com.dataiku.dctc.file.GFile;
 
 public class AutoGZip {
-    public static InputStream buildInput(String fileName, InputStream stream) throws IOException {
+    public static InputStream buildInput(String fileName,
+                                         InputStream stream)
+        throws IOException {
         if (fileName.endsWith(".gz")) {
             return new GZIPInputStream(stream);
         }
         else if (fileName.endsWith(".gz2")) {
             return new BZip2CompressorInputStream(stream);
         }
-
         else {
             return stream;
         }
     }
-
     public static InputStream buildInput(GFile g) throws IOException {
         try {
             return buildInput(g.getFileName(), g.inputStream());
@@ -37,25 +37,27 @@ public class AutoGZip {
             }
         }
     }
-    public static OutputStream buildOutput(String fileName, OutputStream stream) throws IOException {
+    public static OutputStream buildOutput(String fileName
+                                           , OutputStream stream)
+        throws IOException {
         if (fileName.endsWith(".gz")) {
             return new GZIPOutputStream(stream);
         }
         else if (fileName.endsWith(".gz2")) {
             return new BZip2CompressorOutputStream(stream);
         }
-
         else {
             return stream;
         }
     }
     public static OutputStream buildOutput(GFile g) throws IOException {
         assert g.hasOutputStream();
+
         try {
             return buildOutput(g.getFileName(), g.outputStream());
         }
         catch (IOException e) {
-            if (g.exists()){
+            if (g.exists()) {
                 return g.outputStream();
             }
             else {

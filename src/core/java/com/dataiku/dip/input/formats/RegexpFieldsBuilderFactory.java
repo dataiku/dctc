@@ -36,9 +36,9 @@ public class RegexpFieldsBuilderFactory {
 			String fieldType = fmt.getParams().get(prefix, "type");
 			System.out.println("FT " + fieldType);
 			if (fieldType == null) break;
-			
+
 			String fieldPattern = fmt.getParams().get("field." + fieldId, "pattern");
-			
+
 			if (fieldType.equals("predefcapture")) {
 				String fieldPredef = fmt.getParams().get("field." + fieldId, "predef");
 				if (fieldPredef == null) {
@@ -57,7 +57,7 @@ public class RegexpFieldsBuilderFactory {
 					ErrorContext.throwIAE("Unknown predef value "  +fieldPredef);
 				}
 			}
-			
+
 			if (fieldPattern == null) {
 				ErrorContext.throwIAE("No field pattern nor predef");
 			}

@@ -38,16 +38,18 @@ public class Ls extends Command {
             if (arguments.size() == 0) {
                 String[] dot = { "." };
                 perform(build(dot));
-            } else {
+            }
+            else {
                 perform(arguments);
             }
         }
+
         return;
-        // Set options.
     }
     @Override
     public void perform(List<GFile> args) {
         optimizeBucketRecursion(args, recursion());
+
         try {
             for (int i = 0; i < args.size(); ++i) {
                 if (!args.get(i).exists()) {
@@ -68,27 +70,27 @@ public class Ls extends Command {
             else {
                 nonRecursivePerform(args);
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             errorWithHandlingOfKnownExceptions(null, "", e, 2);
             // FIXME: This code isn't really clear.
         }
     }
-    private void optimizeBucketRecursion(List<GFile> args,
-                                         boolean recursion) {
+    private void optimizeBucketRecursion(List<GFile> args
+                                         , boolean recursion) {
         for (GFile arg: args) {
             if (arg instanceof BucketBasedFile) {
                 ((BucketBasedFile) arg).setAutoRecursion(recursion);
             }
         }
     }
-
     public void recursivePerform(List<GFile> args) throws IOException {
         int nbPrinted = printList(args, true);
         printRecursiveDirectoryList(args, nbPrinted == 0);
     }
-
-    private void printRecursiveDirectoryList(List<GFile> args,
-                                             boolean isFirst) throws IOException {
+    private void printRecursiveDirectoryList(List<GFile> args
+                                             , boolean isFirst)
+        throws IOException {
         for (GFile arg: args) {
             @SuppressWarnings("unchecked")
             List<GFile> sons = (List<GFile>) arg.grecursiveList();
@@ -116,22 +118,22 @@ public class Ls extends Command {
                 print(print);
                 if (sons.isEmpty()) {
                     break;
-                } else {
+                }
+                else {
                     System.out.println();
                 }
             }
         }
     }
-
     public void nonRecursivePerform(List<GFile> args) throws IOException {
         int nbPrinted = printList(args, true);
         printDirectoryList(args, nbPrinted == 0);
     }
-
-    private int printList(List<GFile> args,
-                          boolean onlyFile) throws IOException {
+    private int printList(List<GFile> args
+                          , boolean onlyFile) throws IOException {
         List<GFile> toPrint = new ArrayList<GFile>();
         int nbPrinted = 0;
+
         for (GFile arg: args) {
             if (!(onlyFile && arg.isDirectory())) {
                 if (!hide(arg, true)) {
@@ -140,12 +142,15 @@ public class Ls extends Command {
                 }
             }
         }
+
         givenName(toPrint);
+
         return nbPrinted;
     }
     private void printDirectoryList(List<GFile> args,
                                     boolean isFirst) throws IOException {
         boolean header = args.size() > 1 || !isFirst;
+
         for (GFile arg: args) {
             if (!arg.isDirectory()) {
                 continue;

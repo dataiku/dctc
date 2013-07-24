@@ -19,6 +19,7 @@ public class WithoutArgOptionAgregator implements OptionAgregator {
     }
     public int inc(String optName, int position) {
         int r = read(optName);
+
         if (r != 0) {
             ++count;
             this.position = position;
@@ -29,6 +30,7 @@ public class WithoutArgOptionAgregator implements OptionAgregator {
     }
     public int dec(String optName, int position) {
         int r = read(optName);
+
         if (r != 0) {
             --count;
             this.position = position;
@@ -47,6 +49,7 @@ public class WithoutArgOptionAgregator implements OptionAgregator {
                 return r;
             }
         }
+
         return 0;
     }
     public String getDescription() {

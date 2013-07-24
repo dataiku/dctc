@@ -15,7 +15,7 @@ public class SimpleCopyTaskRunnableFactory implements CopyTaskRunnableFactory {
         this.preserveDate = preserveDate;
     }
     @Override
-    public CopyTaskRunnable build(CopyTask task) throws IOException {
+    public CopyTaskRunnable build(CopyTask task) throws IOException { // FIXME
         if (unarchive) {
             String fileName = task.src.givenName();
             if (fileName.endsWith(".zip")

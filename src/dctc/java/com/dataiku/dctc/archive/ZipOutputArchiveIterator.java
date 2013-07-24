@@ -12,11 +12,9 @@ public class ZipOutputArchiveIterator extends OutputArchiveIterator {
         this.output = new ZipOutputStream(outputStream);
     }
 
-    @Override
     public ZipOutputArchiveEntry next() {
         return new ZipOutputArchiveEntry(output);
     }
-    @Override
     public void close() throws IOException {
         output.close();
     }

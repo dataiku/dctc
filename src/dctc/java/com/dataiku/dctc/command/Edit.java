@@ -3,7 +3,6 @@ package com.dataiku.dctc.command;
 import static com.dataiku.dip.utils.PrettyString.scat;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +13,9 @@ import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.copy.CopyTask;
 import com.dataiku.dctc.copy.SimpleCopyTaskRunnableFactory;
-import com.dataiku.dctc.file.PathManip;
 import com.dataiku.dctc.file.GFile;
 import com.dataiku.dctc.file.LocalFile;
+import com.dataiku.dctc.file.PathManip;
 import com.dataiku.dip.utils.DKUtils;
 import com.dataiku.dip.utils.IndentedWriter;
 
@@ -58,78 +57,106 @@ public class Edit extends Command {
             error("The variable `EDITOR' is not set in your environment.", 1);
             return;
         }
-
-        try {
-            for (int i = 0; i < files.size(); i++) {
-                GFile f = files.get(i);
-                if (f instanceof LocalFile) {
-                    localFiles.add(f);
-                }
-                else {
-                    String fileName = f.getFileName() + "-tmp";
-                    String extension = PathManip.extension(fileName);
-                    if (extension.isEmpty()) {
-                        extension = "empty";
-                    }
-
-                    File output = File.createTempFile(fileName, "." + extension);
-                    tasks.add(new CopyTask(f, new LocalFile(output.getAbsolutePath()), "", false));
-                }
-            }
-
-            List<Long> timestamps = new ArrayList<Long>();
-            copy(tasks);
-            for (CopyTask task: tasks) {
-                timestamps.add(task.dstDir.getDate());
-            }
-
-            /* Build command-line and execute editor */
-            List<String> args = new ArrayList<String>();
-            for (String c: rawEditor.split(" ")) {
-                args.add(c);
-            }
-            for (CopyTask task: tasks) {
-                args.add(task.dstDir.getAbsolutePath());
-            }
-            for (GFile file: localFiles) {
-                args.add(file.givenName());
-            }
-            if (new File("/dev/tty").exists()) {
-                String[] cmdArgs = new String[] {"sh", "-c", "'"
-                                               + StringUtils.join(args, "' '")
-                                               + "' > /dev/tty < /dev/tty"};
-                DKUtils.execAndGetOutput(cmdArgs, null);
+        for (int i = 0; i < files.size(); i++) {
+            GFile f = files.get(i);
+            if (f instanceof LocalFile) {
+                localFiles.add(f);
             }
             else {
-                DKUtils.execAndGetOutput(args.toArray(new String[0]), null);
-            }
-
-            // Compute files that must be reuploaded
-            List<CopyTask> backTasks = new ArrayList<CopyTask>();
-            for (int i = 0; i < tasks.size(); i++) {
-                long oldTS = timestamps.get(i);
-                CopyTask task = tasks.get(i);
-                long newTS = task.dstDir.getDate();
-                if (oldTS != newTS) {
-                    backTasks.add(new CopyTask(task.dstDir, task.src, "", false));
+                String fileName = f.getFileName() + "-tmp";
+                String extension = PathManip.extension(fileName);
+                if (extension.isEmpty()) {
+                    extension = "empty";
                 }
-            }
-            copy(backTasks);
 
-            // Delete temporary files
-            for (CopyTask task : tasks) {
-                task.dstDir.delete();
+                File output;
+                try {
+                    output = File.createTempFile(fileName, "." + extension);
+                }
+                catch (IOException e) {
+                    error(f, "Cannot create a local temporary file", e, 3);
+                    return;
+                }
+                tasks.add(new CopyTask(f, new LocalFile(output.getAbsolutePath()), "", false));
             }
-
         }
-        catch (FileNotFoundException e) {
-            error("File not found: " + e.getMessage(), e, 1);
+
+        List<Long> timestamps = new ArrayList<Long>();
+        if (!copy(tasks)) {
+            return;
+        }
+        for (CopyTask task: tasks) {
+            try {
+                timestamps.add(task.dstDir.getDate());
+            }
+            catch (IOException e) {
+                error(task.dstDir, "Could not get the file date, will always be copied back.", e, 0);
+                timestamps.add(-51L);
+            }
+        }
+
+        /* Build command-line and execute editor */
+        List<String> args = new ArrayList<String>();
+        for (String c: rawEditor.split(" ")) {
+            args.add(c);
+        }
+        for (CopyTask task: tasks) {
+            args.add(task.dstDir.getAbsolutePath());
+        }
+        for (GFile file: localFiles) {
+            args.add(file.givenName());
+        }
+        String[] cmdArgs; {
+            if (new File("/dev/tty").exists()) {
+                cmdArgs = new String[] {"sh", "-c", "'"
+                                        + StringUtils.join(args, "' '")
+                                        + "' > /dev/tty < /dev/tty"};
+
+            }
+            else {
+                cmdArgs = args.toArray(new String[0]);
+            }
+        }
+        try {
+            DKUtils.execAndGetOutput(cmdArgs, null);
         }
         catch (IOException e) {
-            error(e.getMessage(), e, 1);
+            error("Unexpected error", e, 3);
         }
         catch (InterruptedException e) {
-            error(e.getMessage(), e, 2);
+            error("Unexpected interruption", e, 3);
+        }
+
+        // Compute files that must be reuploaded
+        List<CopyTask> backTasks = new ArrayList<CopyTask>();
+        for (int i = 0; i < tasks.size(); i++) {
+            long oldTS = timestamps.get(i);
+            CopyTask task = tasks.get(i);
+            long newTS; {
+                try {
+                    newTS= task.dstDir.getDate();
+                }
+                catch (IOException e) {
+                    error(task.dstDir, "Could not get the file date, will always be copied back.", e, 0);
+                    newTS = -42;
+                }
+            }
+            if (oldTS != newTS) {
+                backTasks.add(new CopyTask(task.dstDir, task.src, "", false));
+            }
+        }
+        if (!copy(backTasks)) {
+            return;
+        }
+
+        // Delete temporary files
+        for (CopyTask task: tasks) {
+            try {
+                task.dstDir.delete();
+            }
+            catch (IOException e) {
+                error(task.dstDir, "Cannot delete the file", e, 3);
+            }
         }
     }
 
@@ -145,11 +172,18 @@ public class Edit extends Command {
     }
 
     // Private
-    private void copy(List<CopyTask> tasks) throws IOException {
+    private boolean copy(List<CopyTask> tasks) {
         SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(false, false, true);
 
         for (CopyTask task : tasks) {
-            fact.build(task).work();
+            try {
+                fact.build(task).work();
+            }
+            catch (IOException e) {
+                error(task.dstDir, "Unexpected error", e, 3);
+                return false;
+            }
         }
+        return true;
     }
 }

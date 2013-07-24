@@ -8,18 +8,22 @@ import com.dataiku.dctc.file.PathManip;
 public class WithArgOptionAgregator implements OptionAgregator {
     public int inc(String optName, int position) {
         int r = read(optName);
+
         if (r != 0) {
             this.position = position;
             ++count;
         }
+
         return r;
     }
     public int dec(String optName, int position) {
         int r = read(optName);
+
         if (r != 0) {
             this.position = position;
             --count;
         }
+
         return r;
     }
     public int count() {
@@ -27,6 +31,7 @@ public class WithArgOptionAgregator implements OptionAgregator {
     }
     public int read(String optName) {
         String[] split = PathManip.split(optName, "=", 2);
+
         for (Option opt: opts) {
             int r = opt.read(split[0]);
             if (r != 0) {
@@ -40,10 +45,11 @@ public class WithArgOptionAgregator implements OptionAgregator {
                 }
             }
         }
+
         return 0;
     }
-    // Getters - Setter
 
+    // Getters - Setter
     public void addOpt(Option opt) {
         opts.add(opt);
     }
@@ -106,6 +112,7 @@ public class WithArgOptionAgregator implements OptionAgregator {
         setDescription(description);
         return this;
     }
+
     // Attributes
     private int count;
     private String description;

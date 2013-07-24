@@ -22,9 +22,9 @@ public class Cp extends ListFilesCommand {
     }
     public void longDescription(IndentedWriter printer) {
         printer.paragraph(scat("Copy all sources to the target. Target is create as"
-                               ," a folder if the are several sources or the source is a folder.")
-                          ,scat("Dctc cp can compress or uncompress GZip-compressed inputs and outputs."
-                                ,"Dctc cp can also be used to create or expand Zip archives."));
+                               , " a folder if the are several sources or the source is a folder.")
+                          , scat("Dctc cp can compress or uncompress GZip-compressed inputs and outputs."
+                                 , "Dctc cp can also be used to create or expand Zip archives."));
     }
 
     // Public
@@ -44,12 +44,14 @@ public class Cp extends ListFilesCommand {
         if (recur == null) {
             recur = hasOption('r');
         }
+
         return recur;
     }
     public boolean interactive() {
         if (interactive == null) {
             interactive = hasOption('i');
         }
+
         return interactive;
     }
 
@@ -75,7 +77,8 @@ public class Cp extends ListFilesCommand {
         CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, getThreadLimit());
         try {
             exec.run(tasks, archive());
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             getYell().yell("cp", "Unexpected error while copying files", e);
         }
         if (exec.hasFail()) {
@@ -95,7 +98,8 @@ public class Cp extends ListFilesCommand {
     protected boolean shouldAdd(GFile src, GFile dst, String root) {
         try {
             return !dst.exists() || noClobber() || ask(dst);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             getYell().yell("cp", "Unexpected error", e);
             return false;
         }

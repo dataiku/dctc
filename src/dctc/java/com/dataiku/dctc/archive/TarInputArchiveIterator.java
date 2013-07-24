@@ -13,12 +13,14 @@ public class TarInputArchiveIterator extends InputArchiveIterator {
     TarInputArchiveIterator(InputStream input) {
         this.input = new TarInputStream(input);
     }
+
     public boolean hasNext() {
         try {
             return input.available() == 1;
         }
         catch (IOException e) {
             System.err.println("dctc TarInputArchiveIterator: " + e.getMessage());
+            // FIXME: YellPolicy
             return false;
         }
     }
@@ -28,10 +30,12 @@ public class TarInputArchiveIterator extends InputArchiveIterator {
             if (entry == null) {
                 return null;
             }
+
             return new TarInputArchiveEntry(entry, input);
         }
         catch (IOException e) {
             System.err.println("dctc TarInputArchiveIterator: " + e.getMessage());
+            // FIXME: YellPolicy
             return null;
         }
     }

@@ -54,35 +54,43 @@ public class Main {
         if (exitCode != 0) {
             System.setOut(System.err);
         }
+
         System.out.println("usage: dctc command [OPTIONS...] [ARGS...]");
         System.out.println();
         System.out.println("Available commands are:");
-        int len = 0;
-        for (Command cmd: cmds.values()) {
-            len = Math.max(len, cmd.cmdname().length());
+
+        int len = 0; {
+            for (Command cmd: cmds.values()) {
+                len = Math.max(len, cmd.cmdname().length());
+            }
+            len += 2;
         }
-        len += 2;
+
         for (Command cmd: cmds.values()) {
             System.out.print(scat("  -", cmd.cmdname()));
             indent(" ", len - cmd.cmdname().length());
             System.out.println(cmd.tagline());
         }
-        System.out.println(nlcat("", "For more informations see the project homepage:",
-                                 "http://dctc.io"));
+
+        System.out.println(nlcat(""
+                                 , "For more informations see the project homepage:"
+                                 , "http://dctc.io"));
         System.exit(exitCode);
     }
     public static IndentedWriter getIndentedWriter(YellPolicy yell) {
-        IndentedWriter printer = new IndentedWriter();
-        printer.setFirstLineIndentsize(2);
-        printer.setIndentSize(2);
-        printer.setTermSize(Math.min(GlobalConf.getColNumber(yell), 80));
-        return printer;
+        return new IndentedWriter()
+            .withFirstLineIndentsize(2)
+            .withIndentSize(2)
+            .withTermSize(Math.min(GlobalConf.getColNumber(yell), 80));
     }
-    private static void commandHelp(ExitCode exitCode, String command, YellPolicy yell) {
+    private static void commandHelp(ExitCode exitCode
+                                    , String command
+                                    , YellPolicy yell) {
         IndentedWriter printer = getIndentedWriter(yell);
         for (Command cmd: cmds.values()) {
             if (cmd.cmdname().equals(command)) {
                 commandHelp(cmd, printer);
+
                 return;
             }
         }
@@ -93,7 +101,6 @@ public class Main {
         cmd.setExitCode(new ExitCode());
         cmd.usage(printer);
     }
-
     public static void setLogger() {
         Logger.getRootLogger().removeAllAppenders();
         ConsoleAppender ca = new ConsoleAppender(new PatternLayout("[%r] [%t] [%-5p] [%c] %x - %m%n"));
@@ -148,15 +155,14 @@ public class Main {
         catch (UnsupportedEncodingException e) {
             throw new Error("Never appends.");
         }
+
         setLogger();
         fillCommand();
-
     }
     public static boolean help(String cmd) {
         return (cmd.equals("help") || cmd.equals("-help")
                 || cmd.equals("--help") || cmd.equals("-h")
                 || cmd.equals("-?"));
-
     }
 
     public static void main(String[] args) {
@@ -168,6 +174,7 @@ public class Main {
                 conf = new StructuredConf();
                 conf.parse(GlobalConf.confPath());
                 conf.parseSsh(GlobalConf.sshConfigFile());
+
                 if (conf.getFileBuilder().check()) {
                     System.err.println("dctc: One or more errors are present in the configuration file.");
                 }
@@ -187,9 +194,11 @@ public class Main {
                     if (cmdargs.length > 0) {
                         ExitCode exit = new ExitCode();
                         YellPolicy yell = new HowlPolicy().withOut(System.err);
+
                         for (String cmdarg: cmdargs) {
                             commandHelp(exit, cmdarg, yell);
                         }
+
                         System.exit(exit.getExitCode());
                     }
                     else {
@@ -206,17 +215,22 @@ public class Main {
                     else if (cmd.cmdname().equals("alias")) {
                         ((Alias) cmd).setConf(conf);
                     }
+
                     ExitCode exit = new ExitCode();
                     cmd.setExitCode(exit);
                     cmd.setFileBuilder(conf.getFileBuilder());
+
                     try {
                         cmd.perform(cmdargs);
-                    } catch (Command.EndOfCommand e) {}
+                    }
+                    catch (Command.EndOfCommand e) {}
+
                     System.exit(exit.getExitCode());
                 }
+
                 System.err.println("Unknown command: " + usercmd);
+                globalUsage(1);
             }
-            globalUsage(1);
         }
         catch (UserException e) {
             System.err.println("dctc: ERROR: " + e.getMessage());

@@ -10,6 +10,7 @@ public class ZipInputArchiveEntry implements InputArchiveEntry {
         this.entry = entry;
         this.stream = stream;
     }
+
     public String getName() {
         return entry.getName();
     }

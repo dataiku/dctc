@@ -46,6 +46,7 @@ public class ShortOption implements Option {
         setOpt(opt);
         return this;
     }
+
     // Attributes
     private String opt = "";
 }

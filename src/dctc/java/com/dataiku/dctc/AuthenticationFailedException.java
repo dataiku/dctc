@@ -2,9 +2,7 @@ package com.dataiku.dctc;
 
 import java.io.IOException;
 
-public class AuthenticationFailedException extends IOException{
-    private static final long serialVersionUID = 1L;
-
+public class AuthenticationFailedException extends IOException {
     public AuthenticationFailedException(String message) {
         super(message);
     }
@@ -12,4 +10,5 @@ public class AuthenticationFailedException extends IOException{
         super(message, cause);
     }
 
+    private static final long serialVersionUID = 1L;
 }

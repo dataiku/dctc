@@ -18,7 +18,6 @@ class SimplePrinter implements Printer {
         descriptions = new ArrayList<String>();
     }
     public void newOption() {
-
         sb.setLength(0);
     }
     public void add(char s) {
@@ -56,7 +55,6 @@ class SimplePrinter implements Printer {
         System.out.println("    dctc " + cmdname + " - " + tagline);
         System.out.println();
     }
-
     public void print(YellPolicy yell) {
         IndentedWriter indent = new IndentedWriter();
         indent.setTermSize(Math.min(120, GlobalConf.getColNumber(yell) - 2));
@@ -77,12 +75,13 @@ class SimplePrinter implements Printer {
     // Privates
     private static int maxLength(List<String> ls) {
         int res = 0;
+
         for (String l: ls) {
             res = Math.max(res, l.length());
         }
+
         return res;
     }
-
 
     // Attributes
     StringBuilder sb = new StringBuilder();

@@ -29,7 +29,7 @@ public class AddAccount extends Command {
     }
     public void longDescription(IndentedWriter printer) {
         printer.print(scat("Add an account to the DCTC file configuration using a command-line wizard."
-                           ,"Supported protocols are 's3' and 'gs'"));
+                           , "Supported protocols are 's3' and 'gs'"));
     }
 
     @Override
@@ -37,7 +37,8 @@ public class AddAccount extends Command {
         resetExitCode();
         parseCommandLine(args);
         if (args.length == 0) {
-            error("Missing argument: protocol (one of 's3' or 'gs')" + eol(), 2);
+            error("Missing argument: protocol (one of 's3' or 'gs')"
+                  + eol(), 2);
             usage();
             return;
         }
@@ -55,21 +56,24 @@ public class AddAccount extends Command {
 
         if (bank.getProtocolCredentials(proto) != null) {
             if (account == null) {
-                throw new UserException("At least an account already exists for protocol '" + proto
+                throw new UserException("At least an account already exists for protocol '"
+                                        + proto
                                         + "'. You must specify an explicit "
                                         + "account name for your new account");
             }
         }
         if (account == null) {
             System.err.println("You haven't enter an account name.");
-            account = Interactive.askString("Please enter the account name: ", getYell());
+            account = Interactive.askString("Please enter the account name: "
+                                            , getYell());
         }
         if (account.isEmpty()) {
             account = "default_account";
         }
 
         if (bank.getAccountParamsIfExists(proto, account) != null) {
-            throw new UserException("Account '" + account +  "' already exists for protocol '"
+            throw new UserException("Account '" + account
+                                    + "' already exists for protocol '"
                                     + proto + "'.");
         }
 
@@ -112,12 +116,19 @@ public class AddAccount extends Command {
                                + eol() + e.getMessage());
         }
 
-        System.err.println("Updating configuration file: " + GlobalConf.confPath());
+        System.err.println("Updating configuration file: "
+                           + GlobalConf.confPath());
         try {
-            configuration.appendNewProtocol("add-account", proto, account, parameters);
+            configuration.appendNewProtocol("add-account"
+                                            , proto
+                                            , account
+                                            , parameters);
         }
         catch (IOException e) {
-            error(GlobalConf.confPath(), "Couldn't write in the configuration file", e, 3);
+            error(GlobalConf.confPath()
+                  , "Couldn't write in the configuration file"
+                  , e
+                  , 3);
         }
     }
     private void printChecking() {
@@ -134,7 +145,9 @@ public class AddAccount extends Command {
 
             String rep;
             do {
-                rep = Interactive.askString(ask.substring(0, pipe) + ": ", getYell());
+                rep = Interactive.askString(ask.substring(0, pipe)
+                                            + ": "
+                                            , getYell());
             } while (rep.isEmpty());
             res.put(ask.substring(pipe + 1), rep);
         }

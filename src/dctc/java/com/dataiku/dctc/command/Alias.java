@@ -33,7 +33,10 @@ public class Alias extends Command {
     public void perform(String[] args) {
         if (args.length == 0) {
             for (Entry<String, String> alia: conf.getAlias().getAlias().entrySet()) {
-                System.out.println(alia.getKey() + "=\"" + alia.getValue() + "\"");
+                System.out.println(alia.getKey()
+                                   + "=\""
+                                   + alia.getValue()
+                                   + "\"");
             }
         }
         else {

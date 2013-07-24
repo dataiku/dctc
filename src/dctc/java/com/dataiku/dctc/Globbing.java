@@ -10,9 +10,12 @@ public class Globbing {
     static public boolean match(String pattern, String filename) {
         return match(pattern, filename, false);
     }
-    static public boolean matchPath(String pathPattern, String pathName, String fileSeparator) {
+    static public boolean matchPath(String pathPattern
+                                    , String pathName
+                                    , String fileSeparator) {
         String[] pattern = pathPattern.split(fileSeparator);
         String[] path = pathName.split(fileSeparator);
+
         if (path.length != pattern.length) {
             return false;
         }
@@ -21,23 +24,11 @@ public class Globbing {
                 return false;
             }
         }
-        return true;
-    }
-    static public boolean partialPathMatch(String pathPattern, String pathName, String fileSeparator) {
-        String[] pattern = pathPattern.split(fileSeparator);
-        String[] path = pathName.split(fileSeparator);
-        if (path.length > pattern.length) {
-            return false;
-        }
-        for (int i = 0; i < pattern.length; ++i) {
-            if (!match(pattern[i], path[i], false)) {
-                return false;
-            }
-        }
+
         return true;
     }
     static public List<GFile> resolve(GFile globbing,
-                                                boolean showHidden) throws IOException {
+                                      boolean showHidden) throws IOException {
         List<GFile> res = new ArrayList<GFile>();
         boolean first = true;
 
@@ -45,22 +36,28 @@ public class Globbing {
             String path = globbing.getAbsolutePath();
             String[] split = path.split(globbing.fileSeparator());
             String prevPath = "";
+
             for (int i = 0; i < split.length; ++i) {
                 String splitElt = split[i];
                 if (splitElt.isEmpty()) {
                     // We have a path with // in, skip it.
                     continue;
                 }
+
                 String prevprev = prevPath;
                 prevPath += "/" + splitElt;
 
                 if (hasGlobbing(splitElt)) {
                     if (first) {
                         first = false;
-                        GFile globResolve = globbing.createInstanceFor(prevprev);
+                        GFile globResolve
+                            = globbing.createInstanceFor(prevprev);
+
                         for (GFile f: globResolve.glist()) {
                             if (showHidden || !f.isHidden()) {
-                                if (matchPath(prevPath, f.getAbsolutePath(), "/")) {
+                                if (matchPath(prevPath
+                                              , f.getAbsolutePath()
+                                              , "/")) {
                                     res.add(f);
                                 }
                             }
@@ -76,7 +73,9 @@ public class Globbing {
                         for (GFile parentElt: prevList) {
                             for (GFile nextElt: parentElt.glist()) {
                                 if (showHidden || !nextElt.isHidden()) {
-                                    if (matchPath(prevPath, nextElt.getAbsolutePath(), "/")) {
+                                    if (matchPath(prevPath
+                                                  , nextElt.getAbsolutePath()
+                                                  , "/")) {
                                         res.add(nextElt);
                                     }
                                 }
@@ -94,6 +93,7 @@ public class Globbing {
     }
     static public boolean hasGlobbing(String f) {
         f = f.replaceAll("\\.", ""); // Delete all escaped character.
+
         return f.indexOf(star) != -1
             || f.indexOf(question) != -1
             || f.indexOf(openBracket) != -1;
@@ -102,6 +102,7 @@ public class Globbing {
     // Private
     static private boolean matchRawBracket(String pattern, char letter) {
         // if the regex is [a-zA-Z], pattern = a-zA-Z
+        // letter is the letter to match
         for (int i = 0; i < pattern.length(); ++i) {
             if (i + 2 < pattern.length() && pattern.charAt(i + 1) == dash) {
                 // a-z
@@ -114,46 +115,62 @@ public class Globbing {
                     // continue to match
                     i += 2;
                 }
-            } else if (pattern.charAt(i) == letter) {
+            }
+            else if (pattern.charAt(i) == letter) {
                 // Single letter, check if it
                 return true;
             }
         }
+
         // Not found.
         return false;
     }
     static private boolean matchBracket(String pattern, char letter) {
         return matchRawBracket(pattern, letter) ^
-            (pattern.charAt(0) == '!'
-             || pattern.charAt(0) == '^');
+            (pattern.charAt(0) == '!' // Common and wide use negative character
+             || pattern.charAt(0) == '^'); // Also used for portability.
     }
-    static private boolean match(String pattern, String filename, boolean escape) {
+    // FIXME: Should use StringBuilder instead of String
+    // HINT: reverse, charAt, setLength
+    static private boolean match(String pattern
+                                 , String filename
+                                 , boolean escape) {
         // Recursion of the globbing matching
         if (!escape) {
-            if (pattern.length() == 0 && filename.length() == 0) {
+            if (pattern.isEmpty() && filename.isEmpty()) {
                 return true;
             }
-            else if (pattern.length() == 0 || filename.length() == 0) {
+            else if (pattern.isEmpty() || filename.isEmpty()) {
                 if (pattern.length() != 0 && pattern.charAt(0) == star) {
                     return match(pattern.substring(1), filename, false);
                 }
+
                 return false;
             }
             else if (pattern.charAt(0) == question) {
-                return match(pattern.substring(1), filename.substring(1), false);
+                return match(pattern.substring(1)
+                             , filename.substring(1)
+                             , false);
             }
             else if (pattern.charAt(0) == openBracket) {
                 int idx = pattern.indexOf("]", 2);
+
                 if (idx != -1) {
-                    return matchBracket(pattern.substring(1, idx), filename.charAt(0))
-                        && match(pattern.substring(idx + 1), filename.substring(1), false);
+                    return matchBracket(pattern.substring(1, idx)
+                                        , filename.charAt(0))
+                        && match(pattern.substring(idx + 1)
+                                 , filename.substring(1)
+                                 , false);
                 }
             }
             else if (pattern.charAt(0) == star) {
                 return match(pattern, filename.substring(1), false)
                     || match(pattern.substring(1), filename, false)
-                    || match(pattern.substring(1), filename.substring(1), false);
+                    || match(pattern.substring(1)
+                             , filename.substring(1)
+                             , false);
             }
+
             assert pattern.charAt(0) == openBracket
                 : "pattern.charAt(0) == openBracket";
             assert pattern.indexOf("]", 2) == -1
@@ -164,6 +181,7 @@ public class Globbing {
         if (pattern.charAt(0) == backSlash) {
             return match(pattern.substring(1), filename, true);
         }
+
         return pattern.charAt(0) == filename.charAt(0)
             && match(pattern.substring(1), filename.substring(1), false);
     }

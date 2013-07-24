@@ -52,11 +52,19 @@ public class IndentedWriter {
     public void setFirstLineIndentsize(int firstLineIndentSize) {
         this.firstLineIndentSize = firstLineIndentSize;
     }
+    public IndentedWriter withFirstLineIndentsize(int firstLineIndentSize) {
+        setFirstLineIndentsize(firstLineIndentSize);
+        return this;
+    }
     public int getIndentSize() {
         return indentSize;
     }
     public void setIndentSize(int indentSize) {
         this.indentSize = indentSize;
+    }
+    public IndentedWriter withIndentSize(int indentSize) {
+        setIndentSize(indentSize);
+        return this;
     }
     public String getSeparator() {
         return separator;
@@ -81,6 +89,10 @@ public class IndentedWriter {
     }
     public void setTermSize(int termSize) {
         this.termSize = termSize;
+    }
+    public IndentedWriter withTermSize(int termSize) {
+        setTermSize(termSize);
+        return this;
     }
     public int getStartIndex() {
         return startIndex;

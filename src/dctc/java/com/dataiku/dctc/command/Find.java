@@ -34,22 +34,25 @@ public class Find extends Command {
     }
     @Override
     public void perform(List<GFile> args) {
-        try {
-            for (GFile arg: args) {
+        for (GFile arg: args) {
+            try {
                 if (!arg.exists()) {
                     notFind(arg);
-                } else {
+                }
+                else {
                     if (arg.isDirectory()) {
                         for (GFile f: arg.grecursiveList()) {
                             accept(f);
                         }
-                    } else {
+                    }
+                    else {
                         accept(arg);
                     }
                 }
             }
-        } catch (IOException e) {
-            error("failed to find", e, 1);
+            catch (IOException e) {
+                error(arg, "Failed to find", e, 2);
+            }
         }
     }
     @Override
@@ -61,6 +64,7 @@ public class Find extends Command {
         if (pattern == null && hasOption("name")) {
             pattern = Pattern.compile(getOptionValue("name"));
         }
+
         return pattern;
     }
     /// Setters
@@ -68,7 +72,9 @@ public class Find extends Command {
         this.pattern = Pattern.compile(name);
         return this;
     }
-    private OptionAgregator stdOpt(String lgOpt, String description, String argName) {
+    private OptionAgregator stdOpt(String lgOpt
+                                   , String description
+                                   , String argName) {
         return new WithArgOptionAgregator()
             .withOpt(new FJavaLongOption().withOpt(lgOpt))
             .withDescription(description)

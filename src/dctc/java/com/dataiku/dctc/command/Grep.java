@@ -30,10 +30,10 @@ public class Grep extends Command {
     public void longDescription(IndentedWriter printer) {
         printer.paragraph(scat("Search the pattern in input files and outputs the lines that match."
                                , "The pattern is handled as a non-anchored regular expression.")
-                          ,scat("dctc grep only offers a tiny subset of the capabilities of"
-                                , "POSIX or GNU grep. It is intended as a fallback for systems that"
-                                , "do not offer a native grep (eg, Microsoft Windows). For UNIX"
-                                , "systems, use dctc cat|grep"));
+                          , scat("dctc grep only offers a tiny subset of the capabilities of"
+                                 , "POSIX or GNU grep. It is intended as a fallback for systems that"
+                                 , "do not offer a native grep (eg, Microsoft Windows). For UNIX"
+                                 , "systems, use dctc cat|grep"));
     }
     protected void setOptions(List<OptionAgregator> opts) {
         opts.add(stdOption('r', "recursive", "Read all files under each directory, recursively."));
@@ -86,6 +86,7 @@ public class Grep extends Command {
     public void perform(String[] args) {
         resetExitCode();
         List<GFile> arguments = getArgs(args);
+
         if (arguments != null) {
             buildMe(arguments.size() > 1);
             perform(arguments);
@@ -95,6 +96,7 @@ public class Grep extends Command {
         if (printFileError == null) {
             printFileError = !hasOption('s');
         }
+
         return printFileError;
     }
     public void perform(List<GFile> args) {
@@ -184,6 +186,7 @@ public class Grep extends Command {
     private void grep(GFile file) throws IOException {
         long lineNumber = 0;
         BufferedReader i = StreamUtils.readStream(AutoGZip.buildInput(file), "UTF-8");
+
         try {
             while(true) {
                 String line = i.readLine();
@@ -245,6 +248,5 @@ public class Grep extends Command {
     private GrepHeaderPrinter header;
     private boolean hasMatch;
     private String pattern;
-
     private Boolean printFileError;
 }

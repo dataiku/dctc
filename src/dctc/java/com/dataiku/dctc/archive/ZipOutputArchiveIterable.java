@@ -8,12 +8,9 @@ public class ZipOutputArchiveIterable extends OutputArchiveIterable {
     public ZipOutputArchiveIterable(OutputStream outputStream) {
         this.outputStream = outputStream;
     }
-    @Override
     public String getArchiveType() {
         return GlobalConstants.ZIP;
     }
-
-    @Override
     public ZipOutputArchiveIterator iterator() {
         ZipOutputArchiveIterator res = new ZipOutputArchiveIterator(outputStream);
         outputStream = null;

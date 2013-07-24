@@ -5,6 +5,7 @@ public class FJavaLongOption implements Option {
         if (optName.equals(opt)) {
             return optName.length();
         }
+
         return 0;
     }
     public String getArgument(String optLine) {
@@ -34,4 +35,3 @@ public class FJavaLongOption implements Option {
     // Attributes
     private String opt;
 }
-

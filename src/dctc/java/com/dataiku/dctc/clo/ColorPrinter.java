@@ -14,7 +14,6 @@ import com.dataiku.dip.utils.IndentedWriter;
 class ColorPrinter implements Printer {
     public void description() {
         System.out.println(bold(red("DESCRIPTION")));
-
     }
     public void start() {
         System.out.println();
@@ -90,12 +89,13 @@ class ColorPrinter implements Printer {
     // Privates
     private static int maxLength(List<Integer> ls) {
         int res = 0;
+
         for (Integer l: ls) {
             res = Math.max(res, l);
         }
+
         return res;
     }
-
 
     // Attributes
     int size = 0;

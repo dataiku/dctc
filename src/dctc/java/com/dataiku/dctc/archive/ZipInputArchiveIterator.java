@@ -12,12 +12,14 @@ public class ZipInputArchiveIterator extends InputArchiveIterator {
     ZipInputArchiveIterator(InputStream input) {
         this.input = new ZipInputStream(input);
     }
-    @Override
+
     public boolean hasNext() {
         try {
             return input.available() == 1;
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             System.err.println("dctc ZipInputArchiveIterator: " + e.getMessage());
+            // FIXME: YellPolicy
             return false;
         }
     }
@@ -30,8 +32,10 @@ public class ZipInputArchiveIterator extends InputArchiveIterator {
                 return null;
             }
             return new ZipInputArchiveEntry(entry, input);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             System.err.println("dctc ZipInputArchiveIterator: " + e.getMessage());
+            // FIXME: YellPolicy
             return null;
         }
     }

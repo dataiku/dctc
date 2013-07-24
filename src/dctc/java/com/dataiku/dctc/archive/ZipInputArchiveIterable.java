@@ -8,6 +8,7 @@ public class ZipInputArchiveIterable extends InputArchiveIterable {
     ZipInputArchiveIterable(InputStream inputStream) {
         this.inputStream = inputStream;
     }
+
     public ZipInputArchiveIterator iterator() {
         ZipInputArchiveIterator res = new ZipInputArchiveIterator(inputStream);
         inputStream = null;
@@ -18,5 +19,4 @@ public class ZipInputArchiveIterable extends InputArchiveIterable {
     }
 
     private InputStream inputStream;
-
 }

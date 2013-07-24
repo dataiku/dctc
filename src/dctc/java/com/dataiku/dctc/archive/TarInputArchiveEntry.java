@@ -11,6 +11,7 @@ public class TarInputArchiveEntry implements InputArchiveEntry {
         this.entry = entry;
         this.stream = stream;
     }
+
     public String getName() {
         return entry.getName();
     }
@@ -39,9 +40,8 @@ public class TarInputArchiveEntry implements InputArchiveEntry {
         return "tar";
     }
     public void closeEntry() throws IOException {
-        //stream.close();
-
     }
+
     private TarEntry entry;
     private TarInputStream stream;
 }

@@ -9,6 +9,7 @@ public class Usage {
                              , Printer printer
                              , YellPolicy yell) {
         printer.start();
+
         for (OptionAgregator opt: opts) {
             printer.newOption();
 
@@ -19,7 +20,7 @@ public class Usage {
                 printer.endOptionListing();
             }
 
-            { // Options
+            { // Arguments
                 if (opt.hasArgument()) {
                     printer.addParam(opt.getArgumentName());
                 }
@@ -30,6 +31,7 @@ public class Usage {
                 printer.addDescription(opt.getDescription());
             }
         }
+
         printer.print(yell);
     }
 }

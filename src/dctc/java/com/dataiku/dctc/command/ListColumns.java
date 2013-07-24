@@ -29,8 +29,14 @@ public class ListColumns extends Command {
         return "List the name of the column.";
     }
     public void setOptions(List<OptionAgregator> opts) {
-        opts.add(stdOption('m', "minimal", "Set to minimal the display scheme."));
-        opts.add(stdOption('s', "separator", "Set the separator.", true, "SEP"));
+        opts.add(stdOption('m'
+                           , "minimal"
+                           , "Set to minimal the display scheme."));
+        opts.add(stdOption('s'
+                           , "separator"
+                           , "Set the separator."
+                           , true
+                           , "SEP"));
     }
     public String cmdname() {
         return "list-columns";
@@ -66,7 +72,7 @@ public class ListColumns extends Command {
                     extractor.run(inputStream, out, null, stream, new StreamRowFactory(), null, limit);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    error("Unexpected error", e, 3);
                 }
             }
 
@@ -113,5 +119,4 @@ public class ListColumns extends Command {
 
         return array;
     }
-
 }
