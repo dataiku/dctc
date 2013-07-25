@@ -151,7 +151,7 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
     @Override
     public final void execute(List<CopyTask> tasks) {
         if (tasks.isEmpty()) {
-            error("No missing operands.", 2);
+            error("Missing operands.", 2);
             return;
         }
 
