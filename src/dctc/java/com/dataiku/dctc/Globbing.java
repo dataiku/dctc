@@ -182,11 +182,6 @@ public class Globbing {
                              , fidx + 1
                              , false);
             }
-
-            assert pattern.charAt(pidx) == openBracket
-                : "pattern.charAt(pidx) == openBracket";
-            assert pattern.indexOf("]", 2) == -1
-                : "pattern.indexOf(\"]\", 2) == -1";
         }
         // Character is escaped or the current character is not a
         // special one.
