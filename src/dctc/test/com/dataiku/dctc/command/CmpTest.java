@@ -4,12 +4,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
-import org.junit.Ignore;
-
 import com.dataiku.dctc.Settings;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.configuration.StructuredConf;
-@Ignore
+import com.dataiku.dctc.utils.ExitCode;
+
 public class CmpTest {
     private void checkErr(String str) throws Exception {
         assertTrue(str.equals(Settings.getErr()));
@@ -28,6 +27,7 @@ public class CmpTest {
         conf.parse(GlobalConf.confPath());
         conf.parseSsh(GlobalConf.sshConfigFile());
         cmp.setFileBuilder(conf.getFileBuilder());
+        cmp.setExitCode(new ExitCode());
         cmp.perform(args);
         assertTrue(cmp.getExitCode().getExitCode() == 2);
         checkOut("");

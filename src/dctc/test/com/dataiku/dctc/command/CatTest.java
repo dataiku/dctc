@@ -7,16 +7,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.junit.Ignore;
-
 import com.dataiku.dctc.Main;
-import com.dataiku.dctc.command.Cat;
+import com.dataiku.dctc.Settings;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.configuration.CredentialProviderBank;
 import com.dataiku.dctc.file.FileBuilder;
-import com.dataiku.dctc.Settings;
+import com.dataiku.dctc.utils.ExitCode;
 import com.dataiku.dip.utils.IndentedWriter;
-@Ignore
+
 public class CatTest {
 
     private void checkErr(String str) throws Exception {
@@ -35,6 +33,7 @@ public class CatTest {
         Cat c = new Cat();
         String[] s = { "-foo" };
         try {
+            c.setExitCode(new ExitCode());
             c.perform(s);
         } catch (Command.EndOfCommand e) {
             // ignore
@@ -42,7 +41,8 @@ public class CatTest {
 
         // Check the output.
         checkOut("");
-        assertTrue(Settings.getErr().startsWith("dctc cat: ERROR: Unrecognized option: -foo" + System.getProperty("line.separator")));
+        Settings.resetOutputs();
+        assertTrue(Settings.getErr().startsWith("dctc cat: Unknown option: f" + System.getProperty("line.separator")));
     }
     @org.junit.Test
     public void help() throws IOException, Exception {
@@ -85,6 +85,7 @@ public class CatTest {
         CredentialProviderBank bank = new CredentialProviderBank();
         c.setFileBuilder(new FileBuilder(bank, null));
         String[] s =  { fileName };
+        c.setExitCode(new ExitCode());
         c.perform(s);
 
         checkOutputs(fileContent, "");
