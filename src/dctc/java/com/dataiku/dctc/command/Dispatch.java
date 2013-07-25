@@ -279,7 +279,7 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
     private GFile dst = null;
     private String prefix;
     private String postfix;
-    private int fileNumber;
+    private int fileNumber = -1;
     private SplitFunctionNames splitFunction;
     private String timePeriod;
     private String column;
