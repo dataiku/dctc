@@ -60,8 +60,11 @@ public abstract class Command {
             perform(arguments);
         }
     }
-    protected void longOpt(Options opt, String desc, String longName,
-                           String shortName, String paramName) {
+    protected void longOpt(Options opt
+                           , String desc
+                           , String longName
+                           , String shortName
+                           , String paramName) {
         OptionBuilder.withDescription(desc);
         OptionBuilder.hasArg();
         OptionBuilder.withArgName(paramName);
@@ -196,10 +199,10 @@ public abstract class Command {
         error(file, msg, null, exitCode);
     }
 
-    protected void errorWithHandlingOfKnownExceptions(String fileName,
-                                                      String msg,
-                                                      Throwable exception,
-                                                      int exitCode) {
+    protected void errorWithHandlingOfKnownExceptions(String fileName
+                                                      , String msg
+                                                      , Throwable exception
+                                                      , int exitCode) {
         msg = (fileName == null ? msg :  ("`" + fileName + "': " + msg));
         if (exception instanceof UnknownHostException) {
             error(msg + ": Unknown host '" + exception.getMessage() + "'"

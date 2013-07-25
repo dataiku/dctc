@@ -5,4 +5,3 @@ import com.dataiku.dctc.file.GFile;
 public interface CatHeaderPrinter {
     public void print(GFile file);
 }
-

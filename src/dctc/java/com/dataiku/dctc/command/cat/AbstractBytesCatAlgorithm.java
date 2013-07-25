@@ -25,8 +25,9 @@ abstract class AbstractBytesCatAlgorithm extends AbstractCatAlgorithm {
                 StreamUtils.skip(i, skipFirst);
             }
             catch (IOException e) {
-                yell("Failed to skip beginning bytes of " + file.givenName(),
-                     e, 2);
+                yell("Failed to skip beginning bytes of " + file.givenName()
+                     , e
+                     , 2);
             }
         }
 
@@ -64,4 +65,3 @@ abstract class AbstractBytesCatAlgorithm extends AbstractCatAlgorithm {
     private long skipFirst;
     private long skipLast = Long.MAX_VALUE;
 }
-
