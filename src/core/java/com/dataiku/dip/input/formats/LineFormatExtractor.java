@@ -16,14 +16,16 @@ import com.google.common.io.CountingInputStream;
 
 public class LineFormatExtractor extends AbstractFormatExtractor {
     public LineFormatExtractor(String charset) {
+        assert charset != null
+            : "charset != null";
         this.charset = charset;
     }
     private String charset;
 
     @Override
     public boolean run(StreamsInputSplit in, ProcessorOutput out, ProcessorOutput err,
-            ColumnFactory cf, RowFactory rf, StreamInputSplitProgressListener listener,
-            ExtractionLimit limit) throws Exception {
+                       ColumnFactory cf, RowFactory rf, StreamInputSplitProgressListener listener,
+                       ExtractionLimit limit) throws Exception {
         Column c = cf.column("line");
 
         long totalBytes = 0, nlines = 0;
