@@ -10,6 +10,7 @@ public class GlobbingTest {
     public void match() {
         assertTrue(Globbing.match("*", "foo"));
         assertTrue(Globbing.match("*", ""));
+        assertTrue(Globbing.match("**", ""));
         assertTrue(Globbing.match("f*o", "foo"));
         assertTrue(Globbing.match("f*o", "fo"));
         assertTrue(Globbing.match("f?o", "fao"));
@@ -28,6 +29,7 @@ public class GlobbingTest {
         assertTrue(Globbing.match("[][]", "["));
         assertTrue(Globbing.match("[!!]", "^"));
         assertFalse(Globbing.match("[!!]", "!"));
+        assertFalse(Globbing.match("[!^]", "^"));
         assertTrue(Globbing.match("[^^]", "!"));
         assertFalse(Globbing.match("[][]", "^"));
         assertTrue(Globbing.match("[][]", "["));
@@ -49,6 +51,7 @@ public class GlobbingTest {
         assertFalse(Globbing.match("[^a-c]", "b"));
         assertFalse(Globbing.match("[^a-c]", "c"));
         assertTrue(Globbing.match("[^a-c]", "d"));
+        assertTrue(Globbing.match("[a-c]?", "cd"));
         assertTrue(Globbing.match("*[a-c]*", "cd"));
         assertTrue(Globbing.match("[c]*", "c"));
         assertTrue(Globbing.match("[a-c]*", "c"));
