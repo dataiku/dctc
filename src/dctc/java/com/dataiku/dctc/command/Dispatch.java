@@ -65,6 +65,7 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
         opts.add(stdOption("o", "input-format", "Format type for the input files. Only supports 'csv'.", true, "FILE-FORMAT"));
         opts.add(stdOption("e", "input-separator", "Separator character for CSV format", true, "SEPARATOR"));
         opts.add(stdOption("q", "input-quote", "Quote character for CSV format", true, "QUOTE-CHAR"));
+        opts.add(stdOption("", "charset", "Select a charset", true, "CHARSET-NAME"));
     }
 
     @Override
@@ -249,16 +250,21 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
             : "csv";
         String format = getOptionValue("-input-file", defaultFormat);
 
+        String charset = getOptionValue("-charset", "utf-8");
+
         if (format.equalsIgnoreCase("auto")) {
             throw new NotImplementedException("Auto format is not yet implemented");
         }
         else if (format.equalsIgnoreCase("csv")) {
             String sep = getOptionValue("-input-separator", ",");
 
-            return new Format("csv").withParam("separator", sep);
+            return new Format("csv")
+                .withParam("separator", sep)
+                .withParam("charset", charset);
         }
         else if (format.equalsIgnoreCase("line")) {
-            return new Format("line");
+            return new Format("line")
+                .withParam("charset", charset);
         }
         throw new NotImplementedException("Format '"
                                           + format
