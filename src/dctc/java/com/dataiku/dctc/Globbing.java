@@ -8,7 +8,7 @@ import com.dataiku.dctc.file.GFile;
 
 public class Globbing {
     static public boolean match(String pattern, String filename) {
-        return match(pattern, filename, false);
+        return match(pattern, 0, filename, 0, false);
     }
     static public boolean matchPath(String pathPattern
                                     , String pathName
@@ -20,7 +20,7 @@ public class Globbing {
             return false;
         }
         for (int i = 0; i < pattern.length; ++i) {
-            if (!match(pattern[i], path[i], false)) {
+            if (!match(pattern[i], path[i])) {
                 return false;
             }
         }
@@ -126,64 +126,76 @@ public class Globbing {
         return false;
     }
     static private boolean matchBracket(String pattern, char letter) {
-        return matchRawBracket(pattern, letter) ^
-            (pattern.charAt(0) == '!' // Common and wide use negative character
-             || pattern.charAt(0) == '^'); // Also used for portability.
+        if (pattern.charAt(0) == '!' // Common and wide use negative character
+            || pattern.charAt(0) == '^') { // Also used for portability.
+            return !matchRawBracket(pattern.substring(1), letter);
+        }
+        else {
+            return matchRawBracket(pattern, letter);
+        }
     }
     // FIXME: Should use StringBuilder instead of String
     // HINT: reverse, charAt, setLength
     static private boolean match(String pattern
+                                 , int pidx
                                  , String filename
+                                 , int fidx
                                  , boolean escape) {
         // Recursion of the globbing matching
         if (!escape) {
-            if (pattern.isEmpty() && filename.isEmpty()) {
+            if (pattern.length() == pidx && filename.length() == fidx) {
                 return true;
             }
-            else if (pattern.isEmpty() || filename.isEmpty()) {
-                if (pattern.length() != 0 && pattern.charAt(0) == star) {
-                    return match(pattern.substring(1), filename, false);
+            else if (pattern.length() == pidx || filename.length() == fidx) {
+                if (pidx < pattern.length() && pattern.charAt(pidx) == star) {
+                    return match(pattern, pidx + 1, filename, fidx, false);
                 }
 
                 return false;
             }
-            else if (pattern.charAt(0) == question) {
-                return match(pattern.substring(1)
-                             , filename.substring(1)
+            else if (pattern.charAt(pidx) == question) {
+                return match(pattern
+                             , pidx + 1
+                             , filename
+                             , fidx + 1
                              , false);
             }
-            else if (pattern.charAt(0) == openBracket) {
+            else if (pattern.charAt(pidx) == openBracket) {
                 int idx = pattern.indexOf("]", 2);
 
                 if (idx != -1) {
-                    return matchBracket(pattern.substring(1, idx)
-                                        , filename.charAt(0))
-                        && match(pattern.substring(idx + 1)
-                                 , filename.substring(1)
+                    return matchBracket(pattern.substring(pidx + 1, idx)
+                                        , filename.charAt(fidx))
+                        && match(pattern
+                                 , idx + 1
+                                 , filename
+                                 , fidx + 1
                                  , false);
                 }
             }
-            else if (pattern.charAt(0) == star) {
-                return match(pattern, filename.substring(1), false)
-                    || match(pattern.substring(1), filename, false)
-                    || match(pattern.substring(1)
-                             , filename.substring(1)
+            else if (pattern.charAt(pidx) == star) {
+                return match(pattern, pidx, filename, fidx + 1, false)
+                    || match(pattern, pidx + 1, filename, fidx, false)
+                    || match(pattern
+                             , pidx + 1
+                             , filename
+                             , fidx + 1
                              , false);
             }
 
-            assert pattern.charAt(0) == openBracket
-                : "pattern.charAt(0) == openBracket";
+            assert pattern.charAt(pidx) == openBracket
+                : "pattern.charAt(pidx) == openBracket";
             assert pattern.indexOf("]", 2) == -1
                 : "pattern.indexOf(\"]\", 2) == -1";
         }
         // Character is escaped or the current character is not a
         // special one.
-        if (pattern.charAt(0) == backSlash) {
-            return match(pattern.substring(1), filename, true);
+        if (pattern.charAt(pidx) == backSlash) {
+            return match(pattern, pidx + 1, filename, fidx, true);
         }
 
-        return pattern.charAt(0) == filename.charAt(0)
-            && match(pattern.substring(1), filename.substring(1), false);
+        return pattern.charAt(pidx) == filename.charAt(fidx)
+            && match(pattern, pidx + 1, filename, fidx + 1, false);
     }
 
     // Attributes
