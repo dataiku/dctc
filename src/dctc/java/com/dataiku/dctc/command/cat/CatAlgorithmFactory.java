@@ -41,11 +41,22 @@ public class CatAlgorithmFactory {
                                   , long lineNumber
                                   , boolean showTabulation
                                   , boolean prettyChar) {
-        if (linum || dollar || squeezeMultipleEmpty) {
+        if (linum
+            || dollar
+            || squeezeMultipleEmpty
+            || showTabulation
+            || prettyChar) {
             LinumCatAlgorithm cat = new LinumCatAlgorithm(file, "cat");
             cat.setYell(getYell());
             { // Set the cat printer
-                cat.setPrinter(new SimpleCatPrinter());
+                if (showTabulation || prettyChar) {
+                    cat.setPrinter(new PrettyBytesCatPrinter()
+                                   .withShowTabulation(showTabulation)
+                                   .withPrettyChar(prettyChar));
+                }
+                else {
+                    cat.setPrinter(new SimpleCatPrinter());
+                }
             }
             { // Set Header
                 if (linum) {
@@ -83,18 +94,11 @@ public class CatAlgorithmFactory {
             return cat;
         }
         else {
-            if (prettyChar) {
-                return new PrettyBytesCatAlgorithm(file, "cat")
-                    .withShowTabulation(showTabulation)
-                    .withYell(getYell());
-            }
-            else {
-                // This implementation make a full dump of the file to the
-                // standard output. It's an optimization for the standard
-                // usage case.
-                return new CopyBytesCatAlgorithm(file, "cat")
-                    .withYell(getYell());
-            }
+            // This implementation make a full dump of the file to the
+            // standard output. It's an optimization for the standard
+            // usage case.
+            return new CopyBytesCatAlgorithm(file, "cat")
+                .withYell(getYell());
         }
     }
     private CatAlgorithm buildHead(GFile file) throws IOException {

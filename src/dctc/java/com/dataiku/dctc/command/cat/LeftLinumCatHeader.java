@@ -4,7 +4,7 @@ class LeftLinumCatHeader extends LinumCatHeader {
     public void print() {
         indent();
         System.out.print(getLineNumber());
-        System.out.print("  ");
+        System.out.print("\t");
         incr();
     }
 
