@@ -20,13 +20,16 @@ run_cat_() {
 
 run_cat_
 run_cat_ -n
-
 run_cat_ -E
 run_cat_ -s
 run_cat_ -v
 run_cat_ -T
 run_cat_ -t
 run_cat_ -e
+run_cat_ -nE
+run_cat_ -nT
+run_cat_ -setTvEns
 run_cat -v `which hostname`
+run_cat_ -v
 
 echo $exit_status
