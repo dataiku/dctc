@@ -50,6 +50,16 @@ sep 80 =
 grep -E '^\*\* FAIL' sum.org | sed -e 's#^\*\* FAIL =\(.*\)=#\1#' | nl
 sep 80 =
 
+nb=`grep -E '^\*\* ' sum.org | wc -l`
+pass=`grep -E '^\*\* PASS' sum.org | wc -l`
+fail=`grep -E '^\*\* FAIL' sum.org | wc -l`
+
+echo $pass/$nb tests pass.
+
+if [ "x$fail" != "x0" ]; then
+    echo `tput setaf 1`$fail`tput init` tests has failed.
+fi
+
 emacs=emacs23
 if which $emacs > /dev/null; then
     echo Make html report
@@ -60,15 +70,8 @@ else
     echo Emacs not present on the system, will not generate html/pdf report.
 fi
 
-nb=`grep -E '^\*\* ' sum.org | wc -l`
-pass=`grep -E '^\*\* PASS' sum.org | wc -l`
-fail=`grep -E '^\*\* FAIL' sum.org | wc -l`
-
-echo $pass/$nb tests pass.
-
 if [ "x$fail" != "x0" ]; then
-    echo `tput setaf 1`$fail`tput init` tests has failed.
     exit 1
+else
+    exit 0
 fi
-
-exit 0
