@@ -131,7 +131,7 @@ $(if test "x$(stat -c%s "out.eff")" = "x0"; then
 #+END_EXAMPLE
 *** Diff Between Effective and Expected Outputs
 #+BEGIN_EXAMPLE
-$(diff out.eff out.exp && echo No diff)
+$(diff out.exp out.eff && echo No diff)
 #+END_EXAMPLE
 
 *** Effective Error Output
