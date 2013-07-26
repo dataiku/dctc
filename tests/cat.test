@@ -6,15 +6,27 @@ exit_status=0
 
 run_cat() {
     run 0 - "cat $*" ../dctc-jar.sh cat "$@" <<.
-$(cat $@)
+$(cat $@) || true
 .
     if $fail; then
         exit_status=1
     fi
 }
 
+run_cat_() {
+    run_cat "$@" /etc/bash.bashrc
+    run_cat "$@" /etc/hosts
+}
 
-run_cat /etc/bash.bashrc
-run_cat /etc/hosts
+run_cat_
+run_cat_ -n
+
+run_cat_ -E
+run_cat_ -s
+run_cat_ -v
+run_cat_ -T
+run_cat_ -t
+run_cat_ -e
+run_cat -v `which hostname`
 
 echo $exit_status

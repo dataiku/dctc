@@ -44,7 +44,13 @@ done
 
 rapport_tail
 
-emacs=emacs234
+echo Here a summary of the failed tests:
+
+sep 80 =
+grep -E '^\*\* FAIL' sum.org | sed -e 's#^\*\* FAIL =\(.*\)=#\1#' | nl
+sep 80 =
+
+emacs=emacs23
 if which $emacs > /dev/null; then
     echo Make html report
     $emacs --batch --visit "sum.org" --funcall org-export-as-html > /dev/null 2>&1
@@ -52,11 +58,6 @@ if which $emacs > /dev/null; then
     $emacs --batch --visit "sum.org" --funcall org-export-as-pdf > /dev/null 2>&1
 else
     echo Emacs not present on the system, will not generate html/pdf report.
-    echo Here a summary of the failed tests:
-
-    sep 80 =
-    grep -E '^\*\* FAIL' sum.org | sed -e 's#^\*\* FAIL =\(.*\)=#\1#' | nl
-    sep 80 =
 fi
 
 nb=`grep -E '^\*\* ' sum.org | wc -l`

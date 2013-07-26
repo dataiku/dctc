@@ -14,6 +14,9 @@ EOF
 }
 
 run_ls /
+run_ls /{var,bin,opt,usr}
+run_ls ..
+run_ls .
 run_ls /var
 run_ls / /var
 run_ls /tmp

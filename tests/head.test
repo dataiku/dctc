@@ -5,13 +5,14 @@
 exit_status=0
 
 run_head() {
-    head "$@" > out.exp
+    head "$@" > out.exp 2> /dev/null || true
     run 0 out.exp "head $*" ../dctc-jar.sh head "$@"
     if $fail; then
         exit_status=1
     fi
 }
 
+run_head foo /etc/bash.bashrc
 run_head /etc/bash.bashrc
 run_head /etc/hosts
 run_head -n12 /etc/bash.bashrc
