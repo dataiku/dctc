@@ -2,6 +2,12 @@
 
 . ./utils
 rapport_head
+unset GREP_OPTIONS
+
+sep() {
+    head -c $1 < /dev/zero | tr '\0' $2
+    echo
+}
 
 to_test='*.test'
 res() {
@@ -18,21 +24,13 @@ full_res() {
         echo -e "\r[`tput setaf $1`$2`tput init`] $3"
     fi
 }
-nb=0
-pass=0
-fail=0
-skip=
 for i in $to_test; do
-    nb=$(($nb + 1))
     echo -n "[ .. ] $i"
     exit_status=$(./$i) #> $i.log 2>&1
     if [ "x$exit_status" != "x0" ]; then
         if [ "x$exit_status" = "x77" ]; then
             res 3 skip
-            skip=$(($skip + 1))
         else
-            fail=$(($fail + 1))
-
             if [ "x$exit_status" = "x99" ]; then
                 full_res 1 "epic fail" "$i"
             else
@@ -40,27 +38,35 @@ for i in $to_test; do
             fi
         fi
     else
-        pass=$(($pass + 1))
         res 2 " ok"
     fi
 done
 
 rapport_tail
 
-emacs=emacs23
+emacs=emacs234
 if which $emacs > /dev/null; then
     echo Make html report
     $emacs --batch --visit "sum.org" --funcall org-export-as-html > /dev/null 2>&1
     echo Make pdf report
     $emacs --batch --visit "sum.org" --funcall org-export-as-pdf > /dev/null 2>&1
 else
-    echo Don\'t generate html and pdf summary
+    echo Emacs not present on the system, will not generate html/pdf report.
+    echo Here a summary of the failed tests:
+
+    sep 80 =
+    grep -E '^\*\* FAIL' sum.org | sed -e 's#^\*\* FAIL =\(.*\)=#\1#' | nl
+    sep 80 =
 fi
+
+nb=`grep -E '^\*\* ' sum.org | wc -l`
+pass=`grep -E '^\*\* PASS' sum.org | wc -l`
+fail=`grep -E '^\*\* FAIL' sum.org | wc -l`
 
 echo $pass/$nb tests pass.
 
 if [ "x$fail" != "x0" ]; then
-    echo $fail tests has failed.
+    echo `tput setaf 1`$fail`tput init` tests has failed.
     exit 1
 fi
 
