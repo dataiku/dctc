@@ -12,9 +12,7 @@ run_cmp() {
     fi
 }
 
-
 run_cmp /etc/bash.bashrc /etc/bash.bashrc
 run_cmp /etc/bash.bashrc /etc/bash.bashrc 0 1
-
 
 echo $exit_status
