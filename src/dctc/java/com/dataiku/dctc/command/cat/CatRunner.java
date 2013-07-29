@@ -19,11 +19,11 @@ public class CatRunner {
         long nbLinePrinted = 0;
 
         for (GFile arg: args) {
-            header.print(arg);
             boolean isDirectory;
             try {
                 isDirectory = arg.isDirectory();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 yell(fact, arg, "Unexpected error.", e);
                 continue;
             }
@@ -40,6 +40,21 @@ public class CatRunner {
                     continue;
                 }
                 runner.setExitCode(exitCode);
+                boolean exists; {
+                    try {
+                        exists = arg.exists();
+                    }
+                    catch (IOException e) {
+                        yell.yell(fact.getAlgo().name().toLowerCase()
+                                  , arg.givenName() + ": Unexpected error"
+                                  , e);
+                        setExitCode(1);
+                        continue;
+                    }
+                }
+                if (exists) {
+                    header.print(arg);
+                }
                 nbLinePrinted += runner.run();
                 setExitCode(runner.getExitCode());
             }
