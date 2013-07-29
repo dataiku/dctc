@@ -64,7 +64,7 @@ $out_report_exp
     fail=false
     # Run and check the output code
     ($cmd "$@")>out.eff 2>err.eff          \
-        || staf_eff=$?
+        || sta_eff=$?
 
     # Check the diff
     if [ ! $sta_eff -eq $sta_exp ]; then
