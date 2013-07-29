@@ -233,7 +233,7 @@ public class DKUtils {
     public static Map<String, String> parseKVStringArray(Collection<String> array) {
         return parseKVStringArray(array.toArray(new String[0]));
     }
-    
+
     public static byte[] getResourceFileContent(String file) throws IOException {
         InputStream  is = DKUtils.class.getClassLoader().getResourceAsStream(file);
         if (is == null) {

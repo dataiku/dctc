@@ -39,4 +39,3 @@ class SkipFirstLine extends AbstractCatPrinter {
     private CatPrinter printer;
     private long skipNbLine;
 }
-

@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class CharUtils {
-    public static void showNonPrintable(OutputStream out,
-                                        byte x_,
-                                        boolean showTabulation)
+    public static void showNonPrintable(OutputStream out
+                                        , byte x_
+                                        , boolean showTabulation)
         throws IOException {
         int x = x_ >= 0 ? x_ : (256 + x_);
         assert x >= 0
@@ -51,4 +51,3 @@ public class CharUtils {
         }
     }
 }
-
