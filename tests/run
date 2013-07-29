@@ -61,7 +61,7 @@ nb=`grep -E '^\*\* ' sum.org | wc -l`
 pass=`grep -E '^\*\* PASS' sum.org | wc -l`
 fail=`grep -E '^\*\* FAIL' sum.org | wc -l`
 
-echo "`wc -l sum.dat | sed -e "#^ *##" | cut -d' ' -f1` $nb $pass $fail 0" >> sum.dat
+echo "`wc -l < sum.dat | sed -e "#^ *##"` $nb $pass $fail 0" >> sum.dat
 
 echo $pass/$nb tests pass.
 
@@ -69,8 +69,8 @@ if [ "x$fail" != "x0" ]; then
     echo `tput setaf 1`$fail`tput init` tests has failed.
 fi
 
-gnuplot test.plot
-gnuplot test2.plot
+gnuplot all.plot
+gnuplot fail.plot
 
 emacs=emacs23
 if which $emacs > /dev/null; then

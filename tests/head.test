@@ -20,7 +20,7 @@ files="/etc/bash.bashrc /etc/hosts"
 
 run_head_() {
     for i in $files; do
-        run_head "$@" $files
+        run_head "$@" $i
     done
 }
 
@@ -35,5 +35,6 @@ run_head_ --lines 12
 run_head_ --lines=12
 run_head_ -c 12
 run_head_ --bytes 424242
+run_head -b $files
 
 exit $exit_status

@@ -45,7 +45,7 @@ for i in `seq 0 $power`; do
 done
 
 run_cat -v `which hostname`
-run_cat -u # Ignore this option
+run_cat_ -u # Ignore this option
 
 
 exit $exit_status
