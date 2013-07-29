@@ -19,4 +19,4 @@ run_find /usr -name gcc
 run_find /bin -name bash
 run_find .. -type d
 
-echo $exit_status
+exit $exit_status

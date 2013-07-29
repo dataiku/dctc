@@ -32,4 +32,4 @@ run_ls --hide=*~ data/ls
 run_ls -Q data/ls
 run_ls -R data/
 
-echo $exit_status
+exit $exit_status

@@ -23,6 +23,10 @@ run_grep --color bin /etc/bash.bashrc
 run_grep --color -i BIN /etc/bash.bashrc
 run_grep -li BIN /etc/bash.bashrc
 run_grep -i --files-with-matches BIN /etc/bash.bashrc
+run_grep -i /bin/bash /etc/passwd
+run_grep -q /bin/bash /etc/passwd
 
+run 1 - "grep yolo /etc/passwd" ../dctc-jar.sh grep yolo /etc/passwd <<EOF
+EOF
 
-echo $exit_status
+exit $exit_status

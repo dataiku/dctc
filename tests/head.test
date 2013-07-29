@@ -3,13 +3,17 @@
 . ./utils
 
 exit_status=0
-
-run_head() {
+gen_run_head() {
+    exit=$1
+    shift
     head "$@" > out.exp 2> /dev/null || true
-    run 0 out.exp "head $*" ../dctc-jar.sh head "$@"
+    run $exit out.exp "head $*" ../dctc-jar.sh head "$@"
     if $fail; then
         exit_status=1
     fi
+}
+run_head() {
+    gen_run_head 0 "$@"
 }
 
 files="/etc/bash.bashrc /etc/hosts"
@@ -20,7 +24,7 @@ run_head_() {
     done
 }
 
-run_head foo $files
+gen_run_head 1 foo $files
 run_head_
 run_head_ -n12
 run_head_ -n3
@@ -32,4 +36,4 @@ run_head_ --lines=12
 run_head_ -c 12
 run_head_ --bytes 424242
 
-echo $exit_status
+exit $exit_status

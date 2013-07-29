@@ -1,7 +1,5 @@
 #! /bin/bash
 
-echo \$-: $-
-
 . ./utils
 rapport_head
 unset GREP_OPTIONS
@@ -11,7 +9,12 @@ sep() {
     echo
 }
 
-to_test='*.test'
+if [ "x$1" != "x" ]; then
+    to_test="$@"
+else
+    to_test='*.test'
+fi
+
 res() {
     if [ "x$-" = "x" ]; then
         echo -e "\r[$2"
@@ -28,7 +31,9 @@ full_res() {
 }
 for i in $to_test; do
     echo -n "[ .. ] $i"
-    exit_status=$(./$i) #> $i.log 2>&1
+    exit_status=0
+    ./$i \
+        || exit_status=$?
     if [ "x$exit_status" != "x0" ]; then
         if [ "x$exit_status" = "x77" ]; then
             res 3 skip
@@ -40,7 +45,7 @@ for i in $to_test; do
             fi
         fi
     else
-        res 2 " ok"
+        res 2 " ok "
     fi
 done
 
@@ -56,11 +61,16 @@ nb=`grep -E '^\*\* ' sum.org | wc -l`
 pass=`grep -E '^\*\* PASS' sum.org | wc -l`
 fail=`grep -E '^\*\* FAIL' sum.org | wc -l`
 
+echo "`wc -l sum.dat | sed -e "#^ *##" | cut -d' ' -f1` $nb $pass $fail 0" >> sum.dat
+
 echo $pass/$nb tests pass.
 
 if [ "x$fail" != "x0" ]; then
     echo `tput setaf 1`$fail`tput init` tests has failed.
 fi
+
+gnuplot test.plot
+gnuplot test2.plot
 
 emacs=emacs23
 if which $emacs > /dev/null; then

@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 . ./utils
 
@@ -16,23 +16,36 @@ $(cat $@ || true)
 files="/etc/bash.bashrc /etc/hosts"
 
 run_cat_() {
+    local i
     for i in $files; do
-        run_cat "$@" $files
+        run_cat "$@" $i
     done
 }
 
-run_cat_
-run_cat_ -n
-run_cat_ -E
-run_cat_ -s
-run_cat_ -v
-run_cat_ -T
-run_cat_ -t
-run_cat_ -e
-run_cat_ -nE
-run_cat_ -nT
-run_cat_ -setTvEns
-run_cat -v `which hostname`
-run_cat_ -v
+declare -a opt=(A b e E n s t T v);
 
-echo $exit_status
+nb_elt=$((${#opt[@]} - 1))
+power=$((2**${#opt[@]} - 1))
+
+for i in `seq 0 $power`; do
+
+    opt_list=
+    for j in `seq 0 $nb_elt`; do
+        lol=$i
+
+        for k in `seq 1 $j`; do
+            lol=$(($lol / 2))
+        done
+        if [ $(($lol % 2)) -eq 1 ]; then
+            opt_list="$opt_list -${opt[$j]}"
+        fi
+    done
+    echo -ne "\r[$i"
+    run_cat_ $opt_list
+done
+
+run_cat -v `which hostname`
+run_cat -u # Ignore this option
+
+
+exit $exit_status

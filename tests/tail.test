@@ -37,4 +37,4 @@ run_tail_ -q
 run_tail -q $files
 run_tail $files
 
-echo $exit_status
+exit $exit_status
