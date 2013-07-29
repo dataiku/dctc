@@ -31,13 +31,16 @@ public class Cat extends Command {
             .withAlgo(AlgorithmType.CAT)
             .withLinum(hasOption('n'))
             .withDollar(hasOption('E')
-                        || hasOption('e'))
+                        || hasOption('e')
+                        || hasOption("-show-all"))
             .withYell(getYell())
             .withPrettyChar(hasOption("-show-nonprinting")
                             || hasOption('t')
-                            || hasOption('e'))
+                            || hasOption('e')
+                            || hasOption("-show-all"))
             .withShowTabulation(hasOption("-show-tabs")
-                                || hasOption('t'));
+                                || hasOption('t')
+                                || hasOption("-show-all"));
 
         CatRunner runner = new CatRunner()
             .withHeader(new NeverCatHeaderSelector())
@@ -58,6 +61,7 @@ public class Cat extends Command {
         options.add(stdOption('T', "show-tabs", "display TAB characters as ^I"));
         options.add(stdOption('t', "Equivalent to -vT"));
         options.add(stdOption('e', "Equivalent to -vE"));
+        options.add(stdOption('A', , "show-all", "Equivalent to -vET"));
     }
     @Override
     protected final String proto() {
