@@ -167,6 +167,7 @@ public class Grep extends Command {
             .withColor(hasOption('G'))
             .withListing(hasOption('l'))
             .withCount(hasOption('c'))
+            .withQuiet(hasOption('q'))
             ;
         matcher = fact.buildMatcher(pattern.split(eol()));
         this.header = fact.buildHeaderPrinter();

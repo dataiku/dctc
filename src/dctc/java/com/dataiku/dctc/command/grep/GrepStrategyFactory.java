@@ -1,13 +1,19 @@
 package com.dataiku.dctc.command.grep;
 
 public class GrepStrategyFactory {
-    public GrepPrinter buildPrinter(GrepHeaderPrinter header, GrepMatcher matcher) {
+    public GrepPrinter buildPrinter(GrepHeaderPrinter header
+                                    , GrepMatcher matcher) {
         return buildPrinter(getCount(), getListing(), getColor(), header, matcher);
     }
-    public GrepPrinter buildPrinter(boolean count, boolean listing,
-                                    boolean color, GrepHeaderPrinter header,
-                                    GrepMatcher matcher) {
-        if (count) {
+    public GrepPrinter buildPrinter(boolean count
+                                    , boolean listing
+                                    , boolean color
+                                    , GrepHeaderPrinter header
+                                    , GrepMatcher matcher) {
+        if (quiet) {
+            return new QuietGrepPrinter();
+        }
+        else if (count) {
             return new CountGrepPrinter(header);
         }
         else if (listing) {
@@ -26,11 +32,17 @@ public class GrepStrategyFactory {
         }
     }
     public GrepMatcher buildMatcher(String[] pattern) {
-        return buildMatcher(pattern, getRatexp(), getIgnoreCase(), getFullLine(), getInverse());
+        return buildMatcher(pattern
+                            , getRatexp()
+                            , getIgnoreCase()
+                            , getFullLine()
+                            , getInverse());
     }
-    public GrepMatcher buildMatcher(String[] pattern, boolean ratexp,
-                                    boolean ignoreCase, boolean fullLine,
-                                    boolean inverse) {
+    public GrepMatcher buildMatcher(String[] pattern
+                                    , boolean ratexp
+                                    , boolean ignoreCase
+                                    , boolean fullLine
+                                    , boolean inverse) {
         GrepMatcher matcher = null;
         if (ratexp) {
             matcher = new RatExpGrepMatcher(pattern);
@@ -54,7 +66,9 @@ public class GrepStrategyFactory {
     public GrepLinePrinter buildLinePrinter() {
         return buildLinePrinter(getCount(), getLinum(), getColor());
     }
-    public GrepLinePrinter buildLinePrinter(boolean count, boolean linum, boolean color) {
+    public GrepLinePrinter buildLinePrinter(boolean count
+                                            , boolean linum
+                                            , boolean color) {
         if (count || !linum) {
             return new OffGrepLinePrinter();
         }
@@ -68,7 +82,8 @@ public class GrepStrategyFactory {
     public GrepHeaderPrinter buildHeaderPrinter() {
         return buildHeaderPrinter(getHeader(), getCount());
     }
-    public GrepHeaderPrinter buildHeaderPrinter(boolean header, boolean count) {
+    public GrepHeaderPrinter buildHeaderPrinter(boolean header
+                                                , boolean count) {
         if(header) {
             GrepHeaderPrinter printer = new SimpleGrepHeaderPrinter();
             if (count) {
@@ -172,8 +187,19 @@ public class GrepStrategyFactory {
         setInverse(inverse);
         return this;
     }
+    public boolean getQuiet() {
+        return quiet;
+    }
+    public void setQuiet(boolean quiet) {
+        this.quiet = quiet;
+    }
+    public GrepStrategyFactory withQuiet(boolean quiet) {
+        setQuiet(quiet);
+        return this;
+    }
 
     // Attributes
+    private boolean quiet;
     private boolean inverse;
     private boolean fullLine;
     private boolean ignoreCase;
