@@ -1,5 +1,7 @@
 #! /bin/bash
 
+echo \$-: $-
+
 . ./utils
 rapport_head
 unset GREP_OPTIONS
