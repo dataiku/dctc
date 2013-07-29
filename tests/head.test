@@ -12,17 +12,24 @@ run_head() {
     fi
 }
 
-run_head foo /etc/bash.bashrc
-run_head /etc/bash.bashrc
-run_head /etc/hosts
-run_head -n12 /etc/bash.bashrc
-run_head -n3 /etc/hosts
-run_head -n4242 /etc/bash.bashrc
-run_head --lines 4242 /etc/bash.bashrc
-run_head --lines=4242 /etc/bash.bashrc
-run_head --lines 12 /etc/bash.bashrc
-run_head --lines=12 /etc/bash.bashrc
-run_head -c 12 /etc/bash.bashrc
-run_head --bytes 424242 /etc/bash.bashrc
+files="/etc/bash.bashrc /etc/hosts"
+
+run_head_() {
+    for i in $files; do
+        run_head "$@" $files
+    done
+}
+
+run_head foo $files
+run_head_
+run_head_ -n12
+run_head_ -n3
+run_head_ -n4242
+run_head_ --lines 4242
+run_head_ --lines=4242
+run_head_ --lines 12
+run_head_ --lines=12
+run_head_ -c 12
+run_head_ --bytes 424242
 
 echo $exit_status

@@ -13,9 +13,12 @@ $(cat $@ || true)
     fi
 }
 
+files="/etc/bash.bashrc /etc/hosts"
+
 run_cat_() {
-    run_cat "$@" /etc/bash.bashrc
-    run_cat "$@" /etc/hosts
+    for i in $files; do
+        run_cat "$@" $files
+    done
 }
 
 run_cat_

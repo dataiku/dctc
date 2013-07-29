@@ -5,23 +5,36 @@
 exit_status=0
 
 run_tail() {
-    tail "$@" > out.exp
-    run 0 out.exp "tail $*" ../dctc-jar.sh tail "$@"
+    exp=0
+    tail "$@" > out.exp || exp=$?
+    run $exp out.exp "tail $*" ../dctc-jar.sh tail "$@"
     if $fail; then
         exit_status=1
     fi
 }
 
-run_tail /etc/bash.bashrc
-run_tail /etc/hosts
-run_tail -n12 /etc/bash.bashrc
-run_tail -n3 /etc/hosts
-run_tail -n4242 /etc/bash.bashrc
-run_tail --lines 4242 /etc/bash.bashrc
-run_tail --lines=4242 /etc/bash.bashrc
-run_tail --lines 12 /etc/bash.bashrc
-run_tail --lines=12 /etc/bash.bashrc
-run_tail -c 12 /etc/bash.bashrc
-run_tail --bytes 424242 /etc/bash.bashrc
+files="/etc/bash.bashrc /etc/hosts"
+
+run_tail_() {
+    for i in $files; do
+        run_tail "$@" "$i"
+    done
+
+}
+
+run_tail_
+run_tail_ -n12
+run_tail_ -n3
+run_tail_ -n4242
+run_tail_ --lines 4242
+run_tail_ --lines=4242
+run_tail_ --lines 12
+run_tail_ --lines=12
+run_tail_ -c 12
+run_tail_ -c12
+run_tail_ --bytes 424242
+run_tail_ -q
+run_tail -q $files
+run_tail $files
 
 echo $exit_status
