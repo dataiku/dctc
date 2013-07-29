@@ -32,7 +32,8 @@ public class CatAlgorithmFactory {
                         , getSqueezeMultipleEmpty()
                         , getStartingLine()
                         , getShowTabulation()
-                        , getPrettyChar());
+                        , getPrettyChar()
+                        , getNonEmptyLinum());
     }
     private CatAlgorithm buildCat(GFile file
                                   , boolean linum
@@ -40,8 +41,10 @@ public class CatAlgorithmFactory {
                                   , boolean squeezeMultipleEmpty
                                   , long lineNumber
                                   , boolean showTabulation
-                                  , boolean prettyChar) {
+                                  , boolean prettyChar
+                                  , boolean nonEmptyLinum) {
         if (linum
+            || nonEmptyLinum
             || dollar
             || squeezeMultipleEmpty
             || showTabulation
@@ -59,12 +62,18 @@ public class CatAlgorithmFactory {
                 }
             }
             { // Set Header
-                if (linum) {
-                    cat.getPrinter().setHeader(new LeftLinumCatHeader()
-                                               .withIndentSeparator(" ")
-                                               .withLineNumber(lineNumber)
-                                               .withNumberIncrement(1)
-                                               .withNumberOfCol(6));
+                if (linum || nonEmptyLinum) {
+                    LinumCatHeader header;
+                    if (linum) {
+                        header = new LeftLinumCatHeader();
+                    }
+                    else {
+                        header = new NonEmptyLinumCatHeader();
+                    }
+                    cat.getPrinter().setHeader(header                            .withIndentSeparator(" ")
+                            .withLineNumber(lineNumber)
+                            .withNumberIncrement(1)
+                            .withNumberOfCol(6));
                 }
                 else {
                     cat.getPrinter().setHeader(new EmptyCatHeader());
@@ -360,8 +369,19 @@ public class CatAlgorithmFactory {
         setShowTabulation(showTabulation);
         return this;
     }
+    public boolean getNonEmptyLinum() {
+        return nonEmptyLinum;
+    }
+    public void setNonEmptyLinum(boolean nonEmptyLinum) {
+        this.nonEmptyLinum = nonEmptyLinum;
+    }
+    public CatAlgorithmFactory withNonEmptyLinum(boolean nonEmptyLinum) {
+        setNonEmptyLinum(nonEmptyLinum);
+        return this;
+    }
 
     // Attributes
+    private boolean nonEmptyLinum;
     private boolean showTabulation;
     private boolean prettyChar;
     private YellPolicy yell;

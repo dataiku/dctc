@@ -3,7 +3,7 @@ package com.dataiku.dctc.command.cat;
 class HeadCatPrinter extends AbstractCatPrinter {
     public void print(String line) {
         if (buf[idx] != null) {
-            getHeader().print();
+            getHeader().print(buf[idx]);
             System.out.print(buf[idx]);
             getEol().print();
         }

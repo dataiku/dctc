@@ -9,7 +9,7 @@ public class TailCatPrinter extends AbstractCatPrinter {
         for (int i = 0; i < tail; ++i) {
             String toPrint = buf[(idx + i) % tail];
             if (toPrint != null) {
-                getHeader().print();
+                getHeader().print(toPrint);
                 System.out.print(toPrint);
                 getEol().print();
             }

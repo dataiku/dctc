@@ -9,7 +9,7 @@ class PrettyBytesCatPrinter extends AbstractCatPrinter {
         byte[] l = line.getBytes();
 
         try {
-            getHeader().print();
+            getHeader().print(line);
             for (int i = 0; i < l.length; ++i) {
                 if (prettyChar) {
                     showNonPrintable(System.out, l[i], showTabulation);

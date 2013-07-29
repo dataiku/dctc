@@ -8,7 +8,7 @@ abstract class LinumCatHeader implements CatHeader {
             System.out.print(indentSeparator);
         }
     }
-    public abstract void print();
+    public abstract void print(String line);
 
     // Getters-Setters
     public final int getNumberOfCol() {

@@ -1,5 +1,6 @@
+
 package com.dataiku.dctc.command.cat;
 
 interface CatHeader {
-    public void print();
+    public void print(String line);
 }

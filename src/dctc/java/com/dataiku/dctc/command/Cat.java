@@ -29,7 +29,8 @@ public class Cat extends Command {
         // Set the option to the factory.
         fact = new CatAlgorithmFactory()
             .withAlgo(AlgorithmType.CAT)
-            .withLinum(hasOption('n'))
+            .withLinum(hasOption('n') && !hasOption('b'))
+            .withNonEmptyLinum(hasOption('b'))
             .withDollar(hasOption('E')
                         || hasOption('e')
                         || hasOption("-show-all"))
@@ -61,7 +62,8 @@ public class Cat extends Command {
         options.add(stdOption('T', "show-tabs", "display TAB characters as ^I"));
         options.add(stdOption('t', "Equivalent to -vT"));
         options.add(stdOption('e', "Equivalent to -vE"));
-        options.add(stdOption('A', , "show-all", "Equivalent to -vET"));
+        options.add(stdOption('A', "show-all", "Equivalent to -vET"));
+        options.add(stdOption('b', "number-nonblank", "number nonempty output lines, overrides -n"));
     }
     @Override
     protected final String proto() {
