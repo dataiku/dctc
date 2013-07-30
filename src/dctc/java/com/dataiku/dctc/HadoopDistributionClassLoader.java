@@ -21,6 +21,7 @@ public class HadoopDistributionClassLoader {
                     new File("/usr/lib/hadoop/lib/protobuf-java-2.4.0a.jar"),
                     new File("/usr/lib/hadoop/lib/guava-11.0.2.jar"),
                     new File("/usr/lib/hadoop/lib/slf4j-api-1.6.1.jar"),
+                    new File("/usr/lib/hadoop/lib/slf4j-log4j12-1.6.1.jar"),
                     new File("/usr/lib/hadoop-hdfs/hadoop-hdfs.jar"),
                     new File( "/usr/lib/hadoop/hadoop-common.jar"),
                     new File( "/usr/lib/hadoop/hadoop-auth.jar"));
@@ -50,6 +51,7 @@ public class HadoopDistributionClassLoader {
 
     private static void addSoftwareLibrary(File file) throws Exception {
         if (file.exists()) {
+            logger.info("Adding library : " + file);
             Method method = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});
             method.setAccessible(true);
             method.invoke(ClassLoader.getSystemClassLoader(), new Object[]{file.toURI().toURL()});
@@ -111,11 +113,14 @@ public class HadoopDistributionClassLoader {
                         "/usr/lib/hadoop/lib/protobuf-java-2.4.0a.jar",
                         "/usr/lib/hadoop/lib/guava-11.0.2.jar",
                         "/usr/lib/hadoop/lib/slf4j-api-1.6.1.jar",
+                        "/usr/lib/hadoop/lib/commons-logging-1.1.1.jar",
                         "/usr/lib/hadoop-hdfs/hadoop-hdfs.jar",
                         "/usr/lib/hadoop/hadoop-common.jar",
                 "/usr/lib/hadoop/hadoop-auth.jar"}) {
                     addSoftwareLibrary(new File(path));
                 }
+                //addSoftwareLibrary(new File("/usr/lib/hadoop/lib"), ".*.jar");
+                //addSoftwareLibrary(new File(HadoopUtils.getHadoopHome()));
             } else if (isMAPR()) {
                 logger.info("Detected MAPR distribution");
                 System.setProperty("java.library.path", "/opt/mapr/lib");
