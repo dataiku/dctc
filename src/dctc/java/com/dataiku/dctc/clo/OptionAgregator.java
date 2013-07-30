@@ -14,6 +14,6 @@ public interface OptionAgregator {
     public int has(String optName);
     public int getPosition();
     public boolean hasArgument();
-    public String getArgument();
+    public List<String> getArgument();
     public String getArgumentName();
 }

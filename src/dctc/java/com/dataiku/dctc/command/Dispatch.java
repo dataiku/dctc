@@ -75,24 +75,30 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
     /// Getters
     public String prefix() {
         if (prefix == null) {
-            prefix = getOptionValue("-prefix");
-
-            if (prefix == null) {
+            List<String> prefixes = getOptionValue("-prefix");
+            if (prefixes.size() == 0) {
                 prefix = "";
             }
+            else {
+                prefix = prefixes.get(0);
+            }
+
         }
 
         return prefix;
     }
     public String postfix() {
         if (postfix == null) {
-            postfix = getOptionValue("-suffix");
-
-            if (postfix == null) {
+            List<String> postfixes = getOptionValue("-suffix");
+            if (postfixes.size() == 0) {
                 postfix = "";
             }
+            else {
+                postfix = postfixes.get(0);
+            }
             if (getOptionValue("-input-file") != null
-                && getOptionValue("-input-file").equalsIgnoreCase("csv")) {
+                && getOptionValue("-input-file").size() > 0
+                && getOptionValue("-input-file").get(0).equalsIgnoreCase("csv")) {
                 postfix += ".csv";
             }
             else {
@@ -104,7 +110,7 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
     }
     public SplitFunctionNames splitFunction() {
         if (splitFunction == null) {
-            String fct = getOptionValue("-function").toLowerCase();
+            String fct = getOptionValue("-function").get(0).toLowerCase();
             for (SplitFunctionNames name: SplitFunctionNames.values()) {
                 if (fct.equals(name.toString().toLowerCase())) {
                     splitFunction = name;
@@ -128,21 +134,21 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
     }
     public String timeUnit() {
         if (timePeriod == null) {
-            timePeriod = getOptionValue("-time-period");
+            timePeriod = getOptionValue("-time-period").get(0);
         }
 
         return timePeriod;
     }
     public String column() {
         if (column == null) {
-            column = getOptionValue("-column");
+            column = getOptionValue("-column").get(0);
         }
 
         return column;
     }
     public String timeFormat() {
         if (timeFormat == null) {
-            timeFormat = getOptionValue("-time-format");
+            timeFormat = getOptionValue("-time-format").get(0);
         }
 
         return timeFormat;

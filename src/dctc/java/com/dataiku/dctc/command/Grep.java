@@ -57,11 +57,11 @@ public class Grep extends Command {
         List<String> args = getArgs();
         { // Set pattern
             if (hasOption('e')) {
-                pattern = getOptionValue('e');
+                pattern = getOptionValue('e').get(0);
             }
             else if (hasOption('f')) {
                 try {
-                    pattern = DKUFileUtils.fileToString(new File(getOptionValue('f')));
+                    pattern = DKUFileUtils.fileToString(new File(getOptionValue('f').get(0)));
                 }
                 catch (Exception e) {
                     if (!hasOption("-no-messages")) {

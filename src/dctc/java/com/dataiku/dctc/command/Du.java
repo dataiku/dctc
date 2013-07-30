@@ -91,7 +91,7 @@ public class Du extends Command {
                 maxDepth = 0;
             }
             else if (hasOption('d')) {
-                maxDepth = IntegerUtils.toInt(getOptionValue('d'));
+                maxDepth = IntegerUtils.toInt(getOptionValue('d').get(0));
             }
             else {
                 maxDepth = Integer.MAX_VALUE;

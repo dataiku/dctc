@@ -1,6 +1,7 @@
 package com.dataiku.dctc.command;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -60,16 +61,21 @@ public class Find extends Command {
         return "find";
     }
     /// Getters
-    public Pattern pattern() {
-        if (pattern == null && hasOption("name")) {
-            pattern = Pattern.compile(getOptionValue("name"));
+    public List<Pattern> pattern() {
+        if (pattern == null) {
+            pattern = new ArrayList<Pattern>();
+            if (hasOption("name")) {
+                for (String name: getOptionValue("name")) {
+                    pattern.add(Pattern.compile(name));
+                }
+            }
         }
 
         return pattern;
     }
     /// Setters
     public Find pattern(String name) {
-        this.pattern = Pattern.compile(name);
+        this.pattern.add(Pattern.compile(name));
         return this;
     }
     private OptionAgregator stdOpt(String lgOpt
@@ -94,25 +100,31 @@ public class Find extends Command {
 
     // Private
     private void accept(GFile path) throws IOException {
-        if (!hasName() || pattern.matcher(path.getFileName()).matches()) {
-            switch (kind()) {
-            case ALL:
-                break;
-            case FILE:
-                if (!path.isFile()) {
+        if (hasName()) {
+            for (Pattern pat: pattern) {
+                if (!pat.matcher(path.getFileName()).matches()) {
                     return;
                 }
-                break;
-            case DIRECTORY:
-                if (!path.isDirectory()) {
-                    return;
-                }
-                break;
-            default:
-                break;
             }
-            System.out.println(path.givenName());
         }
+        switch (kind()) {
+        case ALL:
+            break;
+        case FILE:
+            if (!path.isFile()) {
+                return;
+            }
+            break;
+        case DIRECTORY:
+            if (!path.isDirectory()) {
+                return;
+            }
+            break;
+        default:
+            break;
+        }
+
+        System.out.println(path.givenName());
     }
     private void notFind(GFile file) {
         error(file, "No such file or directory", 2);
@@ -128,7 +140,7 @@ public class Find extends Command {
     }
     private Kind kind() {
         if (kind == null) {
-            String value = getOptionValue("type");
+            String value = hasOption("type") ? getOptionValue("type").get(0) : null;
             if (value == null || "all".startsWith(value)) {
                 kind = Kind.ALL;
             }
@@ -146,6 +158,6 @@ public class Find extends Command {
     }
 
     // Attributes
-    private Pattern pattern = null;
+    private List<Pattern> pattern = null;
     private Kind kind = null;
 }

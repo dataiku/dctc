@@ -92,7 +92,7 @@ public class ListColumns extends Command {
     // private
     private String getSeparator() {
         if (hasOption('s')) {
-            return getOptionValue('s');
+            return getOptionValue('s').get(0);
         }
         else {
             return ",";

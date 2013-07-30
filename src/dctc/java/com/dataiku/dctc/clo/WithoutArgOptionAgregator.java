@@ -68,7 +68,7 @@ public class WithoutArgOptionAgregator implements OptionAgregator {
     public boolean hasArgument() {
         return false;
     }
-    public String getArgument() {
+    public List<String> getArgument() {
         return null;
     }
     public String getArgumentName() {

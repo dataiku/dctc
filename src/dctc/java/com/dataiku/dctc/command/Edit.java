@@ -34,7 +34,7 @@ public class Edit extends Command {
     }
     public String getEditor() {
         if (hasOption("-editor")) {
-            return getOptionValue("-editor");
+            return getOptionValue("-editor").get(0);
         }
         else {
             return System.getenv("EDITOR");

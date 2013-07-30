@@ -65,7 +65,7 @@ public class Tail extends Command {
     public void nbLines() {
         if (isLine()) {
             if (hasOption('n')) {
-                number = Long.parseLong(getOptionValue("-lines"));
+                number = Long.parseLong(getOptionValue("-lines").get(0));
             } else {
                 number = 10;
             }
@@ -73,7 +73,7 @@ public class Tail extends Command {
     }
     public void nbBytes() {
         if (!isLine()) {
-            number = Long.parseLong(getOptionValue("-bytes"));
+            number = Long.parseLong(getOptionValue("-bytes").get(0));
         }
     }
     private boolean isLine() {

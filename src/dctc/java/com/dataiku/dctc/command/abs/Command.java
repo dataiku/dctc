@@ -239,10 +239,10 @@ public abstract class Command {
         }
         return false;
     }
-    protected String getOptionValue(char opt) {
+    protected List<String> getOptionValue(char opt) {
         return getOptionValue("" + opt);
     }
-    protected String getOptionValue(String optName) {
+    protected List<String> getOptionValue(String optName) {
         for (OptionAgregator opt: opts) {
             if (opt.has(optName) != 0) {
                 if (opt.hasArgument()) {
@@ -264,10 +264,10 @@ public abstract class Command {
         return -1;
     }
     protected String getOptionValue(String opt, String defaultValue) {
-        return hasOption(opt) ? getOptionValue(opt) : defaultValue;
+        return hasOption(opt) ? getOptionValue(opt).get(0) : defaultValue;
     }
     protected String getOptionValue(char opt, String defaultValue) {
-        return hasOption(opt) ? getOptionValue(opt) : defaultValue;
+        return hasOption(opt) ? getOptionValue(opt).get(0) : defaultValue;
     }
     protected OptionAgregator stdOption(char shortOpt
                                         , String longOpt
@@ -321,7 +321,11 @@ public abstract class Command {
     }
     protected int getIntOption(String option, int defaultValue) {
         if (hasOption(option)) {
-            String val = getOptionValue(option);
+            List<String> values =getOptionValue(option);
+            if (values.size() == 0) {
+                return defaultValue;
+            }
+            String val = values.get(0);
             if (IntegerUtils.isNumeric(val)) {
                 return IntegerUtils.toInt(val);
             }

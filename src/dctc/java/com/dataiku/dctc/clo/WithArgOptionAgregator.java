@@ -82,11 +82,11 @@ public class WithArgOptionAgregator implements OptionAgregator {
         setPosition(position);
         return this;
     }
-    public String getArgument() {
+    public List<String> getArgument() {
         return argument;
     }
     public void setArgument(String argument) {
-        this.argument = argument;
+        this.argument.add(argument);
     }
     public WithArgOptionAgregator withArgument(String argument) {
         setArgument(argument);
@@ -117,7 +117,7 @@ public class WithArgOptionAgregator implements OptionAgregator {
     private int count;
     private String description;
     private String argumentName;
-    private String argument;
+    private List<String> argument = new ArrayList<String>();
     private int position;
     private List<Option> opts = new ArrayList<Option>();
 }

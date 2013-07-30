@@ -217,7 +217,7 @@ public abstract class ListFilesCommand extends Command {
     protected int getThreadLimit() {
         int threadLimit = GlobalConf.getThreadLimit();
         if (hasOption('n')) {
-            threadLimit = Integer.parseInt(getOptionValue('n'));
+            threadLimit = Integer.parseInt(getOptionValue('n').get(0));
         }
         if (hasOption('s')) {
             threadLimit = 1;

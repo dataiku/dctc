@@ -3,7 +3,11 @@ package com.dataiku.dctc.command.grep;
 public class GrepStrategyFactory {
     public GrepPrinter buildPrinter(GrepHeaderPrinter header
                                     , GrepMatcher matcher) {
-        return buildPrinter(getCount(), getListing(), getColor(), header, matcher);
+        return buildPrinter(getCount()
+                            , getListing()
+                            , getColor()
+                            , header
+                            , matcher);
     }
     public GrepPrinter buildPrinter(boolean count
                                     , boolean listing
