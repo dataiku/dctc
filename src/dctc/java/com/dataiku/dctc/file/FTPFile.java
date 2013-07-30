@@ -144,7 +144,6 @@ public class FTPFile extends AbstractGFile {
     }
     @Override
     public List<FTPFile> glist() throws IOException {
-        System.out.println("glist");
         if (list != null) {
             return list;
         }
