@@ -23,6 +23,8 @@ run_find_() {
 declare -a opt=(
     'name gcc'
     'name bash'
+    'name \\*.test'
+    'name .\\*.test'
     'type d'
     'type f'
 );

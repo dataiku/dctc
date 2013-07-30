@@ -32,7 +32,7 @@ declare -a opt=(
     );
 
 iter run_tail_
-run_tail -q $files
+run_tail foo $files
 run_tail $files
 
 print_status $exit_status $0

@@ -3,17 +3,13 @@
 . ./utils
 
 exit_status=0
-gen_run_head() {
-    exit=$1
-    shift
-    head "$@" > out.exp 2> /dev/null || true
+run_head() {
+    exit=0
+    head "$@" > out.exp 2> /dev/null || exit=$?
     run $exit out.exp "head $*" ../dctc-jar.sh head "$@"
     if $fail; then
         exit_status=1
     fi
-}
-run_head() {
-    gen_run_head 0 "$@"
 }
 
 files="/etc/bash.bashrc /etc/hosts"
@@ -36,7 +32,8 @@ declare -a opt=(
 
 iter run_head_
 
-gen_run_head 1 foo $files
+run_head foo $files
+run_head $files
 
 print_status $exit_status $0
 

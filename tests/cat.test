@@ -23,12 +23,11 @@ run_cat_() {
 }
 
 
-declare -a opt=(A b e E n s t T v);
+declare -a opt=(A b e E n s t T v u);
 
 iter run_cat_
 
 run_cat -v `which hostname`
-run_cat_ -u # Ignore this option
 
 print_status $exit_status $0
 

@@ -1,0 +1,42 @@
+#! /bin/bash
+
+. ./utils
+
+set -e
+
+
+run_() {
+    mkdir "$@" > out.exp
+    rmdir "$@" > rmdir.exp
+    run 0 out.exp "mkdir $*" ../dctc-jar.sh mkdir "$@"
+    if $fail; then
+        exit_status=1
+    fi
+
+    file "$@" > /dev/null \
+        || exit_status=1
+
+    mv rmdir.exp out.exp
+    run 0 out.exp "rmdir $*" ../dctc-jar.sh rmdir "$@"
+    if $fail; then
+        exit_status=1
+    fi
+
+    file "$@" > /dev/null \
+        && exit_status=1 \
+        || true # pass
+}
+
+
+run_ mkdir_test
+run_ _foo
+run_ ._foo
+run_ \#foo
+run_ .\#bar
+run_ "foo bar baz quz"
+
+print_status $exit_status $0
+echo
+
+exit $exit_status
+
