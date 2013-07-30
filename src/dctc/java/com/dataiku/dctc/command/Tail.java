@@ -30,11 +30,20 @@ public class Tail extends Command {
     }
     @Override
     protected void setOptions(List<OptionAgregator> opts) {
-        opts.add(stdOption('c', "bytes", "Output the last K bytes.", true, "K"));
-        opts.add(stdOption('n', "lines", "Output the last K lines.", true, "K"));
-        OptionAgregator quiet = stdOption('q', "quiet", "Never output headers giving file names.");
-        quiet.addOpt(new LongOption().withOpt("silent"));
-        opts.add(quiet);
+        opts.add(stdOption('c'
+                           , "bytes"
+                           , "Output the last K bytes."
+                           , true
+                           , "K"));
+        opts.add(stdOption('n'
+                           , "lines"
+                           , "Output the last K lines."
+                           , true
+                           , "K"));
+        opts.add(stdOption('q'
+                           , "quiet"
+                           , "Never output headers giving file names.")
+                 .withOpt(new LongOption().withOpt("silent")));
     }
     @Override
     public void perform(List<GFile> args) {
@@ -64,16 +73,12 @@ public class Tail extends Command {
     }
     public void nbLines() {
         if (isLine()) {
-            if (hasOption('n')) {
-                number = Long.parseLong(getOptionValue("-lines").get(0));
-            } else {
-                number = 10;
-            }
+            number = getIntOption('n', 10);
         }
     }
     public void nbBytes() {
         if (!isLine()) {
-            number = Long.parseLong(getOptionValue("-bytes").get(0));
+            number = getIntOption('c', 10);
         }
     }
     private boolean isLine() {

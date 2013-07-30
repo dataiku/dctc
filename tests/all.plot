@@ -7,6 +7,7 @@ unset label
 set xlabel "Test #"
 set ylabel "# Pass/Fail test"
 set title "# Tests"
+set logscale y
 
 set term png
 set output "sum.png"

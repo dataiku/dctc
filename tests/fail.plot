@@ -7,6 +7,7 @@ unset label
 set xlabel "Test #"
 set ylabel "# Fail"
 set title "# Fail"
+set logscale y
 
 set term png
 set output "fail.png"

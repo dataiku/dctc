@@ -5,13 +5,29 @@
 exit_status=0
 
 run_find() {
-    run 0 - "find $*" ../dctc-jar.sh find "$@" <<.
-$(find $@)
-.
+    find "$@" > out.exp 2> /dev/null || true
+    run 0 out.exp "find $*" ../dctc-jar.sh find "$@"
     if $fail; then
         exit_status=1
     fi
 }
+
+
+files="data data/ls . .."
+run_find_() {
+    for file in $files; do
+        run_find $file "$@"
+    done
+}
+
+declare -a opt=(
+    'name gcc'
+    'name bash'
+    'type d'
+    'type f'
+);
+
+iter run_find_
 
 run_find .
 run_find /usr -name gcc

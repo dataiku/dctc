@@ -321,11 +321,11 @@ public abstract class Command {
     }
     protected int getIntOption(String option, int defaultValue) {
         if (hasOption(option)) {
-            List<String> values =getOptionValue(option);
+            List<String> values = getOptionValue(option);
             if (values.size() == 0) {
                 return defaultValue;
             }
-            String val = values.get(0);
+            String val = values.get(values.size() - 1);
             if (IntegerUtils.isNumeric(val)) {
                 return IntegerUtils.toInt(val);
             }
