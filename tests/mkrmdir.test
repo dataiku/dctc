@@ -4,6 +4,7 @@
 
 set -e
 
+exit_status=0
 
 run_() {
     mkdir "$@" > out.exp
@@ -36,7 +37,6 @@ run_ .\#bar
 run_ "foo bar baz quz"
 
 print_status $exit_status $0
-echo
 
 exit $exit_status
 

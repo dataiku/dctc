@@ -11,24 +11,35 @@ else
 fi
 
 for i in $to_test; do
-    echo -n "[         ] [ .. ] $i"
+    echo -n "[         ] $i"
     ./$i \
         || exit_status=$?
 done
 
 rapport_tail
 
-echo Here a summary of the failed tests:
-
-sep 80 =
-echo
-grep -E '^\*\* FAIL' sum.org | sed -e 's#^\*\* FAIL =\(.*\)=#\1#' | nl
-sep 80 =
-echo
-
 nb=`grep -E '^\*\* ' sum.org | wc -l`
 pass=`grep -E '^\*\* PASS' sum.org | wc -l`
 fail=`grep -E '^\*\* FAIL' sum.org | wc -l`
+
+my_toilet() {
+    if which toilet > /dev/null; then
+        toilet "$@"
+    fi
+}
+
+if [ "x$fail" = "x0" ]; then
+    echo No failed test, you should be happy
+    my_toilet --gay Don\'t Panic
+else
+    echo Here a summary of the failed tests:
+
+    esep 80 =
+    grep -E '^\*\* FAIL' sum.org | sed -e 's#^\*\* FAIL =\(.*\)=#\1#' | nl
+    esep 80 =
+
+    my_toilet --gay DO PANIC
+fi
 
 echo "`wc -l < sum.dat | sed -e "#^ *##"` $nb $pass $fail 0" >> sum.dat
 
@@ -51,8 +62,4 @@ else
     echo Emacs not present on the system, will not generate html/pdf report.
 fi
 
-if [ "x$fail" != "x0" ]; then
-    exit 1
-else
-    exit 0
-fi
+exit $fail

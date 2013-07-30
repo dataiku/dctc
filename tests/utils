@@ -13,6 +13,11 @@ sep() {
     head -c $1 < /dev/zero | tr '\0' "$2"
 }
 
+esep() {
+    sep "$@"
+    echo
+}
+
 stderr () {
   local i
   for i
