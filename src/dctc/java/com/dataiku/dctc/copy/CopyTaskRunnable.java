@@ -59,7 +59,7 @@ public abstract class CopyTaskRunnable implements Runnable {
             work();
         }
         catch (Exception e) {
-            logger.info("Error in copy of " + getInputFile().getAbsoluteAddress(), e);
+            logger.info("Error while copying of " + getInputFile().getAbsoluteAddress(), e);
             exp = e;
         }
         finally {
