@@ -120,6 +120,8 @@ public class Find extends Command {
                 return;
             }
             break;
+        case NONE:
+            return;
         default:
             break;
         }
@@ -137,18 +139,52 @@ public class Find extends Command {
         ALL
         , FILE
         , DIRECTORY
+        , NONE
+    }
+    private Kind kind(String kindName) {
+            if (kindName == null || "all".startsWith(kindName)) {
+                return Kind.ALL;
+            }
+            else if ("directory".startsWith(kindName)) {
+                return Kind.DIRECTORY;
+            }
+            else if ("file".startsWith(kindName)) {
+                return Kind.FILE;
+            }
+            else {
+                return Kind.ALL;
+            }
     }
     private Kind kind() {
         if (kind == null) {
-            String value = hasOption("type") ? getOptionValue("type").get(0) : null;
-            if (value == null || "all".startsWith(value)) {
-                kind = Kind.ALL;
-            }
-            else if ("directory".startsWith(value)) {
-                kind = Kind.DIRECTORY;
-            }
-            else if ("file".startsWith(value)) {
-                kind = Kind.FILE;
+            if (hasOption("type")) {
+                for (String val: getOptionValue("type")) {
+                    if (kind == null) {
+                        kind = kind(val);
+                    }
+                    else {
+                        Kind k = kind(val);
+                        switch (kind) {
+                        case ALL:
+                            kind = k;
+                            break;
+                        case FILE:
+                            if (k == Kind.DIRECTORY) {
+                                kind = Kind.NONE;
+                            }
+                            break;
+                        case DIRECTORY:
+                            if (k == Kind.FILE) {
+                                kind = Kind.NONE;
+                            }
+                            break;
+                        case NONE:
+                            break;
+                        default:
+                            throw new Error("Never reached.");
+                        }
+                    }
+                }
             }
             else {
                 kind = Kind.ALL;
