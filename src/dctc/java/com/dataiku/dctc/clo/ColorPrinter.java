@@ -57,7 +57,7 @@ class ColorPrinter implements Printer {
         System.out.print("    ");
         System.out.print(bold(red("dctc " + cmdname)));
         System.out.print(" ");
-        System.out.println(bold(syn));
+        System.out.println(syn.replaceAll("([a-zA-Z0-9]+)", green("$1")));
         System.out.println();
     }
     public void name(String cmdname, String tagline) {
