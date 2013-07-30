@@ -5,6 +5,8 @@ import static com.dataiku.dip.utils.PrettyString.scat;
 import java.util.List;
 
 import com.dataiku.dctc.clo.OptionAgregator;
+import com.dataiku.dctc.clo.ShortOption;
+import com.dataiku.dctc.clo.WithoutArgOptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.command.cat.AlgorithmType;
 import com.dataiku.dctc.command.cat.CatAlgorithm;
@@ -64,6 +66,9 @@ public class Cat extends Command {
         options.add(stdOption('e', "Equivalent to -vE"));
         options.add(stdOption('A', "show-all", "Equivalent to -vET"));
         options.add(stdOption('b', "number-nonblank", "number nonempty output lines, overrides -n"));
+        options.add(new WithoutArgOptionAgregator()
+                    .withOpt(new ShortOption().withOpt("u"))
+                    .withDescription("Ignored."));
     }
     @Override
     protected final String proto() {
