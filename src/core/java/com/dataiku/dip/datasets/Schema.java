@@ -122,18 +122,19 @@ public class Schema {
         }
     }
 
-    public final static Pattern ARRAY_PATTERN = Pattern.compile("array<([^,>]*)>");
+    public final static Pattern ARRAY_PATTERN = Pattern.compile("array<\\s*([^,>]*)\\s*>");
     public final static Pattern MAP_PATTERN = Pattern.compile("map<\\s*([^,>]*)\\s*,\\s*([^,>]*)\\s*>");
 
 
     public static String arrayContent(String type) {
         Matcher matcher = ARRAY_PATTERN.matcher(type);
-        return matcher.group(1);
+
+        return matcher.matches() ? matcher.group(1) : null;
     }
 
     public static Pair<String, String> mapContent(String type) {
         Matcher matcher = MAP_PATTERN.matcher(type);
-        return new Pair<String, String>(matcher.group(1), matcher.group(2));
+        return matcher.matches() ? new Pair<String, String>(matcher.group(1), matcher.group(2)) : null;
     }
 
     public Schema() {
