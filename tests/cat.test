@@ -22,30 +22,14 @@ run_cat_() {
     done
 }
 
+
 declare -a opt=(A b e E n s t T v);
 
-nb_elt=$((${#opt[@]} - 1))
-power=$((2**${#opt[@]} - 1))
-
-for i in `seq 0 $power`; do
-
-    opt_list=
-    for j in `seq 0 $nb_elt`; do
-        lol=$i
-
-        for k in `seq 1 $j`; do
-            lol=$(($lol / 2))
-        done
-        if [ $(($lol % 2)) -eq 1 ]; then
-            opt_list="$opt_list -${opt[$j]}"
-        fi
-    done
-    echo -ne "\r[$i"
-    run_cat_ $opt_list
-done
+iter run_cat_
 
 run_cat -v `which hostname`
 run_cat_ -u # Ignore this option
 
+print_status $exit_status $0
 
 exit $exit_status

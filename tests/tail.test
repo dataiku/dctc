@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 . ./utils
 
@@ -19,22 +19,22 @@ run_tail_() {
     for i in $files; do
         run_tail "$@" "$i"
     done
-
 }
 
-run_tail_
-run_tail_ -n12
-run_tail_ -n3
-run_tail_ -n4242
-run_tail_ --lines 4242
-run_tail_ --lines=4242
-run_tail_ --lines 12
-run_tail_ --lines=12
-run_tail_ -c 12
-run_tail_ -c12
-run_tail_ --bytes 424242
-run_tail_ -q
+declare -a opt=(
+    "n3"
+    "n4242"
+    "-lines 4242"
+    "-lines 12"
+    "c 12"
+    "-bytes=424242"
+    "q"
+    );
+
+iter run_tail_
 run_tail -q $files
 run_tail $files
+
+print_status $exit_status $0
 
 exit $exit_status

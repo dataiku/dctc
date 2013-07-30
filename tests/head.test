@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 . ./utils
 
@@ -24,17 +24,20 @@ run_head_() {
     done
 }
 
+declare -a opt=(
+    "n3"
+    "n4242"
+    "-lines 4242"
+    "-lines 12"
+    "c 12"
+    "-bytes=424242"
+    "q"
+);
+
+iter run_head_
+
 gen_run_head 1 foo $files
-run_head_
-run_head_ -n12
-run_head_ -n3
-run_head_ -n4242
-run_head_ --lines 4242
-run_head_ --lines=4242
-run_head_ --lines 12
-run_head_ --lines=12
-run_head_ -c 12
-run_head_ --bytes 424242
-run_head -b $files
+
+print_status $exit_status $0
 
 exit $exit_status

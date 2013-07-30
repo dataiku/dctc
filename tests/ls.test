@@ -1,16 +1,23 @@
-#! /bin/sh
+#! /bin/bash
 
 . ./utils
 
 exit_status=0
 
-run_ls() {
-    run 0 - "ls $*" ../dctc-jar.sh ls "$@" <<EOF
+gen_run_ls() {
+    exit="$1"
+    shift
+
+    run $exit - "ls $*" ../dctc-jar.sh ls "$@" <<EOF
 $(ls $@)
 EOF
     if $fail; then
         exit_status=1
     fi
+
+}
+run_ls() {
+    gen_run_ls 0 "$@"
 }
 
 run_ls /
@@ -24,12 +31,14 @@ run_ls /bin
 run_ls data/
 run_ls data/ls
 run_ls /etc/bash.bashrc
-run_ls -a data/ls
-run_ls -A data/ls
-run_ls -d data/ls
-run_ls --color data/ls
-run_ls --hide=*~ data/ls
-run_ls -Q data/ls
-run_ls -R data/
+gen_run_ls 77 -a data/ls
+gen_run_ls 77 -A data/ls
+gen_run_ls 77 -d data/ls
+gen_run_ls 77 --color data/ls
+gen_run_ls 77 --hide=*~ data/ls
+gen_run_ls 77 -Q data/ls
+gen_run_ls 77 -R data/
+
+print_status $exit_status $0
 
 exit $exit_status

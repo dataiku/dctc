@@ -4,49 +4,16 @@
 rapport_head
 unset GREP_OPTIONS
 
-sep() {
-    head -c $1 < /dev/zero | tr '\0' $2
-    echo
-}
-
 if [ "x$1" != "x" ]; then
     to_test="$@"
 else
     to_test='*.test'
 fi
 
-res() {
-    if [ "x$-" = "x" ]; then
-        echo -e "\r[$2"
-    else
-        echo -e "\r[`tput setaf $1`$2`tput init`"
-    fi
-}
-full_res() {
-    if [ "x$-" = "x" ]; then
-        echo -e "\r[$2] $3"
-    else
-        echo -e "\r[`tput setaf $1`$2`tput init`] $3"
-    fi
-}
 for i in $to_test; do
-    echo -n "[ .. ] $i"
-    exit_status=0
+    echo -n "[         ] [ .. ] $i"
     ./$i \
         || exit_status=$?
-    if [ "x$exit_status" != "x0" ]; then
-        if [ "x$exit_status" = "x77" ]; then
-            res 3 skip
-        else
-            if [ "x$exit_status" = "x99" ]; then
-                full_res 1 "epic fail" "$i"
-            else
-                res 1 fail
-            fi
-        fi
-    else
-        res 2 " ok "
-    fi
 done
 
 rapport_tail
@@ -54,8 +21,10 @@ rapport_tail
 echo Here a summary of the failed tests:
 
 sep 80 =
+echo
 grep -E '^\*\* FAIL' sum.org | sed -e 's#^\*\* FAIL =\(.*\)=#\1#' | nl
 sep 80 =
+echo
 
 nb=`grep -E '^\*\* ' sum.org | wc -l`
 pass=`grep -E '^\*\* PASS' sum.org | wc -l`
@@ -66,7 +35,7 @@ echo "`wc -l < sum.dat | sed -e "#^ *##"` $nb $pass $fail 0" >> sum.dat
 echo $pass/$nb tests pass.
 
 if [ "x$fail" != "x0" ]; then
-    echo `tput setaf 1`$fail`tput init` tests has failed.
+    echo `tput setaf 1`$fail`tput init` tests have failed.
 fi
 
 gnuplot all.plot

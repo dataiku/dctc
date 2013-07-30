@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 . ./utils
 
@@ -28,5 +28,7 @@ run_grep -q /bin/bash /etc/passwd
 
 run 1 - "grep yolo /etc/passwd" ../dctc-jar.sh grep yolo /etc/passwd <<EOF
 EOF
+
+print_status $exit_status $0
 
 exit $exit_status

@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 . ./utils
 
@@ -13,10 +13,11 @@ $(find $@)
     fi
 }
 
-
 run_find .
 run_find /usr -name gcc
 run_find /bin -name bash
 run_find .. -type d
+
+print_status $exit_status $0
 
 exit $exit_status

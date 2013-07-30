@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 set -e
 
@@ -8,6 +8,10 @@ out_report_fail=sum.org.fail
 out_report_pass=sum.org.pass
 
 me=$0
+
+sep() {
+    head -c $1 < /dev/zero | tr '\0' "$2"
+}
 
 stderr () {
   local i
@@ -37,10 +41,61 @@ rapport_tail() {
     rm -f $out_report_fail $out_report_pass $out_report_tmp out.exp out.eff err.eff
 }
 
+inc_nb_test() {
+    nb_test=$((nb_test + 1))
+}
+reset_nb_test() {
+    nb_fail_test=0
+    nb_test=0
+}
+
+print_nb_tests() {
+    echo -ne "[$nb_fail_test/$nb_test"
+}
+
+
+res() {
+    echo -ne "\r[`tput setaf $1`$2`tput init`] "
+    print_nb_tests
+    echo -ne "] $3"
+
+    # Clean the view, if needed
+    local test_sum_="$nb_test$nb_fail_test"
+    local test_sum_length=$((8 - ${#test_sum_}))
+
+    if [ $test_sum_length -gt 0 ]; then
+        sep $test_sum_length " "
+    fi
+    echo
+}
+
+print_status() {
+    exit_status=$1
+    shift
+    file_name=$1
+    shift
+    if [ "x$exit_status" != "x0" ]; then
+        if [ "x$exit_status" = "x77" ]; then
+            res 3 "skip" "$file_name"
+        else
+            if [ "x$exit_status" = "x99" ]; then
+                res 1 "epic fail" "$file_name"
+            else
+                res 1 "fail" "$file_name"
+            fi
+        fi
+    else
+        res 2 " ok " "$file_name"
+    fi
+}
+
 #######
 # run #
 #######
 run() {
+    echo -ne '\r'
+    print_nb_tests
+    inc_nb_test
     test_number=$(($test_number + 1))
     local sta_exp=$1
     shift
@@ -79,6 +134,7 @@ $out_report_exp
     # Write the report #
     ####################
     if $fail; then
+        nb_fail_test=$((nb_fail_test + 1))
         {
             ###############
             # Fail Status #
@@ -179,3 +235,27 @@ $(if test "x$(stat -c%s "err.eff")" = "x0"; then
         }>>$out_report_pass
     fi
 }
+
+iter() {
+    nb_elt=$((${#opt[@]} - 1))
+    power=$((2**${#opt[@]} - 1))
+
+    for i in `seq 0 $power`; do
+        opt_list=
+        for j in `seq 0 $nb_elt`; do
+            lol=$i
+
+            for k in `seq 1 $j`; do
+                lol=$(($lol / 2))
+            done
+
+            if [ $(($lol % 2)) -eq 1 ]; then
+                opt_list="$opt_list -${opt[$j]}"
+            fi
+        done
+
+        eval "$1" $opt_list
+    done
+}
+
+reset_nb_test
