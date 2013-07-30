@@ -162,7 +162,7 @@ public class Grep extends Command {
             .withFullLine(hasOption('x'))
             .withIgnoreCase(hasOption('i'))
             .withLinum(hasOption('n'))
-            .withRatexp(hasOption('E'))
+            .withRatexp(!hasOption('F'))
             .withHeader(header)
             .withColor(hasOption('G'))
             .withListing(hasOption('l'))

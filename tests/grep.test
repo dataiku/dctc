@@ -35,8 +35,6 @@ declare -a opt=(
 
 
 iter run_grep_
-run 1 - "grep yolo /etc/passwd" ../dctc-jar.sh grep yolo /etc/passwd <<EOF
-EOF
 
 print_status $exit_status $0
 
