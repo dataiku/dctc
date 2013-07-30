@@ -5,6 +5,16 @@
   ant configure # Mainly download the libraries
   ant           # Compile core and dctc
   #+END_EXAMPLE
+
+  To check Dctc, two solutions:
+  #+BEGIN_EXAMPLE
+  ant check
+  #+END_EXAMPLE
+
+  And for a nicer output:
+  #+BEGIN_EXAMPLE
+  cd tests && ./run
+  #+END_EXAMPLE
 * How to make a release
 
   #+BEGIN_EXAMPLE sh
