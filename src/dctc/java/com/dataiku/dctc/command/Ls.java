@@ -28,7 +28,8 @@ public class Ls extends Command {
         return "List the contents of folders.";
     }
     public void longDescription(IndentedWriter printer) {
-        printer.print("List the contents of folders, with detailed attributes if requested");
+        printer.print("List the contents of folders, with detailed attributes"
+                      + " if requested");
     }
     // Public
     @Override
@@ -106,7 +107,9 @@ public class Ls extends Command {
                 GFile dir = sons.get(0); sons.remove(0);
                 for (int i = 0; i < sons.size(); ++i) {
                     GFile son = sons.get(i);
-                    if (PathManip.isDirectSon(dir.givenName(), son.givenName(), dir.fileSeparator())) {
+                    if (PathManip.isDirectSon(dir.givenName()
+                                              , son.givenName()
+                                              , dir.fileSeparator())) {
                         print.add(new PrintTask(son, son.getFileName()));
                         if (son.isFile()) {
                             sons.remove(i);
@@ -342,7 +345,10 @@ public class Ls extends Command {
                     if (idx >= tasks.size()) {
                         continue;
                     }
-                    colLength.set(i, Math.max(colLength.get(i), tasks.get(idx).second.length() + 2));
+                    colLength.set(i
+                                  , Math.max(colLength.get(i)
+                                             , tasks.get(idx).second.length()
+                                             + 2));
                 }
             }
             int lineLength = 4;
@@ -360,7 +366,9 @@ public class Ls extends Command {
                 if (ct >= tasks.size()) {
                     break;
                 }
-                colLength.set(i, Math.max(tasks.get(ct).second.length(), colLength.get(i)));
+                colLength.set(i
+                              , Math.max(tasks.get(ct).second.length()
+                                         , colLength.get(i)));
             }
             if (ct >= tasks.size()) {
                 break;
@@ -386,7 +394,9 @@ public class Ls extends Command {
                     System.out.println();
                 } else {
                     // Align, don't put trailing white space.
-                    for (int k = file.second.length(); k < colLength.get(ct); ++k) {
+                    for (int k = file.second.length();
+                         k < colLength.get(ct);
+                         ++k) {
                         System.out.print(" ");
                     }
                 }
@@ -481,17 +491,35 @@ public class Ls extends Command {
     @Override
     protected void setOptions(List<OptionAgregator> opts) {
         opts.clear();
-        opts.add(stdOption('?', "help", "Display this help message."));
-        opts.add(stdOption("rR", "recursive", "Recursive display of path given as arguments."));
-        opts.add(stdOption('a', "all", "Do not hide entries starting with."));
-        opts.add(stdOption('U', "Do not sort; list entries in directory order."));
-        opts.add(stdOption('l', "Use long listing format."));
-        opts.add(stdOption('h', "human-readable", "With -l, print sizes in human readable format."));
-        opts.add(stdOption('e', "temp", "Hide temporary files (*~, #*)."));
-        opts.add(stdOption('G', "color", "Colorize the output."));
-        opts.add(stdOption('1', "List one file per line."));
-        opts.add(stdOption('f', "do not sort, enable -aU."));
-        opts.add(stdOption('d', "directory", "List directory entries instead of contents."));
+        opts.add(stdOption('?'
+                           , "help"
+                           , "Display this help message."));
+        opts.add(stdOption("rR"
+                           , "recursive"
+                           , "Recursive display of path given as arguments."));
+        opts.add(stdOption('a'
+                           , "all"
+                           , "Do not hide entries starting with."));
+        opts.add(stdOption('U'
+                           , "Do not sort; list entries in directory order."));
+        opts.add(stdOption('l'
+                           , "Use long listing format."));
+        opts.add(stdOption('h'
+                           , "human-readable"
+                           , "With -l, print sizes in human readable format."));
+        opts.add(stdOption('e'
+                           , "temp"
+                           , "Hide temporary files (*~, #*)."));
+        opts.add(stdOption('G'
+                           , "color"
+                           , "Colorize the output."));
+        opts.add(stdOption('1'
+                           , "List one file per line."));
+        opts.add(stdOption('f'
+                           , "do not sort, enable -aU."));
+        opts.add(stdOption('d'
+                           , "directory"
+                           , "List directory entries instead of contents."));
     }
     @Override
     protected String proto() {
@@ -503,9 +531,13 @@ public class Ls extends Command {
         System.out.println(f.givenName() + ":");
     }
 
-    private boolean hide(GFile f,
-                         boolean forcePrint) throws IOException {
-        return !(forcePrint || ((hidden() || !f.isHidden()) && (!temp() || !f.isTempFile())));
+    private boolean hide(GFile f
+                         , boolean forcePrint) throws IOException {
+        return !(forcePrint
+                 || ((hidden()
+                      || !f.isHidden())
+                     && (!temp()
+                         || !f.isTempFile())));
     }
     private void initColor() {
         if (color == null) {
@@ -561,7 +593,9 @@ public class Ls extends Command {
             }
             else {
                 Acl acl = g.hasAcl() ? g.getAcl() : null;
-                if (acl != null && acl.getExec("user") != null && acl.getExec("user")) {
+                if (acl != null
+                    && acl.getExec("user") != null
+                    && acl.getExec("user")) {
                     colorName(colorSpe.get("ex"), f);
                 }
                 else if (g.isFile()) {
@@ -581,7 +615,8 @@ public class Ls extends Command {
     }
     private boolean color() {
         if (colorize == null) {
-            colorize = (PrettyString.isInteractif() || System.getenv("CLICOLOR_FORCE") != null) &&
+            colorize = (PrettyString.isInteractif()
+                        || System.getenv("CLICOLOR_FORCE") != null) &&
                 (hasOption('G'));
         }
         return colorize;
@@ -592,7 +627,15 @@ public class Ls extends Command {
             this.second = second;
         }
         public int compareTo(PrintTask r) {
-            return second.toLowerCase().replaceAll("[^a-z]", "").compareTo(r.second.toLowerCase().replaceAll("[^a-z]", ""));
+            return second
+                .toLowerCase()
+                .replaceAll("[^a-z]"
+                            , "")
+                .compareTo(r
+                           .second
+                           .toLowerCase()
+                           .replaceAll("[^a-z]"
+                                       , ""));
         }
 
         public GFile first;

@@ -127,7 +127,8 @@ public abstract class AbstractGFile implements GFile {
         return false;
     }
     public Acl getAcl() throws IOException {
-        throw new IllegalArgumentException("Acl is not implemented for " + getProtocol());
+        throw new IllegalArgumentException("Acl is not implemented for "
+                                           + getProtocol());
     }
     @Override
     public boolean hasSize() {
@@ -169,7 +170,9 @@ public abstract class AbstractGFile implements GFile {
     public abstract void mkpath() throws IOException;
 
     // Abstract Method.
-    public abstract GFile createSubFile(String path, String fileSeparator) throws IOException;
+    public abstract GFile createSubFile(String path
+                                        , String fileSeparator)
+        throws IOException;
     public abstract boolean exists() throws IOException;
     public abstract boolean isDirectory() throws IOException;
     public abstract boolean isFile() throws IOException;

@@ -26,7 +26,8 @@ public class ArchiveFactory {
         }
 
         throw new UserException("Unknown archive file extension for '"
-                                + streamName +"'. Expected 'zip', 'tar', 'tar.gz', or 'tar.gz2'");
+                                + streamName + "'. Expected 'zip', 'tar',"
+                                + " 'tar.gz', or 'tar.gz2'"); // FIXME: Clean this
     }
     public static InputArchiveIterable buildInput(GFile file)
         throws IOException {
@@ -38,7 +39,8 @@ public class ArchiveFactory {
             return new ZipOutputArchiveIterable(stream);
         }
 
-        throw new UserException("Unknown archive file extension for '" + streamName + "'. Expected 'zip'");
+        throw new UserException("Unknown archive file extension for '"
+                                + streamName + "'. Expected 'zip'");
     }
     public static OutputArchiveIterable buildOutput(GFile file)
         throws IOException {

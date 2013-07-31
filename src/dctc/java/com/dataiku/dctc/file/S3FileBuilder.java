@@ -16,19 +16,32 @@ public class S3FileBuilder extends ProtocolFileBuilder {
     public Protocol getProtocol() { return Protocol.S3; }
 
 
-    private Map<String, AmazonS3> builtConnections = new HashMap<String, AmazonS3>();
+    private Map<String, AmazonS3> builtConnections
+        = new HashMap<String, AmazonS3>();
 
     @Override
     public boolean validateAccountParams(String account, Params p) {
-        return checkAllowedOnly(account, p, new String[] {"access_key", "secret_key", "default_path"})
+        return checkAllowedOnly(account
+                                , p
+                                , new String[] {"access_key"
+                                                , "secret_key"
+                                                , "default_path"})
             || checkMandatory(account, p, "access_key")
             || checkMandatory(account, p, "secret_key");
     }
 
     @Override
-    public synchronized GFile buildFile(String accountSettings, String rawPath, YellPolicy yell) {
-        String accountName = getBank().getResolvedAccountName(getProtocol().getCanonicalName(), accountSettings);
-        Params p = getBank().getAccountParams(getProtocol().getCanonicalName(), accountSettings);
+    public synchronized GFile buildFile(String accountSettings
+                                        , String rawPath
+                                        , YellPolicy yell) {
+        String accountName
+            = getBank()
+            .getResolvedAccountName(getProtocol()
+                                    .getCanonicalName()
+                                    , accountSettings);
+        Params p = getBank().getAccountParams(getProtocol()
+                                              .getCanonicalName()
+                                              , accountSettings);
         if (validateAccountParams(accountSettings, p)) {
             throw invalidAccountSettings(accountSettings);
         }
@@ -37,8 +50,10 @@ public class S3FileBuilder extends ProtocolFileBuilder {
         if (s3 == null) {
             ClientConfiguration conf = new ClientConfiguration();
             conf.setProtocol(com.amazonaws.Protocol.HTTP);
-            s3 = new AmazonS3Client(new BasicAWSCredentials(p.getMandParam("access_key"),
-                                                            p.getMandParam("secret_key")), conf);
+            BasicAWSCredentials cred
+                = new BasicAWSCredentials(p.getMandParam("access_key"),
+                                          p.getMandParam("secret_key"));
+            s3 = new AmazonS3Client(cred, conf);
             builtConnections.put(accountName, s3);
         }
 

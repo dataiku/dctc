@@ -30,7 +30,8 @@ public class Mkdir extends Command {
                 } else {
                     arg.mkdir();
                     if (verbose()) {
-                        System.out.println("mkdir: created directory `" + arg.givenName() + "'");
+                        System.out.println("mkdir: created directory `"
+                                           + arg.givenName() + "'");
                     }
                 }
             } catch (IOException e) {
@@ -46,7 +47,9 @@ public class Mkdir extends Command {
     // Protected
     @Override
     protected void setOptions(List<OptionAgregator> opts) {
-        opts.add(stdOption('v', "verbose", "Print a message for each created directory."));
+        opts.add(stdOption('v'
+                           , "verbose"
+                           , "Print a message for each created directory."));
     }
     @Override
     protected String proto() {

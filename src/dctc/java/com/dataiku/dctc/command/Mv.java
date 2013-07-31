@@ -31,9 +31,12 @@ public class Mv extends ListFilesCommand {
     @Override
     public void execute(List<CopyTask> tasks) {
         if (getExitCode().getExitCode() == 0) {
-            SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(false, false, false);
+            SimpleCopyTaskRunnableFactory fact
+                = new SimpleCopyTaskRunnableFactory(false, false, false);
             ThreadedDisplay display = GlobalConf.getDisplay();
-            CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, getThreadLimit());
+            CopyTasksExecutor exec = new CopyTasksExecutor(fact
+                                                           , display
+                                                           , getThreadLimit());
 
             try {
                 exec.run(tasks, archive());
@@ -63,8 +66,14 @@ public class Mv extends ListFilesCommand {
 
     @Override
     protected void setOptions(List<OptionAgregator> opts) {
-        opts.add(stdOption('s', "sequential", "Make the copy with only one thread"));
-        opts.add(stdOption('n', "thread-number", "Set the number of thread", true, "NUMBER"));
+        opts.add(stdOption('s'
+                           , "sequential"
+                           , "Make the copy with only one thread"));
+        opts.add(stdOption('n'
+                           , "thread-number"
+                           , "Set the number of thread"
+                           , true
+                           , "NUMBER"));
     }
     @Override
     protected boolean shouldAdd(GFile src, GFile dst, String root) {

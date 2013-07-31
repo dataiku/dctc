@@ -38,16 +38,20 @@ public class SshConfig {
                     hostParam = get(currentHost);
                 }
                 else {
-                    String[/*param/value*/] parameter = PathManip.split(line, " ", 2,
-                                                                               false);
+                    String[/*param/value*/] parameter
+                        = PathManip.split(line
+                                          , " "
+                                          , 2
+                                          , false);
                     if (parameter[1] == null) {
                         parameter = PathManip.split(line, "	", 2, false);
                     }
                     if (parameter[1] == null) {
-                        throw new IOException(scat("dctc ssh config:"
-                                                   , "The parameter"
-                                                   , pquoted(parameter[0])
-                                                   , "doesn't define any value."));
+                        throw new
+                            IOException(scat("dctc ssh config:"
+                                             , "The parameter"
+                                             , pquoted(parameter[0])
+                                             , "doesn't define any value."));
                     }
                     hostParam.put(parameter[0], parameter[1]);
                 }
@@ -89,6 +93,7 @@ public class SshConfig {
     }
 
     // Attributes
-    private Map<String, Map<String, String>> config = new HashMap<String, Map<String, String>>();
+    private Map<String, Map<String, String>> config
     //          Host        Param   Value
+        = new HashMap<String, Map<String, String>>();
 }

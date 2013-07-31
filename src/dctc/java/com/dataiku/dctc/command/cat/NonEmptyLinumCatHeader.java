@@ -10,5 +10,3 @@ class NonEmptyLinumCatHeader extends LinumCatHeader {
         }
     }
 }
-
-

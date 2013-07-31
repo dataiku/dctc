@@ -9,15 +9,21 @@ public class GSFileBuilder extends ProtocolFileBuilder {
 
     @Override
     public boolean validateAccountParams(String account, Params p) {
-        return checkAllowedOnly(account, p, new String[]{"mail", "key_path", "default_path"})
+        return checkAllowedOnly(account, p
+                                , new String[]{"mail"
+                                               , "key_path"
+                                               , "default_path"})
             || checkMandatory(account, p, "mail")
             || checkMandatory(account, p, "key_path");
     }
 
     @Override
-    public synchronized GFile buildFile(String accountSettings, String rawPath, YellPolicy yell) {
+    public synchronized GFile buildFile(String accountSettings
+                                        , String rawPath
+                                        , YellPolicy yell) {
         assert getBank() != null;
-        Params p = getBank().getAccountParams(getProtocol().getCanonicalName(), accountSettings);
+        Params p = getBank().getAccountParams(getProtocol().getCanonicalName()
+                                              , accountSettings);
         if (validateAccountParams(accountSettings, p)) {
             throw invalidAccountSettings(accountSettings);
         }

@@ -43,7 +43,10 @@ public class Parser {
                                         ++i;
                                     }
                                     else {
-                                        few(optName.substring(0, opt.has(optName)));
+                                        few(optName.substring(0
+                                                              , opt.has(optName)
+                                                              )
+                                            );
                                     }
                                 }
 

@@ -14,8 +14,10 @@ import com.dataiku.dip.utils.Params;
 import com.google.common.collect.Sets;
 
 public abstract class ProtocolFileBuilder {
-    protected boolean checkAllowedOnly(String account, Params p,
-                                       String[] allowed) throws IllegalArgumentException {
+    protected boolean checkAllowedOnly(String account
+                                       , Params p
+                                       , String[] allowed)
+        throws IllegalArgumentException {
         StringBuilder sb = new StringBuilder();
         boolean failed = false;
         Set<String> allowedSet = Sets.newHashSet(allowed);
@@ -24,7 +26,10 @@ public abstract class ProtocolFileBuilder {
                 sb.append(scat("For protocol"
                                , getProtocol().getCanonicalName()
                                , "and"
-                               , (account == null ? "default account" : "account " + account) + ","
+                               , (account == null
+                                  ? "default account"
+                                  : "account " + account)
+                               + ","
                                , "parameter"
                                , quoted(key)
                                , "is not recognized."
@@ -39,9 +44,15 @@ public abstract class ProtocolFileBuilder {
     }
     protected boolean checkMandatory(String account, Params p, String key) {
         if (!p.hasParam(key) || p.getParamOrEmpty(key).isEmpty()) {
-            System.err.println(scat("For protocol", getProtocol().getCanonicalName()
-                                    , "and", (account == null ? "default account" : "account" + account)
-                                    , "parameter", key, "is mandatory"));
+            System.err.println(scat("For protocol"
+                                    , getProtocol().getCanonicalName()
+                                    , "and"
+                                    , (account == null
+                                       ? "default account"
+                                       : "account" + account)
+                                    , "parameter"
+                                    , key
+                                    , "is mandatory"));
             return true;
         }
         return false;
@@ -58,7 +69,8 @@ public abstract class ProtocolFileBuilder {
         return this;
     }
 
-    protected String translateDefaultPath(Params accountParams, String protocolData) {
+    protected String translateDefaultPath(Params accountParams
+                                          , String protocolData) {
         String defaultPath = accountParams.getParamOrEmpty("default_path");
         if (defaultPath.isEmpty()) {
             return protocolData;
@@ -71,13 +83,19 @@ public abstract class ProtocolFileBuilder {
     protected UserException invalidAccountSettings(String account) {
         return new UserException(scat("For the protocol", getProtocol()
                                       , "and the"
-                                      , (account == null ? "default account" : account + "account")
-                                      , "one or more parameters are incorrect"));
+                                      , (account == null
+                                         ? "default account"
+                                         : account
+                                         + "account")
+                                      , "one or more parameters are"
+                                      + " incorrect"));
     }
 
     // Abstract
     public abstract Protocol getProtocol();
-    public abstract GFile buildFile(String accountData, String protocolData, YellPolicy yell);
+    public abstract GFile buildFile(String accountData
+                                    , String protocolData
+                                    , YellPolicy yell);
     public abstract boolean validateAccountParams(String account, Params p);
     public abstract String fileSeparator();
 

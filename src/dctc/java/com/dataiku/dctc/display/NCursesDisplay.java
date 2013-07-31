@@ -34,8 +34,10 @@ class NCursesDisplay extends AbstractTransferRateDisplay {
         center("Dataiku Cloud Transport Client", 0, color);
         ++currentLine;
         if (Toolkit.getScreenHeight() > GlobalConf.getThreadLimit() + 3) {
-            Toolkit.printString(Integer.toString(taskSize) + " remaining file(s).", 0,
-                                currentLine, color);
+            Toolkit.printString(Integer.toString(taskSize)
+                                + " remaining file(s)."
+                                , 0
+                                , currentLine, color);
             ++currentLine;
         }
     }
@@ -47,10 +49,10 @@ class NCursesDisplay extends AbstractTransferRateDisplay {
             ++line;
         }
         prettyDisplay("done: " + Size.getReadableSize(doneTransfer()) + "\t\t"
-                      + Size.getReadableSize(getBnd()) + "/s",
-                      doneTransfer(),
-                      wholeSize(),
-                      line);
+                      + Size.getReadableSize(getBnd()) + "/s"
+                      , doneTransfer()
+                      , wholeSize()
+                      , line);
     }
     @Override
     protected final void done(CopyTaskRunnable task) {
@@ -81,10 +83,16 @@ class NCursesDisplay extends AbstractTransferRateDisplay {
         catch (IOException e) {
             sb.append(task.getInputFile().givenName());
         }
-        prettyDisplay(sb.toString(), task.read(), task.getInSize(), currentLine++);
+        prettyDisplay(sb.toString()
+                      , task.read()
+                      , task.getInSize()
+                      , currentLine++);
     }
 
-    private void prettyDisplay(String str, long transferred, long total, int line) {
+    private void prettyDisplay(String str
+                               , long transferred
+                               , long total
+                               , int line) {
         if (Toolkit.getScreenWidth() < str.length()) {
             str = str.substring(0, Toolkit.getScreenWidth() - 1);
         }
@@ -93,15 +101,24 @@ class NCursesDisplay extends AbstractTransferRateDisplay {
             pourcent = 1;
         }
         else {
-            pourcent = Math.min(str.length() - 1, (int) ((transferred * str.length()) / total));
+            pourcent = Math.min(str.length() - 1
+                                , (int) ((transferred * str.length()) / total));
         }
 
         Toolkit.printString(str.substring(0, pourcent), 0, line, doneColor);
-        Toolkit.printString(str.substring(pourcent, str.length()), pourcent, line, color);
+        Toolkit.printString(str.substring(pourcent
+                                          , str.length())
+                            , pourcent
+                            , line
+                            , color);
     }
     private void center(String msg, int column, CharColor color) {
-        Toolkit.printString(msg, Math.max(0, Toolkit.getScreenWidth() / 2 - msg.length() / 2),
-                            column, color);
+        Toolkit.printString(msg
+                            , Math.max(0
+                                       , Toolkit.getScreenWidth() / 2
+                                       - msg.length() / 2),
+                            column
+                            , color);
     }
 
     private int currentLine;

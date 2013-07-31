@@ -23,21 +23,34 @@ import com.dataiku.dip.utils.Params;
 public class SshFileBuilder extends ProtocolFileBuilder {
     @Override
     public boolean validateAccountParams(String account, Params p) {
-        return checkAllowedOnly(account, p, new String[]{"host", "port", "username"
-                                                         , "password", "key", "skip_host_key_check"
+        return checkAllowedOnly(account, p, new String[]{"host"
+                                                         , "port"
+                                                         , "username"
+                                                         , "password"
+                                                         , "key"
+                                                         , "skip_host_key_check"
                                                          , "identity"})
             || checkMandatory(account, p, "host");
     }
 
     @Override
-    public synchronized GFile buildFile(String account, String rawPath, YellPolicy yell) {
+    public synchronized GFile buildFile(String account
+                                        , String rawPath
+                                        , YellPolicy yell) {
         if (account == null) {
             String[] hostPath = PathManip.split(rawPath, ":", 2);
-            Params p = getBank().getAccountParamsIfExists(getProtocol().getCanonicalName(), account);
+            Params p
+                = getBank()
+                .getAccountParamsIfExists(getProtocol()
+                                          .getCanonicalName()
+                                          , account);
             return new SshFile(sshConfig, hostPath[0], hostPath[1], p);
         }
 
-        Params p = getBank().getAccountParamsIfExists(getProtocol().getCanonicalName(), account);
+        Params p = getBank()
+            .getAccountParamsIfExists(getProtocol()
+                                      .getCanonicalName()
+                                      , account);
         if (p != null) {
             if (validateAccountParams(account, p)) {
                 throw invalidAccountSettings(account);
@@ -56,15 +69,24 @@ public class SshFileBuilder extends ProtocolFileBuilder {
             String[] user = PathManip.split(account, ":", 2, false);
             String[] path = PathManip.split(rawPath, ":", 2);
             if (PathManip.contains(path[0], "[")) {
-                throw new IllegalArgumentException("Doesn't manage ipv6 address");
+                throw new
+                    IllegalArgumentException("Doesn't manage ipv6 address");
             }
             if (path[0].isEmpty()) {
-                throw new IllegalArgumentException(scat("Missing host. Maybe you meant"
-                                                        , pquoted(account)
-                                                        , "as an account, but it doesn't exist."));
+                throw new
+                    IllegalArgumentException(scat("Missing host. Maybe"
+                                                  , "you meant"
+                                                  , pquoted(account)
+                                                  , "as an account, but it"
+                                                  , "doesn't exist."));
             }
 
-            return new SshFile(path[0], user[0], user[1], path[1], GlobalConstants.SSH_PORT, false);
+            return new SshFile(path[0]
+                               , user[0]
+                               , user[1]
+                               , path[1]
+                               , GlobalConstants.SSH_PORT
+                               , false);
         }
     }
     public Protocol getProtocol() {

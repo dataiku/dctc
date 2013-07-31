@@ -145,7 +145,11 @@ public abstract class ListFilesCommand extends Command {
     }
     private GFile[] getSources(List<GFile> args) {
         GFile[] sources = new GFile[args.size() - 1];
-        System.arraycopy(args.toArray(new GFile[0]), 0, sources, 0, args.size() - 1);
+        System.arraycopy(args.toArray(new GFile[0]),
+                         0
+                         , sources
+                         , 0
+                         , args.size() - 1);
 
         return sources;
     }
@@ -165,7 +169,12 @@ public abstract class ListFilesCommand extends Command {
             String srcAddress = src[i].getAbsoluteAddress();
 
             if (srcAddress.equals(dstAddress)) {
-                error("`" + srcAddress + "' and `" + dstAddress + "' are the same file.", 1);
+                error("`"
+                      + srcAddress // FIXME: Hideous
+                      + "' and `"
+                      + dstAddress // FIXME: Same
+                      + "' are the same file."
+                      , 1);
                 return false;
             }
         }
@@ -175,7 +184,10 @@ public abstract class ListFilesCommand extends Command {
             if (dst.exists() && !dst.isDirectory()) {
                 // src has at least, one element (checked by earlyCheck()).
                 if (src.length > 1 && !dst.isDirectory() && !archive()) {
-                    error(dst, "is not a directory or the destination is not compressed.", 2);
+                    error(dst
+                          , "is not a directory or the destination is not"
+                          + " compressed."
+                          , 2);
                     return false;
                 }
             }

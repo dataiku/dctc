@@ -23,20 +23,28 @@ import com.dataiku.dip.utils.Params;
 import com.dataiku.dip.utils.StreamUtils;
 
 public class Configuration {
-    public void appendNewProtocol(String addedBy, String protocol, String user,
-                                  Map<String, String> parameters) throws IOException {
+    public void appendNewProtocol(String addedBy
+                                  , String protocol
+                                  , String user
+                                  , Map<String, String> parameters)
+        throws IOException {
         if (parameters.isEmpty()) {
             return;
         }
 
         Map<String, String> newParameters = new HashMap<String, String>();
         for(Map.Entry<String, String> confEntry: parameters.entrySet()) {
-            newParameters.put(user + "." + confEntry.getKey(), confEntry.getValue());
+            newParameters.put(user
+                              + "."
+                              + confEntry.getKey()
+                              , confEntry.getValue());
         }
         appendCustomSection(addedBy, protocol, newParameters);
     }
-    public void appendCustomSection(String addedBy, String sectionName,
-                                    Map<String, String> parameters) throws IOException {
+    public void appendCustomSection(String addedBy
+                                    , String sectionName
+                                    , Map<String, String> parameters)
+        throws IOException {
         if (parameters.isEmpty()) {
             return;
         }
@@ -60,10 +68,16 @@ public class Configuration {
     public void printDate(StringBuilder sb, String addedBy) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
-        sb.append("# Added by dctc " + addedBy + " (" + dateFormat.format(date) + ").");
+        sb.append("# Added by dctc "
+                  + addedBy
+                  + " ("
+                  + dateFormat.format(date)
+                  + ").");
     }
     public void appendToConf(String conf) throws IOException {
-        BufferedWriter writer = StreamUtils.writeToFile(GlobalConf.confFile(), true);
+        BufferedWriter writer = StreamUtils
+            .writeToFile(GlobalConf.confFile()
+                         , true);
 
         if (!conf.startsWith(eol())) {
             writer.write(eol());
@@ -89,7 +103,8 @@ public class Configuration {
         try {
             while((line = stream.readLine()) != null) {
                 line = line.trim();
-                if (!line.startsWith("#") && !line.isEmpty()) { // Skip empty lines and comments
+                if (!line.startsWith("#") && !line.isEmpty()) {
+                    // Skip empty lines and comments
                     if (line.startsWith("[")) {
                         int closingElt = line.lastIndexOf(']');
                         if (closingElt > 1) {
@@ -99,7 +114,8 @@ public class Configuration {
                         else {
                             if (closingElt == -1) {
                                 stream.close();
-                                throw ue("Element beginning by [ must be closed by a ] character.");
+                                throw ue("Element beginning by [ must be"
+                                         + " closed by a ] character.");
                             }
                             else {
                                 stream.close();
@@ -110,7 +126,8 @@ public class Configuration {
                     else {
                         if (protocol == null) {
                             stream.close();
-                            throw ue("variables must be defined in a protocol.");
+                            throw ue("variables must be defined in a"
+                                     + " protocol.");
                         }
                         String[] split = PathManip.split(line, "=", 2);
 
@@ -130,7 +147,9 @@ public class Configuration {
     public Map<String, String> getOrCreateSection(String section) {
         return getNotNull(section, conf);
     }
-    private Map<String, String> getNotNull(String section, Map<String, Map<String, String>> from) {
+    private Map<String, String>
+        getNotNull(String section
+                   , Map<String, Map<String, String>> from) {
         Map<String, String> sectionData = from.get(section);
         if (sectionData == null) {
             sectionData = new HashMap<String, String>();
@@ -139,7 +158,10 @@ public class Configuration {
         }
         return sectionData;
     }
-    public void put(String proto, String accountName, String keyName, String keyValue) {
+    public void put(String proto
+                    , String accountName
+                    , String keyName
+                    , String keyValue) {
         getNotNull(proto, conf).put(accountName + "." + keyName , keyValue);
     }
     public Params getSectionAsParams(String section) {
@@ -151,7 +173,8 @@ public class Configuration {
             File parent = new File(f.getParent());
 
             if (!(parent.mkdirs() || parent.getParentFile().exists())) {
-                System.err.println("dctc configuration: could not create the path of the configuration file.");
+                System.err.println("dctc configuration: could not create"
+                                   + " the path of the configuration file.");
             }
 
             BufferedWriter w = StreamUtils.writeToFile(f, false);
@@ -166,8 +189,12 @@ public class Configuration {
             w.close();
         }
         catch (IOException e) {
-            System.err.println("dctc configuration: could not auto-create configuration file: "
-                               + f.getAbsoluteFile() + " (" + e.getMessage() + ")");
+            System.err.println("dctc configuration: could not auto-create"
+                               + " configuration file: "
+                               + f.getAbsoluteFile()
+                               + " ("
+                               + e.getMessage()
+                               + ")");
             return;
         }
     }
@@ -185,6 +212,7 @@ public class Configuration {
 
     // Attributes
     private Set<String> nonValidSection = new HashSet<String>();
-    private Map<String, Map<String, String>> conf = new HashMap<String, Map<String, String>>();
+    private Map<String, Map<String, String>> conf
+        = new HashMap<String, Map<String, String>>();
     private String lastProtocolDefined = "";
 }

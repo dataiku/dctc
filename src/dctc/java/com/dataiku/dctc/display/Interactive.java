@@ -7,7 +7,11 @@ import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dip.utils.StreamUtils;
 
 public class Interactive {
-    public static boolean ask(String cmd, String question, String yes, String no, YellPolicy yell) {
+    public static boolean ask(String cmd
+                              , String question
+                              , String yes
+                              , String no
+                              , YellPolicy yell) {
         BufferedReader i = StreamUtils.readStream(System.in);
 
         while (true) {

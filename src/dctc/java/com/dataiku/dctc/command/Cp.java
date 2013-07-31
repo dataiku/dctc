@@ -21,10 +21,13 @@ public class Cp extends ListFilesCommand {
         return "Copy files and directories.";
     }
     public void longDescription(IndentedWriter printer) {
-        printer.paragraph(scat("Copy all sources to the target. Target is create as"
-                               , " a folder if the are several sources or the source is a folder.")
-                          , scat("Dctc cp can compress or uncompress GZip-compressed inputs and outputs."
-                                 , "Dctc cp can also be used to create or expand Zip archives."));
+        printer.paragraph(scat("Copy all sources to the target. Target is"
+                               , "create as a folder if the are several"
+                               , "sources or the source is a folder.")
+                          , scat("Dctc cp can compress or uncompress"
+                                 , "GZip-compressed inputs and outputs."
+                                 , "Dctc cp can also be used to"
+                                 , "create or expand Zip archives."));
     }
 
     // Public
@@ -58,23 +61,53 @@ public class Cp extends ListFilesCommand {
     // Protected
     @Override
     protected void setOptions(List<OptionAgregator> opts) {
-        opts.add(stdOption("rR", "recursive", "Copy directories recursively."));
-        opts.add(stdOption('c', "compress", "Compress all input files and add .gz extension."));
-        opts.add(stdOption('u', "uncompress", "Uncompress all compressed (ie, .gz) input files (strips .gz extension)"));
-        opts.add(stdOption('l', "unarchive", "Uncompress all archives found in the command line."));
-        opts.add(stdOption('i', "interactive", "Prompt before overwrite"));
-        opts.add(stdOption('a', "archive", "Archives all input files into a single destination file using the destination file extension as identifier for the archive method. Supported archive methods are 'zip'"));
-        opts.add(stdOption('p', "preserve", "Preserve the time stamp"));
-        opts.add(stdOption('s', "sequential", "Make the copy with only one thread."));
-        opts.add(stdOption('n', "thread-number", "Set the number of thread.", true, "NUMBER"));
+        opts.add(stdOption("rR"
+                           , "recursive"
+                           , "Copy directories recursively."));
+        opts.add(stdOption('c'
+                           , "compress"
+                           , "Compress all input files and add .gz"
+                           + " extension."));
+        opts.add(stdOption('u'
+                           , "uncompress"
+                           , "Uncompress all compressed (ie, .gz) input files"
+                           + " (strips .gz extension)"));
+        opts.add(stdOption('l'
+                           , "unarchive"
+                           , "Uncompress all archives found in the command"
+                           + " line."));
+        opts.add(stdOption('i'
+                           , "interactive"
+                           , "Prompt before overwrite"));
+        opts.add(stdOption('a'
+                           , "archive"
+                           , "Archives all input files into a single"
+                           + " destination file using the destination"
+                           + " file extension as identifier for the"
+                           + " archive method. Supported archive methods"
+                           + " are 'zip'"));
+        opts.add(stdOption('p'
+                           , "preserve"
+                           , "Preserve the time stamp"));
+        opts.add(stdOption('s'
+                           , "sequential"
+                           , "Make the copy with only one thread."));
+        opts.add(stdOption('n'
+                           , "thread-number"
+                           , "Set the number of thread."
+                           , true
+                           , "NUMBER"));
     }
     @Override
     public void execute(List<CopyTask> tasks) {
-        SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(unarchive(),
-                                                                               archive(),
-                                                                               hasOption('p'));
+        SimpleCopyTaskRunnableFactory fact
+            = new SimpleCopyTaskRunnableFactory(unarchive(),
+                                                archive(),
+                                                hasOption('p'));
         ThreadedDisplay display = GlobalConf.getDisplay();
-        CopyTasksExecutor exec = new CopyTasksExecutor(fact, display, getThreadLimit());
+        CopyTasksExecutor exec = new CopyTasksExecutor(fact
+                                                       , display
+                                                       , getThreadLimit());
         try {
             exec.run(tasks, archive());
         }

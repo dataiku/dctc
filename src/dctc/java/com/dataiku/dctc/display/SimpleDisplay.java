@@ -21,7 +21,10 @@ class SimpleDisplay extends AbstractThreadedDisplay {
     }
     @Override
     protected void resetLoop() {
-        String msg = "done: " + Size.getReadableSize(done + transfer) + "/" + prettyFilesSize;
+        String msg = "done: "
+            + Size.getReadableSize(done + transfer)
+            + "/"
+            + prettyFilesSize;
         if (failed != 0) {
             msg += " with " + failed + " fail(s).";
         } else {

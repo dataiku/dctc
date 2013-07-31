@@ -24,18 +24,21 @@ public class Nl extends Command {
     public void setOptions(List<OptionAgregator> opts) {
         opts.add(stdOption('i', "line-increment"
                            , "Line number increment at each line."
-                           , true, "NUMBER"));
+                           , true
+                           , "NUMBER"));
         opts.add(stdOption('w', "number-width"
                            , "Use NUMBER columns for line numbers."
-                           , true, "NUMBER"));
+                           , true
+                           , "NUMBER"));
         opts.add(stdOption('v', "starting-line"
                            , "First line number on each logical page."
-                           , true, "NUMBER"));
+                           , true
+                           , "NUMBER"));
     }
     public void longDescription(IndentedWriter writer) {
-        writer.print("Write each FILE to standard output, with line "
-                     + "numbers added.  With no FILE, or when FILE is -, "
-                     + "read standard input.");
+        writer.print("Write each FILE to standard output, with line"
+                     + " numbers added.  With no FILE, or when FILE is -,"
+                     + " read standard input.");
     }
     public void perform(List<GFile> args) {
         CatAlgorithmFactory fact = new CatAlgorithmFactory()

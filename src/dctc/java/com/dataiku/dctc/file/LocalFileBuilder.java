@@ -14,7 +14,9 @@ public class LocalFileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public GFile buildFile(String accountSettings, String rawPath, YellPolicy yell) {
+    public GFile buildFile(String accountSettings
+                           , String rawPath
+                           , YellPolicy yell) {
         return new LocalFile(rawPath);
     }
     @Override

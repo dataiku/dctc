@@ -11,11 +11,14 @@ import com.dataiku.dctc.archive.InputArchiveIterator;
 import com.dataiku.dctc.file.GFile;
 
 public class UnarchiveCopyTask extends CopyTaskRunnable {
-    public UnarchiveCopyTask(GFile input, GFile outputDir) throws IOException { // FIXME
+    public UnarchiveCopyTask(GFile input
+                             , GFile outputDir) throws IOException {
+        // FIXME: Should not throw
         super(input);
 
         if (!outputDir.isDirectory() && outputDir.exists()) {
-            throw new IllegalArgumentException(outputDir.givenName() + "is not a directory.");
+            throw new IllegalArgumentException(outputDir.givenName()
+                                               + "is not a directory.");
         }
 
         this.out = outputDir;
@@ -33,11 +36,16 @@ public class UnarchiveCopyTask extends CopyTaskRunnable {
                 if (o.hasOutputStream()) {
                     InputStream inputStream = elt.getContentStream();
                     if (inputStream == null) {
-                        throw new IOException("failed to uncompress" + elt.getName() + ", did not get an input stream");
-                    } else {
+                        throw new IOException("failed to uncompress"
+                                              + elt.getName()
+                                              + ", did not get an input stream");
+                    }
+                    else {
                         OutputStream outputStream = o.outputStream();
                         int s;
-                        while (true) {
+                        while (true) { // FIXME: Should use the C++
+                                       // manner to do instead of a
+                                       // verbose method.
                             s = inputStream.read(buf);
                             if (s == -1) {
                                 break;
@@ -48,11 +56,14 @@ public class UnarchiveCopyTask extends CopyTaskRunnable {
                         elt.closeEntry();
                         outputStream.close();
                     }
-                } else {
+                }
+                else {
                     o.copy(elt.getContentStream(), elt.getSize());
                     inc(elt.getCompressSize());
                 }
-            } else {
+            }
+            else { // FIXME: Why, this block is empty? Here since
+                // dc38c16, commit by Clément Stenac.
             }
             elt = i.next();
         }

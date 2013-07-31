@@ -33,7 +33,9 @@ public class PathManip {
         } else if (suffix.isEmpty()) {
             return prefix;
         }
-        return trimEnd(prefix, separator) + separator + trimBegin(suffix, separator);
+        return trimEnd(prefix, separator)
+            + separator
+            + trimBegin(suffix, separator);
     }
     // Concat prefix to suffix with suffix separator translate to
     // prefix separator
@@ -82,10 +84,14 @@ public class PathManip {
         }
         return res;
     }
-    public static String[] split(String str, String separator, final int n) {
+    public static String[] split(String str
+                                 , String separator
+                                 , final int n) {
         return split(str, separator, n, true);
     }
-    public static String[] invSplit(String str, String separator, final int n) {
+    public static String[] invSplit(String str
+                                    , String separator
+                                    , final int n) {
         String[] res = new String[n];
         res[0] = str;
 
@@ -137,13 +143,21 @@ public class PathManip {
         }
         return path.substring(index + separator.length(), path.length());
     }
-    public static String getSonPath(String parent, String son, String separator) {
-        /* Handle the specific case of '.' */
+    public static String getSonPath(String parent
+                                    , String son
+                                    , String separator) {
+        // Handle the specific case of '.'
         if (parent.equals(son)) {
             return "";
         }
         if (!isSon(parent, son, separator)) {
-            throw new Error("Fatal error in getSonPath: parent=" + parent + " son=" + son + " separator=" + separator);
+            // FIXME: Debug message. Please change the format.
+            throw new Error("Fatal error in getSonPath: parent="
+                            + parent
+                            + " son="
+                            + son
+                            + " separator="
+                            + separator);
         }
 
         int len = parent.length();
@@ -162,7 +176,9 @@ public class PathManip {
             || fileName.startsWith(".#");
     }
     // Test if @parent is the son of the parent
-    public static boolean isDirectSon(String parent, String son, String separator) {
+    public static boolean isDirectSon(String parent
+                                      , String son
+                                      , String separator) {
         parent = trimEnd(parent, separator);
         son = trimEnd(son, separator);
 
@@ -184,22 +200,32 @@ public class PathManip {
 
         return son.startsWith(parent); // has the same prefix?
     }
-    // if isSon(parent, subPath) get the value for isDirectSon(parent, path) == true
-    public static String getDirectSon(String parent, String subPath, String separator) {
+    // if isSon(parent, subPath) get the value for isDirectSon(parent,
+    // path) == true
+    public static String getDirectSon(String parent
+                                      , String subPath
+                                      , String separator) {
         parent = trimEnd(parent, separator);
         subPath = trimEnd(subPath, separator);
 
         assert isSon(parent, subPath, separator)
-            : "isSon(" + quoted(parent) + ", " + quoted(subPath) + ", " + separator + ")";
+            : "isSon("
+            + quoted(parent)
+            + ", "
+            + quoted(subPath)
+            + ", "
+            + separator + ")";
 
-        int index = subPath.indexOf(separator, parent.length() + separator.length());
+        int index = subPath.indexOf(separator, parent.length()
+                                    + separator.length());
         if (index == -1) {
             return subPath; // subPath is the direct son.
         }
         return subPath.substring(0, index);
     }
     public static int getDepth(String file, String separator) {
-        String[] split = trimBegin(trimEnd(file, separator), separator).split(separator);
+        String[] split
+            = trimBegin(trimEnd(file, separator), separator).split(separator);
         return split.length;
     }
     public static boolean isAbsolute(String path, String fileSeparator) {

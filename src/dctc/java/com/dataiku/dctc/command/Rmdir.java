@@ -15,7 +15,8 @@ public class Rmdir extends Command {
         return "Remove empty folders.";
     }
     public void longDescription(IndentedWriter printer) {
-        printer.print(scat("Remove empty folders. If the target folder is not empty,"
+        printer.print(scat("Remove empty folders. If the target folder is"
+                           , "not empty,"
                            ,"rmdir will error out."));
     }
     @Override
@@ -32,7 +33,8 @@ public class Rmdir extends Command {
                 }
                 arg.delete();
                 if (hasOption('v')) {
-                    System.out.println("rmdir: removing directory, `" + arg.givenName() + "'");
+                    System.out.println("rmdir: removing directory, `"
+                                       + arg.givenName() + "'");
                 }
             }
             catch (IOException e) {

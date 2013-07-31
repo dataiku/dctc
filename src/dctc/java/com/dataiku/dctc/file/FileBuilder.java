@@ -54,10 +54,14 @@ public class FileBuilder {
     public boolean check() {
         boolean failed = false;
         for (Protocol proto: Protocol.values()) {
-            Map<String, Params> map = bank.getProtocolCredentials(proto.getCanonicalName());
+            Map<String, Params> map
+                = bank.getProtocolCredentials(proto.getCanonicalName());
             if (map != null) {
                 for (Entry<String, Params> e: map.entrySet()) {
-                    failed = proto.builder.validateAccountParams(e.getKey(), e.getValue()) || failed;
+                    failed
+                        = proto.builder.validateAccountParams(e.getKey()
+                                                              , e.getValue())
+                        || failed;
                 }
             }
         }
@@ -75,7 +79,8 @@ public class FileBuilder {
             }
         }
 
-        Protocol protocol = Protocol.forName(uri.substring(0, protocolSeparator));
+        Protocol protocol
+            = Protocol.forName(uri.substring(0, protocolSeparator));
         String path  = uri.substring(protocolSeparator + 3, uri.length());
 
         return buildFile(protocol, path, yell);

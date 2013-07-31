@@ -9,7 +9,8 @@ public interface GFile extends Comparable<GFile> {
     public GFile createInstanceFor(String path);
     public List<? extends GFile> createInstanceFor(List<String> paths);
     public GFile createSubFile(String path) throws IOException;
-    public GFile createSubFile(String path, String fileSeparator) throws IOException;
+    public GFile createSubFile(String path
+                               , String fileSeparator) throws IOException;
 
     // MetaData and Naming.
     public boolean exists() throws IOException;
@@ -38,21 +39,24 @@ public interface GFile extends Comparable<GFile> {
 
     public String givenName();
     public String givenPath();
-    public String pathToFile() throws IOException; // For /foo/bar/baz return /foo/bar/.
+    public String pathToFile() throws IOException; // For /foo/bar/baz
+                                                   // return
+                                                   // /foo/bar/.
 
-    /**
-     * Create the path as a folder. Fails if parents folders don't exist or if the path
-     * already exists
+    /*
+     * Create the path as a folder. Fails if parents folders don't
+     * exist or if the path already exists
      */
     public void mkdir() throws IOException;
-    /**
-     * Creates the path as a folder, including parent folders. Fails if one of the parent
-     * paths or the path itself exists and is a file
+    /*
+     * Creates the path as a folder, including parent folders. Fails
+     * if one of the parent paths or the path itself exists and is a
+     * file
      */
     public void mkdirs() throws IOException;
-    /**
-     * Create the path leading to this file, including intermediate folders.
-     * IE, for /foo/bar/baz, creates /foo/bar
+    /*
+     * Create the path leading to this file, including intermediate
+     * folders.  IE, for /foo/bar/baz, creates /foo/bar
      */
     public abstract void mkpath() throws IOException;
 
@@ -61,7 +65,8 @@ public interface GFile extends Comparable<GFile> {
     public InputStream inputStream() throws IOException;
     public OutputStream outputStream() throws IOException;
     public boolean copy(GFile input) throws IOException;
-    public boolean copy(InputStream contentStream, long size) throws IOException;
+    public boolean copy(InputStream contentStream
+                        , long size) throws IOException;
     public boolean directMove(GFile ginput) throws IOException;
     public boolean directCopy(GFile ginput) throws IOException;
     public boolean delete() throws IOException;

@@ -15,7 +15,13 @@ public class Color {
         return colorChar + color + msg + colorChar + reset;
     }
     public static String bcolor(String color, String msg) {
-        return colorChar + "0;1m" + colorChar + color + msg + colorChar + reset;
+        return colorChar
+            + "0;1m"
+            + colorChar
+            + color
+            + msg
+            + colorChar
+            + reset;
     }
     public static String purple(String msg) {
         return color(purple, msg);

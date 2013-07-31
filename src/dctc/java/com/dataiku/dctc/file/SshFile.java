@@ -70,11 +70,19 @@ public class SshFile extends AbstractGFile {
             i = Integer.parseInt(integer);
         }
         catch (NumberFormatException e) {
-            yell.yell("ssh file", scat(pquoted(integer), "is not a number."), e);
+            yell.yell("ssh file"
+                      , scat(pquoted(integer)
+                             , "is not a number.")
+                      , e);
             throw new EndOfCommand();
         }
         if (low > i || i > high) {
-            throw new UserException(scat("The number", integer, "is not between", low, "and", high));
+            throw new UserException(scat("The number"
+                                         , integer
+                                         , "is not between"
+                                         , low
+                                         , "and"
+                                         , high));
         }
 
         return i;
@@ -89,18 +97,37 @@ public class SshFile extends AbstractGFile {
         }
         this.connData = new ConnectionData();
         this.connData.host = config.get(host, "HostName", host);
-        this.connData.port = parseInt(config.get(host, "Port", "22"), 1, 65535, new HowlPolicy().withOut(System.err));
-        this.connData.username = config.get(host, "User", p.getMandParam("username"));
-        this.connData.skipHostKeyCheck = p.getBoolParam("skip_host_key_check", false);
-        this.connData.identity = config.get(host, "IdentityFile", p.getParam("identity"));
-        this.connData.compressionLevel = parseInt(config.get(host, "CompressionLevel", "6"), 0, 9, new HowlPolicy().withOut(System.err));
+        this.connData.port = parseInt(config.get(host
+                                                 , "Port"
+                                                 , "22")
+                                      , 1
+                                      , 65535
+                                      , new HowlPolicy().withOut(System.err));
+        this.connData.username = config.get(host
+                                            , "User"
+                                            , p.getMandParam("username"));
+        this.connData.skipHostKeyCheck = p.getBoolParam("skip_host_key_check"
+                                                        , false);
+        this.connData.identity = config.get(host
+                                            , "IdentityFile"
+                                            , p.getParam("identity"));
+        this.connData.compressionLevel
+            = parseInt(config.get(host
+                                  , "CompressionLevel", "6")
+                       , 0
+                       , 9
+                       , new HowlPolicy().withOut(System.err));
         this.connData.password = p.getParam("password");
 
         this.host = host;
     }
 
-    public SshFile(String host, String username, String password, String path, int port,
-                   boolean skipHostKeyCheck) {
+    public SshFile(String host
+                   , String username
+                   , String password
+                   , String path
+                   , int port
+                   , boolean skipHostKeyCheck) {
         this.connData = new ConnectionData();
         this.host = host;
         this.connData.host = host;
@@ -114,8 +141,13 @@ public class SshFile extends AbstractGFile {
             this.path = path;
         }
     }
-    public SshFile(String host, String username, String keyPath,
-                   String keyPassphrase, String path, int port, boolean skipHostKeyCheck) {
+    public SshFile(String host
+                   , String username
+                   , String keyPath
+                   , String keyPassphrase
+                   , String path
+                   , int port
+                   , boolean skipHostKeyCheck) {
         this.connData = new ConnectionData();
         this.connData.host = host;
         this.connData.port = port;
@@ -131,7 +163,11 @@ public class SshFile extends AbstractGFile {
         this.host = copy.host;
         this.path = path;
     }
-    private SshFile(SshFile copy, String fileName, Acl acl, long size, long date) {
+    private SshFile(SshFile copy
+                    , String fileName
+                    , Acl acl
+                    , long size
+                    , long date) {
         this.connData = copy.connData;
         this.path = fileName;
         this.acl = acl;
@@ -161,7 +197,14 @@ public class SshFile extends AbstractGFile {
                 path += "/";
             }
             path = path.replaceAll("#", "\\#");
-            list(list, realpath + "; ls -a1 -- \"" + path + "\"| sed -e 's#^#" + path + "#'|" + format);
+            list(list
+                 , realpath
+                 + "; ls -a1 -- \""
+                 + path
+                 + "\"| sed -e 's#^#"
+                 + path
+                 + "#'|"
+                 + format);
         }
         return list;
     }
@@ -173,12 +216,21 @@ public class SshFile extends AbstractGFile {
             String path = this.path.replaceAll("'", "\\'");
             path = PathManip.trimEnd(path, "/");
             path = path.replaceAll("#", "\\#");
-            list(recursiveList, realpath + "; find -- \"" + path + "\"| grep -v \"^" + path + "$\" | " + format);
+            list(recursiveList
+                 , realpath
+                 + "; find -- \""
+                 + path
+                 + "\"| grep -v \"^"
+                 + path
+                 + "$\" | "
+                 + format);
         }
         return recursiveList;
     }
     @Override
-    public SshFile createSubFile(String subpath, String fileSeparator) throws IOException {
+    public SshFile createSubFile(String subpath
+                                 , String fileSeparator)
+        throws IOException {
         /* Absolutize the path if it's relative to the home */
         try {
             if (!path.startsWith("/")) {
@@ -189,7 +241,11 @@ public class SshFile extends AbstractGFile {
             throw new RuntimeException("Unexpected error", e);
         }
 
-        String childPathWithoutHost = PathManip.concat(path, subpath, fileSeparator(), fileSeparator);
+        String childPathWithoutHost
+            = PathManip.concat(path
+                               , subpath
+                               , fileSeparator()
+                               , fileSeparator);
 
         if (exists != null && exists == false) {
             return newNotFound(this, childPathWithoutHost);
@@ -197,15 +253,19 @@ public class SshFile extends AbstractGFile {
 
         if (recursiveList != null) {
             for (SshFile file : recursiveList) {
-                if (file.getAbsolutePath().equals(connData.host + childPathWithoutHost)) {
+                if (file.getAbsolutePath().equals(connData.host
+                                                  + childPathWithoutHost)) {
                     return file;
                 }
             }
 
             return newNotFound(this, childPathWithoutHost);
         }
-        return new SshFile(PathManip.concat(path, subpath,
-                                                   fileSeparator(), fileSeparator), this);
+        return new SshFile(PathManip.concat(path
+                                            , subpath
+                                            , fileSeparator()
+                                            , fileSeparator)
+                           , this);
     }
     @Override
     public boolean exists() throws IOException {
@@ -281,20 +341,28 @@ public class SshFile extends AbstractGFile {
     @Override
     public InputStream getLastLines(long lineNumber) throws IOException {
         try {
-            Channel channel = connect("tail -n" + lineNumber + " '" + path + "'");
+            Channel channel
+                = connect("tail -n" + lineNumber + " '" + path + "'");
             return channel.getInputStream();
         } catch (JSchException e) {
-            throw new IOException("dctc sshfile: Failed to get inputstream for: " + path, e);
+            throw new
+                IOException("dctc sshfile: Failed to get inputstream for: "
+                            + path
+                            , e);
         }
     }
     @Override
     public InputStream getLastBytes(long byteNumber) throws IOException {
         try {
-            Channel channel = connect("tail -c" + byteNumber + " '" + path + "'");
+            Channel channel
+                = connect("tail -c" + byteNumber + " '" + path + "'");
             return channel.getInputStream();
         }
         catch (JSchException e) {
-            throw new IOException("dctc sshfile: Failed to get inputstream for: " + path, e);
+            throw new
+                IOException("dctc sshfile: Failed to get inputstream for: "
+                            + path
+                            , e);
         }
     }
     @Override
@@ -304,11 +372,20 @@ public class SshFile extends AbstractGFile {
             begin = 0;
         }
         try {
-            Channel channel = connect("tail -c+" + begin + " '" + path + "' | head -c" + nbByte);
+            Channel channel
+                = connect("tail -c+"
+                          + begin
+                          + " '"
+                          + path
+                          + "' | head -c"
+                          + nbByte);
             return channel.getInputStream();
         }
         catch (JSchException e) {
-            throw new IOException("dctc sshfile: Failed to get inputstream for: " + path, e);
+            throw new
+                IOException("dctc sshfile: Failed to get inputstream for: "
+                            + path
+                            , e);
         }
     }
 
@@ -319,7 +396,10 @@ public class SshFile extends AbstractGFile {
             return channel.getInputStream();
         }
         catch (JSchException e) {
-            throw new IOException("dctc sshfile: Failed to get inputstream for: " + path, e);
+            throw new
+                IOException("dctc sshfile: Failed to get inputstream for: "
+                            + path
+                            , e);
         }
     }
     @Override
@@ -332,12 +412,19 @@ public class SshFile extends AbstractGFile {
                 return channelSftp.put(path, 0);
             }
             catch (SftpException e) {
-                throw new IOException("dctc SshFile: Failed to get output stream for: " + path, e);
+                throw new
+                    IOException("dctc SshFile: Failed to get output stream"
+                                + " for: "
+                                + path
+                                , e);
 
             }
         }
         catch (JSchException e) {
-            throw new IOException("dctc SshFile: Failed to get output stream for: " + path, e);
+            throw new IOException("dctc SshFile: Failed to get output stream"
+                                  + " for: "
+                                  + path
+                                  , e);
         }
     }
     @Override
@@ -348,8 +435,9 @@ public class SshFile extends AbstractGFile {
     public boolean hasHash() {
         if (!hasHash.containsKey(connData.host)) {
             try {
-                hasHash.put(connData.host,
-                            exec("which md5sum | grep -v which > /dev/null; echo $?").equals("0\n"));
+                hasHash.put(connData.host
+                            , exec("which md5sum | grep -v which >"
+                                   + " /dev/null; echo $?").equals("0\n"));
             }
             catch (IOException e) {
                 return false;
@@ -371,7 +459,8 @@ public class SshFile extends AbstractGFile {
         if (date == -1) {
             String date = exec("stat -c %Y " + path);
             if (!date.isEmpty()) {
-                this.date = Long.parseLong(date.substring(0, date.length() - 1));
+                this.date
+                    = Long.parseLong(date.substring(0, date.length() - 1));
             }
         }
         return date;
@@ -385,7 +474,8 @@ public class SshFile extends AbstractGFile {
             else {
                 String size = exec("wc -c '" + path + "' | cut -d' ' -f1");
                 if (!size.isEmpty()) {
-                    this.size = Long.parseLong(size.substring(0, size.length() - 1));
+                    this.size
+                        = Long.parseLong(size.substring(0, size.length() - 1));
                 }
                 else {
                     throw new IOException("File not found.");
@@ -411,7 +501,10 @@ public class SshFile extends AbstractGFile {
         if (acl == null) {
             String[] split;
             try {
-                split = exec("ls -dl '" + path + "' | sed -re 's/  */ /g'").split(" ");
+                split
+                    = exec("ls -dl '"
+                           + path
+                           + "' | sed -re 's/  */ /g'").split(" ");
             }
             catch (IOException e) {
                 return acl;
@@ -452,9 +545,14 @@ public class SshFile extends AbstractGFile {
                         msg = msg.substring(msg.lastIndexOf(":") + 1).trim();
                     }
                     if (msg.contains("Too many authentication")) {
-                        throw new AuthenticationFailedException(msg.substring(2).trim());
+                        throw new
+                            AuthenticationFailedException(msg
+                                                          .substring(2)
+                                                          .trim());
                     } else {
-                        throw new IOException(scat("Unable to connect to", connData.host), e);
+                        throw new IOException(scat("Unable to connect to"
+                                                   , connData.host)
+                                              , e);
                     }
                 }
                 else if (e.getCause() instanceof UnknownHostException) {
@@ -464,12 +562,15 @@ public class SshFile extends AbstractGFile {
                     throw (ConnectException)e.getCause();
                 }
                 else {
-                    throw new IOException(scat("Unable to connect to", connData.host), e);
+                    throw new IOException(scat("Unable to connect to"
+                                               , connData.host)
+                                          , e);
                 }
             }
         }
 
-        String file = exec("file '" + path + "' | cut -d':' -f2 | tr -d ' ,\n'");
+        String file
+            = exec("file '" + path + "' | cut -d':' -f2 | tr -d ' ,\n'");
         if (file.equals("ERROR")) {
             exists = false;
         }
@@ -494,13 +595,19 @@ public class SshFile extends AbstractGFile {
             disconnect(channel);
             int errorStatut = channel.getExitStatus();
             if (errorStatut != 0) {
-                throw new IOException("Unknown error on: " + getAbsoluteAddress() + eol()
-                                      + "receive: " + channel.getExitStatus() + eol() + str);
+                throw new IOException("Unknown error on: "
+                                      + getAbsoluteAddress() + eol()
+                                      + "receive: "
+                                      + channel.getExitStatus() + eol()
+                                      + str);
             }
             return str;
         }
         catch (JSchException e) {
-            throw new IOException("Failed to execute SSH command on '" + path + "'", e);
+            throw new IOException("Failed to execute SSH command on '"
+                                  + path // FIXME: pquoted
+                                  + "'"
+                                  , e);
         }
     }
     private Acl getAclFrom(String describ) {
@@ -529,9 +636,15 @@ public class SshFile extends AbstractGFile {
     private SshFile parseAndBuild(String str) {
         Acl acl = getAclFrom(str.substring(0, str.indexOf(" ")));
 
-        String absoluteFileName = str.substring(str.lastIndexOf("\"", str.length() - 2) + 1, str.length() - 1);
+        String absoluteFileName
+            = str.substring(str.lastIndexOf("\""
+                                            , str.length() - 2)
+                            + 1
+                            , str.length() - 1);
         str = str.substring(0, str.length() - absoluteFileName.length() - 3);
-        String fileName = str.substring(str.lastIndexOf("\"", str.length() - 2) + 1, str.length() - 1);
+        String fileName
+            = str.substring(str.lastIndexOf("\"", str.length() - 2) + 1
+                            , str.length() - 1);
         str = str.substring(0, str.length() - fileName.length() - 1);
         String[] split = str.split(" ");
         long size = Long.parseLong(split[2]);
@@ -558,7 +671,8 @@ public class SshFile extends AbstractGFile {
             permissionDenied = false;
             if (!s.isEmpty()) {
                 SshFile son = parseAndBuild(s);
-                if (!(son.getFileName().equals(".") || son.getFileName().equals(".."))) {
+                if (!(son.getFileName().equals(".")
+                      || son.getFileName().equals(".."))) {
                     l.add(parseAndBuild(s));
                 }
             }
@@ -582,7 +696,8 @@ public class SshFile extends AbstractGFile {
 
             if (connData.sshKeyPath != null) {
                 if (connData.sshKeyPassphrase != null){
-                    connData.jsch.addIdentity(connData.sshKeyPath, connData.sshKeyPassphrase);
+                    connData.jsch.addIdentity(connData.sshKeyPath
+                                              , connData.sshKeyPassphrase);
                 } else {
                     connData.jsch.addIdentity(connData.sshKeyPath);
                 }
@@ -595,24 +710,34 @@ public class SshFile extends AbstractGFile {
                     }
                 }
                 else {
-                    File dsa = new File(System.getProperty("user.home") + "/.ssh/id_dsa");
+                    File dsa
+                        = new File(System.getProperty("user.home")
+                                   + "/.ssh/id_dsa");
                     if (dsa.exists()) {
                         connData.jsch.addIdentity(dsa.getAbsolutePath());
                     }
-                    File rsa = new File(System.getProperty("user.home") + "/.ssh/id_rsa");
+                    File rsa
+                        = new File(System.getProperty("user.home")
+                                   + "/.ssh/id_rsa");
                     if (rsa.exists()) {
                         connData.jsch.addIdentity(rsa.getAbsolutePath());
                     }
                 }
             }
 
-            File knownHosts = new File(System.getProperties().get("user.home") + "/.ssh/known_hosts");
+            File knownHosts
+                = new File(System.getProperties().get("user.home")
+                           + "/.ssh/known_hosts");
             if (knownHosts.exists()) {
                 connData.jsch.setKnownHosts(knownHosts.getAbsolutePath());
             }
 
-            JSch.setConfig("CompressionLevel", Integer.toString(connData.compressionLevel));
+            JSch.setConfig("CompressionLevel"
+                           , Integer.toString(connData.compressionLevel));
 
+            // FIXME: Will be removed, useless dead code present on
+            // the historic.
+            //
             //             DON'T REMOVE THAT. IT'S USEFUL FOR DEBUGGING
             //                    Logger l = new Logger() {
             //                        @Override
@@ -627,17 +752,23 @@ public class SshFile extends AbstractGFile {
             //                    };
             //                    connData.jsch.setLogger(l);
 
-            connData.session = connData.jsch.getSession(connData.username,connData.host, connData.port);
+            connData.session
+                = connData.jsch.getSession(connData.username,connData.host
+                                           , connData.port);
             if (connData.skipHostKeyCheck) {
                 java.util.Properties config = new java.util.Properties();
                 config.put("StrictHostKeyChecking", "no");
                 connData.session.setConfig(config);
             }
             if (connData.password != null) {
-                connData.session.setUserInfo(new SshUserInfo(connData.password));
+                connData
+                    .session
+                    .setUserInfo(new SshUserInfo(connData.password));
             }
             else {
-                connData.session.setUserInfo(new SshUserInfo(connData.sshKeyPassphrase));
+                connData
+                    .session
+                    .setUserInfo(new SshUserInfo(connData.sshKeyPassphrase));
             }
             connData.session.connect();
 
@@ -670,16 +801,21 @@ public class SshFile extends AbstractGFile {
     private long size = -1;
     private long date = -1;
     private Acl acl;
-    private static Map<String, Boolean> hasHash = new HashMap<String, Boolean>();
+    private static Map<String, Boolean> hasHash
+        = new HashMap<String, Boolean>();
     private String host;
 
-    private static String statOpt = "\\`if \"x$(uname)\" = \"xLinux\"; then echo f; "
-        + "else echo c; fi\\`";
-    private static String realpath = "dctc_real_path_() { path=$1; if [ -f $path ]; "
-        + "then echo `pwd`/$path; else echo `cd -P -- \"${path:-.}\" && pwd`; fi; }";
-    private static String deleteDotSlash = "if echo $line | grep \"^./\" > /dev/null; "
-        + "then line=`echo $line | sed -e 's#^\\./##'`; fi";
-    private static String format = "while read line; do " + deleteDotSlash + "; echo `stat -"
+    private static String statOpt = "\\`if \"x$(uname)\" = \"xLinux\";"
+        + " then echo f; else echo c; fi\\`";
+    private static String realpath = "dctc_real_path_() { path=$1;"
+        + " if [ -f $path ]; then echo `pwd`/$path; else echo `cd -P -- "
+        + "\"${path:-.}\" && pwd`; fi; }";
+    private static String deleteDotSlash = "if echo $line | grep \"^./\" "
+        + "> /dev/null; then line=`echo $line | sed -e 's#^\\./##'`; fi";
+    private static String format = "while read line; do "
+        + deleteDotSlash
+        + "; echo `stat -"
         + statOpt
-        + " ' %A %Z %s %F \"%n\"' -- \"$line\"` \\\"`dctc_real_path_ \"$line\"`\\\"; done";
+        + " ' %A %Z %s %F \"%n\"' -- \"$line\"` \\\"`dctc_real_path_ "
+        + "\"$line\"`\\\"; done";
 }

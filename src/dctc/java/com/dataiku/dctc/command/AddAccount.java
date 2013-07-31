@@ -28,7 +28,8 @@ public class AddAccount extends Command {
         return "Add an account to the DCTC configuration.";
     }
     public void longDescription(IndentedWriter printer) {
-        printer.print(scat("Add an account to the DCTC file configuration using a command-line wizard."
+        printer.print(scat("Add an account to the DCTC file configuration using"
+                           ,"a command-line wizard."
                            , "Supported protocols are 's3' and 'gs'"));
     }
 
@@ -43,7 +44,8 @@ public class AddAccount extends Command {
             return;
         }
         if (!PrettyString.isInteractif()) {
-            throw new UserException("add-account requires dctc to run in interactive mode");
+            throw new UserException("add-account requires dctc to"
+                                    + " run in interactive mode");
         }
 
         String proto = args[0].toLowerCase();
@@ -56,7 +58,8 @@ public class AddAccount extends Command {
 
         if (bank.getProtocolCredentials(proto) != null) {
             if (account == null) {
-                throw new UserException("At least an account already exists for protocol '"
+                throw new UserException("At least an account already exists "
+                                        + "for protocol '"
                                         + proto
                                         + "'. You must specify an explicit "
                                         + "account name for your new account");
@@ -82,20 +85,26 @@ public class AddAccount extends Command {
         if (proto.equals("s3")) {
             while (true) {
                 parameters = ask("Please enter your AWS access key|access_key"
-                                 , "Please enter your AWS secret key|secret_key");
+                                 , "Please enter your AWS "
+                                 + "secret key|secret_key");
 
                 printChecking();
 
-                root = new
-                    S3File("/", new AmazonS3Client(new BasicAWSCredentials(parameters.get("access_key")
-                                                                           , parameters.get("secret_key"))));
+                { // Set root
+                    BasicAWSCredentials cred
+                        = new BasicAWSCredentials(parameters.get("access_key"),
+                                                  parameters.get("secret_key"));
+                    root = new S3File("/", new AmazonS3Client(cred));
+                }
                 break;
             }
         }
         else if (proto.equals("gs")) {
             while (true) {
-                parameters = ask("Please enter your Google service account email|mail"
-                                 , "Please enter the path on disk of your private key file|key_path");
+                parameters = ask("Please enter your Google service account"
+                                 + " email|mail"
+                                 , "Please enter the path on disk of your "
+                                 + "private key file|key_path");
 
                 printChecking();
                 root = new GSFile(parameters.get("mail")
@@ -109,11 +118,17 @@ public class AddAccount extends Command {
         }
         try {
             int nbBuckets = root.glist().size();
-            System.err.println(scat("\rOK, listed", nbBuckets, "buckets in your", proto, "account."));
+            System.err.println(scat("\rOK, listed"
+                                    , nbBuckets
+                                    , "buckets in your"
+                                    , proto
+                                    , "account."));
         }
         catch (Exception e) {
-            System.err.println("\rCould not list your buckets using these credentials:"
-                               + eol() + e.getMessage());
+            System.err.println("\rCould not list your buckets using"
+                               + " these credentials:"
+                               + eol()
+                               + e.getMessage());
         }
 
         System.err.println("Updating configuration file: "

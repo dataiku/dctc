@@ -17,7 +17,8 @@ public class Alias {
             alias.put(setting.getKey(), setting.getValue());
         }
     }
-    public void resolve(List<String> cmdargs, Map<String, String> unusedAlias) {
+    public void resolve(List<String> cmdargs,
+                        Map<String, String> unusedAlias) {
         // unusedAlias variable avoid the loop inside the alias
         if (cmdargs.size() == 0) {
             return;

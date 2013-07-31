@@ -12,7 +12,8 @@ public class ZipOutputArchiveIterable extends OutputArchiveIterable {
         return GlobalConstants.ZIP;
     }
     public ZipOutputArchiveIterator iterator() {
-        ZipOutputArchiveIterator res = new ZipOutputArchiveIterator(outputStream);
+        ZipOutputArchiveIterator res
+            = new ZipOutputArchiveIterator(outputStream);
         outputStream = null;
         return res;
     }

@@ -24,12 +24,30 @@ public class Du extends Command {
     }
     public void setOptions(List<OptionAgregator> opts) {
         opts.clear();
-        opts.add(stdOption('?', "help", "Display this help message."));
-        opts.add(stdOption('h', "human-readable", "print sizes in human readable format."));
-        opts.add(stdOption('s', "summarize", "Display only a total for each argument."));
-        opts.add(stdOption('c', "total", "Produce a grand total."));
-        opts.add(stdOption('a', "all", "Write counts for all files, not just directories."));
-        opts.add(stdOption('d', "max-depth", "Print the total for a directory (or file, with --all) only if it is N or fewer levels below the command line argument; --max-depth=0 is the same as --summarize.", true, "NUMBER"));
+        opts.add(stdOption('?'
+                           , "help"
+                           , "Display this help message."));
+        opts.add(stdOption('h'
+                           , "human-readable", "print sizes in human"
+                           + " readable format."));
+        opts.add(stdOption('s'
+                           , "summarize"
+                           , "Display only a total for each argument."));
+        opts.add(stdOption('c'
+                           , "total"
+                           , "Produce a grand total."));
+        opts.add(stdOption('a'
+                           , "all"
+                           , "Write counts for all files, not just"
+                           + " directories."));
+        opts.add(stdOption('d'
+                           , "max-depth"
+                           , "Print the total for a directory (or file,"
+                           + " with --all) only if it is N or fewer levels"
+                           + " below the command line argument; --max-depth=0"
+                           + " is the same as --summarize."
+                           , true
+                           , "NUMBER"));
     }
     public void longDescription(IndentedWriter printer) {
         printer.print("Compute file space usage.");
@@ -64,7 +82,9 @@ public class Du extends Command {
             for (GFile son: arg.grecursiveList()) {
                 size += son.getSize();
                 if ((all() || son.isDirectory())
-                    && PathManip.isDirectSon(arg.givenName(), son.givenName(), "/")
+                    && PathManip.isDirectSon(arg.givenName()
+                                             , son.givenName()
+                                             , "/")
                     && !first) {
                     perform(son, depth + 1);
                 }

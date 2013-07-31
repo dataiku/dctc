@@ -19,12 +19,18 @@ public class HdfsFileBuilder extends ProtocolFileBuilder {
 
     @Override
     public boolean validateAccountParams(String accountSettings, Params p) {
-        return checkAllowedOnly(accountSettings, p, new String[] {"hadoopConfDir"})
-            || checkMandatory(accountSettings, p, "hadoopConfDir");
+        return checkAllowedOnly(accountSettings
+                                , p
+                                , new String[] {"hadoopConfDir"})
+            || checkMandatory(accountSettings
+                              , p
+                              , "hadoopConfDir");
     }
 
     @Override
-    public GFile buildFile(String accountSettings, String rawPath, YellPolicy yell) {
+    public GFile buildFile(String accountSettings
+                           , String rawPath
+                           , YellPolicy yell) {
         HadoopDistributionClassLoader.addLibraries();
         Params p;
         if (accountSettings != null) {
@@ -36,13 +42,17 @@ public class HdfsFileBuilder extends ProtocolFileBuilder {
             if (p == null) {
                 /* I can still try to build using HADOOP_HOME */
                 if (System.getenv("HADOOP_HOME") == null
-                    && System.getenv("HADOOP_PREFIX") == null
-                    && HadoopDistributionClassLoader.guessHadoopHome() == null) {
-                    throw ErrorContext.iaef("Neither configured credential nor HADOOP_HOME nor HADOOP_PREFIX variable found, can't configure HDFS access"); // FIXME: No
+                    && HadoopDistributionClassLoader.guessHadoopHome() == null
+                    && System.getenv("HADOOP_PREFIX") == null) {
+                    throw ErrorContext.iaef("Neither configured credential nor"
+                                            + " HADOOP_HOME nor HADOOP_PREFIX"
+                                            + " variable found, can't configure"
+                                            + " HDFS access"); // FIXME: No
                 }
             }
         }
         Configuration conf = new Configuration();
+
         if (p == null) {
             conf.addResource(new Path(HadoopUtils.getCoreSiteLocation()));
         }

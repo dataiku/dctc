@@ -16,7 +16,8 @@ public class Version extends Command {
 
     @Override
     public void perform(String[] args) {
-        System.out.println("dctc " + com.dataiku.dctc.configuration.Version.pretty());
+        System.out.println("dctc "
+                           + com.dataiku.dctc.configuration.Version.pretty());
     }
     @Override
     protected String proto() {

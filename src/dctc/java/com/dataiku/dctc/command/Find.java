@@ -17,7 +17,8 @@ public class Find extends Command {
         return "Recursively list the content of a location.";
     }
     public void longDescription(IndentedWriter printer) {
-        printer.print("Output contains one line per file, with its absolute address");
+        printer.print("Output contains one line per file, with its"
+                      + " absolute address");
     }
     // Public
     @Override
@@ -90,8 +91,14 @@ public class Find extends Command {
     // Protected
     @Override
     protected void setOptions(List<OptionAgregator> opts) {
-        opts.add(stdOpt("name", "Print the file only if its name contains the specified pattern.", "PATTERN"));
-        opts.add(stdOpt("type", "Select the type of the file to print (d(irectory), f(ile), a(all)).", "c"));
+        opts.add(stdOpt("name"
+                        , "Print the file only if its name contains the"
+                        + " specified pattern."
+                        , "PATTERN"));
+        opts.add(stdOpt("type"
+                        , "Select the type of the file to print (d(irectory),"
+                        + " f(ile), a(ll))."
+                        , "c"));
     }
     @Override
     protected String proto() {

@@ -19,7 +19,8 @@ public class TarInputArchiveIterator extends InputArchiveIterator {
             return input.available() == 1;
         }
         catch (IOException e) {
-            System.err.println("dctc TarInputArchiveIterator: " + e.getMessage());
+            System.err.println("dctc TarInputArchiveIterator: "
+                               + e.getMessage());
             // FIXME: YellPolicy
             return false;
         }
@@ -34,7 +35,8 @@ public class TarInputArchiveIterator extends InputArchiveIterator {
             return new TarInputArchiveEntry(entry, input);
         }
         catch (IOException e) {
-            System.err.println("dctc TarInputArchiveIterator: " + e.getMessage());
+            System.err.println("dctc TarInputArchiveIterator: "
+                               + e.getMessage());
             // FIXME: YellPolicy
             return null;
         }

@@ -35,7 +35,8 @@ public class S3File extends BucketBasedFile {
         this.path = split[1];
     }
 
-    /** Create a new S3File for which we already have the meta (ie, it's guaranteed to be a file) */
+    /* Create a new S3File for which we already have the meta (ie,
+     * it's guaranteed to be a file) */
     public S3File(S3ObjectSummary sum, AmazonS3 s3) {
         super(false);
         this.s3 = s3;
@@ -45,14 +46,19 @@ public class S3File extends BucketBasedFile {
         this.path = sum.getKey();
     }
 
-    protected S3File(String directoryPath, AmazonS3 s3, List<S3File> sons, boolean autoRecur) {
+    protected S3File(String directoryPath
+                     , AmazonS3 s3
+                     , List<S3File> sons
+                     , boolean autoRecur) {
         super(autoRecur);
         this.s3 = s3;
         this.type = Type.DIR;
         grecursiveList = sons;
         glist = new ArrayList<S3File>();
         for (S3File s: sons) {
-            if (PathManip.isDirectSon(directoryPath, s.getAbsolutePath(), fileSeparator())) {
+            if (PathManip.isDirectSon(directoryPath
+                                      , s.getAbsolutePath()
+                                      , fileSeparator())) {
                 glist.add(s);
             }
         }
@@ -61,8 +67,10 @@ public class S3File extends BucketBasedFile {
         this.bucket = split[0];
         this.path = split[1];
     }
-    protected S3File(String directoryPath, AmazonS3 s3,
-                     S3ObjectSummary objectSummary, boolean autoRecur) {
+    protected S3File(String directoryPath
+                     , AmazonS3 s3
+                     , S3ObjectSummary objectSummary
+                     , boolean autoRecur) {
         super(autoRecur);
         this.s3 = s3;
         this.type = Type.FILE;
@@ -72,8 +80,10 @@ public class S3File extends BucketBasedFile {
         this.path = split[1];
     }
 
-    /** Create a new S3File for which we already know it does not exist */
-    private static S3File newNotFound(S3File parent, String absolutePathWithBucket) {
+    /* Create a new S3File for which we already know it does not
+     *  exist */
+    private static S3File newNotFound(S3File parent
+                                      , String absolutePathWithBucket) {
         S3File out = new S3File(absolutePathWithBucket, parent.s3);
         out.type = Type.NOT_FOUND;
         return out;
@@ -87,8 +97,10 @@ public class S3File extends BucketBasedFile {
     public S3File createSubFile(String path, String separator) {
         /* If this file is resolved, and we already have the list,
          * then maybe we can reuse a storage object / type */
-        String subNameWithBucket = PathManip.concat(getAbsolutePath(),
-                                                           path, fileSeparator(), separator);
+        String subNameWithBucket = PathManip.concat(getAbsolutePath()
+                                                    , path
+                                                    , fileSeparator()
+                                                    , separator);
 
         if (type == Type.DIR && recursiveFileList != null) {
             for (S3ObjectSummary sum : recursiveFileList) {
@@ -96,7 +108,8 @@ public class S3File extends BucketBasedFile {
                     return new S3File(sum, s3);
                 }
             }
-            /* Not found --> So we know that it is a not found, create it ! */
+            /* Not found --> So we know that it is a not found, create
+             * it ! */
             return newNotFound(this, subNameWithBucket);
         }
         return createInstanceFor(subNameWithBucket);
@@ -134,7 +147,10 @@ public class S3File extends BucketBasedFile {
                     glist.add(new S3File(f, s3));
                 }
                 else {
-                    String directSon = PathManip.getDirectSon(path, f.getKey(), fileSeparator());
+                    String directSon
+                        = PathManip.getDirectSon(path
+                                                 , f.getKey()
+                                                 , fileSeparator());
                     String son = "/" + bucket + "/" + directSon;
                     boolean br = false;
                     for (S3File file: glist) {
@@ -146,7 +162,10 @@ public class S3File extends BucketBasedFile {
                     if (!br) {
                         List<S3File> sons = getChildrenOf(son);
                         if (sons.size() != 0) {
-                            glist.add(new S3File(son, s3, getChildrenOf(son), autoRecur));
+                            glist.add(new S3File(son
+                                                 , s3
+                                                 , getChildrenOf(son)
+                                                 , autoRecur));
                         }
                         else {
                             glist.add(new S3File(son, s3, f, autoRecur));
@@ -156,13 +175,18 @@ public class S3File extends BucketBasedFile {
             }
             if (dirs != null) { // autoRecur == false
                 for (String dir: dirs) {
-                    glist.add(new S3File(dir, s3, new ArrayList<S3File>(), false));
+                    glist.add(new S3File(dir
+                                         , s3
+                                         , new ArrayList<S3File>()
+                                         , false));
                 }
             }
             return glist;
         }
         else if (isFile()) {
-            throw new IOException("can't list " + getAbsoluteAddress() + ": is a file");
+            throw new IOException("can't list "
+                                  + getAbsoluteAddress()
+                                  + ": is a file");
         }
         throw new Error("not reached");
     }
@@ -193,17 +217,20 @@ public class S3File extends BucketBasedFile {
             grecursiveList.add(new S3File(so, s3));
 
             while (parent.contains(fileSeparator())) {
-                parent = parent.substring(0, parent.lastIndexOf(fileSeparator()));
+                parent = parent.substring(0
+                                          , parent
+                                          .lastIndexOf(fileSeparator()));
                 if (!parent.startsWith(path)) {
                     break;
                 }
                 if (!contains(grecursiveList, parent)) {
-                    grecursiveList.add(new S3File(PathManip.concat(bucket
-                                                                          , parent
-                                                                          , fileSeparator())
-                                                  , s3
-                                                  , getChildrenOf(parent)
-                                                  , autoRecur));
+                    grecursiveList
+                        .add(new S3File(PathManip.concat(bucket
+                                                         , parent
+                                                         , fileSeparator())
+                                        , s3
+                                        , getChildrenOf(parent)
+                                        , autoRecur));
                 }
             }
         }
@@ -241,7 +268,9 @@ public class S3File extends BucketBasedFile {
         }
         catch (AmazonClientException e) {
             if (e.getMessage().startsWith("Unable to unmarshall response")) {
-                throw new IOException("Is a directory (Unable to unmarshall s3 response)");
+                throw new
+                    IOException("Is a directory (Unable to unmarshall s3"
+                                + " response)");
             }
             else {
                 throw e;
@@ -273,7 +302,8 @@ public class S3File extends BucketBasedFile {
             return false;
         }
         S3File input = (S3File) ginput;
-        CopyObjectRequest request = new CopyObjectRequest(input.bucket, input.path, bucket, path);
+        CopyObjectRequest request
+            = new CopyObjectRequest(input.bucket, input.path, bucket, path);
         s3.copyObject(request);
         return true;
     }
@@ -286,7 +316,8 @@ public class S3File extends BucketBasedFile {
         return false;
     }
     @Override
-    public boolean copy(InputStream contentStream, long size) throws IOException {
+    public boolean copy(InputStream contentStream
+                        , long size) throws IOException {
         s3.putObject(bucket, path, contentStream, new ObjectMetadata());
         return true;
     }
@@ -344,7 +375,9 @@ public class S3File extends BucketBasedFile {
     public String getHash() throws IOException {
         resolve();
         if (type != Type.FILE) {
-            throw new IOException("Can't hash " + getAbsoluteAddress() + ": not a file");
+            throw new IOException("Can't hash "
+                                  + getAbsoluteAddress()
+                                  + ": not a file");
         }
         else {
             if (objectMeta != null) {
@@ -366,7 +399,9 @@ public class S3File extends BucketBasedFile {
     public long getDate() throws IOException {
         resolve();
         if (type != Type.FILE) {
-            throw new IOException("Can't get date of " + getAbsoluteAddress() + ": not a file");
+            throw new IOException("Can't get date of "
+                                  + getAbsoluteAddress()
+                                  + ": not a file");
         }
         else {
             if (objectMeta != null) {
@@ -445,7 +480,8 @@ public class S3File extends BucketBasedFile {
                     type = Type.FILE;
                 }
                 catch (Exception e) {
-                    // Don't act on exception here, because it could just be a path
+                    // Don't act on exception here, because it could
+                    // just be a path
                 }
             }
             if (type == Type.UNRESOLVED) {
@@ -478,7 +514,9 @@ public class S3File extends BucketBasedFile {
                         }
                     }
 
-                    if (recursiveFileList.size() == 0 && (dirs == null || dirs.size() == 0)) {
+                    if (recursiveFileList.size() == 0
+                        && (dirs == null 
+                            || dirs.size() == 0)) {
                         type = Type.NOT_FOUND;
                         S3File root = new S3File("", s3);
                         for (S3File s3Bucket: root.glist()) {
@@ -513,13 +551,21 @@ public class S3File extends BucketBasedFile {
 
     private boolean isFileNotFound(AmazonS3Exception e) {
         return (e.getStatusCode() == 404
-                && (e.getMessage().equals("Not Found") || e.getErrorCode().equals("NoSuchBucket") ||
-                    e.getErrorCode().equals("NoSuchKey")));
+                && (e.getMessage().equals("Not Found")
+                    || e.getErrorCode().equals("NoSuchBucket")
+                    || e.getErrorCode().equals("NoSuchKey")));
     }
 
     private IOException wrapProperly(String failedCall, AmazonS3Exception e) {
-        return new IOException("Failed to " + failedCall + ": status=" + e.getStatusCode() +
-                               " code=" + e.getErrorCode() + " message=" + e.getMessage(),e );
+        return new IOException("Failed to "
+                               + failedCall
+                               + ": status="
+                               + e.getStatusCode()
+                               + " code="
+                               + e.getErrorCode()
+                               + " message="
+                               + e.getMessage()
+                               , e);
     }
 
     /// Public

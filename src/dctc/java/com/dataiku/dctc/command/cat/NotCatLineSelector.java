@@ -20,4 +20,3 @@ class NotCatLineSelector implements CatLineSelector {
     // Attributes
     private CatLineSelector selector;
 }
-

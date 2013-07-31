@@ -16,7 +16,8 @@ public class Rm extends Command {
         return "Remove files and folders.";
     }
     public void longDescription(IndentedWriter printer) {
-        printer.print(scat("Remove files and folders. By default, it will refuse to remove"
+        printer.print(scat("Remove files and folders. By default, it will"
+                           , "refuse to remove"
                            , "folders. Use -r"));
     }
     // Public
@@ -83,10 +84,19 @@ public class Rm extends Command {
     // Protected
     @Override
     protected void setOptions(List<OptionAgregator> opts) {
-        opts.add(stdOption('v', "verbose", "Explain what i being done."));
-        opts.add(stdOption("rR", "recursive", "Remove directories and their contents recursively."));
-        opts.add(stdOption('f', "force", "Ignore nonexistent files and argumens, never prompt."));
-        opts.add(stdOption('i', "Prompt before every removal."));
+        opts.add(stdOption('v'
+                           , "verbose"
+                           , "Explain what i being done."));
+        opts.add(stdOption("rR"
+                           , "recursive"
+                           , "Remove directories and their contents"
+                           + " recursively."));
+        opts.add(stdOption('f'
+                           , "force"
+                           , "Ignore nonexistent files and arguments,"
+                           + " never prompt."));
+        opts.add(stdOption('i'
+                           , "Prompt before every removal."));
     }
     @Override
     protected String proto() {
@@ -108,17 +118,29 @@ public class Rm extends Command {
     }
     private boolean dirAsk(GFile arg) throws IOException {
         if (arg.isEmpty()) {
-            return Interactive.ask("rm", "rm: remove directory `" + arg.givenName() + "'? ",
-                                   "yY", "nN", getYell());
+            return Interactive.ask("rm"
+                                   , "rm: remove directory `"
+                                   + arg.givenName() + "'? "
+                                   , "yY"
+                                   , "nN"
+                                   , getYell());
         }
         else {
-            return Interactive.ask("rm", "rm: descend into directory `" + arg.givenName() + "'? ",
-                                   "yY", "nN", getYell());
+            return Interactive.ask("rm"
+                                   , "rm: descend into directory `"
+                                   + arg.givenName() + "'? "
+                                   , "yY"
+                                   , "nN"
+                                   , getYell());
         }
     }
     private boolean fileAsk(GFile arg) {
-        return Interactive.ask("rm", "rm: remove regular file `" + arg.givenName() + "'? ",
-                               "yY", "nN", getYell());
+        return Interactive.ask("rm"
+                               , "rm: remove regular file `"
+                               + arg.givenName() + "'? "
+                               , "yY"
+                               , "nN"
+                               , getYell());
     }
     private void notEmpty(GFile arg) {
         error(arg, "Cannot remove, directory not empty", 1);

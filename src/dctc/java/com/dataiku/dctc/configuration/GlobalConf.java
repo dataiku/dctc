@@ -22,7 +22,10 @@ public class GlobalConf {
         return new File(sshConfigPath());
     }
     public static String confPath() {
-        return GlobalConstants.userHome + (GlobalConstants.isWindows ? "/dctcrc" : "/.dctcrc");
+        return GlobalConstants.userHome
+            + (GlobalConstants.isWindows
+               ? "/dctcrc"
+               : "/.dctcrc");
     }
     public static String sshConfigPath() {
         return GlobalConstants.userHome + "/.ssh/config";
@@ -50,7 +53,9 @@ public class GlobalConf {
                 }
             }
             else {
-                throw new UserException("dctc conf: Invalid option '" + key + "' in [global] section");
+                throw new UserException("dctc conf: Invalid option '"
+                                        + key
+                                        + "' in [global] section");
             }
         }
     }
@@ -71,11 +76,23 @@ public class GlobalConf {
             }
             else {
                 try {
-                    String s = new String(DKUtils.execAndGetOutput(new String[]{"sh", "-c", "stty size < /dev/tty"}, null), "utf8");
-                    colNumber =  Integer.parseInt(s.replace("\n", "").split(" ")[1]);
+                    String[] line = new String[]{"sh"
+                                                 , "-c"
+                                                 , "stty size < /dev/tty"};
+                    String s
+                        = new String(DKUtils.execAndGetOutput(line
+                                                              , null)
+                                     , "utf8");
+                    colNumber =  Integer.parseInt(s
+                                                  .replace("\n"
+                                                           , "")
+                                                  .split(" ")[1]);
                 }
                 catch (Exception e) {
-                    yell.yell("conf", "Can't compute terminal width (set it to 80).", e);
+                    yell.yell("conf"
+                              , "Can't compute terminal width (set it"
+                              + " to 80)."
+                              , e);
                     colNumber = 80;
                 }
             }
@@ -104,6 +121,7 @@ public class GlobalConf {
     static private PrinterType printerType = PrinterType.COLORED;
     static private int colNumber;
     static private String display = "auto";
-    static private int threadLimit = Runtime.getRuntime().availableProcessors();
+    static private int threadLimit
+        = Runtime.getRuntime().availableProcessors();
     static private Boolean resolveGlobbing = true;
 }

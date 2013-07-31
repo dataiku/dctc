@@ -13,7 +13,10 @@ import com.dataiku.dip.utils.Params;
 public class CredentialProviderBank {
     public CredentialProviderBank() {
     }
-    private void addCredentialParam(String protocol, String account, String key, String value) {
+    private void addCredentialParam(String protocol
+                                    , String account
+                                    , String key
+                                    , String value) {
         ProtocolCredentials pcre = protocolCredentials.get(protocol);
         if (pcre == null) {
             pcre = new ProtocolCredentials();
@@ -26,7 +29,8 @@ public class CredentialProviderBank {
         }
         accountCred.add(key, value);
     }
-    public void addProtocolSettings(String protocol, Map<String, String> settings) {
+    public void addProtocolSettings(String protocol
+                                    , Map<String, String> settings) {
         String firstAccount = null;
         for (Map.Entry<String, String> setting: settings.entrySet()) {
             String key = setting.getKey();
@@ -43,9 +47,13 @@ public class CredentialProviderBank {
                 protocolToDefaultAccount.put(protocol, value);
             }
             else {
-                throw new UserException(scat("Unexpected parameter", pquoted(key)
-                                             , "in the protocol section", pquoted(protocol) + ", "
-                                             , "expected either `default' or `account.param' key."));
+                throw new UserException(scat("Unexpected parameter"
+                                             , pquoted(key)
+                                             , "in the protocol section"
+                                             , pquoted(protocol)
+                                             + ", "
+                                             , "expected either `default' or"
+                                             + " `account.param' key."));
             }
         }
         if (protocolToDefaultAccount.containsKey(protocol)) {
@@ -54,7 +62,8 @@ public class CredentialProviderBank {
             if (getAccountParamsIfExists(protocol, defaultAccount) == null) {
                 throw new UserException(scat("Invalid default account"
                                              , pquoted(defaultAccount)
-                                             , "for protocol", pquoted(protocol)));
+                                             , "for protocol"
+                                             , pquoted(protocol)));
             }
         }
         else {
@@ -107,15 +116,20 @@ public class CredentialProviderBank {
     private void checkCredentials(Object o, String protocol) {
         if (o == null) {
             if (protocol.equals("s3") || protocol.equals("gs")) {
-                throw ue(protocol, "You can add an account using 'dctc add-account'.");
+                throw ue(protocol
+                         , "You can add an account using 'dctc add-account'.");
             }
             else {
-                throw ue(protocol, "Please edit configuration file: " + GlobalConf.confPath());
+                throw ue(protocol
+                         , "Please edit configuration file: "
+                         + GlobalConf.confPath());
             }
         }
     }
     private UserException ue(String protocol, String msg) {
-        return new UserException("No credentials for protocol '" + protocol + "'. "
+        return new UserException("No credentials for protocol '"
+                                 + protocol
+                                 + "'. "
                                  + msg);
     }
 
@@ -123,6 +137,8 @@ public class CredentialProviderBank {
     public static class ProtocolCredentials extends HashMap<String, Params> {}
 
     // Attributes
-    private Map<String, String> protocolToDefaultAccount = new HashMap<String, String>();
-    private Map<String, ProtocolCredentials> protocolCredentials = new HashMap<String, ProtocolCredentials>();
+    private Map<String, String> protocolToDefaultAccount
+        = new HashMap<String, String>();
+    private Map<String, ProtocolCredentials> protocolCredentials
+        = new HashMap<String, ProtocolCredentials>();
 }

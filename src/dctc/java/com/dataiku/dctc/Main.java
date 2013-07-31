@@ -73,7 +73,8 @@ public class Main {
         }
 
         System.out.println(nlcat(""
-                                 , "For more informations see the project homepage:"
+                                 , "For more informations see the project"
+                                 + " homepage:"
                                  , "http://dctc.io"));
         System.exit(exitCode);
     }
@@ -103,7 +104,10 @@ public class Main {
     }
     public static void setLogger() {
         Logger.getRootLogger().removeAllAppenders();
-        ConsoleAppender ca = new ConsoleAppender(new PatternLayout("[%r] [%t] [%-5p] [%c] %x - %m%n"));
+        ConsoleAppender ca = new ConsoleAppender(new PatternLayout("[%r] [%t] "
+                                                                   + "[%-5p] "
+                                                                   + "[%c] %x -"
+                                                                   + " %m%n"));
         ca.setName("console");
         ca.setTarget(ConsoleAppender.SYSTEM_ERR);
         ca.activateOptions();
@@ -176,7 +180,8 @@ public class Main {
                 conf.parseSsh(GlobalConf.sshConfigFile());
 
                 if (conf.getFileBuilder().check()) {
-                    System.err.println("dctc: One or more errors are present in the configuration file.");
+                    System.err.println("dctc: One or more errors are present "
+                                       + "in the configuration file.");
                 }
             }
             catch (IOException e) {

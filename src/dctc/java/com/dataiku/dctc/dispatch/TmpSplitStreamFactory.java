@@ -35,8 +35,10 @@ public class TmpSplitStreamFactory extends SplitStreamFactory {
         File tmpFile = File.createTempFile("Foo", "bar.toto");
         tmpFile.deleteOnExit();
 
-        Output output = new Output(new FileOutputStream(tmpFile), formatter);
-        TmpOutput tmpOutput = new TmpOutput().withOutput(output).withLocalTmp(tmpFile);
+        Output output = new Output(new FileOutputStream(tmpFile
+                                                        ), formatter);
+        TmpOutput tmpOutput
+            = new TmpOutput().withOutput(output).withLocalTmp(tmpFile);
         map.put(splitIndex, tmpOutput);
 
         return tmpOutput.output;
@@ -45,7 +47,8 @@ public class TmpSplitStreamFactory extends SplitStreamFactory {
     public synchronized void close() {
         // Do the real job here.
         for (Map.Entry<String, TmpOutput> elt : map.entrySet()) {
-            LocalFile f = new LocalFile(elt.getValue().localTmp.getAbsolutePath());
+            LocalFile f
+                = new LocalFile(elt.getValue().localTmp.getAbsolutePath());
             if (f.exists()) {
                 try {
                     GFile out = dir.createSubFile(prefix

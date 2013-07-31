@@ -9,7 +9,9 @@ import com.dataiku.dctc.file.GFile;
 
 // Direct move with archiving/unarchiving management.
 public class SimpleCopyTaskRunnableFactory implements CopyTaskRunnableFactory {
-    public SimpleCopyTaskRunnableFactory(boolean unarchive, boolean archive, boolean preserveDate) {
+    public SimpleCopyTaskRunnableFactory(boolean unarchive
+                                         , boolean archive
+                                         , boolean preserveDate) {
         this.unarchive = unarchive;
         this.archive = archive;
         this.preserveDate = preserveDate;
@@ -22,7 +24,8 @@ public class SimpleCopyTaskRunnableFactory implements CopyTaskRunnableFactory {
                 || fileName.endsWith(".tar")
                 || fileName.endsWith(".tar.bz2")
                 || fileName.endsWith(".tar.gz")) {
-                if (task.dstDir.givenName().endsWith(task.dstDir.fileSeparator())) {
+                if (task.dstDir.givenName()
+                    .endsWith(task.dstDir.fileSeparator())) {
                     return new UnarchiveCopyTask(task.src, task.dstDir);
 
                 } else {
@@ -34,9 +37,11 @@ public class SimpleCopyTaskRunnableFactory implements CopyTaskRunnableFactory {
         if (archive) {
             if (archiveIterable == null) {
                 if (task.dstDir.exists() && task.dstDir.isDirectory()) {
-                    archiveIterable = ArchiveFactory.buildOutput(task
-                                                                 .dstDir
-                                                                 .createSubFile(task.dstDir.getFileName()));
+                    archiveIterable
+                        = ArchiveFactory
+                        .buildOutput(task
+                                     .dstDir
+                                     .createSubFile(task.dstDir.getFileName()));
                 }
                 else {
                     archiveIterable = ArchiveFactory.buildOutput(task.dstDir);
@@ -47,11 +52,16 @@ public class SimpleCopyTaskRunnableFactory implements CopyTaskRunnableFactory {
             return new ArchiveCopyTaskRunnable(task, ite.next());
         }
         else {
-            return new DirectCopyTaskRunnable(task.src
-                                              , task.dstDir.createSubFile(task.dstFileName
-                                                                          , task.src.fileSeparator())
-                                              , task.deleteSrc
-                                              , preserveDate);
+            return new
+                DirectCopyTaskRunnable(task.src
+                                       , task
+                                       .dstDir
+                                       .createSubFile(task.dstFileName
+                                                      , task
+                                                      .src
+                                                      .fileSeparator())
+                                       , task.deleteSrc
+                                       , preserveDate);
         }
     }
 

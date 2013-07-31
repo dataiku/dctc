@@ -21,8 +21,10 @@ public class Cat extends Command {
         return "Display the content of one or several files.";
     }
     public void longDescription(IndentedWriter printer) {
-        printer.print(scat("Concatenates the content of all input files to standard output."
-                           ,"GZip compressed files are automatically uncompressed"));
+        printer.print(scat("Concatenates the content of all input files"
+                           , "to standard output."
+                           , "GZip compressed files are automatically"
+                           , "uncompressed"));
     }
 
     // Public
@@ -57,15 +59,31 @@ public class Cat extends Command {
     // Protected
     @Override
     protected void setOptions(List<OptionAgregator> options) {
-        options.add(stdOption('n', "number", "Number all output lines."));
-        options.add(stdOption('E', "show-ends", "Display $ at end of each line."));
-        options.add(stdOption('s', "squeeze-blank", "Suppress repeated empty output lines."));
-        options.add(stdOption('v', "show-nonprinting", "Use ^ and M- notation exception for LFD and TAB."));
-        options.add(stdOption('T', "show-tabs", "display TAB characters as ^I"));
-        options.add(stdOption('t', "Equivalent to -vT"));
-        options.add(stdOption('e', "Equivalent to -vE"));
-        options.add(stdOption('A', "show-all", "Equivalent to -vET"));
-        options.add(stdOption('b', "number-nonblank", "number nonempty output lines, overrides -n"));
+        options.add(stdOption('n'
+                              , "number"
+                              , "Number all output lines."));
+        options.add(stdOption('E'
+                              , "show-ends"
+                              , "Display $ at end of each line."));
+        options.add(stdOption('s'
+                              , "squeeze-blank"
+                              , "Suppress repeated empty output lines."));
+        options.add(stdOption('v'
+                              , "show-nonprinting"
+                              , "Use ^ and M- notation exception for"
+                              + " LFD and TAB."));
+        options.add(stdOption('T'
+                              , "show-tabs"
+                              , "display TAB characters as ^I"));
+        options.add(stdOption('t'
+                              , "Equivalent to -vT"));
+        options.add(stdOption('e'
+                              , "Equivalent to -vE"));
+        options.add(stdOption('A'
+                              , "show-all", "Equivalent to -vET"));
+        options.add(stdOption('b'
+                              , "number-nonblank"
+                              , "number nonempty output lines, overrides -n"));
         options.add(new WithoutArgOptionAgregator()
                     .withOpt(new ShortOption().withOpt("u"))
                     .withDescription("Ignored."));

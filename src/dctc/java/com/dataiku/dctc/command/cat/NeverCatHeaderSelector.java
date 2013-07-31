@@ -6,4 +6,3 @@ public class NeverCatHeaderSelector implements CatHeaderPrinter {
     public void print(GFile file) {
     }
 }
-

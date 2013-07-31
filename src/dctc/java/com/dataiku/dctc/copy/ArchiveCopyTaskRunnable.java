@@ -59,8 +59,8 @@ public class ArchiveCopyTaskRunnable extends CopyTaskRunnable {
             return task.src.getFileName();
         }
         else {
-            return PathManip.makeRelative(task.dstFileName,
-                                                 task.src.absolutePattern());
+            return PathManip.makeRelative(task.dstFileName
+                                          , task.src.absolutePattern());
         }
     }
 

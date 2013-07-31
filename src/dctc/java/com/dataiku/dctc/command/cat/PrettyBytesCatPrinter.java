@@ -21,7 +21,10 @@ class PrettyBytesCatPrinter extends AbstractCatPrinter {
             getEol().print();
         }
         catch (IOException e) {
-            //yell("Unexpected error while reading " + file.givenName(), e, 2);
+            // FIXME: yell("Unexpected error while reading "
+            //             + file.givenName()
+            //             , e
+            //             , 2);
         }
     }
     public void end() {
@@ -63,4 +66,3 @@ class PrettyBytesCatPrinter extends AbstractCatPrinter {
     private boolean showTabulation;
 
 }
-

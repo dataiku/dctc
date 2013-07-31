@@ -18,7 +18,8 @@ public class ZipInputArchiveIterator extends InputArchiveIterator {
             return input.available() == 1;
         }
         catch (IOException e) {
-            System.err.println("dctc ZipInputArchiveIterator: " + e.getMessage());
+            System.err.println("dctc ZipInputArchiveIterator: "
+                               + e.getMessage());
             // FIXME: YellPolicy
             return false;
         }
@@ -34,7 +35,8 @@ public class ZipInputArchiveIterator extends InputArchiveIterator {
             return new ZipInputArchiveEntry(entry, input);
         }
         catch (IOException e) {
-            System.err.println("dctc ZipInputArchiveIterator: " + e.getMessage());
+            System.err.println("dctc ZipInputArchiveIterator: "
+                               + e.getMessage());
             // FIXME: YellPolicy
             return null;
         }

@@ -70,7 +70,8 @@ public class CatAlgorithmFactory {
                     else {
                         header = new NonEmptyLinumCatHeader();
                     }
-                    cat.getPrinter().setHeader(header                            .withIndentSeparator(" ")
+                    cat.getPrinter().setHeader(header
+                                               .withIndentSeparator(" ")
                             .withLineNumber(lineNumber)
                             .withNumberIncrement(1)
                             .withNumberOfCol(6));
@@ -178,12 +179,13 @@ public class CatAlgorithmFactory {
                     .withStop(new ContinueCatStop());
             }
             else {
+                CatPrinter printer = new SimpleCatPrinter()
+                    .withHeader(new EmptyCatHeader())
+                    .withEol(new NewLineEOLCatPrinter());
                 linum.withSelect(new FullCatLineSelector())
                     .withPrinter(new SkipFirstLine()
                                  .withSkipNbLine(-skipFirst)
-                                 .withPrinter(new SimpleCatPrinter()
-                                              .withHeader(new EmptyCatHeader())
-                                              .withEol(new NewLineEOLCatPrinter())))
+                                 .withPrinter(printer))
                     .withStop(new ContinueCatStop());
             }
 
@@ -264,7 +266,8 @@ public class CatAlgorithmFactory {
     public void setSqueezeMultipleEmpty(boolean squeezeMultipleEmpty) {
         this.squeezeMultipleEmpty = squeezeMultipleEmpty;
     }
-    public CatAlgorithmFactory withSqueezeMultipleEmpty(boolean squeezeMultipleEmpty) {
+    public CatAlgorithmFactory
+        withSqueezeMultipleEmpty(boolean squeezeMultipleEmpty) {
         setSqueezeMultipleEmpty(squeezeMultipleEmpty);
         return this;
     }

@@ -16,7 +16,8 @@ public class StandardFile implements GFile {
     }
     @Override
     public StandardFile createInstanceFor(String path) {
-        if (!path.isEmpty()) {
+        if (!path.isEmpty()) { // FIXME: Remove this code.
+            // cp dir -, should copy all files on the standard output.
             throw new Error("Invalid operation");
         }
         return this;
@@ -34,7 +35,8 @@ public class StandardFile implements GFile {
         return createInstanceFor(path);
     }
     @Override
-    public GFile createSubFile(String path, String fileSeparator) throws IOException {
+    public GFile createSubFile(String path
+                               , String fileSeparator) throws IOException {
         return createInstanceFor(path);
     }
     @Override
@@ -155,7 +157,8 @@ public class StandardFile implements GFile {
         return false;
     }
     @Override
-    public boolean copy(InputStream contentStream, long size) throws IOException {
+    public boolean copy(InputStream contentStream
+                        , long size) throws IOException {
         return false;
     }
     @Override

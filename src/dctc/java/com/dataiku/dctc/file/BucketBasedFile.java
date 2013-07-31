@@ -4,8 +4,9 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * A small abstraction for file systems that have a notion of buckets and paths within a bucket;
- * Each file object has a "state", depending on whether we have stat() this file or not.
+ * A small abstraction for file systems that have a notion of buckets
+ * and paths within a bucket; Each file object has a "state",
+ * depending on whether we have stat() this file or not.
  */
 public abstract class BucketBasedFile extends AbstractGFile {
     BucketBasedFile(boolean autoRecur) {
@@ -13,11 +14,13 @@ public abstract class BucketBasedFile extends AbstractGFile {
     }
     /**
      * Computes the type of this file and relevant info:
-     *   - If type is ROOT, should cache the list of buckets
-     *   - If type is PATH_IN_BUCKET, should cache the recursive list with metadata info
-     *   - If type is FILE, should cache the metadata info for this file
+     * - If type is ROOT, should cache the list of buckets;
+     * - If type is PATH_IN_BUCKET, should cache the recursive list
+     *     with metadata info;
+     * - If type is FILE, should cache the metadata info for this file.
      *
-     * Type should not be UNRESOLVED anymore after this method (ie, use finally)
+     * Type should not be UNRESOLVED anymore after this method (ie,
+     * use finally)
      */
     protected abstract void resolve() throws IOException;
 
@@ -55,7 +58,9 @@ public abstract class BucketBasedFile extends AbstractGFile {
     }
     @Override
     public String givenName() {
-        return getProtocol() + "://" + PathManip.concat(bucket, path, fileSeparator());
+        return getProtocol()
+            + "://"
+            + PathManip.concat(bucket, path, fileSeparator());
     }
     @Override
     public String givenPath() {
@@ -63,7 +68,8 @@ public abstract class BucketBasedFile extends AbstractGFile {
     }
     @Override
     public String getAbsolutePath() {
-        return fileSeparator() + PathManip.concat(bucket, path, fileSeparator());
+        return fileSeparator()
+            + PathManip.concat(bucket, path, fileSeparator());
     }
     @Override
     public boolean hasAcl() {

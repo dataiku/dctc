@@ -17,7 +17,11 @@ import com.dataiku.dctc.file.FileBuilder.Protocol;
 import com.dataiku.dip.utils.Params;
 
 public class FTPFile extends AbstractGFile {
-    public FTPFile(String server, String username, String password, String path, int port) {
+    public FTPFile(String server
+                   , String username
+                   , String password
+                   , String path
+                   , int port) {
         this.server = server;
         this.username = username;
         this.password = password;
@@ -27,8 +31,12 @@ public class FTPFile extends AbstractGFile {
             this.path = "/";
         }
     }
-    public FTPFile(String server, String username, String password,
-                   String path, int port, org.apache.commons.net.ftp.FTPFile file) {
+    public FTPFile(String server
+                   , String username
+                   , String password
+                   , String path
+                   , int port
+                   , org.apache.commons.net.ftp.FTPFile file) {
         this.server = server;
         this.username = username;
         this.password = password;
@@ -69,12 +77,20 @@ public class FTPFile extends AbstractGFile {
     @Override
     public FTPFile createSubFile(String path, String separator) {
         return new FTPFile(server, username, password,
-                           PathManip.concat(this.path, path, fileSeparator(), separator),
+                           PathManip.concat(this.path
+                                            , path
+                                            , fileSeparator()
+                                            , separator),
                            port);
     }
-    public FTPFile createSubFile(String path, String separator, org.apache.commons.net.ftp.FTPFile file) {
+    public FTPFile createSubFile(String path
+                                 , String separator
+                                 , org.apache.commons.net.ftp.FTPFile file) {
         return new FTPFile(server, username, password,
-                           PathManip.concat(this.path, path, fileSeparator(), separator),
+                           PathManip.concat(this.path
+                                            , path
+                                            , fileSeparator()
+                                            , separator),
                            port, file);
     }
 
@@ -202,7 +218,8 @@ public class FTPFile extends AbstractGFile {
         ftpInit();
         cwd("/");
         if (!ftp.makeDirectory(getAbsolutePath())) {
-            throw new IOException("Unknown error while creating " + pathToFile());
+            throw new IOException("Unknown error while creating "
+                                  + pathToFile()); // FIXME: pquoted!
         }
     }
     @Override
@@ -210,7 +227,8 @@ public class FTPFile extends AbstractGFile {
         ftpInit();
         cwd("/");
         if (!ftp.makeDirectory(getAbsolutePath())) {
-            throw new IOException("Unknown error while creating " + getAbsolutePath());
+            throw new IOException("Unknown error while creating "
+                                  + getAbsolutePath()); // FIXME: pquoted!
         }
     }
     @Override
@@ -218,7 +236,8 @@ public class FTPFile extends AbstractGFile {
         ftpInit();
         cwd("/");
         if (!ftp.makeDirectory(pathToFile())) {
-            throw new IOException("Unknown error while creating " + pathToFile());
+            throw new IOException("Unknown error while creating "
+                                  + pathToFile()); // FIXME: pquoted!
         }
     }
     @Override
@@ -236,7 +255,8 @@ public class FTPFile extends AbstractGFile {
             return res;
         }
         catch (IllegalArgumentException e) {
-            throw new IOException("No such file or directory " + getAbsoluteAddress());
+            throw new IOException("No such file or directory "
+                                  + getAbsoluteAddress());
         }
     }
     @Override
@@ -333,13 +353,17 @@ public class FTPFile extends AbstractGFile {
             throw new IOException ("Failed to connect to " + server, e);
         }
         if (!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
-            throw new IOException("Failed to connect to " + server + ": FTP return code " +ftp.getReplyCode());
+            throw new IOException("Failed to connect to "
+                                  + server
+                                  + ": FTP return code "
+                                  + ftp.getReplyCode());
         }
     }
     private void login()throws IOException {
         ftp.enterLocalPassiveMode();
         if (!ftp.login(username, password)) {
-            throw new IOException("Could not connect with account/password, login failed");
+            throw new IOException("Could not connect with account/password,"
+                                  + " login failed");
         }
     }
     private void ftpInit() throws IOException {
@@ -357,7 +381,9 @@ public class FTPFile extends AbstractGFile {
         }
         else {
             ftp.cwd(path);
-            return !ftp.printWorkingDirectory().equals("\"" + fileSeparator() + "\"")
+            return !ftp.printWorkingDirectory().equals("\""
+                                                       + fileSeparator()
+                                                       + "\"")
                 && !ftp.printWorkingDirectory().equals(fileSeparator());
         }
     }

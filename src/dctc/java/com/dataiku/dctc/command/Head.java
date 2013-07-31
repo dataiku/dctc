@@ -21,9 +21,19 @@ public class Head extends Command {
         printer.print("Output the first N lines of the input files");
     }
     protected void setOptions(List<OptionAgregator> opts) {
-        opts.add(stdOption('n', "lines", "Display the first `number' lines of each file", true, "K"));
-        opts.add(stdOption('c', "bytes", "Print the first k bytes  of each file.", true, "K"));
-        opts.add(stdOption('q', "quiet", "Never output headers giving file names.")
+        opts.add(stdOption('n'
+                           , "lines"
+                           , "Display the first `number' lines of each file"
+                           , true
+                           , "K"));
+        opts.add(stdOption('c'
+                           , "bytes"
+                           , "Print the first k bytes  of each file."
+                           , true
+                           , "K"));
+        opts.add(stdOption('q'
+                           , "quiet"
+                           , "Never output headers giving file names.")
                  .withOpt(new LongOption().withOpt("silent")));
     }
     @Override

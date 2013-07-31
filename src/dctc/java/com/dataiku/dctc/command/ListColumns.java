@@ -23,7 +23,8 @@ import com.dataiku.dip.utils.PrettyArray;
 public class ListColumns extends Command {
     // Public
     public void longDescription(IndentedWriter printer) {
-        printer.print("List the name of the column, and pretty print it in a table.");
+        printer.print("List the name of the column, and pretty print it in"
+                      + " a table.");
     }
     public String tagline() {
         return "List the name of the column.";
@@ -61,7 +62,10 @@ public class ListColumns extends Command {
 
             { // Get the column names
                 try {
-                    inputStream = new GeneralizedFileInputSplit(arg, AutoGZip.buildInput(arg));
+                    inputStream
+                        = new GeneralizedFileInputSplit(arg
+                                                        , AutoGZip
+                                                        .buildInput(arg));
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -69,7 +73,13 @@ public class ListColumns extends Command {
                 }
 
                 try {
-                    extractor.run(inputStream, out, null, stream, new StreamRowFactory(), null, limit);
+                    extractor.run(inputStream
+                                  , out
+                                  , null
+                                  , stream
+                                  , new StreamRowFactory()
+                                  , null
+                                  , limit);
                 }
                 catch (Exception e) {
                     error("Unexpected error", e, 3);

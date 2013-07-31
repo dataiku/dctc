@@ -41,7 +41,8 @@ public class SshUserInfo implements UserInfo {
     @Override
     public boolean promptYesNo(String arg0) {
         if (PrettyString.isInteractif()) {
-            System.out.print(arg0.substring(0, arg0.length() - 1) + " (yes/no)? ");
+            System.out.print(arg0.substring(0, arg0.length() - 1)
+                             + " (yes/no)? ");
             System.out.flush();
             while (true) {
                 String response = System.console().readLine();

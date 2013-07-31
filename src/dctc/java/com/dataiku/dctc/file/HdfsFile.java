@@ -57,10 +57,10 @@ public class HdfsFile extends AbstractGFile {
     }
     @Override
     public HdfsFile createSubFile(String path, String separator) {
-        return createInstanceFor(PathManip.concat(this.path,
-                                                         path,
-                                                         fileSeparator(),
-                                                         separator));
+        return createInstanceFor(PathManip.concat(this.path
+                                                  , path
+                                                  , fileSeparator()
+                                                  , separator));
     }
 
     // Public
@@ -118,9 +118,18 @@ public class HdfsFile extends AbstractGFile {
             while (!task.empty()) {
                 FileStatus status = task.pop();
                 Path path = status.getPath().getParent();
-                recursiveList.add(PathManip.concat(path == null ? "" : path.toString().substring(7), status.getPath().getName(), fileSeparator()));
+                recursiveList.add(PathManip.concat(path == null
+                                                   ? ""
+                                                   : path
+                                                   .toString()
+                                                   .substring(7)
+                                                   , status
+                                                   .getPath()
+                                                   .getName()
+                                                   , fileSeparator()));
                 if (status.isDir()) {
-                    for (FileStatus st: fileSystem.listStatus(status.getPath())) {
+                    for (FileStatus st: fileSystem
+                             .listStatus(status.getPath())) {
                         task.add(st);
                     }
                 }
@@ -151,7 +160,8 @@ public class HdfsFile extends AbstractGFile {
     public void mkdir() throws IOException {
         if (!createInstanceFor(pathToFile()).isDirectory()) {
             throw new IOException("Can't mkdir, parent folder "
-                                  + pathToFile() + " does not exist or is not a directory");
+                                  + pathToFile()
+                                  + " does not exist or is not a directory");
         }
         mkdirs();
     }
@@ -228,8 +238,11 @@ public class HdfsFile extends AbstractGFile {
     private void initFileSystem() throws IOException {
         if (fileSystem == null) {
             this.fileSystem = FileSystem.get(conf);
-            if (this.fileSystem instanceof RawLocalFileSystem || this.fileSystem instanceof LocalFileSystem) {
-                throw new IOException("HDFS initialization returned a LocalFileSystem. Maybe you need to configure your HDFS location ?");
+            if (this.fileSystem instanceof RawLocalFileSystem
+                || this.fileSystem instanceof LocalFileSystem) {
+                throw new IOException("HDFS initialization returned a"
+                                      + " LocalFileSystem. Maybe you need to"
+                                      + " configure your HDFS location ?");
             }
         }
     }

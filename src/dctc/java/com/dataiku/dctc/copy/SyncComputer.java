@@ -62,7 +62,9 @@ public class SyncComputer {
                     }
                     break;
                 case TIME_ONLY:
-                    if (src.hasDate() && dst.hasDate() &&  src.getDate() <= dst.getDate()) {
+                    if (src.hasDate()
+                        && dst.hasDate()
+                        &&  src.getDate() <= dst.getDate()) {
                         return false;
                     }
                     break;
@@ -72,7 +74,8 @@ public class SyncComputer {
                     }
                     break;
                 case TIME_AND_SIZE:
-                    if (dst.getSize() == src.getSize() && !dateIsDifferent(src, dst)) {
+                    if (dst.getSize() == src.getSize()
+                        && !dateIsDifferent(src, dst)) {
                         return false;
                     }
                     break;
@@ -82,7 +85,9 @@ public class SyncComputer {
                 logger.debug("dst already exists but required s1="
                              + src.getSize() + " ds=" + dst.getSize());
             } else {
-                logger.debug("dst " + dst.getAbsoluteAddress() + " does not exist");
+                logger.debug("dst "
+                             + dst.getAbsoluteAddress()
+                             + " does not exist");
             }
             createDst(src, dst);
             return true;
@@ -107,7 +112,8 @@ public class SyncComputer {
     public List<CopyTask> computeTasksList() throws IOException {
         checkArgs(sources, target);
 
-        // Compute the recursive target list, so that subsequent existence checks on subfiles work
+        // Compute the recursive target list, so that subsequent
+        // existence checks on subfiles work
         if (target.isDirectory()) {
             target.grecursiveList();
         }
@@ -125,25 +131,31 @@ public class SyncComputer {
                         if (subfile.givenName().equals(source.givenName())) {
                             continue;
                         }
-                        String dstRoot = PathManip.getSonPath(source.givenName(),
-                                                                     subfile.givenName(),
-                                                                     source.fileSeparator());
+                        String dstRoot
+                            = PathManip.getSonPath(source.givenName()
+                                                   , subfile.givenName()
+                                                   , source.fileSeparator());
                         if (includeLastPathElementInTarget &&
                             (target.exists() || sources.size() > 1)) {
-                            dstRoot = PathManip.concat(source.getFileName(),
-                                                              dstRoot, source.fileSeparator());
+                            dstRoot
+                                = PathManip.concat(source.getFileName()
+                                                   , dstRoot
+                                                   , source.fileSeparator());
                         }
                         addCandidate(subfile, target, dstRoot);
                     }
                 }
             } else if (source.isFile()) {
-                if (target.isDirectory() || target.givenName().endsWith(target.fileSeparator())) {
+                if (target.isDirectory()
+                    || target.givenName().endsWith(target.fileSeparator())) {
                     addCandidate(source, target, source.getFileName());
                 } else {
                     addCandidate(source, target, "");
                 }
             } else {
-                throw new IOException("Source is neither a file nor a directory " + source.getAbsoluteAddress());
+                throw new
+                    IOException("Source is neither a file nor a directory "
+                                + source.getAbsoluteAddress()); // FIXME: quote
             }
         }
         return taskList;
@@ -158,26 +170,34 @@ public class SyncComputer {
             String srcAddress = src.get(i).getAbsoluteAddress();
 
             if (srcAddress.equals(dstAddress)) {
-                throw new IOException("`" + srcAddress + "' and `" + dstAddress + "' are the same file.");
+                throw new IOException("`"
+                                      + srcAddress
+                                      + "' and `"
+                                      + dstAddress
+                                      + "' are the same file.");
             }
             if (i != 0 && prevSrcAddress.equals(srcAddress)) {
-                throw new IOException("source file '" + srcAddress + "' specified more than once.");
+                throw new IOException("source file '"
+                                      + srcAddress
+                                      + "' specified more than once.");
             }
             prevSrcAddress = srcAddress;
         }
-        //       if (dst.exists() && !dst.isDirectory()) {
-        //           // src has at least, one element (checked by earlyCheck()).
-        //           if (src.length > 1 && !dst.isDirectory() && !archive()) {
-        //               error(dstAddress, "is not a directory or the destination is not compressed.", 2);
-        //               return true;
-        //           }
-        //       }
         return false;
     }
 
-    private void addCandidate(GFile src, GFile dst, String root) throws IOException {
+    private void addCandidate(GFile src
+                              , GFile dst
+                              , String root) throws IOException {
         // Syncing empty folders still causes trouble ...
-        if (src.isDirectory()) return;
+        // FIXME: False.
+        if (src.isDirectory()) {
+            return;
+            // FIXME: Should be added as for a file. The copy will
+            // create the path, then the directory himself. This bug
+            // was *DELETED* 2-3 months ago, before this
+            // implementation.
+        }
 
         if (compressTargets && !src.isDirectory() && !root.endsWith(".gz")) {
             root += ".gz";
@@ -186,8 +206,11 @@ public class SyncComputer {
             root = root.substring(0, root.length() - 3);
         }
 
-        logger.debug("Checking candidate " + src.getAbsoluteAddress() + " with " + filter);
-        if (filter == null || filter.accept(src, dst, root)) {
+        logger.debug("Checking candidate "
+                     + src.getAbsoluteAddress()
+                     + " with " + filter); // FIXME: No logger.
+        if (filter == null
+            || filter.accept(src, dst, root)) {
             logger.debug("Adding task " + src.getAbsoluteAddress());
             taskList.add(new CopyTask(src, dst, root, deleteSources));
         } else {
@@ -198,4 +221,5 @@ public class SyncComputer {
     // Attributes
     private List<CopyTask> taskList = new ArrayList<CopyTask>();
     private static Logger logger = Logger.getLogger("dctc.sync");
+    // FIXME: Delete all loggers
 }

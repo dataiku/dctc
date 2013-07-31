@@ -29,8 +29,13 @@ abstract public class AbstractTransferRateDisplay implements ThreadedDisplay {
                 synchronized (elt) {
                     if (elt.isDone()) {
                         /* Sanity checks */
+                        // FIXME: Sanity checks *ARE* assert
                         if (!elt.isStarted()) {
-                            System.err.println("Unexpected: done and not started for " +  elt.getInputFile().getAbsoluteAddress());
+                            System.err.println("Unexpected: done and not"
+                                               + " started for "
+                                               +  elt
+                                               .getInputFile()
+                                               .getAbsoluteAddress());
                         }
                         ++nbDone;
                         if (elt.getException() != null) {
@@ -58,7 +63,8 @@ abstract public class AbstractTransferRateDisplay implements ThreadedDisplay {
                 bndWdth = moyBndWdth / 10;
                 moyBndWdth = 0;
             }
-            moyBndWdth += (bandWidth[cursorPos()] - bandWidth[(cursorPos() + 1) % 10]);
+            moyBndWdth += bandWidth[cursorPos()]
+                - bandWidth[(cursorPos() + 1) % 10];
 
             ++tick;
             endLoop();

@@ -8,7 +8,9 @@ import com.dataiku.dip.input.stream.EnrichedInputStream;
 import com.dataiku.dip.input.stream.StreamsInputSplit;
 
 public class GeneralizedFileInputSplit extends StreamsInputSplit {
-    public GeneralizedFileInputSplit(GFile f, InputStream stream) throws IOException {
+    public GeneralizedFileInputSplit(GFile f
+                                     , InputStream stream)
+        throws IOException {
         this.in = new BasicEnrichedInputStream(stream,
                                                f.getSize());
         this.desc = f.getAbsoluteAddress();

@@ -18,7 +18,8 @@ class PartialFileTailAlgorithm extends AbstractCatAlgorithm {
                 size = file.getSize();
             }
             catch (IOException e) {
-                yell("Unexpected error while getting the size of " + file.givenName(), e, 1);
+                yell("Unexpected error while getting the size of "
+                     + file.givenName(), e, 1);
                 return -1;
             }
         }
@@ -29,14 +30,17 @@ class PartialFileTailAlgorithm extends AbstractCatAlgorithm {
             StringWriter writer = new StringWriter();
             try {
                 size -= GlobalConstants.FIVE_MIO;
-                IOUtils.copy(file.getRange(size, GlobalConstants.FIVE_MIO), writer, "UTF-8");
+                IOUtils.copy(file.getRange(size, GlobalConstants.FIVE_MIO)
+                             , writer, "UTF-8");
             } catch (IOException e) {
                 yell("Unexpected error on " + file.givenName(), e, 1);
             }
             line = writer.toString() + line;
         }
         String[] lines = line.split("\n");
-        for (int i = Math.max(0, lines.length - getNbLine()); i < lines.length; ++i) {
+        for (int i = Math.max(0, lines.length - getNbLine());
+             i < lines.length;
+             ++i) {
             if (lines[i] != null) {
                 System.out.println(lines[i]);
             }

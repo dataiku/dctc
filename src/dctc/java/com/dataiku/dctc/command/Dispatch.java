@@ -41,31 +41,88 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
         return "Dispatches the content of input files to output files.";
     }
     public void longDescription(IndentedWriter printer) {
-        printer.paragraph(scat("This command split the input files to output files. Input files are"
-                               , "split in records based on the specified format."
-                               , "For each record, the target output file is computed according to"
-                               , "a dispatch function, and the record is appended to the computed"
+        printer.paragraph(scat("This command split the input files to output"
+                               , "files. Input files are split in records"
+                               , "based on the specified format."
+                               , "For each record, the target output file"
+                               , "is computed according to"
+                               , "a dispatch function, and the record is"
+                               ,"appended to the computed"
                                , "output.")
-                          , scat("For example this uses the value of the first column of each line"
-                                , "of each file in 'input/'. This value becomes the target file name"
-                                , "within the 'dispatched/' folders:"
-                                , "dctc dispatch inputs/ dispatched/ -function value -column col_0")
-                          , scat("Dispatch supports delimited files (CSV, TSV)."));
+                          , scat("For example this uses the value of the"
+                                 , "first column of each line"
+                                 , "of each file in 'input/'. This value"
+                                 , "becomes the target file name"
+                                 , "within the 'dispatched/' folders:"
+                                 , "dctc dispatch inputs/ dispatched/"
+                                 , "-function value -column col_0")
+                          , scat("Dispatch supports delimited files (CSV,"
+                                 , "TSV)."));
     }
     @Override
     protected void setOptions(List<OptionAgregator> opts) {
-        opts.add(stdOption('c', "compress", "Compress all files (add a .gz extension)."));
-        opts.add(stdOption('p', "prefix", "Prefix the names of output files with a constant string", true, "PREFIX"));
-        opts.add(stdOption('s', "suffix", "Suffix the names of output files with a constant string", true, "SUFFIX"));
-        opts.add(stdOption("l", "column", "Column to use for 'value', 'hash' and 'time' functions.", true, "COLUMN-NAME"));
-        opts.add(stdOption('f', "function", "Function to use to dispatch (one of 'random', 'value', 'hash', or 'time').", true, "FUNCTION_NAME"));
-        opts.add(stdOption("n", "nb-files", "Number of output files to create for 'hash' and 'random' functions", true, "NUMBER"));
-        opts.add(stdOption("t", "time-format", "Time format string for the 'time' function.", true, "FORMAT"));
-        opts.add(stdOption("r", "time-period", "Dispatch time period for the 'time' function (one of 'year', 'month', 'day' or 'hour').", true, "PERIOD"));
-        opts.add(stdOption("o", "input-format", "Format type for the input files. Only supports 'csv'.", true, "FILE-FORMAT"));
-        opts.add(stdOption("e", "input-separator", "Separator character for CSV format", true, "SEPARATOR"));
-        opts.add(stdOption("q", "input-quote", "Quote character for CSV format", true, "QUOTE-CHAR"));
-        opts.add(stdOption("", "charset", "Select a charset", true, "CHARSET-NAME"));
+        opts.add(stdOption('c'
+                           , "compress"
+                           , "Compress all files (add a .gz extension)."));
+        opts.add(stdOption('p'
+                           , "prefix"
+                           , "Prefix the names of output files with a constant"
+                           + " string"
+                           , true
+                           , "PREFIX"));
+        opts.add(stdOption('s'
+                           , "suffix"
+                           , "Suffix the names of output files with a constant"
+                           + " string"
+                           , true
+                           , "SUFFIX"));
+        opts.add(stdOption("l"
+                           , "column"
+                           , "Column to use for 'value', 'hash' and 'time'"
+                           + " functions."
+                           , true
+                           , "COLUMN-NAME"));
+        opts.add(stdOption('f'
+                           , "function"
+                           , "Function to use to dispatch (one of 'random',"
+                           + " 'value', 'hash', or 'time')."
+                           , true
+                           , "FUNCTION_NAME"));
+        opts.add(stdOption("n"
+                           , "nb-files"
+                           , "Number of output files to create for 'hash'"
+                           + " and 'random' functions", true, "NUMBER"));
+        opts.add(stdOption("t"
+                           , "time-format"
+                           , "Time format string for the 'time' function."
+                           , true, "FORMAT"));
+        opts.add(stdOption("r"
+                           , "time-period"
+                           , "Dispatch time period for the 'time' function"
+                           + " (one of 'year', 'month', 'day' or 'hour')."
+                           , true
+                           , "PERIOD"));
+        opts.add(stdOption("o"
+                           , "input-format"
+                           , "Format type for the input files. Only supports"
+                           + " 'csv'."
+                           , true
+                           , "FILE-FORMAT"));
+        opts.add(stdOption("e"
+                           , "input-separator"
+                           , "Separator character for CSV format"
+                           , true
+                           , "SEPARATOR"));
+        opts.add(stdOption("q"
+                           , "input-quote"
+                           , "Quote character for CSV format"
+                           , true
+                           , "QUOTE-CHAR"));
+        opts.add(stdOption(""
+                           , "charset"
+                           , "Select a charset",
+                           true
+                           , "CHARSET-NAME"));
     }
 
     @Override
@@ -98,7 +155,9 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
             }
             if (getOptionValue("-input-file") != null
                 && getOptionValue("-input-file").size() > 0
-                && getOptionValue("-input-file").get(0).equalsIgnoreCase("csv")) {
+                && (getOptionValue("-input-file")
+                    .get(0)
+                    .equalsIgnoreCase("csv"))) {
                 postfix += ".csv";
             }
             else {
@@ -177,7 +236,8 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
         ThreadedDisplay display = GlobalConf.getDisplay();
         CopyTasksExecutor exec = new CopyTasksExecutor(fact
                                                        , display
-                                                       , GlobalConf.getThreadLimit());
+                                                       , GlobalConf
+                                                       .getThreadLimit());
         try {
             exec.run(tasks, false);
             fact.close();
@@ -243,14 +303,17 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
             }
 
             return new DateFunction(timeFormat()
-                                    , TimeDimension.Period.valueOf(timeUnit().toUpperCase()));
+                                    , TimeDimension
+                                    .Period
+                                    .valueOf(timeUnit().toUpperCase()));
         case MERGE:
             return new MergeFunction();
         default:
             throw new Error("Never reached.");
         }
     }
-    private Format buildFormat(SplitFunctionNames function, CopyTask sampleTask) {
+    private Format buildFormat(SplitFunctionNames function
+                               , CopyTask sampleTask) {
         String defaultFormat = function == SplitFunctionNames.RANDOM
             ? "line"
             : "csv";
@@ -259,7 +322,8 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
         String charset = getOptionValue("-charset", "utf-8");
 
         if (format.equalsIgnoreCase("auto")) {
-            throw new NotImplementedException("Auto format is not yet implemented");
+            throw new NotImplementedException("Auto format is not yet"
+                                              + " implemented");
         }
         else if (format.equalsIgnoreCase("csv")) {
             String sep = getOptionValue("-input-separator", ",");
@@ -274,7 +338,8 @@ public class Dispatch extends ListFilesCommand { // FIXME: Why?
         }
         throw new NotImplementedException("Format '"
                                           + format
-                                          + "' is not implemented, use 'csv' or 'line'");
+                                          + "' is not implemented, use 'csv'"
+                                          + " or 'line'");
     }
     private UserException missingParam(String paramName) {
         return new UserException("'" + paramName + "'" + "is required for '"

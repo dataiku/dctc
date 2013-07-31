@@ -22,8 +22,11 @@ class LessSimpleDisplay extends AbstractTransferRateDisplay {
             prettyFail = String.format("(%d have failed) ", fail);
         }
         print(scat("done:"
-                   , Size.getReadableSize(doneTransfer()), "/", prettyWholeSize()
-                   , "in", FriendlyTime.elapsedTime(getElapsedTime() / 1000)
+                   , Size.getReadableSize(doneTransfer())
+                   , "/"
+                   , prettyWholeSize()
+                   , "in"
+                   , FriendlyTime.elapsedTime(getElapsedTime() / 1000)
                    , nbDone(), "/", nbFiles(), "files done", prettyFail
                    , "-", Size.getReadableSize(getBnd()) + "Bps -"
                    , nbRunning(), "transfer(s) running."));
@@ -38,6 +41,7 @@ class LessSimpleDisplay extends AbstractTransferRateDisplay {
         System.out.println();
         System.out.println(scat("Copied,"
                                 , Size.getReadableSize(doneTransfer()),"in"
-                                , FriendlyTime.elapsedTime(getTotalElapsedTime() / 1000)));
+                                , FriendlyTime
+                                .elapsedTime(getTotalElapsedTime() / 1000)));
     }
 }

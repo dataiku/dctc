@@ -17,7 +17,9 @@ public class HttpFileBuilder extends ProtocolFileBuilder {
     }
 
     @Override
-    public HttpFile buildFile(String accountSettings, String rawPath, YellPolicy yell) {
+    public HttpFile buildFile(String accountSettings
+                              , String rawPath
+                              , YellPolicy yell) {
         return new HttpFile(rawPath);
     }
     @Override

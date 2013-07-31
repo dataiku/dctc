@@ -26,7 +26,8 @@ public class SplitTask extends CopyTaskRunnable {
         if (format == null) {
             format = new Format("csv").withParam("separator", ",");
         }
-        FormatExtractor formatExtractor = BasicFormatExtractorFactory.build(format);
+        FormatExtractor formatExtractor
+            = BasicFormatExtractorFactory.build(format);
 
         SplitProcessorOutput out = new SplitProcessorOutput(fact);
 

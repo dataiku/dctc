@@ -40,7 +40,10 @@ public class DirectCopyTaskRunnable extends CopyTaskRunnable {
 
         if (out.hasOutputStream()) {
             if (!out.allocate(in.getSize())) {
-                throw new IOException("Can't transfer " + in.getAbsoluteAddress() + ": file too big for the destination file system");
+                throw new IOException("Can't transfer "
+                                      + in.getAbsoluteAddress()
+                                      + ": file too big for the destination "
+                                      + "file system");
             }
             InputStream i = null;
             OutputStream o = null;
@@ -104,10 +107,12 @@ public class DirectCopyTaskRunnable extends CopyTaskRunnable {
         return in.givenName() + " -> " + out.givenName();
     }
     private boolean compress() {
-        return !in.givenName().endsWith(".gz") && out.givenName().endsWith(".gz");
+        return !in.givenName().endsWith(".gz")
+            && out.givenName().endsWith(".gz");
     }
     private boolean uncompress() {
-        return in.givenName().endsWith(".gz") && !out.givenName().endsWith(".gz");
+        return in.givenName().endsWith(".gz")
+            && !out.givenName().endsWith(".gz");
     }
 
     private CountingInputStream inputStream;

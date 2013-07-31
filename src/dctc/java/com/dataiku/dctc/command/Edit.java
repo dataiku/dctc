@@ -24,8 +24,10 @@ public class Edit extends Command {
         return "Edit a remote file.";
     }
     public void longDescription(IndentedWriter printer) {
-        printer.print(scat("The file is downloaded, an editor is opened, and if the file was"
-                           ,"modified, it's uploaded back to its original location"));
+        printer.print(scat("The file is downloaded, an editor is opened,"
+                           , "and if the file was"
+                           , "modified, it's uploaded back to its original"
+                           , "location"));
     }
 
     @Override
@@ -77,7 +79,10 @@ public class Edit extends Command {
                     error(f, "Cannot create a local temporary file", e, 3);
                     return;
                 }
-                tasks.add(new CopyTask(f, new LocalFile(output.getAbsolutePath()), "", false));
+                tasks.add(new CopyTask(f
+                                       , new LocalFile(output.getAbsolutePath())
+                                       , ""
+                                       , false));
             }
         }
 
@@ -90,7 +95,11 @@ public class Edit extends Command {
                 timestamps.add(task.dstDir.getDate());
             }
             catch (IOException e) {
-                error(task.dstDir, "Could not get the file date, will always be copied back.", e, 0);
+                error(task.dstDir
+                      , "Could not get the file date, will always be copied"
+                      + " back."
+                      , e
+                      , 0);
                 timestamps.add(-51L);
             }
         }
@@ -137,7 +146,11 @@ public class Edit extends Command {
                     newTS= task.dstDir.getDate();
                 }
                 catch (IOException e) {
-                    error(task.dstDir, "Could not get the file date, will always be copied back.", e, 0);
+                    error(task.dstDir
+                          , "Could not get the file date, will always"
+                          + " be copied back."
+                          , e
+                          , 0);
                     newTS = -42;
                 }
             }
@@ -163,7 +176,11 @@ public class Edit extends Command {
     // Protected
     @Override
     protected void setOptions(List<OptionAgregator> opts) {
-        opts.add(stdOption('e', "editor", "Override the EDITOR variable.", true, "BIN-NAME"));
+        opts.add(stdOption('e'
+                           , "editor"
+                           , "Override the EDITOR variable."
+                           , true
+                           , "BIN-NAME"));
     }
 
     @Override
@@ -173,7 +190,8 @@ public class Edit extends Command {
 
     // Private
     private boolean copy(List<CopyTask> tasks) {
-        SimpleCopyTaskRunnableFactory fact = new SimpleCopyTaskRunnableFactory(false, false, true);
+        SimpleCopyTaskRunnableFactory fact
+            = new SimpleCopyTaskRunnableFactory(false, false, true);
 
         for (CopyTask task : tasks) {
             try {

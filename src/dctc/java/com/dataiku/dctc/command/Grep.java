@@ -28,29 +28,83 @@ public class Grep extends Command {
         return "Match content within files.";
     }
     public void longDescription(IndentedWriter printer) {
-        printer.paragraph(scat("Search the pattern in input files and outputs the lines that match."
-                               , "The pattern is handled as a non-anchored regular expression.")
-                          , scat("dctc grep only offers a tiny subset of the capabilities of"
-                                 , "POSIX or GNU grep. It is intended as a fallback for systems that"
-                                 , "do not offer a native grep (eg, Microsoft Windows). For UNIX"
+        printer.paragraph(scat("Search the pattern in input files and outputs"
+                               , "the lines that match."
+                               , "The pattern is handled as a non-anchored"
+                               , "regular expression.")
+                          , scat("dctc grep only offers a tiny subset of the"
+                                 , "capabilities of"
+                                 , "POSIX or GNU grep. It is intended as a"
+                                 , "fallback for systems that"
+                                 , "do not offer a native grep (eg, Microsoft"
+                                 , "Windows). For UNIX"
                                  , "systems, use dctc cat|grep"));
+        // FIXME: Dctc grep is posix.
     }
     protected void setOptions(List<OptionAgregator> opts) {
-        opts.add(stdOption('r', "recursive", "Read all files under each directory, recursively."));
-        opts.add(stdOption('v', "invert-match", "Invert the sense of matching, to select non-matching lines."));
-        opts.add(stdOption('i', "ignore-case", "Ignore case distinctions in both the PATTERN and the input files."));
-        opts.add(stdOption('c', "count", "Write only a count of selected lines to standard output."));
-        opts.add(stdOption('q', "quiet", "Nothing shall be written to the standard output, regardless of matching lines. Exit with zero status if an input line is selected."));
-        opts.add(stdOption('n', "line", "Precede each output line by its relative line number in the file, each file starting at line 1. The line number counter shall be reset for each file processed."));
-        opts.add(stdOption('G', "color", "Add color to the output"));
-        opts.add(stdOption('E', "extended-regexp", "Match using java extended regular expressions."));
-        opts.add(stdOption('F', "fixed-strings", "Match using fixed strings."));
-        opts.add(stdOption('s', "no-messages", "Suppress the error messages ordinarily written for nonexistent or unreadable files. Other error messages shall not be suppressed."));
-        opts.add(stdOption('l', "files-with-matches", "print only names of FILEs containing matches"));
-        opts.add(stdOption('x', "Consider only input lines that use all characters in the line excluding the terminating <newline> to match an entire fixed string or regular expression to be matching lines."));
+        opts.add(stdOption('r'
+                           , "recursive"
+                           , "Read all files under each directory,"
+                           + " recursively."));
+        opts.add(stdOption('v'
+                           , "invert-match"
+                           , "Invert the sense of matching, to select"
+                           + " non-matching lines."));
+        opts.add(stdOption('i'
+                           , "ignore-case"
+                           , "Ignore case distinctions in both the PATTERN"
+                           + " and the input files."));
+        opts.add(stdOption('c'
+                           , "count"
+                           , "Write only a count of selected lines to standard"
+                           + " output."));
+        opts.add(stdOption('q'
+                           , "quiet"
+                           , "Nothing shall be written to the standard"
+                           + " output, regardless of matching lines. Exit"
+                           + " with zero status if an input line is"
+                           + " selected."));
+        opts.add(stdOption('n'
+                           , "line"
+                           , "Precede each output line by its relative line"
+                           + " number in the file, each file starting at line"
+                           + " 1. The line number counter shall be reset for"
+                           + " each file processed."));
+        opts.add(stdOption('G'
+                           , "color"
+                           , "Add color to the output"));
+        opts.add(stdOption('E'
+                           , "extended-regexp"
+                           , "Match using java extended regular expressions."));
+        opts.add(stdOption('F'
+                           , "fixed-strings"
+                           , "Match using fixed strings."));
+        opts.add(stdOption('s'
+                           , "no-messages"
+                           , "Suppress the error messages ordinarily written"
+                           + " for nonexistent or unreadable files. Other"
+                           + " error messages shall not be suppressed."));
+        opts.add(stdOption('l'
+                           , "files-with-matches"
+                           , "print only names of FILEs containing matches"));
+        opts.add(stdOption('x'
+                           , "Consider only input lines that use all"
+                           + " characters in the line excluding the"
+                           + " terminating <newline> to match an entire"
+                           + " fixed string or regular expression to be"
+                           + " matching lines."));
 
-        opts.add(stdOption('f', "file", "obtain PATTERN from FILE", true, "FILE"));
-        opts.add(stdOption('e', "regexp", "Specify one or more patterns to be used during the search for input.", true, "PATTERN"));
+        opts.add(stdOption('f'
+                           , "file"
+                           , "obtain PATTERN from FILE"
+                           , true
+                           , "FILE"));
+        opts.add(stdOption('e'
+                           , "regexp"
+                           , "Specify one or more patterns to be used during"
+                           + " the search for input."
+                           , true
+                           , "PATTERN"));
     }
     protected List<GFile> getArgs(String[] shellArgs) {
         parseCommandLine(shellArgs);
@@ -61,7 +115,9 @@ public class Grep extends Command {
             }
             else if (hasOption('f')) {
                 try {
-                    pattern = DKUFileUtils.fileToString(new File(getOptionValue('f').get(0)));
+                    pattern
+                        = DKUFileUtils.fileToString(new File(getOptionValue('f')
+                                                             .get(0)));
                 }
                 catch (Exception e) {
                     if (!hasOption("-no-messages")) {
@@ -186,7 +242,8 @@ public class Grep extends Command {
     // Private
     private void grep(GFile file) throws IOException {
         long lineNumber = 0;
-        BufferedReader i = StreamUtils.readStream(AutoGZip.buildInput(file), "UTF-8");
+        BufferedReader i = StreamUtils.readStream(AutoGZip.buildInput(file)
+                                                  , "UTF-8");
 
         try {
             while(true) {
