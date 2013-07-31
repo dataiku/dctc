@@ -34,22 +34,18 @@ public abstract class CopyTaskRunnable implements Runnable {
     public synchronized boolean isStarted() {
         return started;
     }
-
     public synchronized boolean isDone() {
         return done;
     }
-
     public Exception getException() {
         return exp;
     }
-
     protected synchronized void inc(long size) {
         read += size;
     }
     public synchronized long read() {
         return read;
     }
-
     public void run() {
         synchronized (this) {
             started = true;
@@ -71,9 +67,11 @@ public abstract class CopyTaskRunnable implements Runnable {
         return inSize;
     }
 
-    public  abstract void work() throws IOException;
+    public abstract void work() throws IOException;
     public abstract String print() throws IOException;
 
+
+    // Attributes
     protected GFile in;
     private boolean started = false;
     private boolean done = false;

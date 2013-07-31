@@ -125,7 +125,7 @@ public class FTPFile extends AbstractGFile {
         return exists && !file;
     }
     @Override
-    public boolean isFile() throws IOException{
+    public boolean isFile() throws IOException {
         fastStat();
         return exists && file;
     }
