@@ -59,7 +59,6 @@ public abstract class CopyTaskRunnable implements Runnable {
             work();
         }
         catch (Exception e) {
-            logger.info("Error while copying of " + getInputFile().getAbsoluteAddress(), e); // FIXME: No
             exp = e;
         }
         finally {
@@ -81,6 +80,4 @@ public abstract class CopyTaskRunnable implements Runnable {
     private long read;
     private Exception exp;
     private long inSize;
-
-    private static Logger logger = Logger.getLogger("dctc.copy");
 }
