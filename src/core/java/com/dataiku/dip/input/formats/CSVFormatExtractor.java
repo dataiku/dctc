@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.amazonaws.util.json.JSONObject;
+import com.dataiku.dip.datasets.Schema;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
@@ -66,6 +68,7 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
             }
             try {
                 List<Column> columns = new ArrayList<Column>();
+                List<Schema.Type> types = getTypes();
                 long fileLines = 0, nintern = 0;
 
                 while (true){
@@ -130,6 +133,49 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                             else if (s.equals("Y")) { s = "Y"; ++nintern; }
                             else if (s.equals("N")) { s = "N"; ++nintern; }
                             else if (s.equals("0")) { s = "0"; ++nintern; }
+
+
+                            if (types != null && conf.arraySeparator != null) {
+                            Schema.Type type = types.get(i);
+
+                                // Replace the string by its
+                                if (type.equals(Schema.Type.MAP) && conf.mapKeySeparator != null) {
+                                    logger.info("Subst map for "+ columns.get(i).getName());
+                                    if (s.length() > 0 && (s.indexOf(conf.mapKeySeparator.charValue()) < 0)) {
+                                        log_line_warn("Map column " + columns.get(i).getName() + " does not contains the map key separator " + (int) conf.mapKeySeparator.charValue());
+                                        s = "{}";
+                                    } else {
+                                        StringBuilder builder = new StringBuilder();
+                                        builder.append("{");
+                                        String[] elts = s.split("" +conf.arraySeparator);
+                                        boolean first = true;
+                                        for(String elt : elts) {
+                                            if (first) {
+                                                first = false;
+                                            } else {
+                                                builder.append(",");
+                                            }
+                                            String[] keyValue = elt.split(""+ conf.mapKeySeparator,2);
+                                            builder.append(JSONObject.quote(keyValue[0]));
+                                            builder.append(":");
+                                            builder.append(JSONObject.quote(keyValue[1]));
+                                        }
+                                        builder.append("}");
+                                        s = builder.toString();
+                                        logger.info("Subst map for=>" + s);
+                                    }
+                                } else if (type.equals(Schema.Type.ARRAY)) {
+                                    StringBuilder builder = new StringBuilder();
+                                    builder.append("[");
+                                    String[] elts = s.split("" +conf.arraySeparator);
+                                    boolean first = true;
+                                    for(String elt : elts) {
+                                        builder.append(JSONObject.quote(elt));
+                                    }
+                                    builder.append("]");
+                                    s = builder.toString();
+                                }
+                            }
 
                             r.put(columns.get(i), s);
                         }

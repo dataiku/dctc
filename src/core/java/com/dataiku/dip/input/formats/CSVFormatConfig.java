@@ -18,6 +18,13 @@ public class CSVFormatConfig {
         if (!p.getParam("escapeChar", "").isEmpty()) {
             escapeChar = p.getCharParam("escapeChar");
         }
+        if (!p.getParam("arraySeparator", "").isEmpty()) {
+            arraySeparator = p.getCharParam("arraySeparator");
+        }
+        if (!p.getParam("mapKeySeparator", "").isEmpty()) {
+            mapKeySeparator = p.getCharParam("mapKeySeparator");
+        }
+
 
         skipRowsBeforeHeader = p.getIntParam(AbstractFormatExtractor.PARAM_skipRowsBeforeHeader, 0);
         parseHeaderRow = p.getBoolParam(AbstractFormatExtractor.PARAM_parseHeaderRow, true);
@@ -29,6 +36,12 @@ public class CSVFormatConfig {
         f.addParam("quoteChar", "" + quoteChar);
         if (escapeChar != null) {
             f.addParam("escapeChar", "" + escapeChar);
+        }
+        if (arraySeparator != null) {
+            f.addParam("arraySeparator", "" + arraySeparator);
+        }
+        if (mapKeySeparator != null) {
+            f.addParam("mapKeySeparator", ""+ mapKeySeparator);
         }
 
         f.addParam(AbstractFormatExtractor.PARAM_skipRowsBeforeHeader, skipRowsBeforeHeader);
@@ -54,6 +67,8 @@ public class CSVFormatConfig {
     public char separator;
     public char quoteChar;
     public Character escapeChar;
+    public Character arraySeparator;
+    public Character mapKeySeparator;
 
     public int skipRowsBeforeHeader;
     public boolean parseHeaderRow;
