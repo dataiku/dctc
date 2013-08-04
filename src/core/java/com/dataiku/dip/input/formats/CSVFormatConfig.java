@@ -18,12 +18,14 @@ public class CSVFormatConfig {
         if (!p.getParam("escapeChar", "").isEmpty()) {
             escapeChar = p.getCharParam("escapeChar");
         }
-        if (!p.getParam("arraySeparator", "").isEmpty()) {
-            arraySeparator = p.getCharParam("arraySeparator");
+        if (!p.getParam("arrayItemSeparator", "").isEmpty()) {
+            arraySeparator = p.getCharParam("arrayItemSeparator");
         }
         if (!p.getParam("mapKeySeparator", "").isEmpty()) {
             mapKeySeparator = p.getCharParam("mapKeySeparator");
         }
+
+
 
 
         skipRowsBeforeHeader = p.getIntParam(AbstractFormatExtractor.PARAM_skipRowsBeforeHeader, 0);
@@ -38,7 +40,7 @@ public class CSVFormatConfig {
             f.addParam("escapeChar", "" + escapeChar);
         }
         if (arraySeparator != null) {
-            f.addParam("arraySeparator", "" + arraySeparator);
+            f.addParam("arrayItemSeparator", "" + arraySeparator);
         }
         if (mapKeySeparator != null) {
             f.addParam("mapKeySeparator", ""+ mapKeySeparator);
