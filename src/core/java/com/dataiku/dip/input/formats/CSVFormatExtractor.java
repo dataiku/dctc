@@ -126,8 +126,11 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                             }
                             String s = line[i];
 
+                            boolean nullString = false;
                             /* Replace common strings by their intern versions */
-                            if (s.equals("null")) { s = "null"; ++nintern; }
+                            if (s.equals("null")) { s = "null"; nullString=true; ++nintern; }
+                            else if (s.equals("NULL")) { s = "NULL"; nullString=true; ++nintern; }
+                            else if (s.equals("\\N")) { s = "\\N"; nullString=true; ++nintern; }
                             else if (s.equals("true")) { s = "true"; ++nintern; }
                             else if (s.equals("false")) { s = "false"; ++nintern; }
                             else if (s.equals("Y")) { s = "Y"; ++nintern; }
@@ -135,12 +138,11 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                             else if (s.equals("0")) { s = "0"; ++nintern; }
 
 
-                            if (types != null && conf.arraySeparator != null && !conf.arrayMapFormat.equals("json")) {
+                            if (!nullString && types != null && conf.arraySeparator != null && !conf.arrayMapFormat.equals("json")) {
                             Schema.Type type = types.get(i);
 
                                 // Replace the string by its
                                 if (type.equals(Schema.Type.MAP) && conf.mapKeySeparator != null) {
-                                    logger.info("Subst map for "+ columns.get(i).getName());
                                     if (s.length() > 0 && (s.indexOf(conf.mapKeySeparator.charValue()) < 0)) {
                                         log_line_warn("Map column " + columns.get(i).getName() + " does not contains the map key separator " + (int) conf.mapKeySeparator.charValue());
                                         s = "{}";
@@ -150,21 +152,24 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                                         String[] elts = s.split("" +conf.arraySeparator);
                                         boolean first = true;
                                         for(String elt : elts) {
+                                            String[] keyValue = elt.split(""+ conf.mapKeySeparator,2);
+                                            if (keyValue.length < 2) {
+                                                log_line_warn("Map column " + columns.get(i).getName() + " does not contain map separator at entry: " + elt);
+                                                continue;
+                                            }
                                             if (first) {
                                                 first = false;
                                             } else {
                                                 builder.append(",");
                                             }
-                                            String[] keyValue = elt.split(""+ conf.mapKeySeparator,2);
                                             builder.append(JSONObject.quote(keyValue[0]));
                                             builder.append(":");
                                             builder.append(JSONObject.quote(keyValue[1]));
                                         }
                                         builder.append("}");
                                         s = builder.toString();
-                                        logger.info("Subst map for=>" + s);
                                     }
-                                } else if (type.equals(Schema.Type.ARRAY)) {
+                                } else if (!nullString && type.equals(Schema.Type.ARRAY)) {
                                     StringBuilder builder = new StringBuilder();
                                     builder.append("[");
                                     String[] elts = s.split("" +conf.arraySeparator);
