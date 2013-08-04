@@ -20,13 +20,25 @@ public class CSVFormatConfig {
         }
         if (!p.getParam("arrayItemSeparator", "").isEmpty()) {
             arraySeparator = p.getCharParam("arrayItemSeparator");
+        } else {
+            arraySeparator = '\u0002';
         }
+
         if (!p.getParam("mapKeySeparator", "").isEmpty()) {
             mapKeySeparator = p.getCharParam("mapKeySeparator");
+        } else {
+            mapKeySeparator = '\u0003';
         }
 
+        if (!p.getParam("arrayMapFormat", "").isEmpty()) {
+            arrayMapFormat = p.getParam("arrayMapFormat");
+        } else {
+            arrayMapFormat = "delimited";
+        }
 
-
+        if (!(arrayMapFormat.equals("json") || arrayMapFormat.equals("delimited"))) {
+            throw new IllegalArgumentException("arrayMapFormat: possible values are json or delimited");
+        }
 
         skipRowsBeforeHeader = p.getIntParam(AbstractFormatExtractor.PARAM_skipRowsBeforeHeader, 0);
         parseHeaderRow = p.getBoolParam(AbstractFormatExtractor.PARAM_parseHeaderRow, true);
@@ -44,6 +56,10 @@ public class CSVFormatConfig {
         }
         if (mapKeySeparator != null) {
             f.addParam("mapKeySeparator", ""+ mapKeySeparator);
+        }
+
+        if (arrayMapFormat != null) {
+            f.addParam("arrayMapFormat", arrayMapFormat);
         }
 
         f.addParam(AbstractFormatExtractor.PARAM_skipRowsBeforeHeader, skipRowsBeforeHeader);
@@ -71,6 +87,7 @@ public class CSVFormatConfig {
     public Character escapeChar;
     public Character arraySeparator;
     public Character mapKeySeparator;
+    public String arrayMapFormat = "delimited";
 
     public int skipRowsBeforeHeader;
     public boolean parseHeaderRow;
