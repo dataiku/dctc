@@ -23,7 +23,7 @@ public class JSON {
                 try {
                     @SuppressWarnings("unchecked")
                     List l = (List) field.get(t);
-                    if (l.size() > 0) {
+                    if (l != null && l.size() > 0) {
                         if(l.get(l.size()-1) == null) {
                             l.remove(l.size()-1);
                         }
