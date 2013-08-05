@@ -33,7 +33,9 @@ public class DKULogger extends Logger {
         tl.get().start =System.currentTimeMillis();
     }
     public static void endCurrentCall() {
-        if (tl.get() != null) tl.get().start = 0;
+        if (tl.get() != null) {
+            tl.remove();
+        }
     }
     private static ThreadLocal<CallTime> tl = new ThreadLocal<DKULogger.CallTime>();
 
