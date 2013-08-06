@@ -24,6 +24,15 @@ public class DKUFileUtils {
     public static void mkdirsParent(File file) throws IOException {
         mkdirs(file.getParentFile());
     }
+    
+    public static void delete(File f) throws IOException {
+        if (f.exists()) {
+            boolean ret = f.delete();
+            if (ret == false) {
+                throw new IOException("Failed to delete " + f);
+            }
+        }
+    }
 
     public static String readFileToStringUTF8(File file) throws IOException {
         return FileUtils.readFileToString(file, "utf8");

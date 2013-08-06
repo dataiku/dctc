@@ -1,5 +1,6 @@
 package com.dataiku.dip.utils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,4 +89,7 @@ public class ErrorContext {
         throw new IllegalArgumentException(format() + message);
     }
 
+    public static IOException ioException(String message, Object ... format) {
+        return new IOException(format() + String.format(message, format));
+    }
 }
