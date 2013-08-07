@@ -1,14 +1,6 @@
 package com.dataiku.dip.utils;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.*;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -113,7 +105,7 @@ public class DKUtils {
         }
         tout.join();
         terr.join();
-        return tout.baos.toByteArray();
+        return tout.getOutput().toByteArray();
     }
 
     /* Execute and returns stdout - logs stderr - throws if return code is non zero */
@@ -131,8 +123,42 @@ public class DKUtils {
         }
         tout.join();
         terr.join();
-        return tout.baos.toByteArray();
+        return tout.getOutput().toByteArray();
     }
+
+
+    public static void execAndWriteOutput(String[] args, String[] env, File cwd, File output) throws IOException, InterruptedException {
+        Process p = Runtime.getRuntime().exec(args, env, cwd);
+        FileOutputStream fos = new FileOutputStream(output);
+        CopyStreamEater tout = new CopyStreamEater(p.getInputStream(), fos);
+        tout.start();
+        Thread terr = new LoggingStreamEater(p.getErrorStream(), org.apache.log4j.Level.INFO);
+        terr.start();
+        int rv = p.waitFor();
+        if (rv != 0) {
+            //System.out.println(tout.sb.toString());
+            throw new IOException("Return code is non-zero: " + rv);
+        }
+        tout.join();
+        terr.join();
+    }
+
+
+    public static void execAndWriteOutput(String[] args, String[] env, File cwd, OutputStream output) throws IOException, InterruptedException {
+        Process p = Runtime.getRuntime().exec(args, env, cwd);
+        CopyStreamEater tout = new CopyStreamEater(p.getInputStream(),output);
+        tout.start();
+        Thread terr = new LoggingStreamEater(p.getErrorStream(), org.apache.log4j.Level.INFO);
+        terr.start();
+        int rv = p.waitFor();
+        if (rv != 0) {
+            //System.out.println(tout.sb.toString());
+            throw new IOException("Return code is non-zero: " + rv);
+        }
+        tout.join();
+        terr.join();
+    }
+
 
     /* Eat a stream and log its output */
     static public class LoggingStreamEater extends Thread {
@@ -158,14 +184,15 @@ public class DKUtils {
             }
         }
         private org.apache.log4j.Level level;
-        private InputStream is;
+         InputStream is;
         private static Logger logger = Logger.getLogger("process");
     }
 
-    /* Eat a stream and gather its output */
-    static class GatheringStreamEater extends Thread {
-        GatheringStreamEater(InputStream is) {
+
+    static class CopyStreamEater extends Thread {
+        CopyStreamEater(InputStream is, OutputStream os) {
             this.is = is;
+            this.os = os;
         }
         @Override
         public void run() {
@@ -176,16 +203,29 @@ public class DKUtils {
                 while (true) {
                     int i = is.read(buf);
                     if (i <= 0) break;
-                    baos.write(buf, 0, i);
+                    os.write(buf, 0, i);
                 }
                 is.close();
             } catch (IOException e) {
                 logger.error("", e);
             }
         }
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        private InputStream is;
+        OutputStream os;
+         InputStream is;
         private static Logger logger = Logger.getLogger("process");
+
+    }
+
+    /* Eat a stream and gather its output */
+    static class GatheringStreamEater extends CopyStreamEater {
+        GatheringStreamEater(InputStream is) {
+            super(is, new ByteArrayOutputStream());
+            this.is = is;
+        }
+
+        public ByteArrayOutputStream getOutput() {
+            return (ByteArrayOutputStream) os;
+        }
     }
 
     public static String tailFile(File f, int nlines) throws IOException{
