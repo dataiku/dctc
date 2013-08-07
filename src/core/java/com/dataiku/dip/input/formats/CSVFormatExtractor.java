@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.amazonaws.util.json.JSONObject;
 import com.dataiku.dip.datasets.Schema;
+import com.dataiku.dip.datasets.Schema.SchemaColumn;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
@@ -70,7 +72,13 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                 List<Column> columns = new ArrayList<Column>();
                 List<Schema.Type> types = getTypes();
                 long fileLines = 0, nintern = 0;
-
+                
+                if (!conf.parseHeaderRow && schema != null) {
+                    logger.info("Loading schema");
+                    for (SchemaColumn col : schema.getColumns()) {
+                        columns.add(cf.column(col.getName()));
+                    }
+                }
                 while (true){
                     String[] line = reader.readNext();
                     if (line == null) break;
