@@ -7,7 +7,7 @@ public abstract class Dimension {
         this.name = Preconditions.checkNotNull(name);
     }
 
-    private String name;
+    protected String name;
     public String getName() {
         return name;
     }

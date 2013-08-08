@@ -1,22 +1,20 @@
 package com.dataiku.dip.partitioning;
 
 public class ExactValueDimension extends Dimension {
-    public ExactValueDimension(String name, String field) {
+    public ExactValueDimension(String name, String type) {
         super(name);
-        this.field = field;
+        this.type = type;
     }
 
-    public String getField() {
-        return field;
-    }
+    protected String type;
 
-    private String field;
+
 
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof ExactValueDimension)) return false;
         ExactValueDimension tother = (ExactValueDimension)other;
-        return tother.field.equals(field);
+        return name.equals(tother.name) && type.equals(tother.type);
     }
 
     @Override
