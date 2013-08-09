@@ -1,6 +1,8 @@
 package com.dataiku.dip.utils;
 
 import java.io.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,6 +14,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.ISODateTimeFormat;
+
+import com.sun.tools.javac.resources.javac;
 
 public class DKUtils {
     public static <T> T lastElement(T[] array) {
@@ -184,7 +188,7 @@ public class DKUtils {
             }
         }
         private org.apache.log4j.Level level;
-         InputStream is;
+        InputStream is;
         private static Logger logger = Logger.getLogger("process");
     }
 
@@ -211,7 +215,7 @@ public class DKUtils {
             }
         }
         OutputStream os;
-         InputStream is;
+        InputStream is;
         private static Logger logger = Logger.getLogger("process");
 
     }
@@ -287,6 +291,32 @@ public class DKUtils {
             throw new Error("Can't open resource file " + file);
         }
         return  IOUtils.toString(is, "utf8");
+    }
+
+    public static <T> Map<String, T> listToMap(List<T> list, String memberOrFunction) {
+        Map<String, T> ret = new HashMap<String, T>();
+        if (list.isEmpty()) {
+            return ret;
+        }
+        Class<T> tclazz = (Class<T>) list.get(0).getClass();
+        try {
+            if (memberOrFunction.endsWith("()")) {
+                Method m = tclazz.getMethod(memberOrFunction.replace("()", ""));
+                for (T obj : list) {
+                    String key = (String)m.invoke(obj);
+                    ret.put(key, obj);
+                }
+            } else {
+                Field f  = tclazz.getField(memberOrFunction);
+                for (T obj : list) {
+                    String key = (String)f.get(obj);
+                    ret.put(key, obj);
+                }
+            }
+        } catch (Exception e) {
+            throw new Error(e);
+        }
+        return ret;
     }
 
     private static Logger logger = Logger.getLogger("dku.utils");
