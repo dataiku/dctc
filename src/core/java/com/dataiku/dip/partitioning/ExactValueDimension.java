@@ -1,5 +1,8 @@
 package com.dataiku.dip.partitioning;
 
+import java.util.Collections;
+import java.util.List;
+
 public class ExactValueDimension extends Dimension {
     public ExactValueDimension(String name, String type) {
         super(name);
@@ -20,6 +23,11 @@ public class ExactValueDimension extends Dimension {
     @Override
     public DimensionValue getValueFromId(String id) {
         return new ExactValueDimensionValue(id);
+    }
+
+    @Override
+    public List<DimensionValue> getValueFromPattern(String pattern) {
+        return Collections.singletonList((DimensionValue) new ExactValueDimensionValue(pattern)); // TODO sanity check ? Numerical Range support ?
     }
 
     @Override

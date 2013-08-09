@@ -15,8 +15,6 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.ISODateTimeFormat;
 
-import com.sun.tools.javac.resources.javac;
-
 public class DKUtils {
     public static <T> T lastElement(T[] array) {
         return array[array.length - 1];

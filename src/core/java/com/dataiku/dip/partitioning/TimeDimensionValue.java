@@ -5,7 +5,7 @@ import java.util.Calendar;
 import com.dataiku.dip.partitioning.TimeDimension.Period;
 import com.google.common.base.Preconditions;
 
-public class TimeDimensionValue extends DimensionValue {
+public class TimeDimensionValue extends DimensionValue implements Comparable<TimeDimensionValue> {
     // Constructors
     public TimeDimensionValue(TimeDimension dimension) {
         this.dimension = dimension;
@@ -96,7 +96,7 @@ public class TimeDimensionValue extends DimensionValue {
         case DAY:
             setDay(cal.get(Calendar.DAY_OF_MONTH));
         case MONTH:
-            setMonth(cal.get(Calendar.MONTH + 1));
+            setMonth(cal.get(Calendar.MONTH) + 1);
         case YEAR:
             setYear(cal.get(Calendar.YEAR));
             break;
@@ -153,7 +153,7 @@ public class TimeDimensionValue extends DimensionValue {
     }
 
     @SuppressWarnings("fallthrough")
-    public long getTimestamp() {
+    public Calendar getCalendar() {
         Calendar cal = Calendar.getInstance();
         switch (dimension.mappedPeriod) {
         case HOUR:
@@ -168,7 +168,44 @@ public class TimeDimensionValue extends DimensionValue {
         default:
             assert false : "Must not be reached.";
         }
-        return cal.getTimeInMillis();
+        return cal;
+    }
+
+    public long getTimestamp() {
+        return getCalendar().getTimeInMillis();
+    }
+
+    /**
+     * @return the next period for this time dimension w.r.t to the mapped period
+     */
+    public TimeDimensionValue nextPeriod() {
+        Calendar cal = getCalendar();
+        switch (dimension.mappedPeriod) {
+            case HOUR:
+                cal.add(Calendar.HOUR_OF_DAY, 1) ;
+                break;
+            case DAY:
+                cal.add(Calendar.DATE, 1);
+                break;
+            case MONTH:
+                cal.add(Calendar.MONTH, 1);
+                break;
+            case YEAR:
+                cal.add(Calendar.YEAR, 1);
+                break;
+        }
+        return new TimeDimensionValue(dimension).withCal(cal);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!super.equals(o)) return false;
+        return dimension.equals(((TimeDimensionValue) o).dimension);
+    }
+
+    @Override
+    public int compareTo(TimeDimensionValue timeDimensionValue) {
+        return getCalendar().compareTo(timeDimensionValue.getCalendar());
     }
 
     // Attributes

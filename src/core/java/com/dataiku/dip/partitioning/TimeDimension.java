@@ -1,6 +1,11 @@
 package com.dataiku.dip.partitioning;
 
 import com.dataiku.dip.utils.ErrorContext;
+import org.mortbay.util.SingletonList;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class TimeDimension extends Dimension {
     public TimeDimension(String name, Period mappedPeriod) {
@@ -53,6 +58,7 @@ public class TimeDimension extends Dimension {
     public boolean hasHour() {
         return mappedPeriod != Period.YEAR && mappedPeriod != Period.MONTH && mappedPeriod != Period.DAY;
     }
+
     public Period mappedPeriod;
 
     @Override
@@ -83,6 +89,24 @@ public class TimeDimension extends Dimension {
             throw new Error("Never reached.");
         }
         return timeDim;
+    }
+
+    @Override
+    public List<DimensionValue> getValueFromPattern(String pattern) {
+        if (pattern.contains("/")) {
+            String[] ids = pattern.split("/", 2);
+            TimeDimensionValue first = (TimeDimensionValue) getValueFromId(ids[0]);
+            TimeDimensionValue last = (TimeDimensionValue) getValueFromId(ids[1]);
+            TimeDimensionValue current = first;
+            List<DimensionValue> values = new ArrayList<DimensionValue>();
+            while (current.compareTo(last) <= 0) {
+                values.add(current);
+                current = current.nextPeriod();
+            }
+            return values;
+        } else {
+            return Collections.singletonList(getValueFromId(pattern));
+        }
     }
 
     @Override
