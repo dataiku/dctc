@@ -1,34 +1,32 @@
 package com.dataiku.dip.input.filter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.dataiku.dip.partitioning.Partition;
 
 
 public class InputFilter {
-    public List<Partition> getSelectablePartitions() {
-        return selectablePartitions;
+    public List<Partition> getPartitionsClause() {
+        return partitionsClause;
     }
-    public void setSelectablePartitions(List<Partition> selectablePartitions) {
-        this.selectablePartitions = selectablePartitions;
+    public void setPartitionsClause(List<Partition> partitionsClause) {
+        this.partitionsClause = partitionsClause;
     }
-    public InputFilter withSelectablePartitions(List<Partition> selectablePartitions) {
-        this.selectablePartitions = selectablePartitions;
+    public InputFilter withSelectedPartition(Partition p) {
+        if (this.partitionsClause == null) this.partitionsClause = new ArrayList<Partition>();
+        this.partitionsClause.add(p);
         return this;
     }
-    public List<FilterClause> getConjunctiveClauses() {
-        return conjunctiveClauses;
-    }
-    public void setConjunctiveClauses(List<FilterClause> conjunctiveClauses) {
-        this.conjunctiveClauses = conjunctiveClauses;
-    }
-    public InputFilter withConjunctiveClauses(List<FilterClause> conjunctiveClauses) {
-        this.conjunctiveClauses = conjunctiveClauses;
+    public InputFilter withSelectedPartitions(List<Partition> p) {
+        if (this.partitionsClause == null) this.partitionsClause = new ArrayList<Partition>();
+        this.partitionsClause.addAll(p);
         return this;
     }
 
     // Attributes
 	/* TODO: Make this a real AST */
-    private List<FilterClause> conjunctiveClauses;
-    private List<Partition> selectablePartitions;
+    // Not yet implemented :)
+    //private List<FilterClause> conjunctiveClauses;
+    private List<Partition> partitionsClause;
 }

@@ -4,7 +4,7 @@ import java.io.IOException;
 import com.dataiku.dip.input.InputSplit;
 
 /**
- * One split of a stream input.
+ * One split of a stream-oriented input.
  * Each split is actually made of several streams, which can be concatenated
  */
 public abstract class StreamsInputSplit implements InputSplit {
