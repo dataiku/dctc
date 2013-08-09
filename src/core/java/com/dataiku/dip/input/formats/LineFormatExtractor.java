@@ -62,7 +62,6 @@ public class LineFormatExtractor extends AbstractFormatExtractor {
                 br.close();
             }
         }
-        out.lastRowEmitted();
         return true;
     }
 }

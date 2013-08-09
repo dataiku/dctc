@@ -104,11 +104,9 @@ public class RawRegexpFormatExtractor extends AbstractFormatExtractor  {
                 br.close();
             }
             if (broken) {
-                out.lastRowEmitted();
                 return false;
             }
         }
-        out.lastRowEmitted();
         return true;
     }
 

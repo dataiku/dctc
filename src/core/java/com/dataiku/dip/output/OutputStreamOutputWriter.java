@@ -5,6 +5,7 @@ import java.io.OutputStream;
 
 import com.dataiku.dip.datalayer.ColumnFactory;
 import com.dataiku.dip.datalayer.Row;
+import com.dataiku.dip.utils.SingleCallAsserter;
 
 public class OutputStreamOutputWriter extends OutputWriter{
     private OutputStream os;
@@ -33,8 +34,10 @@ public class OutputStreamOutputWriter extends OutputWriter{
 
     @Override
     public void lastRowEmitted() throws Exception {
+        lre.call("processor already closed");
         formatter.footer(cf, os);
     }
+    private SingleCallAsserter lre = new SingleCallAsserter();
 
     @Override
     public long writtenBytes() throws IOException {

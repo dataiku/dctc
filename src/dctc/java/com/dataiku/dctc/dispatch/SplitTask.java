@@ -49,6 +49,7 @@ public class SplitTask extends CopyTaskRunnable {
                                 , new StreamRowFactory()
                                 , null
                                 , null);
+            out.lastRowEmitted();
         }
         catch (Exception e) {
             throw new IOException("Error while extracting", e);

@@ -94,7 +94,6 @@ public class SmartRegexpFormatExtractor extends AbstractFormatExtractor  {
             }
             // TODO: properly close streams
         }
-        out.lastRowEmitted();
         return true;
     }
 

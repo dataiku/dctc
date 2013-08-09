@@ -220,7 +220,6 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                 logger.info("Stream closed");
             }
         }
-        out.lastRowEmitted();
         return true;
     }
 

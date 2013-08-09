@@ -103,7 +103,6 @@ public class FixedWidthFormatExtractor extends AbstractFormatExtractor {
                 cis.close();
             }
         }
-        out.lastRowEmitted();
         return true;
     }
 
