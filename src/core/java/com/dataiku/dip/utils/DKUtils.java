@@ -191,8 +191,8 @@ public class DKUtils {
     }
 
 
-    static class CopyStreamEater extends Thread {
-        CopyStreamEater(InputStream is, OutputStream os) {
+    public static class CopyStreamEater extends Thread {
+        public CopyStreamEater(InputStream is, OutputStream os) {
             this.is = is;
             this.os = os;
         }
