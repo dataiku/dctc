@@ -1,13 +1,10 @@
 package com.dataiku.dctc.file;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
 
-import com.dataiku.dctc.HadoopDistributionClassLoader;
+import com.dataiku.dctc.HadoopLoader;
 import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
-import com.dataiku.dip.hadoop.HadoopUtils;
-import com.dataiku.dip.utils.ErrorContext;
 import com.dataiku.dip.utils.Params;
 
 public class HdfsFileBuilder extends ProtocolFileBuilder {
@@ -19,51 +16,17 @@ public class HdfsFileBuilder extends ProtocolFileBuilder {
 
     @Override
     public boolean validateAccountParams(String accountSettings, Params p) {
-        return checkAllowedOnly(accountSettings
-                                , p
-                                , new String[] {"hadoopConfDir"})
-            || checkMandatory(accountSettings
-                              , p
-                              , "hadoopConfDir");
+        return true;
     }
 
     @Override
-    public GFile buildFile(String accountSettings
-                           , String rawPath
-                           , YellPolicy yell) {
-        HadoopDistributionClassLoader.addLibraries();
-        Params p;
-        if (accountSettings != null) {
-            p = getBank().getAccountParams("hdfs", accountSettings);
+    public GFile buildFile(String accountSettings, String path, YellPolicy yell) {
+        HadoopLoader.addLibraries();
+        try {
+            return new HdfsFile(path, accountSettings);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Failed to build HDFS file", e);
         }
-        else {
-            p = getBank().getAccountParamsIfExists("hdfs", accountSettings);
-
-            if (p == null) {
-                /* I can still try to build using HADOOP_HOME */
-                if (System.getenv("HADOOP_HOME") == null
-                    && HadoopDistributionClassLoader.guessHadoopHome() == null
-                    && System.getenv("HADOOP_PREFIX") == null) {
-                    throw ErrorContext.iaef("Neither configured credential nor"
-                                            + " HADOOP_HOME nor HADOOP_PREFIX"
-                                            + " variable found, can't configure"
-                                            + " HDFS access"); // FIXME: No
-                }
-            }
-        }
-        Configuration conf = new Configuration();
-
-        if (p == null) {
-            conf.addResource(new Path(HadoopUtils.getCoreSiteLocation()));
-        }
-        else {
-            if (validateAccountParams(accountSettings, p)) {
-                throw invalidAccountSettings(accountSettings);
-            }
-            conf.addResource(new Path(p.getNonEmptyMandParam("hadoopConfDir")));
-        }
-
-        return new HdfsFile(rawPath, accountSettings, conf);
     }
     @Override
     public final String fileSeparator() {

@@ -8,19 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.LocalFileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.fs.RawLocalFileSystem;
 
 import com.dataiku.dctc.GlobalConstants;
+import com.dataiku.dctc.HadoopLoader;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
 
 public class HdfsFile extends AbstractGFile {
     // Constructors
-    public HdfsFile(String path, String accountName, Configuration conf) {
+    public HdfsFile(String path, String accountName) {
         if (path.isEmpty()) {
             path = fileSeparator();
         }
@@ -28,9 +26,9 @@ public class HdfsFile extends AbstractGFile {
             path = fileSeparator() + path;
         }
         this.path = path;
-        this.conf = conf;
         this.accountName = accountName;
         this.hdfsPath = new Path(this.path);
+        System.out.println("CONSTRUCT HDFS FILE");
     }
     public HdfsFile(FileStatus status, FileSystem fileSystem) {
         this.status = status;
@@ -53,7 +51,7 @@ public class HdfsFile extends AbstractGFile {
     }
     @Override
     public HdfsFile createInstanceFor(String path) {
-        return new HdfsFile(path, accountName, conf);
+        return new HdfsFile(path, accountName);
     }
     @Override
     public HdfsFile createSubFile(String path, String separator) {
@@ -92,6 +90,7 @@ public class HdfsFile extends AbstractGFile {
         return Protocol.HDFS.getCanonicalName();
     }
     protected List<String> list() throws IOException {
+        System.out.println("lfs");
         initStatus();
         FileStatus[] status = fileSystem.listStatus(hdfsPath);
         list = new ArrayList<String>();
@@ -236,15 +235,7 @@ public class HdfsFile extends AbstractGFile {
     // Local Methods
     // Private
     private void initFileSystem() throws IOException {
-        if (fileSystem == null) {
-            this.fileSystem = FileSystem.get(conf);
-            if (this.fileSystem instanceof RawLocalFileSystem
-                || this.fileSystem instanceof LocalFileSystem) {
-                throw new IOException("HDFS initialization returned a"
-                                      + " LocalFileSystem. Maybe you need to"
-                                      + " configure your HDFS location ?");
-            }
-        }
+        fileSystem = HadoopLoader.getFS();
     }
     private void initStatus() throws IOException {
         initFileSystem();
@@ -255,7 +246,6 @@ public class HdfsFile extends AbstractGFile {
     private String path;
     private String accountName;
     private Path hdfsPath;
-    private Configuration conf;
     private FileSystem fileSystem;
     private List<String> list;
     private List<String> recursiveList;

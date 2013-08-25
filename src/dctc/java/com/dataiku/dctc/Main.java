@@ -112,7 +112,7 @@ public class Main {
         ca.setTarget(ConsoleAppender.SYSTEM_ERR);
         ca.activateOptions();
         Logger.getRootLogger().addAppender(ca);
-        Logger.getRootLogger().setLevel(Level.INFO);
+        Logger.getRootLogger().setLevel(Level.DEBUG);
     }
     private static void addCmd(Command cmd) {
         cmds.put(cmd.cmdname(), cmd);

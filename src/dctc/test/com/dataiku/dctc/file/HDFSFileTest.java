@@ -8,15 +8,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import com.dataiku.dip.hadoop.HadoopUtils;
 
 @Ignore("Can't run this test as a unit test at the moment, as it requires a Hadoop cluster")
 public class HDFSFileTest {
@@ -24,12 +20,7 @@ public class HDFSFileTest {
     public void setUp() {
         Logger.getLogger("org.apache.hadoop.conf.Configuration").setLevel(Level.INFO);
     }
-    
-    private Configuration getConf() {
-        Configuration conf = new Configuration();
-        conf.addResource(new Path(HadoopUtils.getCoreSiteLocation()));
-        return conf;
-    }
+  
     
     private String testFolder() throws Exception {
         return "/tmp/dip-tests/" + this.getClass().getCanonicalName();
@@ -42,7 +33,7 @@ public class HDFSFileTest {
     
     @Test
     public void a()  throws IOException {
-        HdfsFile file = new HdfsFile("/", "pouet", getConf());
+        HdfsFile file = new HdfsFile("/", "pouet");
         assertTrue(file.isDirectory());
         assertFalse(file.isEmpty());
         assertTrue(file.list().size() > 0);
@@ -50,7 +41,7 @@ public class HDFSFileTest {
     
     @Test
     public void newDirectory()  throws Exception {
-        HdfsFile file = new HdfsFile("/", "pouet", getConf());
+        HdfsFile file = new HdfsFile("/", "pouet");
         
         String testFolder = testFolder();
         long ms = System.currentTimeMillis();
@@ -94,7 +85,7 @@ public class HDFSFileTest {
     
     @Test
     public void newDirectoryBad()  throws Exception {
-        HdfsFile file = new HdfsFile("/", "pouet", getConf());
+        HdfsFile file = new HdfsFile("/", "pouet");
         
         String tmpFolder = tmpFolder();
         String fooFolder = tmpFolder + "/foo";
@@ -121,7 +112,7 @@ public class HDFSFileTest {
     
     @Test
     public void writeFile()  throws Exception {
-        HdfsFile folder = new HdfsFile(tmpFolder(), "pouet", getConf());
+        HdfsFile folder = new HdfsFile(tmpFolder(), "pouet");
         
         HdfsFile file = folder.createSubFile("file0", "/");
         

@@ -41,7 +41,7 @@ cat >"$TMP_DEST"<<.
 #! /bin/sh
 TMPFILE=\`mktemp /tmp/temp.XXXX\`
 tail -n+$line_pattern \$0 > \$TMPFILE
-java -jar \$TMPFILE "\$@"
+DCTC_AUTO_LOAD_HADOOP=1 java -jar \$TMPFILE "\$@"
 RET=\$?; rm -f \$TMPFILE; exit \$RET
 .
 
