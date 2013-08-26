@@ -35,6 +35,18 @@ public class HadoopLoader {
         }
         return files;
     }
+    
+    public static boolean hadoopEnabled() {
+        if (hadoopEnabled != null) return hadoopEnabled;
+        try {
+            getConfigLocations();
+            hadoopEnabled = true;
+        } catch (Exception e) {
+            hadoopEnabled  = false;
+        }
+        return hadoopEnabled;
+    }
+    private static Boolean hadoopEnabled = null;
 
     private static String getHadoopHome() {
         String hadoopHome = System.getenv("HADOOP_HOME");
