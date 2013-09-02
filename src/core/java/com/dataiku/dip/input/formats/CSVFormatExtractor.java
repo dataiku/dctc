@@ -146,7 +146,7 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                             else if (s.equals("0")) { s = "0"; ++nintern; }
 
 
-                            if (!nullString && types != null && conf.arraySeparator != null && !conf.arrayMapFormat.equals("json")) {
+                            if (!nullString && types != null && conf.arraySeparator != null && !conf.arrayMapFormat.equals("json") && i < types.size()) {
                             Schema.Type type = types.get(i);
 
                                 // Replace the string by its
