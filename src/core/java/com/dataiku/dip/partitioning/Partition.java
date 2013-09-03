@@ -71,13 +71,17 @@ public class Partition implements Cloneable {
         } else {
             StringBuilder sb = new StringBuilder();
             boolean first = true;
-            for (DimensionValue dv : dimensionValues.values()) {
+            for (String name : scheme.getDimensionNames()) {
                 if (first == true) {
                     first = false;
                 } else {
                     sb.append("|");
                 }
-                sb.append(dv.id());
+                if (dimensionValues.containsKey(name)) {
+                    sb.append(dimensionValues.get(name).id());
+                } else {
+                    sb.append("*");
+                }
             }
             return sb.toString();
         }
