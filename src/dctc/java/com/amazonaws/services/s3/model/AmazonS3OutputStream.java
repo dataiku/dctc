@@ -31,7 +31,10 @@ public class AmazonS3OutputStream extends OutputStream {
     }
     @Override
     public final void close() throws IOException {
-        send(true);
+    	if (! closed) {
+    		send(true);
+    		closed = true;
+    	}
     }
     private void send(boolean isLast) throws IOException {
         try {
@@ -61,6 +64,7 @@ public class AmazonS3OutputStream extends OutputStream {
     private String bucket;
     private String path;
     private int partNumber;
+    private boolean closed = false;
     private InitiateMultipartUploadResult multiPartInit;
     private List<PartETag> partETag;
 }
