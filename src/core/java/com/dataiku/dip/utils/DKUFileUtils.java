@@ -24,7 +24,7 @@ public class DKUFileUtils {
     public static void mkdirsParent(File file) throws IOException {
         mkdirs(file.getParentFile());
     }
-    
+
     public static void delete(File f) throws IOException {
         if (f.exists()) {
             boolean ret = f.delete();
@@ -72,9 +72,9 @@ public class DKUFileUtils {
         }
     }
     public static String fileToString(File path,
-                                      String encoding) throws UnsupportedEncodingException,
-                                                              FileNotFoundException,
-                                                              IOException {
+            String encoding) throws UnsupportedEncodingException,
+            FileNotFoundException,
+            IOException {
         return streamToString(StreamUtils.readFile(path, encoding));
     }
     public static String streamToString(BufferedReader in) throws IOException{
@@ -86,5 +86,27 @@ public class DKUFileUtils {
         }
 
         return sb.toString();
+    }
+
+    public static int highestFileNumber(File root, String prefix) {
+        int max = -1;
+        if (!root.isDirectory()) return max;
+        for (File f : root.listFiles()) {
+            if (f.getName().startsWith(prefix)) {
+                try {
+                    int cur = Integer.parseInt(f.getName().replace(prefix, ""));
+                    max = Math.max(cur, max);
+                } catch (Exception e) {}
+            }
+        }
+        return max;
+    }
+    
+    public static int nextFileNumber(File root, String prefix) {
+        int backupVersion = -1;
+        int lastSavedVersion = highestFileNumber(root, prefix);
+        if (lastSavedVersion == -1) backupVersion = 1;
+        else backupVersion = lastSavedVersion + 1;
+        return backupVersion;
     }
 }
