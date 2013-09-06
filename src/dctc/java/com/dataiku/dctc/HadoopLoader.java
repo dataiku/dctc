@@ -2,7 +2,6 @@ package com.dataiku.dctc;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -11,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.LocalFileSystem;
@@ -72,7 +69,7 @@ public class HadoopLoader {
     private static void addSoftwareLibrary(File file) throws Exception {
         if (file.exists()) {
             logger.info("Adding library : " + file);
-            Method method = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});
+            Method method = URLClassLoader.class.getDeclaredMethod("addURL", new Class<?>[]{URL.class});
             method.setAccessible(true);
             method.invoke(ClassLoader.getSystemClassLoader(), new Object[]{file.toURI().toURL()});
         } else {
@@ -162,7 +159,7 @@ public class HadoopLoader {
         List<File> configLocations = new ArrayList<File>();
         try {
             // FIXME: Should not be UTF8 but native FS encoding ??
-            String hadoopClasspath = IOUtils.toString(DKUtils.execAndGetOutput(new String[]{"hadoop", "classpath"}, null), "utf8");
+          String hadoopClasspath = new String(DKUtils.execAndGetOutput(new String[]{"hadoop", "classpath"}, null), "UTF-8");
 
             for (String chunk : hadoopClasspath.split(":")) {
                 if (chunk.contains("conf")) {

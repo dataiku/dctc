@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -44,7 +45,6 @@ public class GSFile extends BucketBasedFile {
         this.bucket = split[0];
         this.path = split[1];
     }
-    @SuppressWarnings("deprecation")
     public GSFile(String userMail, String keyPath, String path) {
         super(false);
         __init(userMail, keyPath, path);
@@ -55,7 +55,7 @@ public class GSFile extends BucketBasedFile {
                 .setJsonFactory(new JacksonFactory())
                 .setTransport(httpTransport)
                 .setServiceAccountId(userMail)
-                .setServiceAccountScopes(STORAGE_SCOPE)
+                .setServiceAccountScopes(Collections.singleton(STORAGE_SCOPE))
                 .setServiceAccountPrivateKeyFromP12File(new File(keyPath))
                 .build();
         }

@@ -296,7 +296,7 @@ public class DKUtils {
         if (list.isEmpty()) {
             return ret;
         }
-        Class<T> tclazz = (Class<T>) list.get(0).getClass();
+        Class<?> tclazz = list.get(0).getClass();
         try {
             if (memberOrFunction.endsWith("()")) {
                 Method m = tclazz.getMethod(memberOrFunction.replace("()", ""));

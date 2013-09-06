@@ -3,7 +3,6 @@ package com.dataiku.dip.utils;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,8 +20,7 @@ public class JSON {
             field.setAccessible(true);
             if (List.class.isAssignableFrom(field.getType())) {
                 try {
-                    @SuppressWarnings("unchecked")
-                    List l = (List) field.get(t);
+                    List<?> l = (List<?>) field.get(t);
                     if (l != null && l.size() > 0) {
                         if(l.get(l.size()-1) == null) {
                             l.remove(l.size()-1);

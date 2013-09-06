@@ -49,8 +49,6 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
             ColumnFactory cf, RowFactory rf, StreamInputSplitProgressListener listener,
             ExtractionLimit limit) throws Exception {
         long totalBytes = 0, totalRecords = 0;
-        long log_count = 0;
-        long max_log = 1000; // Maximum number of log per line.
         while (true) {
             EnrichedInputStream stream = in.nextStream();
             if (stream == null) break;
@@ -181,7 +179,6 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                                     StringBuilder builder = new StringBuilder();
                                     builder.append("[");
                                     String[] elts = s.split("" +conf.arraySeparator);
-                                    boolean first = true;
                                     for(String elt : elts) {
                                         builder.append(JSONObject.quote(elt));
                                     }

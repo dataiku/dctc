@@ -2,8 +2,6 @@ package com.dataiku.dctc.copy;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
-
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.file.GFile;
 

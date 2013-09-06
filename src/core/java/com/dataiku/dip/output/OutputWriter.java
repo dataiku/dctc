@@ -1,7 +1,6 @@
 package com.dataiku.dip.output;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 import com.dataiku.dip.datalayer.ColumnFactory;
 import com.dataiku.dip.datalayer.ProcessorOutput;

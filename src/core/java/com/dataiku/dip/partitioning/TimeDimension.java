@@ -1,7 +1,6 @@
 package com.dataiku.dip.partitioning;
 
 import com.dataiku.dip.utils.ErrorContext;
-import org.mortbay.util.SingletonList;
 
 import java.util.ArrayList;
 import java.util.Collections;

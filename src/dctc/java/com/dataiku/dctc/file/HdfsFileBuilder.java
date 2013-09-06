@@ -1,7 +1,5 @@
 package com.dataiku.dctc.file;
 
-import org.apache.hadoop.conf.Configuration;
-
 import com.dataiku.dctc.HadoopLoader;
 import com.dataiku.dctc.command.policy.YellPolicy;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
