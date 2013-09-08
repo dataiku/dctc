@@ -2,9 +2,7 @@ package com.dataiku.dip.partitioning;
 
 import com.dataiku.dip.utils.ErrorContext;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class TimeDimension extends Dimension {
     public TimeDimension(String name, Period mappedPeriod) {
@@ -67,9 +65,27 @@ public class TimeDimension extends Dimension {
         return tother.mappedPeriod.equals(mappedPeriod);
     }
 
+    protected DimensionValue getValueFromSymbolicDate(String date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        if (date.equals("YESTERDAY")) {
+            cal.add(Calendar.DAY_OF_MONTH, -1);
+        } else if(date.equals("TODAY")) {
+        } else {
+            throw new IllegalArgumentException("Unable to parse date: " + date);
+        }
+        TimeDimensionValue timeDim = new TimeDimensionValue(this);
+        timeDim.setCal(cal);
+        return timeDim;
+    }
+
     @SuppressWarnings("fallthrough")
     @Override
     public DimensionValue getValueFromId(String id) {
+        if (!id.contains("-")) {
+            return getValueFromSymbolicDate(id);
+        }
+
         String[] chunks = id.split("-");
         TimeDimensionValue  timeDim = new TimeDimensionValue(this);
 
