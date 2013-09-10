@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.ClosedInputStream;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.s3.AmazonS3;
@@ -237,20 +238,37 @@ public class S3File extends BucketBasedFile {
     }
     @Override
     public InputStream getRange(long begin, long length) throws IOException {
-        try {
-            GetObjectRequest req = new GetObjectRequest(bucket, path);
-            req.setRange(begin, begin + length);
-            S3Object obj = s3.getObject(req);
-            return obj.getObjectContent();
-        }
-        catch (AmazonS3Exception access) {
-            if (isFileNotFound(access)) {
-                throw new FileNotFoundException(getAbsoluteAddress());
-            }
-            else {
-                throw wrapProperly("getObject", access);
-            }
-        }
+    	// TODO - check arguments? fail if one is negative?
+    	try {
+    		GetObjectRequest req = new GetObjectRequest(bucket, path);
+			if (length == 0) {
+				return new ClosedInputStream();
+			}
+    		try {
+        		req.setRange(begin, begin + length - 1);
+    			return s3.getObject(req).getObjectContent();
+    		} catch (AmazonS3Exception e) {
+    			if (isInvalidRange(e)) {
+    				// If required end of range is after end of file, retry by clipping it to end of file
+    				// Any other case is an error.
+    				long size = s3.getObjectMetadata(bucket, path).getContentLength();
+    				if (begin == size) {
+    					return new ClosedInputStream();
+    				} else if (begin < size && begin + length > size) {
+    					req.setRange(begin, size - 1);
+    					return s3.getObject(req).getObjectContent();
+    				}
+    			}
+    			throw e;
+    		}
+    	}
+    	catch (AmazonS3Exception access) {
+    		if (isFileNotFound(access)) {
+    			throw new FileNotFoundException(getAbsoluteAddress());
+    		} else {
+    			throw wrapProperly("getObject", access);
+    		}
+    	}
     }
     @Override
     public InputStream inputStream() throws IOException {
@@ -554,6 +572,11 @@ public class S3File extends BucketBasedFile {
                 && (e.getMessage().equals("Not Found")
                     || e.getErrorCode().equals("NoSuchBucket")
                     || e.getErrorCode().equals("NoSuchKey")));
+    }
+    
+    private boolean isInvalidRange(AmazonS3Exception e) {
+    	return (e.getStatusCode() == 416
+    			&& (e.getErrorCode().equals("InvalidRange")));
     }
 
     private IOException wrapProperly(String failedCall, AmazonS3Exception e) {
