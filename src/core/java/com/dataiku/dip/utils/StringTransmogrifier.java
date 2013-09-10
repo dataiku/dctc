@@ -23,6 +23,11 @@ public class StringTransmogrifier {
         assigned.add(in);
     }
     
+    public void addAlreadyTransmogrifiedAcceptDupes(String in) {
+        assigned.add(in);
+    }
+    
+    
     public String transmogrify(String input) {
         String cur = input;
         int i = 0;
