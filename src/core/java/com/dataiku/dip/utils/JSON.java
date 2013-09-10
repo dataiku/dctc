@@ -13,7 +13,7 @@ import com.google.gson.GsonBuilder;
 
 public class JSON {
     public static <T> T parse(String s, Class<T> classOfT) {
-        T t =  new Gson().fromJson(s, classOfT);
+        T t = new GsonBuilder().serializeSpecialFloatingPointValues().create().fromJson(s, classOfT);
 
         // Cleanup-null at the end of array.
         for(Field field: t.getClass().getDeclaredFields()) {
@@ -47,11 +47,11 @@ public class JSON {
     }
     public static String json(Object o) {
         if (o == null) return null;
-        return new Gson().toJson(o);
+        return new GsonBuilder().serializeSpecialFloatingPointValues().create().toJson(o);
     }
     public static String pretty(Object o) {
         if (o == null) return null;
-        return new GsonBuilder().setPrettyPrinting().create().toJson(o);
+        return new GsonBuilder().serializeSpecialFloatingPointValues().setPrettyPrinting().create().toJson(o);
     }
     public static void jsonToFile(Object o, File f) throws IOException {
         FileUtils.write(f, json(o), "utf8");
@@ -62,6 +62,6 @@ public class JSON {
 
     public static void prettySyso(Object o) {
         if (o == null) return;
-        System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(o));
+        System.out.println(new GsonBuilder().serializeSpecialFloatingPointValues().setPrettyPrinting().create().toJson(o));
     }
 }
