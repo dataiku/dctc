@@ -112,7 +112,14 @@ public class HadoopLoader {
                     new File("/opt/mapr/hadoop/hadoop-0.20.2/lib/hadoop-0.20.2-dev-core.jar"),
                     new File("/opt/mapr/hadoop/hadoop-0.20.2/lib/maprfs-test-0.1.jar"));
         } else {
-            return expand(new File(getHadoopHome()), "hadoop-core-.*.jar");
+            List<File> files =  expand(new File(getHadoopHome()), "hadoop-core-.*.jar");
+            files.addAll(expand(new File(getHadoopHome(), "lib"), "protobuf-java-*.jar"));
+            files.addAll(expand(new File(getHadoopHome(), "lib"), "guava-*.jar"));
+            files.addAll(expand(new File(getHadoopHome(), "lib"), "sl4j-api-*.jar"));
+            files.addAll(expand(new File(getHadoopHome(), "lib"), "sl4j-log4j-*.jar"));
+            files.addAll(expand(new File(getHadoopHome(), "lib"), "commons-configuration-*.jar"));
+            files.addAll(expand(new File(getHadoopHome(), "lib"), "commons-configuration-*.jar"));
+            return files;
         }
     }
 
