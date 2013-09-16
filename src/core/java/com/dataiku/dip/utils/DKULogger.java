@@ -10,6 +10,14 @@ import org.apache.log4j.Priority;
 import org.apache.log4j.spi.LoggerRepository;
 import org.apache.log4j.spi.LoggingEvent;
 
+/**
+ * A variant of the Log4J logger that adds a "relative call timestamp" to messages.
+ * 
+ * To use, call DKULogger.startCurrentCall() to record the "beginning of call timestamp".
+ * Until you call DKULogger.endCurrentCall(), all infos will contain [ct: time_in_ms]
+ * 
+ * Also adds some variadic methods with printf formatting: infoV, debugV, warnV, errorV
+ */
 public class DKULogger extends Logger {
     public static DKULogger getLogger(String loggerName) {
        return new DKULogger(Logger.getLogger(loggerName));
@@ -66,6 +74,10 @@ public class DKULogger extends Logger {
     public void debug(Object message) {
         delegate.debug(concatTime(message));
     }
+    public void debugV(String message, Object... format) {
+        this.debug(String.format(message, format));
+    }
+
 
     public boolean equals(Object obj) {
         return delegate.equals(obj);
@@ -77,6 +89,9 @@ public class DKULogger extends Logger {
 
     public void error(Object message) {
         delegate.error(message);
+    }
+    public void errorV(String message, Object... format) {
+        this.error(String.format(message, format));
     }
 
     public void fatal(Object message, Throwable t) {
@@ -131,6 +146,9 @@ public class DKULogger extends Logger {
 
     public void info(Object message) {
         delegate.info(concatTime(message));
+    }
+    public void infoV(String message, Object... format) {
+        this.info(String.format(message, format));
     }
 
     public boolean isAttached(Appender appender) {
@@ -222,4 +240,8 @@ public class DKULogger extends Logger {
     public void warn(Object message) {
         delegate.warn(message);
     }
+    public void warnV(String message, Object... format) {
+        this.warn(String.format(message, format));
+    }
+
 }

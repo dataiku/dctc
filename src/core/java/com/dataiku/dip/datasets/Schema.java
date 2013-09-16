@@ -187,7 +187,7 @@ public class Schema {
         public void includeInOutput(boolean includeInOutput) {
             this.includeInOutput = includeInOutput;
         }
-
+        
         private String name;
         private boolean includeInOutput;
         private String typeName;
