@@ -23,4 +23,11 @@ public interface DatasetHandler {
      * lists of files to process.
      */
     public FilterResultWithSplits getFilterSplits(InputFilter filter) throws Exception;
+
+
+    /**
+     * Create the underlying resource (table, bucket, ... ) for a managed dataset
+     * @throws Exception
+     */
+    public boolean createManaged() throws Exception;
 }
