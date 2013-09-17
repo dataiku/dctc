@@ -52,7 +52,6 @@ public class Partition implements Cloneable {
         Partition clone = new Partition(this.scheme);
 
         for (Map.Entry<String, DimensionValue> dv : dimensionValues.entrySet()) {
-            System.out.println("CLONE " + dv.getKey() + " WITH VAL " + dv.getValue());
             clone.dimensionValues.put(dv.getKey(), dv.getValue().clone());
         }
 
