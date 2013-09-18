@@ -65,36 +65,7 @@ public class Schema {
 
     }
 
-    public static String toSQLType(String type) {
-        return toSQLType(Type.forName(type));
-    }
 
-    public static String toSQLType(Type type) {
-        switch (type) {
-            case TINYINT:
-                return "TINYINT";
-            case SMALLINT:
-                return "SMALLINT";
-            case INT:
-                return "INTEGER";
-            case BIGINT:
-                return "BIGINT";
-            case FLOAT:
-                return "FLOAT";
-            case DOUBLE:
-                return "DOUBLE";
-            case BOOLEAN:
-                return "BOOLEAN";
-            case STRING:
-                return "VARCHAR(1023)";
-            case ARRAY:
-                return "VARCHAR(1023)";
-            case MAP:
-                return "VARCHAR(1023)";
-            default:
-                return "VARCHAR(1023)";
-        }
-    }
 
     public static Type fromSQLType(int sqlType) {
         switch (sqlType) {
