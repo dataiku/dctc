@@ -48,9 +48,12 @@ public class SyncComputer {
         public boolean accept(GFile src, GFile dstRoot,
                               String destination) throws IOException {
             GFile dst = dstRoot.createSubFile(destination, src.fileSeparator());
+            logger.debug("accept " + src.getAbsolutePath() + " to " + dstRoot.getAbsolutePath() + " " + destination + " dst.isDir = " + dst.isDirectory() + " dst.exists" + dst.exists());
             if (dst.isDirectory()) {
                 return false;
             }
+            
+            
 
             if (dst.exists()) {
                 switch (type) {
@@ -108,6 +111,11 @@ public class SyncComputer {
 
     private List<GFile> sources;
     private GFile target;
+    
+    public List<GFile> getResolvedSources() {
+        assert(sources != null);
+        return sources;
+    }
 
     public List<CopyTask> computeTasksList() throws IOException {
         checkArgs(sources, target);

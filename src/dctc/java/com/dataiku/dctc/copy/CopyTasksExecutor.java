@@ -71,6 +71,11 @@ public class CopyTasksExecutor {
     public boolean hasFail() {
         return errors != null && errors.size() > 0;
     }
+    public List<CopyTaskRunnable> getErrors() {
+        if (errors == null) return new ArrayList<CopyTaskRunnable>();
+        return errors;
+    }
+    
     public void displayErrors(YellPolicy yell) {
         for (CopyTaskRunnable runnable: errors) {
             if (runnable.getException() != null) {
