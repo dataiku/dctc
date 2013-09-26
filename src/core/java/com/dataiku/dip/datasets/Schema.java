@@ -38,7 +38,7 @@ public class Schema {
             return name;
         }
 
-        public boolean isCore() {
+        public boolean isPrimitive() {
             switch(this)  {
                 case ARRAY:
                 case MAP:
