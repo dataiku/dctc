@@ -4,11 +4,13 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
+import org.junit.Ignore;
+
 import com.dataiku.dctc.Settings;
 import com.dataiku.dctc.configuration.GlobalConf;
 import com.dataiku.dctc.configuration.StructuredConf;
 import com.dataiku.dctc.utils.ExitCode;
-
+@Ignore
 public class CmpTest {
     private void checkErr(String str) throws Exception {
         assertTrue(str.equals(Settings.getErr()));
