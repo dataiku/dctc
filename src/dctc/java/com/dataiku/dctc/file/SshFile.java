@@ -168,6 +168,7 @@ public class SshFile extends AbstractGFile {
                     , Acl acl
                     , long size
                     , long date) {
+        this.host = copy.host;
         this.connData = copy.connData;
         this.path = fileName;
         this.acl = acl;
