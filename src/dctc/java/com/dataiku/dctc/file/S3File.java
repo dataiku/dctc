@@ -419,7 +419,7 @@ public class S3File extends BucketBasedFile {
         if (type != Type.FILE) {
             throw new IOException("Can't get date of "
                                   + getAbsoluteAddress()
-                                  + ": not a file");
+                                  + ": not a file but a " + type);
         }
         else {
             if (objectMeta != null) {
