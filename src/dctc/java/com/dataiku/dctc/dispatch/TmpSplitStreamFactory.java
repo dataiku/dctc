@@ -31,7 +31,10 @@ public class TmpSplitStreamFactory extends SplitStreamFactory {
                                       + suffix
                                       , dir.fileSeparator());
         out.mkpath();
-        OutputFormatter formatter = new CSVOutputFormatter(',', true, false);
+        Format inputFormat = new Format("csv");
+        inputFormat.addParam("separator", ",");
+        inputFormat.addParam("parseHeaderRow", "true");
+        OutputFormatter formatter = new CSVOutputFormatter(inputFormat);
         File tmpFile = File.createTempFile("Foo", "bar.toto");
         tmpFile.deleteOnExit();
 

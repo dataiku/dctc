@@ -73,10 +73,7 @@ public class SplitStreamFactory {
 
         OutputFormatter formatter = null;
         if (inputFormat.getType().equals("csv")) {
-            formatter = new CSVOutputFormatter(inputFormat
-                                               .getCharParam("separator")
-                                               , true
-                                               , false);
+            formatter = new CSVOutputFormatter(inputFormat);
         }
         else if (inputFormat.getType().equals("line")) {
             formatter = new LineOutputFormatter();
