@@ -6,19 +6,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.amazonaws.services.simpleworkflow.model.ScheduleActivityTaskDecisionAttributes;
-import com.dataiku.dip.input.formats.CSVFormatConfig;
-import com.dataiku.dip.utils.ErrorContext;
-import com.dataiku.dip.utils.WithParams;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.dataiku.dip.datalayer.Column;
 import com.dataiku.dip.datalayer.ColumnFactory;
 import com.dataiku.dip.datalayer.Row;
 import com.dataiku.dip.datasets.Schema;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.dataiku.dip.input.formats.CSVFormatConfig;
+import com.dataiku.dip.utils.ErrorContext;
+import com.dataiku.dip.utils.WithParams;
 
 public class CSVOutputFormatter extends StringOutputFormatter {
 
@@ -96,7 +95,7 @@ public class CSVOutputFormatter extends StringOutputFormatter {
     public static void appendMapDelimited(Writer wr, String v, char sep, char quote, Character escape, char arraySeparator, char mapKeySeparator) throws IOException {
         try {
             JSONObject obj = new JSONObject(v);
-            Iterator it = obj.keys();
+            Iterator<?> it = obj.keys();
             int i = 0;
             StringBuilder sb = new StringBuilder();
             boolean shouldQuote = false;
