@@ -11,6 +11,7 @@ import com.dataiku.dip.datalayer.ColumnFactory;
 import com.dataiku.dip.datalayer.ProcessorOutput;
 import com.dataiku.dip.datalayer.Row;
 import com.dataiku.dip.datalayer.RowFactory;
+import com.dataiku.dip.datasets.Schema.SchemaColumn;
 import com.dataiku.dip.input.StreamInputSplitProgressListener;
 import com.dataiku.dip.input.stream.EnrichedInputStream;
 import com.dataiku.dip.input.stream.StreamsInputSplit;
@@ -48,6 +49,12 @@ public class FixedWidthFormatExtractor extends AbstractFormatExtractor {
 
             try {
                 List<Column> headerColumns = null;
+                if (getSchema() != null) {
+                    headerColumns = new ArrayList<Column>();
+                    for (SchemaColumn col : getSchema().getColumns()) {
+                        headerColumns.add(cf.column(col.getName()));
+                    }
+                }
                 long fileLines = 0;
                 while (true) {
                     String line = br.readLine();
@@ -60,13 +67,16 @@ public class FixedWidthFormatExtractor extends AbstractFormatExtractor {
                     if (fileLines < skipBefore) {
                         // Skip
                     } else if (fileLines == skipBefore && parseHeader) {
-                        headerColumns = new ArrayList<Column>();
-                        for (int colIdx = 0; colIdx < columnOffsets.length; colIdx++) {
-                            int begin = columnOffsets[colIdx];
-                            int end = colIdx < columnOffsets.length - 1 ? columnOffsets[colIdx+1] : line.length();
-                            if (begin >= line.length()) break;
-                            String s = line.substring(begin, end).trim();
-                            headerColumns.add(cf.column(s));
+                        if (getSchema() == null) {
+                            headerColumns = new ArrayList<Column>();
+                            for (int colIdx = 0; colIdx < columnOffsets.length; colIdx++) {
+                                int begin = columnOffsets[colIdx];
+                                int end = colIdx < columnOffsets.length - 1 ? columnOffsets[colIdx+1] : line.length();
+                                if (begin >= line.length()) break;
+                                String s = line.substring(begin, end).trim();
+                                if (s.isEmpty()) s = "col_" + colIdx;
+                                headerColumns.add(cf.column(s));
+                            }
                         }
                     } else {
                         Row r = rf.row();
