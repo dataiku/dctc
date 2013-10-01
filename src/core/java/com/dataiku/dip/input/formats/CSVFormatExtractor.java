@@ -70,7 +70,7 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                 List<Column> columns = new ArrayList<Column>();
                 List<Schema.Type> types = getTypes();
                 long fileLines = 0, nintern = 0;
-                
+
                 if (!conf.parseHeaderRow && schema != null) {
                     logger.info("Loading schema");
                     for (SchemaColumn col : schema.getColumns()) {
@@ -145,7 +145,7 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
 
 
                             if (!nullString && types != null && conf.arraySeparator != null && !conf.arrayMapFormat.equals("json") && i < types.size()) {
-                            Schema.Type type = types.get(i);
+                                Schema.Type type = types.get(i);
 
                                 // Replace the string by its
                                 if (type.equals(Schema.Type.MAP) && conf.mapKeySeparator != null) {
@@ -197,13 +197,13 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                     fileLines++;
 
                     if (listener != null && totalRecords % 500 == 0) {
-                        if (totalRecords % 5000 == 0) {
-                            Runtime runtime = Runtime.getRuntime();
-                            double p = ((double) runtime.totalMemory()) / runtime.maxMemory() * 100;
-                            logger.info("CSV Emitted " + fileLines + " lines from file, " + totalRecords + " total, " +
-                                    columns.size() + " columns - interned: " + nintern + " MEM: " + p + "%");
-                        }
                         listener.setData(totalBytes + cis.getCount(), totalRecords, 0);
+                    }
+                    if (totalRecords % 5000 == 0) {
+                        Runtime runtime = Runtime.getRuntime();
+                        double p = ((double) runtime.totalMemory()) / runtime.maxMemory() * 100;
+                        logger.info("CSV Emitted " + fileLines + " lines from file, " + totalRecords + " total, " +
+                                columns.size() + " columns - interned: " + nintern + " MEM: " + p + "%");
                     }
                 }
                 totalBytes += cis.getCount();
