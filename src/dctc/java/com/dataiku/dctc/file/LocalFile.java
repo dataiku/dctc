@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 
 import com.dataiku.dctc.GlobalConstants;
 import com.dataiku.dctc.file.FileBuilder.Protocol;
@@ -168,7 +169,8 @@ public class LocalFile extends AbstractGFile {
     }
     @Override
     public void mkdirs() throws IOException {
-        File file = new File(pathToFile());
+        File file = new File(getAbsolutePath());
+        logger.info("mkdirs " + file + " e=" + file.exists() + " d=" + file.isDirectory() + " f=" + file.isFile());
         DKUFileUtils.mkdirs(file);
     }
     @Override
@@ -312,5 +314,5 @@ public class LocalFile extends AbstractGFile {
     private String fileName;
     private List<String> l;
     private List<String> recurList;
-
+    private static Logger logger = Logger.getLogger("dku.dctc");
 }
