@@ -204,7 +204,7 @@ public class HadoopLoader {
             }
         } catch (Exception e) {
             logger.info("Could not read Hadoop classpath, retrying with HADOOP_HOME", e);
-            configLocations.add(new File(getHadoopHome()));
+            configLocations.add(new File(getHadoopHome(), "conf"));
         }
         return configLocations;
     }
