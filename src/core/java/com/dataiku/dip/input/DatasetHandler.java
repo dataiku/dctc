@@ -26,8 +26,7 @@ public interface DatasetHandler {
 
 
     /**
-     * Create the underlying resource (table, bucket, ... ) for a managed dataset
-     * @throws Exception
+     * Creates the underlying resource (table, bucket, ... ) for a managed dataset
      */
-    public boolean createManaged() throws Exception;
+    public void createManaged() throws Exception;
 }
