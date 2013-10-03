@@ -55,6 +55,11 @@ public class SingleFileOutputWriter extends OutputWriter{
         finalOutputStream.close();
         fos.close();
     }
+    @Override
+    public void cancel() throws Exception {
+        finalOutputStream.close();
+        fos.close();
+    }
 
     @Override
     public long writtenBytes() throws IOException {

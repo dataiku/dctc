@@ -37,10 +37,16 @@ public class OutputStreamOutputWriter extends OutputWriter{
         lre.call("processor already closed");
         formatter.footer(cf, os);
     }
+    @Override
+    public void cancel() throws Exception {
+        lre.call("processor already closed");
+    }
+
     private SingleCallAsserter lre = new SingleCallAsserter();
 
     @Override
     public long writtenBytes() throws IOException {
         return -1;
     }
+
 }
