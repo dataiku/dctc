@@ -219,8 +219,8 @@ public class DKUtils {
     }
 
     /* Eat a stream and gather its output */
-    static class GatheringStreamEater extends CopyStreamEater {
-        GatheringStreamEater(InputStream is) {
+    public static class GatheringStreamEater extends CopyStreamEater {
+        public GatheringStreamEater(InputStream is) {
             super(is, new ByteArrayOutputStream());
             this.is = is;
         }
