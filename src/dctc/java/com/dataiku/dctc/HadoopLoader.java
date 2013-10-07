@@ -32,7 +32,7 @@ public class HadoopLoader {
         }
         return files;
     }
-    
+
     public static boolean hadoopEnabled() {
         if (hadoopEnabled != null) return hadoopEnabled;
         try {
@@ -93,38 +93,38 @@ public class HadoopLoader {
         }
         return false;
     }
-    
+
     public static boolean isCDH4Parcel() {
-    	// TODO - this path can be customized in /etc/cloudera-scm-agent/config.ini
-    	if (new File("/opt/cloudera/parcels/CDH/lib/hadoop/cloudera").isDirectory()) {
-    		logger.info("Detected Cloudera distribution using parcels");
+        // TODO - this path can be customized in /etc/cloudera-scm-agent/config.ini
+        if (new File("/opt/cloudera/parcels/CDH/lib/hadoop/cloudera").isDirectory()) {
+            logger.info("Detected Cloudera distribution using parcels");
             try {
                 String content = FileUtils.readFileToString(new File("/opt/cloudera/parcels/CDH/lib/hadoop/cloudera/cdh_version.properties"));
                 if (content.indexOf("cdh4") > 0 ) {
                     return true;
                 }
             } catch (Exception e) {}
-    	}
-    	return false;
+        }
+        return false;
     }
-    
+
     public static boolean isCDH4() {
-    	return isCDH4Parcel() || isCDH4Package();
+        return isCDH4Parcel() || isCDH4Package();
     }
 
     public static List<File> getHadoopCodeJARs() {
-    	if (isCDH4Parcel()) {
-    		String dir = "/opt/cloudera/parcels/CDH/lib/";
-    		return Lists.newArrayList(
-    				new File(dir + "hadoop/lib/protobuf-java-2.4.0a.jar"),
-    				new File(dir + "hadoop/lib/guava-11.0.2.jar"),
-    				new File(dir + "hadoop/lib/slf4j-api-1.6.1.jar"),
-    				new File(dir + "hadoop/lib/slf4j-log4j12-1.6.1.jar"),
-    				new File(dir + "hadoop/lib/commons-configuration-1.6.jar"),
-    				new File(dir + "hadoop-hdfs/hadoop-hdfs.jar"),
-    				new File(dir + "hadoop/hadoop-common.jar"),
-    				new File(dir + "hadoop/hadoop-auth.jar"));
-		} else if (isCDH4Package()) {
+        if (isCDH4Parcel()) {
+            String dir = "/opt/cloudera/parcels/CDH/lib/";
+            return Lists.newArrayList(
+                    new File(dir + "hadoop/lib/protobuf-java-2.4.0a.jar"),
+                    new File(dir + "hadoop/lib/guava-11.0.2.jar"),
+                    new File(dir + "hadoop/lib/slf4j-api-1.6.1.jar"),
+                    new File(dir + "hadoop/lib/slf4j-log4j12-1.6.1.jar"),
+                    new File(dir + "hadoop/lib/commons-configuration-1.6.jar"),
+                    new File(dir + "hadoop-hdfs/hadoop-hdfs.jar"),
+                    new File(dir + "hadoop/hadoop-common.jar"),
+                    new File(dir + "hadoop/hadoop-auth.jar"));
+        } else if (isCDH4Package()) {
             return Lists.newArrayList(
                     new File("/usr/lib/hadoop/lib/protobuf-java-2.4.0a.jar"),
                     new File("/usr/lib/hadoop/lib/guava-11.0.2.jar"),
@@ -195,7 +195,7 @@ public class HadoopLoader {
         List<File> configLocations = new ArrayList<File>();
         try {
             // FIXME: Should not be UTF8 but native FS encoding ??
-          String hadoopClasspath = new String(DKUtils.execAndGetOutput(new String[]{"hadoop", "classpath"}, null), "UTF-8");
+            String hadoopClasspath = new String(DKUtils.execAndGetOutput(new String[]{"hadoop", "classpath"}, null), "UTF-8");
 
             for (String chunk : hadoopClasspath.split(":")) {
                 if (chunk.contains("conf")) {
@@ -203,7 +203,7 @@ public class HadoopLoader {
                 }
             }
         } catch (Exception e) {
-            logger.info("Could not read Hadoop classpath, retrying with HADOOP_HOME", e);
+            logger.debug("Could not read Hadoop classpath, retrying with HADOOP_HOME", e);
             configLocations.add(new File(getHadoopHome(), "conf"));
         }
         return configLocations;
