@@ -26,6 +26,9 @@ public class Schema {
         BOOLEAN("boolean"),
         /** No size limitation */
         STRING("string"),
+        
+        DATE("date"),
+        
         ARRAY("array"),
         MAP("map");
 
