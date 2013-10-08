@@ -72,7 +72,6 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                 long fileLines = 0, nintern = 0;
 
                 if (!conf.parseHeaderRow && schema != null) {
-                    logger.info("Loading schema");
                     for (SchemaColumn col : schema.getColumns()) {
                         columns.add(cf.column(col.getName()));
                     }
@@ -199,7 +198,7 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                     if (listener != null && totalRecords % 500 == 0) {
                         listener.setData(totalBytes + cis.getCount(), totalRecords, 0);
                     }
-                    if (totalRecords % 5000 == 0) {
+                    if (totalRecords % 20000 == 0) {
                         Runtime runtime = Runtime.getRuntime();
                         double p = ((double) runtime.totalMemory()) / runtime.maxMemory() * 100;
                         logger.info("CSV Emitted " + fileLines + " lines from file, " + totalRecords + " total, " +
@@ -211,10 +210,13 @@ public class CSVFormatExtractor extends AbstractFormatExtractor  {
                     listener.setData(totalBytes, totalRecords, 0);
                 }
             } finally {
-                logger.info("Closing stream");
+                long before = System.currentTimeMillis();
                 reader.close();
                 IOUtils.closeQuietly(cis);
-                logger.info("Stream closed");
+                long now = System.currentTimeMillis();
+                if (now - before > 100) {
+                    logger.info("Stream " + stream.desc() + " closed after " + (now -before)+  "ms");
+                }
             }
         }
         return true;
