@@ -84,8 +84,10 @@ public class FixedWidthFormatExtractor extends AbstractFormatExtractor {
                             Column c = null;
                             if (headerColumns == null) {
                                 c = cf.column("col_" + colIdx);
-                            } else {
+                            } else if (colIdx < headerColumns.size()) {
                                 c = headerColumns.get(colIdx);
+                            } else {
+                                c = cf.column("col_" + colIdx);
                             }
                             int begin = columnOffsets[colIdx];
                             int end = colIdx < columnOffsets.length - 1 ? columnOffsets[colIdx+1] : line.length();
