@@ -244,9 +244,13 @@ public class Params {
     }
 
     /* Get as char */
-
     public char getCharParam(String name) {
-        String s = getMandParam(name);
+        getMandParam(name);
+        return getCharParam(name, null);
+    }
+
+    public char getCharParam(String name, Character defaultValue) {
+        String s = getParam(name, "" + defaultValue);
         if (s.length() != 1) {
             if (s.startsWith("\\u")) {
                 try {

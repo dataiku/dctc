@@ -44,6 +44,7 @@ public class WithParams {
 
     /* Get as char */
     public char getCharParam(String name) { return internalParams.getCharParam(name); }
+    public char getCharParam(String name, char defaultValue) { return internalParams.getCharParam(name, defaultValue); }
 
     /* Get as CSV */
     public List<String> getCSVParamAsList(String name, String defaultValue) { return internalParams.getCSVParamAsList(name, defaultValue); }
