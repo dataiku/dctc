@@ -25,12 +25,12 @@ import com.dataiku.dip.input.stream.StreamsInputSplit;
 import com.dataiku.dip.utils.DKULogger;
 import com.google.common.io.CountingInputStream;
 
-public class CSVFormatExtractor extends AbstractFormatExtractor  {
-    public CSVFormatExtractor(CSVFormatConfig conf) {
+public class BasicCSVFormatExtractor extends AbstractFormatExtractor  {
+    public BasicCSVFormatExtractor(BasicCSVFormatConfig conf) {
         this.conf = conf;
     }
 
-    private CSVFormatConfig conf;
+    private BasicCSVFormatConfig conf;
 
 
     long log_count = 0;

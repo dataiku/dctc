@@ -15,18 +15,18 @@ import com.dataiku.dip.datalayer.Column;
 import com.dataiku.dip.datalayer.ColumnFactory;
 import com.dataiku.dip.datalayer.Row;
 import com.dataiku.dip.datasets.Schema;
-import com.dataiku.dip.input.formats.CSVFormatConfig;
+import com.dataiku.dip.input.formats.BasicCSVFormatConfig;
 import com.dataiku.dip.utils.ErrorContext;
 import com.dataiku.dip.utils.WithParams;
 
 public class CSVOutputFormatter extends StringOutputFormatter {
 
 
-    CSVFormatConfig config;
+    BasicCSVFormatConfig config;
 
     public CSVOutputFormatter(WithParams p) {
         super(p.getParam("charset", "utf8"));
-        config = new CSVFormatConfig(p);
+        config = new BasicCSVFormatConfig(p);
         this.delimiter  = config.separator;
         this.printHeaderLine = config.parseHeaderRow;
         this.prefixHeaderLineWithSharp = p.getBoolParam("prefixHeaderLineWithSharp", false);

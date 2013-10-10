@@ -10,8 +10,8 @@ import com.dataiku.dip.utils.RegexpFieldsBuilder;
 public class BasicFormatExtractorFactory {
     public static FormatExtractor build(Format fmt) {
         if (fmt.getType().equals("csv")) {
-            CSVFormatConfig csvConfig = new CSVFormatConfig(fmt);
-            CSVFormatExtractor csvExtractor = new CSVFormatExtractor(csvConfig);
+            BasicCSVFormatConfig csvConfig = new BasicCSVFormatConfig(fmt);
+            BasicCSVFormatExtractor csvExtractor = new BasicCSVFormatExtractor(csvConfig);
             return csvExtractor;
 
         } else if (fmt.getType().equals("fixed")) {

@@ -3,11 +3,11 @@ package com.dataiku.dip.input.formats;
 import com.dataiku.dip.input.Format;
 import com.dataiku.dip.utils.WithParams;
 
-public class CSVFormatConfig {
-    public CSVFormatConfig() {
+public class BasicCSVFormatConfig {
+    public BasicCSVFormatConfig() {
     }
 
-    public CSVFormatConfig(WithParams p) {
+    public BasicCSVFormatConfig(WithParams p) {
         charset = p.getParam("charset", "utf8");
         separator = p.getCharParam("separator");
         if (!p.getParam("quoteChar", "").isEmpty()) {
@@ -67,19 +67,14 @@ public class CSVFormatConfig {
         f.addParam(AbstractFormatExtractor.PARAM_skipRowsAfterHeader, skipRowsAfterHeader);
     }
 
-    public int getProbableNumberOfRecords() {
-        return probableNumberOfRecords;
-    }
-    public void setProbableNumberOfRecords(int problableNumberOfRecords) {
-        this.probableNumberOfRecords = problableNumberOfRecords;
-    }
-    public CSVFormatConfig withProbableNumberOfRecords(int probableNumberOfRecords) {
-        this.probableNumberOfRecords = probableNumberOfRecords;
-        return this;
-    }
-
     // Attributes
-    private int probableNumberOfRecords;
+    int probableNumberOfRecords;
+    
+    public enum CSVStyle {
+        OPENCSV,
+        RFC,
+        ESCAPE_ONLY_NO_QUOTE
+    }
 
     public String charset = "utf8";
     public char separator;
@@ -88,7 +83,7 @@ public class CSVFormatConfig {
     public Character arraySeparator;
     public Character mapKeySeparator;
     public String arrayMapFormat = "delimited";
-
+    
     public int skipRowsBeforeHeader;
     public boolean parseHeaderRow;
     public int skipRowsAfterHeader;
