@@ -43,7 +43,7 @@ public class BasicFormatExtractorFactory {
             return extractor;
         }
         else if (fmt.getType().equals("line")) {
-            return new LineFormatExtractor(fmt.getParam("charset"));
+            return new BasicLineFormatExtractor(fmt.getParam("charset"));
         }
         else {
             ErrorContext.throwIAE("Unknown format type "+ fmt.getType());

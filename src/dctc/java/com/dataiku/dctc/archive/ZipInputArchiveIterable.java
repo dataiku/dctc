@@ -5,7 +5,7 @@ import java.io.InputStream;
 import com.dataiku.dctc.GlobalConstants;
 
 public class ZipInputArchiveIterable extends InputArchiveIterable {
-    ZipInputArchiveIterable(InputStream inputStream) {
+    public ZipInputArchiveIterable(InputStream inputStream) {
         this.inputStream = inputStream;
     }
 

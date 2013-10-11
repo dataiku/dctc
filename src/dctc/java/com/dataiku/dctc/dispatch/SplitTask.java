@@ -1,7 +1,6 @@
 package com.dataiku.dctc.dispatch;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.apache.commons.io.input.CountingInputStream;
 
@@ -12,7 +11,6 @@ import com.dataiku.dip.datalayer.streamimpl.StreamRowFactory;
 import com.dataiku.dip.input.Format;
 import com.dataiku.dip.input.formats.BasicFormatExtractorFactory;
 import com.dataiku.dip.input.formats.FormatExtractor;
-import com.dataiku.dip.input.utils.AutoGZInputStream;
 
 public class SplitTask extends CopyTaskRunnable {
     SplitTask(GFile in, SplitStreamFactory fact, Format format) {
@@ -31,16 +29,7 @@ public class SplitTask extends CopyTaskRunnable {
 
         SplitProcessorOutput out = new SplitProcessorOutput(fact);
 
-        InputStream realStream = null;
-        if (in.getFileName().endsWith(".gz")) {
-            countable = new CountingInputStream(in.inputStream());
-            realStream = AutoGZInputStream.get(countable, in.getFileName());
-        }
-        else {
-            realStream = countable = new CountingInputStream(in.inputStream());
-        }
-        GeneralizedFileInputSplit inputStream
-            = new GeneralizedFileInputSplit(in, realStream);
+        GeneralizedFileInputSplit inputStream = new GeneralizedFileInputSplit(in);
         try {
             formatExtractor.run(inputStream
                                 , out

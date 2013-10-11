@@ -55,7 +55,7 @@ public class BasicCSVFormatExtractor extends AbstractFormatExtractor  {
 
             logger.info("CSV starting to process one stream: " + stream.desc() +  "  " + stream.size());
 
-            InputStream is = stream.headStream(limit != null ? limit.maxBytes : -1); 
+            InputStream is = stream.decompressedHeadStream(limit != null ? limit.maxBytes : -1); 
             CountingInputStream cis = new CountingInputStream(is);
 
             CSVReader reader = null;
@@ -195,9 +195,6 @@ public class BasicCSVFormatExtractor extends AbstractFormatExtractor  {
                     }
                     fileLines++;
 
-                    if (listener != null && totalRecords % 500 == 0) {
-                        listener.setData(totalBytes + cis.getCount(), totalRecords, 0);
-                    }
                     if (totalRecords % 20000 == 0) {
                         Runtime runtime = Runtime.getRuntime();
                         double p = ((double) runtime.totalMemory()) / runtime.maxMemory() * 100;
@@ -206,9 +203,6 @@ public class BasicCSVFormatExtractor extends AbstractFormatExtractor  {
                     }
                 }
                 totalBytes += cis.getCount();
-                if (listener != null) {
-                    listener.setData(totalBytes, totalRecords, 0);
-                }
             } finally {
                 long before = System.currentTimeMillis();
                 reader.close();

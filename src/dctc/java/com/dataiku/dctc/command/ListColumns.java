@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dataiku.dctc.AutoGZip;
 import com.dataiku.dctc.clo.OptionAgregator;
 import com.dataiku.dctc.command.abs.Command;
 import com.dataiku.dctc.file.GFile;
@@ -62,10 +61,7 @@ public class ListColumns extends Command {
 
             { // Get the column names
                 try {
-                    inputStream
-                        = new GeneralizedFileInputSplit(arg
-                                                        , AutoGZip
-                                                        .buildInput(arg));
+                    inputStream = new GeneralizedFileInputSplit(arg);
                 }
                 catch (IOException e) {
                     e.printStackTrace();
