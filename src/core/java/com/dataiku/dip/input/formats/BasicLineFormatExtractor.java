@@ -9,12 +9,11 @@ import com.dataiku.dip.datalayer.ColumnFactory;
 import com.dataiku.dip.datalayer.ProcessorOutput;
 import com.dataiku.dip.datalayer.Row;
 import com.dataiku.dip.datalayer.RowFactory;
-import com.dataiku.dip.input.StreamInputSplitProgressListener;
 import com.dataiku.dip.input.stream.EnrichedInputStream;
 import com.dataiku.dip.input.stream.StreamsInputSplit;
 import com.google.common.io.CountingInputStream;
 
-public class BasicLineFormatExtractor extends AbstractFormatExtractor {
+public class BasicLineFormatExtractor extends AbstractBasicFormatExtractor {
     public BasicLineFormatExtractor(String charset) {
         this.charset = charset;
     }
@@ -22,7 +21,7 @@ public class BasicLineFormatExtractor extends AbstractFormatExtractor {
 
     @Override
     public boolean run(StreamsInputSplit in, ProcessorOutput out, ProcessorOutput err,
-            ColumnFactory cf, RowFactory rf, StreamInputSplitProgressListener listener,
+            ColumnFactory cf, RowFactory rf,
             ExtractionLimit limit) throws Exception {
         Column c = cf.column("line");
 

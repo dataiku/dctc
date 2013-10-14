@@ -40,9 +40,9 @@ public class BasicCSVFormatConfig {
             throw new IllegalArgumentException("arrayMapFormat: possible values are json or delimited");
         }
 
-        skipRowsBeforeHeader = p.getIntParam(AbstractFormatExtractor.PARAM_skipRowsBeforeHeader, 0);
-        parseHeaderRow = p.getBoolParam(AbstractFormatExtractor.PARAM_parseHeaderRow, true);
-        skipRowsAfterHeader = p.getIntParam(AbstractFormatExtractor.PARAM_skipRowsAfterHeader, 0);
+        skipRowsBeforeHeader = p.getIntParam(AbstractBasicFormatExtractor.PARAM_skipRowsBeforeHeader, 0);
+        parseHeaderRow = p.getBoolParam(AbstractBasicFormatExtractor.PARAM_parseHeaderRow, true);
+        skipRowsAfterHeader = p.getIntParam(AbstractBasicFormatExtractor.PARAM_skipRowsAfterHeader, 0);
     }
     public void toParams(Format f) {
         f.addParam("charset", "" + charset);
@@ -62,9 +62,9 @@ public class BasicCSVFormatConfig {
             f.addParam("arrayMapFormat", arrayMapFormat);
         }
 
-        f.addParam(AbstractFormatExtractor.PARAM_skipRowsBeforeHeader, skipRowsBeforeHeader);
-        f.addParam(AbstractFormatExtractor.PARAM_parseHeaderRow, ""+parseHeaderRow);
-        f.addParam(AbstractFormatExtractor.PARAM_skipRowsAfterHeader, skipRowsAfterHeader);
+        f.addParam(AbstractBasicFormatExtractor.PARAM_skipRowsBeforeHeader, skipRowsBeforeHeader);
+        f.addParam(AbstractBasicFormatExtractor.PARAM_parseHeaderRow, ""+parseHeaderRow);
+        f.addParam(AbstractBasicFormatExtractor.PARAM_skipRowsAfterHeader, skipRowsAfterHeader);
     }
 
     // Attributes

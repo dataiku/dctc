@@ -2,7 +2,6 @@ package com.dataiku.dip.datalayer.streamimpl;
 
 import com.dataiku.dip.Context;
 import com.dataiku.dip.input.InputSplit;
-import com.dataiku.dip.input.formats.FormatExtractor;
 import com.dataiku.dip.output.OutputWriter;
 
 public class StreamContext implements Context{
@@ -11,10 +10,6 @@ public class StreamContext implements Context{
         return split;
     }
 
-    @Override
-    public FormatExtractor getFormatExtractor() {
-        return null;
-    }
     public void setMainInputSplit(InputSplit split) {
         this.split = split;
     }

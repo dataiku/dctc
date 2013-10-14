@@ -13,9 +13,9 @@ import com.dataiku.dip.datalayer.DevNullProcessorOutput;
 import com.dataiku.dip.datalayer.streamimpl.StreamColumnFactory;
 import com.dataiku.dip.datalayer.streamimpl.StreamRowFactory;
 import com.dataiku.dip.input.Format;
+import com.dataiku.dip.input.formats.BasicFormatExtractor;
 import com.dataiku.dip.input.formats.BasicFormatExtractorFactory;
 import com.dataiku.dip.input.formats.ExtractionLimit;
-import com.dataiku.dip.input.formats.FormatExtractor;
 import com.dataiku.dip.utils.IndentedWriter;
 import com.dataiku.dip.utils.PrettyArray;
 
@@ -45,7 +45,7 @@ public class ListColumns extends Command {
     @Override
     public void perform(List<GFile> args) {
         Format csv = new Format("csv").withParam("separator", getSeparator());
-        FormatExtractor extractor = BasicFormatExtractorFactory.build(csv);
+        BasicFormatExtractor extractor = BasicFormatExtractorFactory.build(csv);
         StreamColumnFactory stream = null;
         ExtractionLimit limit = new ExtractionLimit();
         DevNullProcessorOutput out = new DevNullProcessorOutput();
@@ -74,7 +74,6 @@ public class ListColumns extends Command {
                                   , null
                                   , stream
                                   , new StreamRowFactory()
-                                  , null
                                   , limit);
                 }
                 catch (Exception e) {

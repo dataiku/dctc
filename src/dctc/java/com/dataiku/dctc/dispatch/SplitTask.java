@@ -9,8 +9,8 @@ import com.dataiku.dctc.file.GFile;
 import com.dataiku.dctc.file.GeneralizedFileInputSplit;
 import com.dataiku.dip.datalayer.streamimpl.StreamRowFactory;
 import com.dataiku.dip.input.Format;
+import com.dataiku.dip.input.formats.BasicFormatExtractor;
 import com.dataiku.dip.input.formats.BasicFormatExtractorFactory;
-import com.dataiku.dip.input.formats.FormatExtractor;
 
 public class SplitTask extends CopyTaskRunnable {
     SplitTask(GFile in, SplitStreamFactory fact, Format format) {
@@ -24,7 +24,7 @@ public class SplitTask extends CopyTaskRunnable {
         if (format == null) {
             format = new Format("csv").withParam("separator", ",");
         }
-        FormatExtractor formatExtractor
+        BasicFormatExtractor formatExtractor
             = BasicFormatExtractorFactory.build(format);
 
         SplitProcessorOutput out = new SplitProcessorOutput(fact);
@@ -36,7 +36,6 @@ public class SplitTask extends CopyTaskRunnable {
                                 , null
                                 , out.getColumnFactory()
                                 , new StreamRowFactory()
-                                , null
                                 , null);
             out.lastRowEmitted();
         }

@@ -4,7 +4,7 @@ import com.dataiku.dip.input.Format;
 import com.dataiku.dip.utils.ErrorContext;
 
 public class BasicFormatExtractorFactory {
-    public static FormatExtractor build(Format fmt) {
+    public static BasicFormatExtractor build(Format fmt) {
         if (fmt.getType().equals("csv")) {
             BasicCSVFormatConfig csvConfig = new BasicCSVFormatConfig(fmt);
             return new BasicCSVFormatExtractor(csvConfig);
