@@ -87,6 +87,8 @@ public class Schema {
             return Type.FLOAT;
         case Types.INTEGER:
             return Type.INT;
+        case Types.SMALLINT:
+            return Type.SMALLINT;
         case Types.TINYINT:
             return Type.TINYINT;
         case Types.LONGVARCHAR:
@@ -116,7 +118,6 @@ public class Schema {
         case Types.REAL:
         case Types.REF:
         case Types.ROWID:
-        case Types.SMALLINT:
         case Types.SQLXML:
         case Types.STRUCT:
         case Types.TIME:
