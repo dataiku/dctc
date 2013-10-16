@@ -26,9 +26,9 @@ public class Schema {
         BOOLEAN("boolean"),
         /** No size limitation */
         STRING("string"),
-        
+
         DATE("date"),
-        
+
         ARRAY("array"),
         MAP("map");
 
@@ -43,11 +43,11 @@ public class Schema {
 
         public boolean isPrimitive() {
             switch(this)  {
-                case ARRAY:
-                case MAP:
-                    return false;
-                default:
-                    return true;
+            case ARRAY:
+            case MAP:
+                return false;
+            default:
+                return true;
             }
         }
 
@@ -97,7 +97,13 @@ public class Schema {
             return Type.STRING;
         case Types.NULL:
             return Type.STRING;
+        case Types.DATE:
+        case Types.TIMESTAMP:
+            return Type.DATE;
 
+        case Types.TIME:
+            //???
+            return  Type.STRING;
 
         case Types.ARRAY:
         case Types.BINARY:
@@ -105,7 +111,6 @@ public class Schema {
         case Types.BLOB:
         case Types.CLOB:
         case Types.DATALINK:
-        case Types.DATE:
         case Types.DISTINCT:
         case Types.JAVA_OBJECT:
         case Types.LONGNVARCHAR:
@@ -120,8 +125,7 @@ public class Schema {
         case Types.ROWID:
         case Types.SQLXML:
         case Types.STRUCT:
-        case Types.TIME:
-        case Types.TIMESTAMP:
+
         case Types.VARBINARY:
         default:
             return Type.STRING; // defaulting to string
@@ -151,7 +155,7 @@ public class Schema {
             columns.add(new SchemaColumn(c));
         }
     }
-    
+
     public Schema(List<SchemaColumn> other) {
         this.columns = other;
     }
@@ -181,7 +185,7 @@ public class Schema {
         public void setType(String type) {
             this.typeName = type;
         }
-        
+
         public String getComment() {
             return comment;
         }
@@ -194,24 +198,24 @@ public class Schema {
         public void includeInOutput(boolean includeInOutput) {
             this.includeInOutput = includeInOutput;
         }
-        
+
         private String name;
         private boolean includeInOutput;
         private String typeName;
         private String comment;
     }
-    
+
     public boolean isUserModified() {
         return userModified;
     }
     public void setUserModified(boolean userModified) {
         this.userModified = userModified;
     }
-   
+
     public List<SchemaColumn> getColumns() {
         return columns;
     }
-    
+
     public void addColumn(String name, String type) {
         SchemaColumn column = new SchemaColumn(name, type);
         columns.add(column);
