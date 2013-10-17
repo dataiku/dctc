@@ -56,7 +56,10 @@ public class DKUtils {
     public static void unsafeRollbackAndClose(Connection conn) {
         try {
             conn.rollback();
+            logger.info("Closing " + conn);
             conn.close();
+            logger.info("Conn " + conn + " is now " + conn.isClosed());
+            
         } catch (Exception e) {
             logger.warn("Could not safely close SQL connection " + conn , e);
         }
