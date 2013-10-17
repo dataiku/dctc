@@ -19,12 +19,12 @@ import com.dataiku.dip.input.formats.BasicCSVFormatConfig;
 import com.dataiku.dip.utils.ErrorContext;
 import com.dataiku.dip.utils.WithParams;
 
-public class CSVOutputFormatter extends StringOutputFormatter {
+public class BasicCSVOutputFormatter extends StringOutputFormatter {
 
 
     BasicCSVFormatConfig config;
 
-    public CSVOutputFormatter(WithParams p) {
+    public BasicCSVOutputFormatter(WithParams p) {
         super(p.getParam("charset", "utf8"));
         config = new BasicCSVFormatConfig(p);
         this.delimiter  = config.separator;
@@ -72,7 +72,7 @@ public class CSVOutputFormatter extends StringOutputFormatter {
             if (i++ > 0) sb.append(delimiter);
             if (!type.isPrimitive()) {
                 if (config.arrayMapFormat.equals("json")) {
-                    appendEscapedAndQuoted(sb, v, delimiter, config.quoteChar, config.escapeChar);
+                    appendUNIXStyle(sb, v, delimiter, config.quoteChar, config.escapeChar);
                 } else if (type == Schema.Type.MAP) {
                     appendMapDelimited(sb, v, delimiter, config.quoteChar, config.escapeChar, config.arraySeparator, config.mapKeySeparator);
                 } else if (type == Schema.Type.ARRAY) {
@@ -81,7 +81,7 @@ public class CSVOutputFormatter extends StringOutputFormatter {
                     throw ErrorContext.iae("Unknown non-primitive type " + type);
                 }
             } else {
-                appendEscapedAndQuoted(sb, v, delimiter, config.quoteChar, config.escapeChar);
+                appendUNIXStyle(sb, v, delimiter, config.quoteChar, config.escapeChar);
             }
         }
         sb.append('\n');
@@ -161,13 +161,18 @@ public class CSVOutputFormatter extends StringOutputFormatter {
         }
         return false;
     }
-    public static void appendEscapedAndQuoted(Writer wr, String v, char sep, char quote, Character escape) throws IOException {
+    
+    public static void appendUNIXStyle(Writer wr, String v, char sep, char quote, Character escape) throws IOException {
         if (v != null && v.length() > 0)  {
             if (StringUtils.contains(v, sep)|| StringUtils.contains(v, quote) || StringUtils.contains(v, '\n') ||
-                    StringUtils.contains(v, '\r')) {
+                    StringUtils.contains(v, '\r') || (escape != null && StringUtils.contains(v, escape))) {
                 wr.append(quote);
                 if (escape != null) {
-                    wr.append(StringUtils.replace(v, "" + quote, "" + escape + "" + quote));
+                    // Escape the escape with itself
+                    String e = StringUtils.replace(v, "" + escape, "" + escape+escape);
+                    // Escape quotes with escape
+                    e = StringUtils.replace(e, "" + quote, "" + escape + quote);
+                    wr.append(e);
                 } else {
                     wr.append(v);
                 }

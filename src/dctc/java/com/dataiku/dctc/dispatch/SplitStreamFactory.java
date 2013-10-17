@@ -13,7 +13,7 @@ import com.dataiku.dctc.file.GFile;
 import com.dataiku.dip.datalayer.ColumnFactory;
 import com.dataiku.dip.datalayer.Row;
 import com.dataiku.dip.input.Format;
-import com.dataiku.dip.output.CSVOutputFormatter;
+import com.dataiku.dip.output.BasicCSVOutputFormatter;
 import com.dataiku.dip.output.LineOutputFormatter;
 import com.dataiku.dip.output.OutputFormatter;
 
@@ -73,7 +73,7 @@ public class SplitStreamFactory {
 
         OutputFormatter formatter = null;
         if (inputFormat.getType().equals("csv")) {
-            formatter = new CSVOutputFormatter(inputFormat);
+            formatter = new BasicCSVOutputFormatter(inputFormat);
         }
         else if (inputFormat.getType().equals("line")) {
             formatter = new LineOutputFormatter();

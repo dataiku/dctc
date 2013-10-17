@@ -9,7 +9,7 @@ import java.util.Map;
 import com.dataiku.dctc.file.GFile;
 import com.dataiku.dctc.file.LocalFile;
 import com.dataiku.dip.input.Format;
-import com.dataiku.dip.output.CSVOutputFormatter;
+import com.dataiku.dip.output.BasicCSVOutputFormatter;
 import com.dataiku.dip.output.OutputFormatter;
 
 public class TmpSplitStreamFactory extends SplitStreamFactory {
@@ -34,7 +34,7 @@ public class TmpSplitStreamFactory extends SplitStreamFactory {
         Format inputFormat = new Format("csv");
         inputFormat.addParam("separator", ",");
         inputFormat.addParam("parseHeaderRow", "true");
-        OutputFormatter formatter = new CSVOutputFormatter(inputFormat);
+        OutputFormatter formatter = new BasicCSVOutputFormatter(inputFormat);
         File tmpFile = File.createTempFile("Foo", "bar.toto");
         tmpFile.deleteOnExit();
 
