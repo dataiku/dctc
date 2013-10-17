@@ -35,11 +35,18 @@ public class HadoopLoader {
 
     public static boolean hadoopEnabled() {
         if (hadoopEnabled != null) return hadoopEnabled;
-        try {
-            getConfigLocations();
+        String envVar = System.getenv("HADOOP_ENABLED");
+        if (envVar != null && envVar.equalsIgnoreCase("true")) {
             hadoopEnabled = true;
-        } catch (Exception e) {
-            hadoopEnabled  = false;
+        } else if (envVar != null && envVar.equalsIgnoreCase("false")) {
+            hadoopEnabled = false;
+        } else {
+            try {
+                getConfigLocations();
+                hadoopEnabled = true;
+            } catch (Exception e) {
+                hadoopEnabled  = false;
+            }
         }
         return hadoopEnabled;
     }
