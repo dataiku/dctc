@@ -48,21 +48,59 @@ public class DKUFileUtils {
         FileUtils.write(file, content, "utf8");
     }
 
+    /**
+     * Return the list of the files that are, (at any depth)
+     * under this directory
+     *
+     * The resulting list is a list of files sorted "depth-first."
+     */
     public static List<File> recursiveListFiles(File root) throws IOException {
+        return recursiveListFiles(root, FileFilter.FILES);
+    }
+
+    public static void removeDirectoryRecursive(File root) throws IOException {
+        List<File> files = recursiveListFiles(root, FileFilter.FILES_AND_DIRECTORY);
+        for (File file: files ){
+            DKUFileUtils.delete(file);
+        }
+    }
+
+    public static List<File> recursiveListFiles(File root, FileFilter fileFilter) throws IOException {
         if (!root.isDirectory()) {
             throw new IOException("Root " + root + " is not a directory");
         }
         List<File>  ret = new ArrayList<File>();
-        listRec(root, ret);
+        listRec(root, ret, fileFilter);
         return ret;
     }
 
-    private static void listRec(File folder, List<File> ret) {
-        for (File f : folder.listFiles()) {
-            if (f.isDirectory()) listRec(f, ret);
-            else ret.add(f);
+    public static enum FileFilter {
+        FILES {
+            @Override
+            boolean accept(File f) {
+                return !f.isDirectory();
+            }
+        },
+        FILES_AND_DIRECTORY {
+            @Override
+            boolean accept(File f) {
+                return true;
+            }
+        };
+        abstract boolean accept(File f);
+    }
+
+    private static void listRec(File f, List<File> ret, FileFilter fileFilter) {
+        if (f.isDirectory()) {
+            for (File child : f.listFiles()) {
+                listRec(child, ret, fileFilter);
+            }
+        }
+        if (fileFilter.accept(f)) {
+            ret.add(f);
         }
     }
+
     public static String fileToString(File path) throws FileNotFoundException, IOException {
         try {
             return fileToString(path, "UTF-8");
