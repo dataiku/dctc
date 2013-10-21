@@ -221,6 +221,15 @@ public class Schema {
         columns.add(column);
     }
 
+    public SchemaColumn getColumn(String name) {
+        for (SchemaColumn col : getColumns()) {
+            if (col.getName().equals(name)) {
+                return col;
+            }
+        }
+        return null;
+    }
+
     private boolean userModified;
     private List<SchemaColumn> columns = new ArrayList<SchemaColumn>();
 }
