@@ -133,28 +133,30 @@ public class TimeDimensionValue extends DimensionValue implements Comparable<Tim
             throw new Error("Must not be reached");
         }
     }
+    
+    /**
+     * Replace %Y, %M, %D, %H in the pattern by the elemnets on this value.
+     */
     @SuppressWarnings("fallthrough")
-    public String formatGlob(String glob) {
+    public String resolvePattern(String pattern) {
         switch (dimension.mappedPeriod) {
+        /* fallthrough (and lack of break) is intended ! */
         case HOUR:
-            glob = glob.replace("%H", String.format("%02d", hour));
+            pattern = pattern.replace("%H", String.format("%02d", hour));
         case DAY:
-            glob = glob.replace("%D", String.format("%02d", day));
+            pattern = pattern.replace("%D", String.format("%02d", day));
         case MONTH:
-            glob = glob.replace("%M", String.format("%02d", month));
+            pattern = pattern.replace("%M", String.format("%02d", month));
         case YEAR:
-            glob = glob.replace("%Y", String.format("%04d", year));
-            break;
-        default:
-            assert false : "Must not be reached.";
-            return null;
+            pattern = pattern.replace("%Y", String.format("%04d", year));
         }
-        return glob;
+        return pattern;
     }
 
     @SuppressWarnings("fallthrough")
     public Calendar getCalendar() {
         Calendar cal = Calendar.getInstance();
+        /* fallthrough (and lack of break) is intended ! */
         switch (dimension.mappedPeriod) {
         case HOUR:
             cal.set(Calendar.HOUR_OF_DAY, hour);

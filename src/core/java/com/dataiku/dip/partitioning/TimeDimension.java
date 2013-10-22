@@ -11,7 +11,7 @@ public class TimeDimension extends Dimension {
     }
 
     public String formatValue(TimeDimensionValue tdv, String glob) {
-        return tdv.formatGlob(glob);
+        return tdv.resolvePattern(glob);
     }
 
     public enum Period {

@@ -1,23 +1,19 @@
 package com.dataiku.dip.partitioning;
 
-import java.util.Collections;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 public class ExactValueDimension extends Dimension {
-    public ExactValueDimension(String name, String type) {
+    public ExactValueDimension(String name) {
         super(name);
-        this.type = type;
     }
-
-    protected String type;
-
-
 
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof ExactValueDimension)) return false;
         ExactValueDimension tother = (ExactValueDimension)other;
-        return name.equals(tother.name) && type.equals(tother.type);
+        return name.equals(tother.name);
     }
 
     @Override
@@ -27,7 +23,8 @@ public class ExactValueDimension extends Dimension {
 
     @Override
     public List<DimensionValue> getValueFromPattern(String pattern) {
-        return Collections.singletonList((DimensionValue) new ExactValueDimensionValue(pattern)); // TODO sanity check ? Numerical Range support ?
+        // TODO sanity check ? Numerical Range support ?
+        return Lists.newArrayList((DimensionValue) new ExactValueDimensionValue(pattern));
     }
 
     @Override
