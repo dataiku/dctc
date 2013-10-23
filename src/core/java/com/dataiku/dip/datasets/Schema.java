@@ -68,8 +68,6 @@ public class Schema {
 
     }
 
-
-
     public static Type fromSQLType(int sqlType) {
         switch (sqlType) {
 
@@ -136,10 +134,8 @@ public class Schema {
     public final static Pattern ARRAY_PATTERN = Pattern.compile("array<\\s*([^,>]*)\\s*>");
     public final static Pattern MAP_PATTERN = Pattern.compile("map<\\s*([^,>]*)\\s*,\\s*([^,>]*)\\s*>");
 
-
     public static String arrayContent(String type) {
         Matcher matcher = ARRAY_PATTERN.matcher(type);
-
         return matcher.matches() ? matcher.group(1) : null;
     }
 
@@ -166,6 +162,7 @@ public class Schema {
             this.name = other.name;
             this.typeName = other.typeName;
             this.comment = other.comment;
+            this.maxLength = other.maxLength;
         }
         public SchemaColumn(String name, String type) {
             this.name = name;
@@ -179,10 +176,14 @@ public class Schema {
             this.name = name;
             return this;
         }
-        public String getType() {
+        public Type getType() {
+            return Type.forName(typeName);
+        }
+        
+        public String getTypeName() {
             return typeName;
         }
-        public void setType(String type) {
+        public void setTypeName(String type) {
             this.typeName = type;
         }
 
@@ -192,17 +193,18 @@ public class Schema {
         public void setComment(String comment) {
             this.comment = comment;
         }
-        public boolean includeInOutput() {
-            return includeInOutput;
+        
+        public int getMaxLength() {
+            return maxLength;
         }
-        public void includeInOutput(boolean includeInOutput) {
-            this.includeInOutput = includeInOutput;
+        public void setMaxLength(int maxLength) {
+            this.maxLength = maxLength;
         }
 
         private String name;
-        private boolean includeInOutput;
         private String typeName;
         private String comment;
+        private int maxLength = 1000;
     }
 
     public boolean isUserModified() {

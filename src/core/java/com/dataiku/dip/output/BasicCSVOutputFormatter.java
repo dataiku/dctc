@@ -47,7 +47,7 @@ public class BasicCSVOutputFormatter extends StringOutputFormatter {
                 String name = outputSchema.getColumns().get(i).getName();
                 if (i > 0 && printHeaderLine) sb.append(delimiter);
                 headerColumns.add(cf.column(name));
-                Schema.Type type = Schema.Type.forName(outputSchema.getColumns().get(i).getType());
+                Schema.Type type = Schema.Type.forName(outputSchema.getColumns().get(i).getTypeName());
                 columnTypes.add(type);
                 if (printHeaderLine) sb.append(name);
             }
