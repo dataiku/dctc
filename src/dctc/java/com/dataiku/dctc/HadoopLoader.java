@@ -65,6 +65,18 @@ public class HadoopLoader {
             }
         }
         if (hadoopHome == null) {
+            try {
+                String hadoopClasspath = new String(DKUtils.execAndGetOutput(new String[]{"hadoop", "classpath"}, null), "UTF-8");
+
+                for (String chunk : hadoopClasspath.split(":")) {
+                    if (chunk.contains("hadoop-core")) {
+                        hadoopHome = new File(chunk).getParent();
+                    }
+                }
+            } catch (Exception e) {
+            }
+        }
+        if (hadoopHome == null) {
             throw new IllegalArgumentException("Cannot find hadoop home: need HADOOP_HOME or HADOOP_PREFIX environment variable");
         }
         if (!hadoopHome.endsWith("/"))  {
