@@ -61,7 +61,6 @@ public class JSONTest {
     }
 
 
-
     @Test
     public void testSanitizationEscapeQuoteChar() {
         NameList nameList = JSON.parse("{\n" +
@@ -69,6 +68,28 @@ public class JSONTest {
                 "}", NameList.class);
         List<String> names = new ArrayList<String>();
         names.add("Jose, Bo\"ve");
+        names.add("Jean Val Jean");
+        Assert.equals(names, nameList.names);
+    }
+
+    @Test
+    public void testMultilineComments() {
+        NameList nameList = JSON.parse("{ \n" +
+                "    \"names\" : [\"Jose Bove\", \"Jean Val Jean\"] /* this is a \n comment */\n" +
+                "}", NameList.class);
+        List<String> names = new ArrayList<String>();
+        names.add("Jose Bove");
+        names.add("Jean Val Jean");
+        Assert.equals(names, nameList.names);
+    }
+
+    @Test
+    public void testOnelineComments() {
+        NameList nameList = JSON.parse("{\n" +
+                "    \"names\" : [\"Jose Bove\", \"Jean Val Jean\"] // this is a comment \n" +
+                "}", NameList.class);
+        List<String> names = new ArrayList<String>();
+        names.add("Jose Bove");
         names.add("Jean Val Jean");
         Assert.equals(names, nameList.names);
     }

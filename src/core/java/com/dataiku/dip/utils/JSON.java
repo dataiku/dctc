@@ -12,10 +12,7 @@ import java.util.Map;
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import org.apache.commons.io.FileUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONStringer;
-import org.json.JSONTokener;
+import org.json.*;
 
 public class JSON {
 
@@ -53,11 +50,7 @@ public class JSON {
            char c = tokener.next();
            if ((c=='"') || (c=='\'')) {
                String stringToken = tokener.nextString(c);
-               JSONArray arr = new JSONArray(new String[]{stringToken});
-               String arrJson = arr.toString();
-               writer.write("\n");
-               writer.write(arrJson.toString().substring(1, arrJson.length()-1));
-               writer.write("\n");
+               writer.write(JSONObject.quote(stringToken));
            }
            else if (c==',') {
                char afterComma = tokener.nextClean();
