@@ -53,13 +53,21 @@ public class JSON {
                writer.write(JSONObject.quote(stringToken));
            }
            else if (c==',') {
-               char afterComma = tokener.nextClean();
-               if ((afterComma == '}') || (afterComma == ']'))   {
-                   writer.write(afterComma);
-               }
-               else {
-                   writer.write(c);
-                   tokener.back();
+               StringWriter tmp = new StringWriter();
+               while (tokener.more()) {
+                   char n = tokener.next();
+                   if (Character.isWhitespace(n)) {
+                       tmp.append(n);
+                   } else if (n == '}' || n == ']') {
+                       writer.append(tmp.toString());
+                       writer.append(n);
+                       break;
+                   } else {
+                       writer.append(c);
+                       writer.append(tmp.toString());
+                       tokener.back();
+                       break;
+                   }
                }
            }
            else {
