@@ -47,7 +47,7 @@
         <ivy:resolve type="${ivy.resolve.types}"/>
         <ivy:report todir="report" />
     </target>
-    <target name="core-jar" depends="">
+    <target name="core-jar" depends="resolve">
         <path id="lib.path.id">
             <fileset dir="${clib.dir}" />
             <fileset dir="${extlib.dir}" />
