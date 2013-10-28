@@ -1,6 +1,9 @@
 package com.dataiku.dip.utils;
 
-import com.vividsolutions.jts.util.Assert;
+import com.google.common.collect.ImmutableList;
+import com.google.gson.JsonSyntaxException;
+import org.json.JSONException;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -18,10 +21,8 @@ public class JSONTest {
         NameList nameList = JSON.parse("{\n" +
         "    \"names\" : [\"Jose Bove\", \"Jean Val Jean\"]\n" +
         "}", NameList.class);
-        List<String> names = new ArrayList<String>();
-        names.add("Jose Bove");
-        names.add("Jean Val Jean");
-        Assert.equals(names, nameList.names);
+        List<String> names = ImmutableList.of("Jose Bove", "Jean Val Jean");
+        Assert.assertEquals(names, nameList.names);
     }
 
 
@@ -30,10 +31,8 @@ public class JSONTest {
         NameList nameList = JSON.parse("{\n" +
                 "    \"names\" : [\"Jose Bove\", \"Jean Val Jean\", ]\n" +
                 "}", NameList.class);
-        List<String> names = new ArrayList<String>();
-        names.add("Jose Bove");
-        names.add("Jean Val Jean");
-        Assert.equals(names, nameList.names);
+        List<String> names = ImmutableList.of("Jose Bove", "Jean Val Jean");
+        Assert.assertEquals(names, nameList.names);
     }
 
     @Test
@@ -45,7 +44,7 @@ public class JSONTest {
         names.add("Jose Bove");
         names.add("Jean Val Jean");
         names.add(null);
-        Assert.equals(names, nameList.names);
+        Assert.assertEquals(names, nameList.names);
     }
 
 
@@ -54,10 +53,8 @@ public class JSONTest {
         NameList nameList = JSON.parse("{\n" +
                 "    \"names\" : [\"Jose, Bove\", \"Jean Val Jean\"]\n" +
                 "}", NameList.class);
-        List<String> names = new ArrayList<String>();
-        names.add("Jose, Bove");
-        names.add("Jean Val Jean");
-        Assert.equals(names, nameList.names);
+        List<String> names = ImmutableList.of("Jose, Bove", "Jean Val Jean");
+        Assert.assertEquals(names, nameList.names);
     }
 
 
@@ -66,10 +63,8 @@ public class JSONTest {
         NameList nameList = JSON.parse("{\n" +
                 "    \"names\" : [\"Jose, Bo\\\"ve\", \"Jean Val Jean\"]\n" +
                 "}", NameList.class);
-        List<String> names = new ArrayList<String>();
-        names.add("Jose, Bo\"ve");
-        names.add("Jean Val Jean");
-        Assert.equals(names, nameList.names);
+        List<String> names = ImmutableList.of("Jose, Bo\"ve", "Jean Val Jean");
+        Assert.assertEquals(names, nameList.names);
     }
 
     @Test
@@ -77,10 +72,8 @@ public class JSONTest {
         NameList nameList = JSON.parse("{ \n" +
                 "    \"names\" : [\"Jose Bove\", \"Jean Val Jean\"] /* this is a \n comment */\n" +
                 "}", NameList.class);
-        List<String> names = new ArrayList<String>();
-        names.add("Jose Bove");
-        names.add("Jean Val Jean");
-        Assert.equals(names, nameList.names);
+        List<String> names = ImmutableList.of("Jose Bove", "Jean Val Jean");
+        Assert.assertEquals(names, nameList.names);
     }
 
     @Test
@@ -91,7 +84,42 @@ public class JSONTest {
         List<String> names = new ArrayList<String>();
         names.add("Jose Bove");
         names.add("Jean Val Jean");
-        Assert.equals(names, nameList.names);
+        Assert.assertEquals(names, nameList.names);
+    }
+
+    @Test
+    public void testQuoteInOneLineComments() {
+        NameList nameList = JSON.parse("{\n" +
+                "    \"names\" : [\"Jose Bove\", \"Jean Val Jean\"] // this \"is a comment \n" +
+                "}", NameList.class);
+        List<String> names = ImmutableList.of("Jose Bove", "Jean Val Jean");
+        Assert.assertEquals(names, nameList.names);
+    }
+
+    @Test
+    public void testQuoteInMultilineComments() {
+        NameList nameList = JSON.parse("{\n" +
+                "    \"names\" : [\"Jose Bove\", \"Jean Val Jean\"] /* this \"is a \n comment */\n" +
+                "}", NameList.class);
+        List<String> names = ImmutableList.of("Jose Bove", "Jean Val Jean");
+        Assert.assertEquals(names, nameList.names);
+    }
+
+    @Test
+    public void testNeverEndingComment() {
+        boolean throwsJSONException = false;
+        try {
+            JSON.parse("{\n" +
+                "    \"names\" : [\"Jose Bove\", \"Jean Val Jean\"] /* this \"is a \n comment \n" +
+             "}", NameList.class);
+        }
+        catch(JsonSyntaxException e) {
+           throwsJSONException = (e.getCause().getClass() == JSONException.class);
+        }
+        finally {
+            Assert.assertTrue(throwsJSONException);
+        }
+
     }
 
 }

@@ -47,32 +47,52 @@ public class JSON {
         JSONTokener tokener = new JSONTokener(json);
         StringWriter writer = new StringWriter();
         while (tokener.more() ) {
-           char c = tokener.next();
-           if ((c=='"') || (c=='\'')) {
-               String stringToken = tokener.nextString(c);
-               writer.write(JSONObject.quote(stringToken));
-           }
-           else if (c==',') {
-               StringWriter tmp = new StringWriter();
-               while (tokener.more()) {
-                   char n = tokener.next();
-                   if (Character.isWhitespace(n)) {
-                       tmp.append(n);
-                   } else if (n == '}' || n == ']') {
-                       writer.append(tmp.toString());
-                       writer.append(n);
-                       break;
-                   } else {
-                       writer.append(c);
-                       writer.append(tmp.toString());
-                       tokener.back();
-                       break;
-                   }
-               }
-           }
-           else {
-               writer.write(c);
-           }
+            char c = tokener.next();
+            if ((c=='"') || (c=='\'')) {
+                // we enter the string state
+                String stringToken = tokener.nextString(c);
+                writer.write(JSONObject.quote(stringToken));
+            }
+            else if (c==',') {
+                // getting rid of trailing commma in array
+                char afterComma = tokener.nextClean();
+                if ((afterComma == '}') || (afterComma == ']'))   {
+                    writer.write(afterComma);
+                }
+                else {
+                    writer.write(c);
+                    tokener.back();
+                }
+            }
+            else if (c == '/') {
+                // we enter the comment state.
+                c = tokener.next();
+                if (c == '/') {
+                    // one line comment
+                    // we skip until the next new line.
+                    tokener.skipTo('\n');
+                }
+                else if (c == '*') {
+                    while (tokener.more()) {
+                        c = tokener.skipTo('*');
+                        if (c != '*') {
+                            throw tokener.syntaxError("Unclosed comment");
+                        }
+                        tokener.next();
+                        c = tokener.next();
+                        if (c == '/') {
+                            break;
+                        }
+                        tokener.back(); //< handle the case of the **/
+                    }
+                }
+                else {
+                    throw tokener.syntaxError("Invalid character: " + c + "after '/'");
+                }
+            }
+            else {
+                writer.write(c);
+            }
         }
         return writer.toString(); // gson does not like long lines
     }
