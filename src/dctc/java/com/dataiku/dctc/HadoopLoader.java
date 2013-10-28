@@ -20,19 +20,9 @@ import com.dataiku.dip.utils.DKUtils;
 import com.google.common.collect.Lists;
 
 public class HadoopLoader {
-    private static List<File> expand(File directory, String pattern) {
-        List<File> files = new ArrayList<File>();
-
-        if (directory.isDirectory()) {
-            for (File f : directory.listFiles()) {
-                if (f.getName().matches(pattern)) {
-                    files.add(f);
-                }
-            }
-        }
-        return files;
-    }
-
+    /** 
+     * Returns whether Hadoop is enabled on this DSS instance
+     */
     public static boolean hadoopEnabled() {
         if (hadoopEnabled != null) return hadoopEnabled;
         String envVar = System.getenv("HADOOP_ENABLED");
@@ -50,52 +40,19 @@ public class HadoopLoader {
         }
         return hadoopEnabled;
     }
-    private static Boolean hadoopEnabled = null;
+    
 
-    private static String getHadoopHome() {
-        String hadoopHome = System.getenv("HADOOP_HOME");
-        if (hadoopHome == null) {
-            hadoopHome = System.getenv("HADOOP_PREFIX");
+    public static FileSystem getFS() throws IOException{
+        HadoopLoader.addLibraries();
+        FileSystem fs =  FileSystem.get(new Configuration(true));
+        if (fs instanceof RawLocalFileSystem || fs  instanceof LocalFileSystem){
+            logger.info("Wrong configuration, was created with " + new Configuration(true).toString());
+            logger.info("fs.defaultFS=" + new Configuration(true).get("fs.defaultFS"));
+            throw new IOException("HDFS initialization returned a LocalFileSystem. Maybe you need to configure your HDFS location?");
         }
-        if (hadoopHome == null) {
-            if (isCDH4()) {
-                hadoopHome = "/etc/hadoop";
-            } else if (isMAPR()) {
-                hadoopHome = "/opt/mapr/hadoop/hadoop-0.20.2/";
-            }
-        }
-        if (hadoopHome == null) {
-            try {
-                String hadoopClasspath = new String(DKUtils.execAndGetOutput(new String[]{"hadoop", "classpath"}, null), "UTF-8");
-
-                for (String chunk : hadoopClasspath.split(":")) {
-                    if (chunk.contains("hadoop-core")) {
-                        hadoopHome = new File(chunk).getParent();
-                    }
-                }
-            } catch (Exception e) {
-            }
-        }
-        if (hadoopHome == null) {
-            throw new IllegalArgumentException("Cannot find hadoop home: need HADOOP_HOME or HADOOP_PREFIX environment variable");
-        }
-        if (!hadoopHome.endsWith("/"))  {
-            hadoopHome += "/";
-        }
-        return hadoopHome;
+        return fs;
     }
-
-    private static void addSoftwareLibrary(File file) throws Exception {
-        if (file.exists()) {
-            logger.info("Adding library : " + file);
-            Method method = URLClassLoader.class.getDeclaredMethod("addURL", new Class<?>[]{URL.class});
-            method.setAccessible(true);
-            method.invoke(ClassLoader.getSystemClassLoader(), new Object[]{file.toURI().toURL()});
-        } else {
-            logger.warn("Did not find JAR to load: " + file);
-        }
-    }
-
+    
     public static boolean isMAPR() {
         return new File("/opt/mapr").isDirectory();
     }
@@ -160,17 +117,32 @@ public class HadoopLoader {
                     new File("/opt/mapr/hadoop/hadoop-0.20.2/lib/hadoop-0.20.2-dev-core.jar"),
                     new File("/opt/mapr/hadoop/hadoop-0.20.2/lib/maprfs-test-0.1.jar"));
         } else {
-            List<File> files =  expand(new File(getHadoopHome()), "hadoop-core-.*.jar");
-            files.addAll(expand(new File(getHadoopHome(), "lib"), "protobuf-java-*.jar"));
-            files.addAll(expand(new File(getHadoopHome(), "lib"), "guava-*.jar"));
-            files.addAll(expand(new File(getHadoopHome(), "lib"), "sl4j-api-*.jar"));
-            files.addAll(expand(new File(getHadoopHome(), "lib"), "sl4j-log4j-*.jar"));
-            files.addAll(expand(new File(getHadoopHome(), "lib"), "commons-configuration-*.jar"));
-            files.addAll(expand(new File(getHadoopHome(), "lib"), "commons-configuration-*.jar"));
+            // Custom distribution 
+            String hadoopHome =getHadoopHomeUsingHadoopClasspath();
+            if (hadoopHome == null) {
+                hadoopHome = getHadoopHomeUsingEnvVars();
+            }
+            if (hadoopHome ==null ){
+                throw new IllegalArgumentException("Could not locate Hadoop home, using either 'hadoop classpath', $HADOOP_HOME OR $HADOOP_PREFIX");
+            }
+            logger.info("Detected custom Hadoop distribution in " + hadoopHome);
+            List<File> files =  expand(new File(hadoopHome), "hadoop-core-.*.jar");
+            files.addAll(expand(new File(hadoopHome, "lib"), "protobuf-java-*.jar"));
+            files.addAll(expand(new File(hadoopHome, "lib"), "guava-*.jar"));
+            files.addAll(expand(new File(hadoopHome, "lib"), "sl4j-api-*.jar"));
+            files.addAll(expand(new File(hadoopHome, "lib"), "sl4j-log4j-*.jar"));
+            files.addAll(expand(new File(hadoopHome, "lib"), "commons-configuration-*.jar"));
+            files.addAll(expand(new File(hadoopHome, "lib"), "commons-configuration-*.jar"));
             return files;
         }
     }
 
+    /**
+     * Load the required libraries to make Hadoop work.
+     * 
+     * For DSS, it means Hadoop conf and MapR native libraries.
+     * Additionally, for dctc, we load JARs
+     */
     public static void addLibraries() {
         if (librariesAdded) return;
         librariesAdded = true;
@@ -179,12 +151,13 @@ public class HadoopLoader {
             if (System.getenv("DCTC_AUTO_LOAD_HADOOP") != null) {
                 logger.info("Loading Jars for DCTC");
                 for (File f : getHadoopCodeJARs()) {
-                    addSoftwareLibrary(f);
+                    loadJar(f);
                 }
             }
         } catch (Exception e) {
             logger.warn("Failed to set distribution-specific parameters", e);
         }
+
         try {
             /* Always load MAPR native library */
             if (isMAPR()) {
@@ -203,13 +176,15 @@ public class HadoopLoader {
         logger.info("Loading Hadoop configuration locations");
         try {
             for (File f : getConfigLocations()) {
-                addSoftwareLibrary(f);
+                loadJar(f);
             }
         } catch (Exception e) {
             logger.warn("Failed to set distribution-specific parameters", e);
         }
     }
 
+    
+    /** Try to find Hadoop configuration locations, using "hadoop classpath" and env vars as a fallback */
     private static List<File> getConfigLocations() {
         List<File> configLocations = new ArrayList<File>();
         try {
@@ -222,23 +197,72 @@ public class HadoopLoader {
                 }
             }
         } catch (Exception e) {
-            logger.debug("Could not read Hadoop classpath, retrying with HADOOP_HOME", e);
-            configLocations.add(new File(getHadoopHome(), "conf"));
+            logger.debug("Could not read Hadoop classpath using command, retrying with HADOOP_HOME: " + e.getMessage());
+            String hadoopHome = getHadoopHomeUsingEnvVars();
+            if (hadoopHome == null) {
+                throw new IllegalArgumentException("Could not locate Hadoop conf, using either 'hadoop classpath', $HADOOP_HOME OR $HADOOP_PREFIX");
+            } else {
+                configLocations.add(new File(hadoopHome, "conf"));
+            }
         }
+        logger.info("Detected Hadoop configuration in " + org.apache.commons.lang.StringUtils.join(configLocations, ";"));
         return configLocations;
     }
 
-    public static FileSystem getFS() throws IOException{
-        HadoopLoader.addLibraries();
-        FileSystem fs =  FileSystem.get(new Configuration(true));
-        if (fs instanceof RawLocalFileSystem || fs  instanceof LocalFileSystem){
-            logger.info("Wrong configuration, was created with " + new Configuration(true).toString());
-            logger.info("fs.defaultFS=" + new Configuration(true).get("fs.defaultFS"));
-            throw new IOException("HDFS initialization returned a LocalFileSystem. Maybe you need to configure your HDFS location?");
+    private static List<File> expand(File directory, String pattern) {
+        List<File> files = new ArrayList<File>();
+
+        if (directory.isDirectory()) {
+            for (File f : directory.listFiles()) {
+                if (f.getName().matches(pattern)) {
+                    files.add(f);
+                }
+            }
         }
-        return fs;
+        return files;
     }
 
+
+    /** 
+     * Return null if fails.
+     */
+    private static String getHadoopHomeUsingHadoopClasspath() {
+        try {
+            String hadoopClasspath = new String(DKUtils.execAndGetOutput(new String[]{"hadoop", "classpath"}, null), "UTF-8");
+
+            for (String chunk : hadoopClasspath.split(":")) {
+                if (chunk.contains("hadoop-core")) {
+                    return new File(chunk).getParent();
+                }
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    /**
+     * Return null if fails
+     */
+    private static String getHadoopHomeUsingEnvVars() {
+        String hadoopHome = System.getenv("HADOOP_HOME");
+        if (hadoopHome == null) {
+            hadoopHome = System.getenv("HADOOP_PREFIX");
+        }
+        return hadoopHome;
+    }
+
+    private static void loadJar(File file) throws Exception {
+        if (file.exists()) {
+            logger.info("Adding library : " + file);
+            Method method = URLClassLoader.class.getDeclaredMethod("addURL", new Class<?>[]{URL.class});
+            method.setAccessible(true);
+            method.invoke(ClassLoader.getSystemClassLoader(), new Object[]{file.toURI().toURL()});
+        } else {
+            logger.warn("Did not find JAR to load: " + file);
+        }
+    }
+
+    private static Boolean hadoopEnabled = null;
     private static boolean librariesAdded = false;
     private static Logger logger = Logger.getLogger("dku.hadoop");
 }
