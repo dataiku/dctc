@@ -25,7 +25,7 @@ public class HadoopLoader {
      */
     public static boolean hadoopEnabled() {
         if (hadoopEnabled != null) return hadoopEnabled;
-        String envVar = System.getenv("HADOOP_ENABLED");
+        String envVar = System.getenv("DKU_HADOOP_ENABLED");
         if (envVar != null && envVar.equalsIgnoreCase("true")) {
             hadoopEnabled = true;
         } else if (envVar != null && envVar.equalsIgnoreCase("false")) {
