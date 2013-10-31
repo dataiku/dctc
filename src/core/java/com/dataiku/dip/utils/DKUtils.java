@@ -32,6 +32,12 @@ public class DKUtils {
     public static String isoFormat(long ts) {
         return ISODateTimeFormat.basicDateTime().withZone(DateTimeZone.UTC).print(ts);
     }
+    
+    /* Warning: not optimized */
+    public static String isoFormatReadableByDateFormat(long ts) {
+        return ISODateTimeFormat.dateHourMinuteSecondMillis().withZoneUTC().print(ts) + "Z";
+    }
+    
     /* Warning: not optimized */
     public static String isoFormatPretty(long ts) {
         return ISODateTimeFormat.dateHourMinuteSecondMillis().withZone(DateTimeZone.UTC).print(ts);
