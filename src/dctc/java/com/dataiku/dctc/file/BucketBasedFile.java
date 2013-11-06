@@ -72,6 +72,10 @@ public abstract class BucketBasedFile extends AbstractGFile {
             + PathManip.concat(bucket, path, fileSeparator());
     }
     @Override
+    public String getAbsoluteAddress() {
+        return getProtocol() + ":/" + getAbsolutePath();
+    }
+    @Override
     public boolean hasAcl() {
         return true;
     }
