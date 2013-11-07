@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.ClosedInputStream;
+import org.apache.log4j.Logger;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.s3.AmazonS3;
@@ -240,11 +241,13 @@ public class S3File extends BucketBasedFile {
     public InputStream getRange(long begin, long length) throws IOException {
     	// TODO - check arguments? fail if one is negative?
     	try {
-    		GetObjectRequest req = new GetObjectRequest(bucket, path);
+            if (!path.startsWith("/")) path = "/"+ path;
+    	    GetObjectRequest req = new GetObjectRequest(bucket, path);
 			if (length == 0) {
 				return new ClosedInputStream();
 			}
     		try {
+    		   
         		req.setRange(begin, begin + length - 1);
     			return s3.getObject(req).getObjectContent();
     		} catch (AmazonS3Exception e) {
@@ -273,6 +276,7 @@ public class S3File extends BucketBasedFile {
     @Override
     public InputStream inputStream() throws IOException {
         try {
+            if (!path.startsWith("/")) path = "/"+ path;
             S3Object obj = s3.getObject(new GetObjectRequest(bucket, path));
             return obj.getObjectContent();
         }
@@ -635,4 +639,7 @@ public class S3File extends BucketBasedFile {
     List<S3File> glist;
     List<String> bucketList;
     List<S3File> grecursiveList;
+    
+    @SuppressWarnings("unused")
+    private static Logger logger = Logger.getLogger("s3");
 }
