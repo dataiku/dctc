@@ -241,7 +241,6 @@ public class S3File extends BucketBasedFile {
     public InputStream getRange(long begin, long length) throws IOException {
     	// TODO - check arguments? fail if one is negative?
     	try {
-            if (!path.startsWith("/")) path = "/"+ path;
     	    GetObjectRequest req = new GetObjectRequest(bucket, path);
 			if (length == 0) {
 				return new ClosedInputStream();
@@ -276,7 +275,6 @@ public class S3File extends BucketBasedFile {
     @Override
     public InputStream inputStream() throws IOException {
         try {
-            if (!path.startsWith("/")) path = "/"+ path;
             S3Object obj = s3.getObject(new GetObjectRequest(bucket, path));
             return obj.getObjectContent();
         }
