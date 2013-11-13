@@ -38,14 +38,19 @@ public class DKUFileUtils {
         return FileUtils.readFileToString(file, "utf8");
     }
     public static void writeFileUTF8(File file, String content) throws IOException {
-        FileUtils.write(file, content, "utf8");
+        File tmpFile = new File(file.getPath() + "."  + content.hashCode());
+        FileUtils.write(tmpFile, content, "utf8");
+        if (file.exists()) {
+            FileUtils.forceDelete(file);
+        }
+        FileUtils.moveFile(tmpFile, file);
     }
 
     public static void writeFileUTF8(File file, String content, boolean mkdirs) throws IOException {
         if (mkdirs) {
             mkdirsParent(file);
         }
-        FileUtils.write(file, content, "utf8");
+        writeFileUTF8(file, content);
     }
 
     /**
