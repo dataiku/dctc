@@ -97,6 +97,8 @@ public class HadoopLoader {
                     new File(dir + "hadoop/lib/slf4j-api-1.6.1.jar"),
                     new File(dir + "hadoop/lib/slf4j-log4j12-1.6.1.jar"),
                     new File(dir + "hadoop/lib/commons-configuration-1.6.jar"),
+                    new File(dir + "hadoop-mapreduce/hadoop-mapreduce-client-core.jar"),
+                    new File(dir + "hadoop/lib/avro-1.7.4.jar"),
                     new File(dir + "hadoop-hdfs/hadoop-hdfs.jar"),
                     new File(dir + "hadoop/hadoop-common.jar"),
                     new File(dir + "hadoop/hadoop-auth.jar"));
@@ -109,8 +111,11 @@ public class HadoopLoader {
                     new File("/usr/lib/hadoop/lib/commons-configuration-1.6.jar"),
                     new File("/usr/lib/hadoop-hdfs/hadoop-hdfs.jar"),
                     new File("/usr/lib/hadoop/hadoop-common.jar"),
+                    new File("/usr/lib/hadoop-mapreduce/hadoop-mapreduce-client-core.jar"),
+                    new File("/usr/lib/hadoop/lib/avro-1.7.4.jar"),
                     new File("/usr/lib/hadoop/hadoop-auth.jar"));
         } else if (isMAPR()) {
+            // TODO : Sequence file support on Mapr
             return Lists.newArrayList(
                     new File("/opt/mapr/hadoop/hadoop-0.20.2/lib/zookeeper-3.3.6.jar"),
                     new File("/opt/mapr/hadoop/hadoop-0.20.2/lib/maprfs-0.1.jar"),
