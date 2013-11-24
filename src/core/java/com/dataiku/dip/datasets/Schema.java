@@ -1,5 +1,6 @@
 package com.dataiku.dip.datasets;
 
+import java.lang.reflect.Type;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -178,6 +179,38 @@ public class Schema {
         }
         public Type getType() {
             return Type.forName(typeName);
+        }
+
+        public java.lang.reflect.Type getJavaType() {
+
+            Type type = getType();
+            switch (type) {
+                case TINYINT:
+                    return Byte.class;
+
+                case SMALLINT:
+                    return Short.class;
+                case INT:
+                    return Integer.class;
+                case BIGINT:
+                    return Long.class;
+                case FLOAT:
+                    return Float.class;
+                case DOUBLE:
+                    return Double.class;
+                case BOOLEAN:
+                    return Boolean.class;
+                case STRING:
+                    return String.class;
+                case DATE:
+                    return String.class;
+                case ARRAY:
+                    return String.class;
+                case MAP:
+                    return String.class;
+                default:
+                    return Object.class;
+            }
         }
         
         public String getTypeName() {
