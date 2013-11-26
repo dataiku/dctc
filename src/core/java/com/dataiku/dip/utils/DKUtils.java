@@ -325,6 +325,30 @@ public class DKUtils {
         }
         return ret;
     }
+    
+    public static void killProcessTree(Process p) throws IOException {
+        /* java.lang.Process.destroy() does SIGKILL on the process ... but it does not kill 
+         * the children. And here we have dku>java.
+         * So we find out the pid (by dirty reflection hacks) and use pkill to kill the 
+         * whole process tree.
+         */
+        int pid = 0;
+        if(p.getClass().getName().equals("java.lang.UNIXProcess")) {
+            /* get the PID on unix/linux systems */
+            try {
+                Field f = p.getClass().getDeclaredField("pid");
+                f.setAccessible(true);
+                pid = f.getInt(p);
+            } catch (Throwable e) {
+            }
+        }
+        if (pid > 0) {
+            logger.info("Killing pid " + pid);
+            Runtime.getRuntime().exec("pkill -KILL -P " + pid);
+        } else {
+            throw new IOException("Unable to find pid of process to kill");
+        }
+    }
 
     private static Logger logger = Logger.getLogger("dku.utils");
 }
