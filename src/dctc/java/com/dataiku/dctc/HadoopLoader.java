@@ -48,7 +48,7 @@ public class HadoopLoader {
         if (fs instanceof RawLocalFileSystem || fs  instanceof LocalFileSystem){
             logger.info("Wrong configuration, was created with " + new Configuration(true).toString());
             logger.info("fs.defaultFS=" + new Configuration(true).get("fs.defaultFS"));
-            throw new IOException("HDFS initialization returned a LocalFileSystem. Maybe you need to configure your HDFS location?");
+            //throw new IOException("HDFS initialization returned a LocalFileSystem. Maybe you need to configure your HDFS location?");
         }
         return fs;
     }
@@ -132,12 +132,14 @@ public class HadoopLoader {
             }
             logger.info("Detected custom Hadoop distribution in " + hadoopHome);
             List<File> files =  expand(new File(hadoopHome), "hadoop-core-.*.jar");
-            files.addAll(expand(new File(hadoopHome, "lib"), "protobuf-java-*.jar"));
-            files.addAll(expand(new File(hadoopHome, "lib"), "guava-*.jar"));
-            files.addAll(expand(new File(hadoopHome, "lib"), "sl4j-api-*.jar"));
-            files.addAll(expand(new File(hadoopHome, "lib"), "sl4j-log4j-*.jar"));
-            files.addAll(expand(new File(hadoopHome, "lib"), "commons-configuration-*.jar"));
-            files.addAll(expand(new File(hadoopHome, "lib"), "commons-configuration-*.jar"));
+            files.addAll(expand(new File(hadoopHome), "hadoop-common-.*jar"));
+            files.addAll(expand(new File(hadoopHome, "lib"), "hadoop-auth-.*.jar"));
+            files.addAll(expand(new File(hadoopHome, "lib"), "protobuf-java-.*.jar"));
+            files.addAll(expand(new File(hadoopHome, "lib"), "guava-.*.jar"));
+            files.addAll(expand(new File(hadoopHome, "lib"), "slf4j-api-.*.jar"));
+            files.addAll(expand(new File(hadoopHome, "lib"), "slf4j-log4j.*.jar"));
+            files.addAll(expand(new File(hadoopHome, "lib"), "commons-configuration-.*.jar"));
+            files.addAll(expand(new File(hadoopHome, "lib"), "commons-configuration-.*.jar"));
             return files;
         }
     }
