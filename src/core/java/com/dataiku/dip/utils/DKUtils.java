@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
@@ -300,6 +301,11 @@ public class DKUtils {
         return  IOUtils.toString(is, "utf8");
     }
 
+    /**
+     * Given a list of objects, removes a map of the elements of "list" indexed by "memberOrFunction.
+     * If memberOfFunction ends by (), it's intepreted as a string-returning method. Else it must be a string member.
+     * The map is a copy, modifying it does not impact the list.
+     */
     public static <T> Map<String, T> listToMap(List<T> list, String memberOrFunction) {
         Map<String, T> ret = new HashMap<String, T>();
         if (list.isEmpty()) {
@@ -324,6 +330,34 @@ public class DKUtils {
             throw new Error(e);
         }
         return ret;
+    }
+    
+    /**
+     * Given a list of objects, removes the elements of "list" where the "memberOrFunction" member is equal to needle.
+     * If memberOfFunction ends by (), it's intepreted as a string-returning method. Else it must be a string member.
+     */
+    public static <T> void listRemove(List<T> list, String memberOrFunction, String needle) {
+        if (list.size() == 0) return;
+        Class<?> tclazz = list.get(0).getClass();
+        try {
+            if (memberOrFunction.endsWith("()")) {
+                Method m = tclazz.getMethod(memberOrFunction.replace("()", ""));
+                ListIterator<T> it = list.listIterator();
+                while (it.hasNext()) {
+                    String key = (String)m.invoke(it.next());
+                    if (key.equals(needle)) it.remove();
+                }
+            } else {
+                ListIterator<T> it = list.listIterator();
+                Field f  = tclazz.getField(memberOrFunction);
+                while (it.hasNext()) {
+                    String key = (String)f.get(it.next());
+                    if (key.equals(needle)) it.remove();
+                }
+            }
+        } catch (Exception e) {
+            throw new Error(e);
+        }
     }
     
     public static void killProcessTree(Process p) throws IOException {
