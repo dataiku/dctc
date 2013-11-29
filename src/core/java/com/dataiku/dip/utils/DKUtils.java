@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -15,6 +17,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.ISODateTimeFormat;
+
+import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
 
 public class DKUtils {
     public static <T> T lastElement(T[] array) {
@@ -33,12 +38,12 @@ public class DKUtils {
     public static String isoFormat(long ts) {
         return ISODateTimeFormat.basicDateTime().withZone(DateTimeZone.UTC).print(ts);
     }
-    
+
     /* Warning: not optimized */
     public static String isoFormatReadableByDateFormat(long ts) {
         return ISODateTimeFormat.dateHourMinuteSecondMillis().withZoneUTC().print(ts) + "Z";
     }
-    
+
     /* Warning: not optimized */
     public static String isoFormatPretty(long ts) {
         return ISODateTimeFormat.dateHourMinuteSecondMillis().withZone(DateTimeZone.UTC).print(ts);
@@ -66,7 +71,7 @@ public class DKUtils {
             logger.info("Closing " + conn);
             conn.close();
             logger.info("Conn " + conn + " is now " + conn.isClosed());
-            
+
         } catch (Exception e) {
             logger.warn("Could not safely close SQL connection " + conn , e);
         }
@@ -331,7 +336,7 @@ public class DKUtils {
         }
         return ret;
     }
-    
+
     /**
      * Given a list of objects, removes the elements of "list" where the "memberOrFunction" member is equal to needle.
      * If memberOfFunction ends by (), it's intepreted as a string-returning method. Else it must be a string member.
@@ -359,7 +364,90 @@ public class DKUtils {
             throw new Error(e);
         }
     }
-    
+
+    /**
+     * Given a list of objects, sort it by the values of "memberOrFunction"
+     * If memberOfFunction ends by (), it's intepreted as a string-returning method. Else it must be a public member.
+     * 
+     * This allows a very compact writing : DKUtils.listSort(myList, "name"); instead of 
+     * Collections.sort(myList, new Comparator<T>() {
+     *   @Override
+     *   public int compare(T s1, T s2) {
+     *     return s1.name.compareTo(s2.name);
+     *   }
+     * });
+     * 
+     * @warning This is slow. Only use it for convenience on small lists.
+     */
+    public static <T> void listSort(List<T> list, String memberOrFunction, final boolean reverse) {
+        if (list.size() == 0) return;
+        Class<?> tclazz = list.get(0).getClass();
+        try {
+            if (memberOrFunction.endsWith("()")) {
+                final Method m = tclazz.getMethod(memberOrFunction.replace("()", ""));
+                Collections.sort(list, new Comparator<T>() {
+                    @Override
+                    public int compare(T o1, T o2) {
+                        try {
+                            String s1 = (String) m.invoke(o1);
+                            String s2 = (String) m.invoke(o1);
+                            return (reverse ? s2.compareTo(s1) : s1.compareTo(s2));
+                        } catch (Exception e) {
+                            throw new Error(e);
+                        }
+                    }
+                });
+            } else {
+                final Field f  = tclazz.getField(memberOrFunction);
+                if (!f.getType().isPrimitive()) {
+                    Collections.sort(list, new Comparator<T>() {
+                        @Override
+                        public int compare(T o1, T o2) {
+                            try {
+                                String s1 = (String) f.get(o1);
+                                String s2 = (String) f.get(o1);
+                                return (reverse ? s2.compareTo(s1) : s1.compareTo(s2));
+                            } catch (Exception e) {
+                                throw new Error(e);
+                            }
+                        }
+                    });
+                } else if (f.getType() == Integer.TYPE) {
+                    Collections.sort(list, new Comparator<T>() {
+                        @Override
+                        public int compare(T o1, T o2) {
+                            try {
+                                int i1 = f.getInt(o1);
+                                int i2 = f.getInt(o2);
+                                return reverse ? Ints.compare(i2, i1) : Ints.compare(i1, i2);
+                            } catch (Exception e) {
+                                throw new Error(e);
+                            }
+                        }
+                    });
+                } else if (f.getType() == Long.TYPE) {
+                    Collections.sort(list, new Comparator<T>() {
+                        @Override
+                        public int compare(T o1, T o2) {
+                            try {
+                                long i1 = f.getLong(o1);
+                                long i2 = f.getLong(o2);
+                                return reverse ? Longs.compare(i2, i1) : Longs.compare(i1, i2);
+                            } catch (Exception e) {
+                                throw new Error(e);
+                            }
+                        }
+                    });
+                } else {
+                    throw new Error("Unsupported type for sort : " + f.getType());
+                }
+
+            }
+        } catch (Throwable e) {
+            throw new Error(e);
+        }
+    }
+
     public static void killProcessTree(Process p) throws IOException {
         /* java.lang.Process.destroy() does SIGKILL on the process ... but it does not kill 
          * the children. And here we have dku>java.
