@@ -1,5 +1,6 @@
 package com.dataiku.dip.partitioning;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,7 +8,7 @@ import org.apache.commons.lang.NotImplementedException;
 
 import com.google.common.collect.ImmutableMap;
 
-public class Partition implements Cloneable {
+public class Partition implements Cloneable, Serializable{
     public Partition(PartitioningScheme scheme) {
         this.scheme = scheme;
     }

@@ -1,11 +1,12 @@
 package com.dataiku.dip.partitioning;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PartitioningScheme {
+public class PartitioningScheme implements Serializable {
 
     public boolean isPartitioned() {
         return dimensions.size() > 0;

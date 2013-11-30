@@ -1,6 +1,6 @@
 package com.dataiku.dip.datasets;
 
-import java.lang.reflect.Type;
+import java.io.Serializable;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import com.dataiku.dip.utils.ErrorContext;
 import com.dataiku.dip.utils.Pair;
 
-public class Schema {
+public class Schema implements Serializable {
     public static enum Type {
         /** 8 bits */
         TINYINT("tinyint"),
@@ -157,7 +157,7 @@ public class Schema {
         this.columns = other;
     }
 
-    public static class SchemaColumn {
+    public static class SchemaColumn implements Serializable {
         public SchemaColumn() {}
         public SchemaColumn(SchemaColumn other) {
             this.name = other.name;
