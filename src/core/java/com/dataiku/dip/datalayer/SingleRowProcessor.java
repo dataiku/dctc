@@ -1,5 +1,6 @@
 package com.dataiku.dip.datalayer;
 
+
 /**
  * A processor that processes the rows one by one.
  *  - It may mark a row as deleted
@@ -9,7 +10,7 @@ package com.dataiku.dip.datalayer;
  *
  * The column factory must be set before init
  */
-public abstract class SingleRowProcessor {
+public abstract class SingleRowProcessor  implements Processor {
     private ColumnFactory cf;
 
     public void setColumnFactory(ColumnFactory cf) {

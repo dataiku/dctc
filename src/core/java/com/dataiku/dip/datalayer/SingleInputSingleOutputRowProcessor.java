@@ -10,7 +10,7 @@ import com.dataiku.dip.ProcessorWithFactories;
  *   - set output, factories, context (no particular order)
  *   - init
  */
-public abstract class SingleInputSingleOutputRowProcessor implements SingleInputRowProcessor, SingleOutputRowProcessor, ProcessorWithFactories {
+public abstract class SingleInputSingleOutputRowProcessor implements SingleInputRowProcessor, SingleOutputRowProcessor, ProcessorWithFactories, Processor {
     /** Called after output and factories are set */
     public abstract void init() throws Exception;
 
