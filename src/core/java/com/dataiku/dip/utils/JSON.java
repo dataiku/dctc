@@ -2,17 +2,18 @@ package com.dataiku.dip.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
-import java.lang.reflect.Field;
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Map;
 
-import com.google.gson.*;
-import com.google.gson.stream.JsonReader;
 import org.apache.commons.io.FileUtils;
-import org.json.*;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 public class JSON {
 
