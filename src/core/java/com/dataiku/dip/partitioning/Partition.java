@@ -16,7 +16,8 @@ public class Partition implements Cloneable, Serializable{
     public static Partition randomSamplePartition(PartitioningScheme scheme) {
         Partition p = new Partition(scheme);
 
-        for (Dimension dim : scheme.getDimensions().values()) {
+        for (String dimName :scheme.getDimensionNames()) {
+            Dimension dim = scheme.getDimension(dimName);
             if (dim instanceof TimeDimension) {
                 TimeDimension td = (TimeDimension)dim;
                 switch (td.mappedPeriod) {

@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import com.google.common.base.Preconditions;
 
 public class PartitioningScheme implements Serializable {
 
@@ -15,7 +18,6 @@ public class PartitioningScheme implements Serializable {
     public PartitioningScheme addDimension(Dimension dimension) {
         dimensionNames.add(dimension.getName());
         dimensions.put(dimension.getName(), dimension);
-
         return this;
     }
 
@@ -32,12 +34,36 @@ public class PartitioningScheme implements Serializable {
     public List<String> getDimensionNames() {
         return dimensionNames;
     }
-    public Map<String, Dimension> getDimensions() {
+
+    /** NEVER ITERATE ON THE MAP ! */
+    Map<String, Dimension> getDimensions() {
         return dimensions;
     }
-    public Dimension getDimensions(String name) {
+    
+    public Set<String> getDimensionNamesSet() {
+        return dimensions.keySet();
+    }
+    
+    public Dimension getDimension(String name) {
         return dimensions.get(name);
     }
+    
+    public boolean isSingleDimension() {
+        return dimensionNames.size() == 1;
+    }
+
+    public Dimension getSingleDimension() {
+        Preconditions.checkState(dimensionNames.size() == 1);
+        return dimensions.get(dimensionNames.get(0));
+    }
+    
+    public TimeDimension getSingleTimeDimension() {
+        for (Dimension dim : dimensions.values()) {
+            if (dim instanceof TimeDimension) return (TimeDimension) dim;
+        }
+      return null;
+    }
+
 
     public String getFilePathPattern() {
         return filePathPattern;
