@@ -142,7 +142,16 @@ public class DKUtils {
         terr.join();
         return tout.getOutput().toByteArray();
     }
-
+    
+    /* Execute, ignore stdout and log stderr + forward each line to a listener (useful for log analysis) */
+    public static int execNoOutputForwardStderr(String[] args, String[] env, File cwd, LoggingStreamEater.Listener listener) throws IOException, InterruptedException {
+        Process p = Runtime.getRuntime().exec(args, env, cwd);
+        Thread terr = new LoggingStreamEater(p.getErrorStream(), org.apache.log4j.Level.INFO,listener);
+        terr.start();
+        int rv = p.waitFor();
+        terr.join();
+        return rv;
+    }
 
     public static void execAndWriteOutput(String[] args, String[] env, File cwd, File output) throws IOException, InterruptedException {
         Process p = Runtime.getRuntime().exec(args, env, cwd);
@@ -175,15 +184,24 @@ public class DKUtils {
         tout.join();
         terr.join();
     }
-
+    
 
     /* Eat a stream and log its output */
     static public class LoggingStreamEater extends Thread {
+        static public interface Listener {
+            void readLine(String str);
+        }
+        private Listener listener;
         public LoggingStreamEater(InputStream is, org.apache.log4j.Level level) {
             this.is = is;
             this.level = level;
-
         }
+        public LoggingStreamEater(InputStream is, org.apache.log4j.Level level,Listener listener) {
+            this.is = is;
+            this.level = level;
+            this.listener = listener;
+        }
+        
         @Override
         public void run() {
             Thread.currentThread().setName("Exec-" + Thread.currentThread().getId());
@@ -194,6 +212,9 @@ public class DKUtils {
                     String line = br.readLine();
                     if (line == null) break;
                     logger.log(level, line);
+                    if(listener!=null) {
+                        listener.readLine(line);
+                    }
                 }
                 br.close();
             } catch (IOException e) {
