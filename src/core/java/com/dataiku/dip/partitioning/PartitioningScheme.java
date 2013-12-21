@@ -66,7 +66,13 @@ public class PartitioningScheme implements Serializable {
 
 
     public String getFilePathPattern() {
-        return filePathPattern;
+        if (filePathPattern == null) {
+          return null;
+        } else if (filePathPattern.startsWith("/")) {
+            return filePathPattern;
+        } else {
+            return "/" + filePathPattern;
+        }
     }
     public void setFilePathPattern(String filePathPattern) {
         this.filePathPattern = filePathPattern;
