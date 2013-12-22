@@ -64,15 +64,18 @@ public class PartitioningScheme implements Serializable {
       return null;
     }
 
+    public static String normalizePathForPattern(String path) {
+        if (path == null) {
+            return null;
+        } else if (path.startsWith("/")) {
+            return path.substring(1);
+        } else {
+            return path;
+        }
+    }
 
     public String getFilePathPattern() {
-        if (filePathPattern == null) {
-          return null;
-        } else if (filePathPattern.startsWith("/")) {
-            return filePathPattern;
-        } else {
-            return "/" + filePathPattern;
-        }
+        return normalizePathForPattern(filePathPattern);
     }
     public void setFilePathPattern(String filePathPattern) {
         this.filePathPattern = filePathPattern;
