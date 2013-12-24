@@ -123,24 +123,50 @@ public class HadoopLoader {
                     new File("/opt/mapr/hadoop/hadoop-0.20.2/lib/maprfs-test-0.1.jar"));
         } else {
             // Custom distribution 
-            String hadoopHome =getHadoopHomeUsingHadoopClasspath();
-            if (hadoopHome == null) {
-                hadoopHome = getHadoopHomeUsingEnvVars();
+            String[] hadoopClassPath = getHadoopClassPathFromBin();
+
+            String[] filesToLookFor = new String[] {
+                    "hadoop-core-.*.jar",
+                    "hadoop-common-.*jar",
+                    "hadoop-auth-.*.jar",
+                    "protobuf-java-.*.jar",
+                    "guava-.*.jar",
+                    "slf4j-api-.*.jar",
+                    "slf4j-log4j.*.jar",
+                    "commons-configuration-.*.jar"
+            };
+
+            if (hadoopClassPath != null) {
+
+                List<File> files = new ArrayList<>();
+
+                for(String path : hadoopClassPath) {
+                    for(String fileToLookFor : filesToLookFor) {
+                        files.addAll(expand(new File(path), fileToLookFor));
+                    }
+                }
+
+                return files;
+
+            } else {
+
+                String hadoopHome = getHadoopHomeUsingEnvVars();
+
+                if (hadoopHome ==null ){
+                    throw new IllegalArgumentException("Could not locate Hadoop home, using either 'hadoop classpath', $HADOOP_HOME OR $HADOOP_PREFIX");
+                }
+                logger.info("Detected custom Hadoop distribution in " + hadoopHome);
+                List<File> files =  expand(new File(hadoopHome), "hadoop-core-.*.jar");
+                files.addAll(expand(new File(hadoopHome), "hadoop-common-.*jar"));
+                files.addAll(expand(new File(hadoopHome, "lib"), "hadoop-auth-.*.jar"));
+                files.addAll(expand(new File(hadoopHome, "lib"), "protobuf-java-.*.jar"));
+                files.addAll(expand(new File(hadoopHome, "lib"), "guava-.*.jar"));
+                files.addAll(expand(new File(hadoopHome, "lib"), "slf4j-api-.*.jar"));
+                files.addAll(expand(new File(hadoopHome, "lib"), "slf4j-log4j.*.jar"));
+                files.addAll(expand(new File(hadoopHome, "lib"), "commons-configuration-.*.jar"));
+                files.addAll(expand(new File(hadoopHome, "lib"), "commons-configuration-.*.jar"));
+                return files;
             }
-            if (hadoopHome ==null ){
-                throw new IllegalArgumentException("Could not locate Hadoop home, using either 'hadoop classpath', $HADOOP_HOME OR $HADOOP_PREFIX");
-            }
-            logger.info("Detected custom Hadoop distribution in " + hadoopHome);
-            List<File> files =  expand(new File(hadoopHome), "hadoop-core-.*.jar");
-            files.addAll(expand(new File(hadoopHome), "hadoop-common-.*jar"));
-            files.addAll(expand(new File(hadoopHome, "lib"), "hadoop-auth-.*.jar"));
-            files.addAll(expand(new File(hadoopHome, "lib"), "protobuf-java-.*.jar"));
-            files.addAll(expand(new File(hadoopHome, "lib"), "guava-.*.jar"));
-            files.addAll(expand(new File(hadoopHome, "lib"), "slf4j-api-.*.jar"));
-            files.addAll(expand(new File(hadoopHome, "lib"), "slf4j-log4j.*.jar"));
-            files.addAll(expand(new File(hadoopHome, "lib"), "commons-configuration-.*.jar"));
-            files.addAll(expand(new File(hadoopHome, "lib"), "commons-configuration-.*.jar"));
-            return files;
         }
     }
 
@@ -233,15 +259,10 @@ public class HadoopLoader {
     /** 
      * Return null if fails.
      */
-    private static String getHadoopHomeUsingHadoopClasspath() {
+    private static String[] getHadoopClassPathFromBin() {
         try {
             String hadoopClasspath = new String(DKUtils.execAndGetOutput(new String[]{"hadoop", "classpath"}, null), "UTF-8");
-
-            for (String chunk : hadoopClasspath.split(":")) {
-                if (chunk.contains("hadoop-core")) {
-                    return new File(chunk).getParent();
-                }
-            }
+            return hadoopClasspath.split(":");
         } catch (Exception e) {
         }
         return null;
