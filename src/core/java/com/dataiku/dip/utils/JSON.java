@@ -1,34 +1,35 @@
 package com.dataiku.dip.utils;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+import org.apache.commons.io.FileUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
-
 public class JSON {
 
-    private final static GsonBuilder gsonBuilder = new GsonBuilder().serializeSpecialFloatingPointValues();
-    private final static GsonBuilder gsonBuilderPretty = new GsonBuilder().serializeSpecialFloatingPointValues().setPrettyPrinting();
+    private final static GsonBuilder gsonBuilder = createGsonBuilder();
+    private final static GsonBuilder gsonBuilderPretty = createGsonBuilder().setPrettyPrinting();
+
+    private static GsonBuilder createGsonBuilder() {
+        return new GsonBuilder()
+                .serializeSpecialFloatingPointValues() // Allows for NaN and stuff
+                .registerTypeAdapterFactory(new GsonLowerCaseEnumTypeAdapterFactor()) // lower-case normalisation when serializing/deserializing enum
+        ;
+    }
 
     public static void registerAdapter(Type type, Object adapter) {
         gsonBuilder.registerTypeAdapter(type, adapter);
 
         gsonBuilderPretty.registerTypeAdapter(type, adapter);
-    }
-
-    public static void registerHierarchyAdapter(Class<?> type, Object adapter) {
-        gsonBuilder.registerTypeHierarchyAdapter(type, adapter);
-        gsonBuilderPretty.registerTypeHierarchyAdapter(type, adapter);
     }
 
     public static Gson gson() {
@@ -38,7 +39,6 @@ public class JSON {
     public static Gson gsonPretty() {
         return gsonBuilderPretty.create();
     }
-
 
     /**
      * Removing trailing commas in arrray instead
@@ -108,9 +108,8 @@ public class JSON {
      * @return The object of typed T that has been parsed.
      */
     public static <T> T parse(String s, Class<T> classOfT) {
-        String sanitized = null;
         try {
-            sanitized = sanitizeJson(s);
+            String sanitized = sanitizeJson(s);
             return gson().fromJson(sanitized, classOfT);
         } catch (JSONException e) {
             throw new JsonSyntaxException("Sanitization failed", e);
