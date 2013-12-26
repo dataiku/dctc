@@ -46,7 +46,7 @@ public class DKULogger extends Logger {
             tl.remove();
         }
     }
-    private static ThreadLocal<CallTime> tl = new ThreadLocal<>();
+    private static ThreadLocal<CallTime> tl = new ThreadLocal<CallTime>();
 
     private Object concatTime(Object message) {
         if (tl.get() != null && tl.get().start != 0) {
