@@ -138,7 +138,7 @@ public class HadoopLoader {
 
             if (hadoopClassPath != null) {
 
-                List<File> files = new ArrayList<>();
+                List<File> files = new ArrayList<File>();
 
                 for(String path : hadoopClassPath) {
                     for(String fileToLookFor : filesToLookFor) {
