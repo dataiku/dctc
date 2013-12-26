@@ -1,14 +1,15 @@
 package com.dataiku.dip.utils;
 
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Logger;
-import org.apache.log4j.SimpleLayout;
-import org.apache.log4j.spi.Filter;
-import org.apache.log4j.spi.LoggingEvent;
 
-public class LimitFilter extends Filter {
+/**
+ * Ensures that the appender will
+ * output at most N- lines.
+ *
+ * Makes sure to not use it for static loggers
+ * as this "budget" is for the lifetime of the logger.
+ */
+public class LimitFilter implements DKULoggerFilter {
 
     public int nbLinesLogged = 0;
     public final int limit;
@@ -22,35 +23,13 @@ public class LimitFilter extends Filter {
     }
 
     @Override
-    public int decide(LoggingEvent loggingEvent) {
+    public boolean accept(Object msg) {
         nbLinesLogged+=1;
         if (nbLinesLogged > limit) {
-            return Filter.DENY;
+            return false;
         }
         else {
-            return Filter.ACCEPT;
+            return true;
         }
-    }
-
-    /**
-     * Returns a logger with a single console appender
-     * with a limit filter. It ensures that the appender will
-     * output at most N- lines.
-     *
-     * Makes sure to not use it for static loggers
-     * as this "budget" is for the lifetime of the logger.
-     *
-     * @param name
-     * @param limit Number of max lines outputted for the lifetime.
-     * @return A limitted logger.
-     */
-    public static Logger getLimitedLogger(String name, int limit) {
-        Logger logger = Logger.getLogger(name);
-        logger.setAdditivity(false);
-        logger.removeAllAppenders();
-        Appender consoleAppender = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
-        consoleAppender.addFilter(new LimitFilter(limit));
-        logger.addAppender(consoleAppender);
-        return logger;
     }
 }
