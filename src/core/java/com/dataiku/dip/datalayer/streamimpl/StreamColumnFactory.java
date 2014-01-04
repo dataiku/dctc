@@ -75,8 +75,16 @@ public class StreamColumnFactory implements ColumnFactory {
 
     @Override
     public synchronized void deleteColumn(String name) {
+        /*
+        WARNING WARNING. Highly complex
+        Since columns() is used on a StreamColumnFactory  inside some processors
+         and that delete() it can be called, in the context of a multithread shaker, by different processors upon completion in postProcess
+         delete should not be taken into account for StreamColumnFactory.
+        Having too many column is no hindrance for a StreamColumnFactory() BUT in the case where the output dataset schema is not defined.
+        Such cases, however should not happen.
         list.remove(map.get(name));
         map.remove(name);
+        */
     }
 
     synchronized void renameColumn(StreamColumn sc, String newName) {
