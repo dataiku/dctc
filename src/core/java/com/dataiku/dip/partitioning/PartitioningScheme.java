@@ -10,6 +10,7 @@ import java.util.Set;
 import com.google.common.base.Preconditions;
 
 public class PartitioningScheme implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     public boolean isPartitioned() {
         return dimensions.size() > 0;
@@ -63,19 +64,9 @@ public class PartitioningScheme implements Serializable {
         }
       return null;
     }
-
-    public static String normalizePathForPattern(String path) {
-        if (path == null) {
-            return null;
-        } else if (path.startsWith("/")) {
-            return path.substring(1);
-        } else {
-            return path;
-        }
-    }
-
+    
     public String getFilePathPattern() {
-        return normalizePathForPattern(filePathPattern);
+        return filePathPattern;
     }
     public void setFilePathPattern(String filePathPattern) {
         this.filePathPattern = filePathPattern;
@@ -111,6 +102,4 @@ public class PartitioningScheme implements Serializable {
     private String filePathPattern;
     private List<String> dimensionNames = new ArrayList<String>();
     private Map<String, Dimension> dimensions = new HashMap<String, Dimension>();
-
-
 }

@@ -11,6 +11,8 @@ import com.dataiku.dip.utils.ErrorContext;
 import com.dataiku.dip.utils.Pair;
 
 public class Schema implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public static enum Type {
         /** 8 bits */
         TINYINT("tinyint"),
@@ -158,6 +160,8 @@ public class Schema implements Serializable {
     }
 
     public static class SchemaColumn implements Serializable {
+        private static final long serialVersionUID = 1L;
+
         public SchemaColumn() {}
         public SchemaColumn(SchemaColumn other) {
             this.name = other.name;

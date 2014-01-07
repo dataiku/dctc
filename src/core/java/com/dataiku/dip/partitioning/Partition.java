@@ -9,6 +9,8 @@ import org.apache.commons.lang.NotImplementedException;
 import com.google.common.collect.ImmutableMap;
 
 public class Partition implements Cloneable, Serializable{
+    private static final long serialVersionUID = 1L;
+
     public Partition(PartitioningScheme scheme) {
         this.scheme = scheme;
     }
