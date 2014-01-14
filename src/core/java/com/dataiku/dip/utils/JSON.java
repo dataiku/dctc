@@ -148,4 +148,11 @@ public class JSON {
         if (o == null) return;
         System.out.println(pretty(o));
     }
+    
+    public static <T> T deepCopy(T o) {
+        if(o==null) {
+            return null;
+        }
+        return (T) JSON.parse(JSON.json(o), o.getClass());
+    }
 }
