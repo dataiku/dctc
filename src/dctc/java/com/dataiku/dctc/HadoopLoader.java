@@ -58,38 +58,50 @@ public class HadoopLoader {
     }
 
     public static boolean isCDH4Package() {
-        if (new File("/usr/lib/hadoop/cloudera").isDirectory()) {
-            logger.info("Detected Cloudera distribution using packages");
-            try {
-                String content = FileUtils.readFileToString(new File("/usr/lib/hadoop/cloudera/cdh_version.properties"));
-                if (content.indexOf("cdh4") > 0 ) {
-                    return true;
-                }
-            } catch (Exception e) {}
-        }
+    	try {
+    		String content = FileUtils.readFileToString(new File("/usr/lib/hadoop/cloudera/cdh_version.properties"));
+    		if (content.indexOf("cdh4") > 0 ) {
+    			return true;
+    		}
+    	} catch (Exception e) {}
+        return false;
+    }
+
+    public static boolean isCDH5Package() {
+    	try {
+    		String content = FileUtils.readFileToString(new File("/usr/lib/hadoop/cloudera/cdh_version.properties"));
+    		if (content.indexOf("cdh5") > 0 ) {
+    			return true;
+    		}
+    	} catch (Exception e) {}
         return false;
     }
 
     public static boolean isCDH4Parcel() {
         // TODO - this path can be customized in /etc/cloudera-scm-agent/config.ini
-        if (new File("/opt/cloudera/parcels/CDH/lib/hadoop/cloudera").isDirectory()) {
-            logger.info("Detected Cloudera distribution using parcels");
-            try {
-                String content = FileUtils.readFileToString(new File("/opt/cloudera/parcels/CDH/lib/hadoop/cloudera/cdh_version.properties"));
-                if (content.indexOf("cdh4") > 0 ) {
-                    return true;
-                }
-            } catch (Exception e) {}
-        }
+    	try {
+    		String content = FileUtils.readFileToString(new File("/opt/cloudera/parcels/CDH/lib/hadoop/cloudera/cdh_version.properties"));
+    		if (content.indexOf("cdh4") > 0 ) {
+    			return true;
+    		}
+    	} catch (Exception e) {}
         return false;
     }
 
-    public static boolean isCDH4() {
-        return isCDH4Parcel() || isCDH4Package();
+    public static boolean isCDH5Parcel() {
+        // TODO - this path can be customized in /etc/cloudera-scm-agent/config.ini
+    	try {
+    		String content = FileUtils.readFileToString(new File("/opt/cloudera/parcels/CDH/lib/hadoop/cloudera/cdh_version.properties"));
+    		if (content.indexOf("cdh5") > 0 ) {
+    			return true;
+    		}
+    	} catch (Exception e) {}
+        return false;
     }
 
     public static List<File> getHadoopCodeJARs() {
         if (isCDH4Parcel()) {
+            logger.info("Detected Cloudera CDH4 distribution using parcels");
             String dir = "/opt/cloudera/parcels/CDH/lib/";
             return Lists.newArrayList(
                     new File(dir + "hadoop/lib/protobuf-java-2.4.0a.jar"),
@@ -103,17 +115,47 @@ public class HadoopLoader {
                     new File(dir + "hadoop/hadoop-common.jar"),
                     new File(dir + "hadoop/hadoop-auth.jar"));
         } else if (isCDH4Package()) {
+            logger.info("Detected Cloudera CDH4 distribution using packages");
+            String dir = "/usr/lib/";
             return Lists.newArrayList(
-                    new File("/usr/lib/hadoop/lib/protobuf-java-2.4.0a.jar"),
-                    new File("/usr/lib/hadoop/lib/guava-11.0.2.jar"),
-                    new File("/usr/lib/hadoop/lib/slf4j-api-1.6.1.jar"),
-                    new File("/usr/lib/hadoop/lib/slf4j-log4j12-1.6.1.jar"),
-                    new File("/usr/lib/hadoop/lib/commons-configuration-1.6.jar"),
-                    new File("/usr/lib/hadoop-hdfs/hadoop-hdfs.jar"),
-                    new File("/usr/lib/hadoop/hadoop-common.jar"),
-                    new File("/usr/lib/hadoop-mapreduce/hadoop-mapreduce-client-core.jar"),
-                    new File("/usr/lib/hadoop/lib/avro-1.7.4.jar"),
-                    new File("/usr/lib/hadoop/hadoop-auth.jar"));
+                    new File(dir + "hadoop/lib/protobuf-java-2.4.0a.jar"),
+                    new File(dir + "hadoop/lib/guava-11.0.2.jar"),
+                    new File(dir + "hadoop/lib/slf4j-api-1.6.1.jar"),
+                    new File(dir + "hadoop/lib/slf4j-log4j12-1.6.1.jar"),
+                    new File(dir + "hadoop/lib/commons-configuration-1.6.jar"),
+                    new File(dir + "hadoop-mapreduce/hadoop-mapreduce-client-core.jar"),
+                    new File(dir + "hadoop/lib/avro-1.7.4.jar"),
+                    new File(dir + "hadoop-hdfs/hadoop-hdfs.jar"),
+                    new File(dir + "hadoop/hadoop-common.jar"),
+                    new File(dir + "hadoop/hadoop-auth.jar"));
+        } else if (isCDH5Parcel()) {
+        	logger.info("Detected Cloudera CDH5 distribution using parcels");
+        	String dir = "/opt/cloudera/parcels/CDH/lib/";
+        	return Lists.newArrayList(
+        			new File(dir + "hadoop/lib/protobuf-java-2.5.0.jar"),
+        			new File(dir + "hadoop/lib/guava-11.0.2.jar"),
+        			new File(dir + "hadoop/lib/slf4j-api-1.7.5.jar"),
+        			new File(dir + "hadoop/lib/slf4j-log4j12.jar"),
+        			new File(dir + "hadoop/lib/commons-configuration-1.6.jar"),
+        			new File(dir + "hadoop-mapreduce/hadoop-mapreduce-client-core.jar"),
+        			new File(dir + "hadoop/lib/avro-1.7.4.jar"),
+        			new File(dir + "hadoop-hdfs/hadoop-hdfs.jar"),
+        			new File(dir + "hadoop/hadoop-common.jar"),
+        			new File(dir + "hadoop/hadoop-auth.jar"));
+        } else if (isCDH5Package()) {
+        	logger.info("Detected Cloudera CDH5 distribution using packages");
+        	String dir = "/usr/lib/";
+        	return Lists.newArrayList(
+        			new File(dir + "hadoop/lib/protobuf-java-2.5.0.jar"),
+        			new File(dir + "hadoop/lib/guava-11.0.2.jar"),
+        			new File(dir + "hadoop/lib/slf4j-api-1.7.5.jar"),
+        			new File(dir + "hadoop/lib/slf4j-log4j12.jar"),
+        			new File(dir + "hadoop/lib/commons-configuration-1.6.jar"),
+        			new File(dir + "hadoop-mapreduce/hadoop-mapreduce-client-core.jar"),
+        			new File(dir + "hadoop/lib/avro-1.7.4.jar"),
+        			new File(dir + "hadoop-hdfs/hadoop-hdfs.jar"),
+        			new File(dir + "hadoop/hadoop-common.jar"),
+        			new File(dir + "hadoop/hadoop-auth.jar"));
         } else if (isMAPR()) {
             // TODO : Sequence file support on Mapr
             return Lists.newArrayList(
@@ -141,16 +183,8 @@ public class HadoopLoader {
                 List<File> files = new ArrayList<File>();
 
                 for(String path : hadoopClassPath) {
-                    if (path.endsWith("*")) {
-                        path = path.substring(0, path.length()-1);
-                    } else if (path.endsWith("*.jar")) {
-                        path = path.substring(0, path.length()-4);
-                    }
-                    File dir = new File(path);
-
-
                     for(String fileToLookFor : filesToLookFor) {
-                        files.addAll(expand(dir, fileToLookFor));
+                        files.addAll(expand(new File(path), fileToLookFor));
                     }
                 }
 
