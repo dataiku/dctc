@@ -141,8 +141,16 @@ public class HadoopLoader {
                 List<File> files = new ArrayList<File>();
 
                 for(String path : hadoopClassPath) {
+                    if (path.endsWith("*")) {
+                        path = path.substring(0, path.length()-1);
+                    } else if (path.endsWith("*.jar")) {
+                        path = path.substring(0, path.length()-4);
+                    }
+                    File dir = new File(path);
+
+
                     for(String fileToLookFor : filesToLookFor) {
-                        files.addAll(expand(new File(path), fileToLookFor));
+                        files.addAll(expand(dir, fileToLookFor));
                     }
                 }
 
