@@ -24,21 +24,28 @@ public class HadoopLoader {
      * Returns whether Hadoop is enabled on this DSS instance
      */
     public static boolean hadoopEnabled() {
+        
         if (hadoopEnabled != null) return hadoopEnabled;
-        String envVar = System.getenv("DKU_HADOOP_ENABLED");
-        if (envVar != null && envVar.equalsIgnoreCase("true")) {
-            hadoopEnabled = true;
-        } else if (envVar != null && envVar.equalsIgnoreCase("false")) {
-            hadoopEnabled = false;
-        } else {
-            try {
-                getConfigLocations();
+        
+        synchronized (HadoopLoader.class) {
+            
+            if (hadoopEnabled != null) return hadoopEnabled;
+
+            String envVar = System.getenv("DKU_HADOOP_ENABLED");
+            if (envVar != null && envVar.equalsIgnoreCase("true")) {
                 hadoopEnabled = true;
-            } catch (Exception e) {
-                hadoopEnabled  = false;
+            } else if (envVar != null && envVar.equalsIgnoreCase("false")) {
+                hadoopEnabled = false;
+            } else {
+                try {
+                    getConfigLocations();
+                    hadoopEnabled = true;
+                } catch (Exception e) {
+                    hadoopEnabled  = false;
+                }
             }
+            return hadoopEnabled;
         }
-        return hadoopEnabled;
     }
     
 
@@ -219,43 +226,50 @@ public class HadoopLoader {
      * Additionally, for dctc, we load JARs
      */
     public static void addLibraries() {
+        
         if (librariesAdded) return;
-        librariesAdded = true;
-
-        try {
-            if (System.getenv("DCTC_AUTO_LOAD_HADOOP") != null) {
-                logger.info("Loading Jars for DCTC");
-                for (File f : getHadoopCodeJARs()) {
+        
+        synchronized(HadoopLoader.class)  {
+            
+            if (librariesAdded) return;
+            librariesAdded = true;
+    
+            try {
+                if (System.getenv("DCTC_AUTO_LOAD_HADOOP") != null) {
+                    logger.info("Loading Jars for DCTC");
+                    for (File f : getHadoopCodeJARs()) {
+                        loadJar(f);
+                    }
+                }
+            } catch (Exception e) {
+                logger.warn("Failed to set distribution-specific parameters", e);
+            }
+    
+            try {
+                /* Always load MAPR native library */
+                if (isMAPR()) {
+                    logger.info("Loading native MAPR library");
+                    System.setProperty("java.library.path", "/opt/mapr/lib");
+                    /* Force Java to reload library path .*/
+                    // From : http://blog.cedarsoft.com/2010/11/setting-java-library-path-programmatically/
+                    Field fieldSysPath = ClassLoader.class.getDeclaredField( "sys_paths" );
+                    fieldSysPath.setAccessible( true );
+                    fieldSysPath.set( null, null );
+                }
+            } catch (Exception e) {
+                logger.warn("Failed to set distribution-specific parameters", e);
+            }
+    
+            logger.info("Loading Hadoop configuration locations");
+            try {
+                for (File f : getConfigLocations()) {
                     loadJar(f);
                 }
+            } catch (Exception e) {
+                logger.warn("Failed to set distribution-specific parameters", e);
             }
-        } catch (Exception e) {
-            logger.warn("Failed to set distribution-specific parameters", e);
         }
-
-        try {
-            /* Always load MAPR native library */
-            if (isMAPR()) {
-                logger.info("Loading native MAPR library");
-                System.setProperty("java.library.path", "/opt/mapr/lib");
-                /* Force Java to reload library path .*/
-                // From : http://blog.cedarsoft.com/2010/11/setting-java-library-path-programmatically/
-                Field fieldSysPath = ClassLoader.class.getDeclaredField( "sys_paths" );
-                fieldSysPath.setAccessible( true );
-                fieldSysPath.set( null, null );
-            }
-        } catch (Exception e) {
-            logger.warn("Failed to set distribution-specific parameters", e);
-        }
-
-        logger.info("Loading Hadoop configuration locations");
-        try {
-            for (File f : getConfigLocations()) {
-                loadJar(f);
-            }
-        } catch (Exception e) {
-            logger.warn("Failed to set distribution-specific parameters", e);
-        }
+        
     }
 
     
