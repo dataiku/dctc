@@ -82,7 +82,7 @@ public class TimeDimension extends Dimension {
     @SuppressWarnings("fallthrough")
     @Override
     public DimensionValue getValueFromId(String id) {
-        if (!id.contains("-")) {
+        if (id.equals("YESTERDAY") || id.equals("TODAY")) {
             return getValueFromSymbolicDate(id);
         }
 
