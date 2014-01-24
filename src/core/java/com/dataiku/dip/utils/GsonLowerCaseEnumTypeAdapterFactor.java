@@ -20,6 +20,7 @@ import java.util.Map;
 public class GsonLowerCaseEnumTypeAdapterFactor implements TypeAdapterFactory {
 
         public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+            @SuppressWarnings("unchecked")
             Class<T> rawType = (Class<T>) type.getRawType();
             if (!rawType.isEnum()) {
                 return null;

@@ -3,6 +3,7 @@ package com.dataiku.dip.utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -149,6 +150,7 @@ public class JSON {
         System.out.println(pretty(o));
     }
     
+    @SuppressWarnings("unchecked")
     public static <T> T deepCopy(T o) {
         if(o==null) {
             return null;
