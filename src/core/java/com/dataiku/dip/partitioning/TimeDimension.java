@@ -82,28 +82,32 @@ public class TimeDimension extends Dimension {
     @SuppressWarnings("fallthrough")
     @Override
     public DimensionValue getValueFromId(String id) {
-        if (id.equals("YESTERDAY") || id.equals("TODAY")) {
-            return getValueFromSymbolicDate(id);
+        try {
+            if (id.equals("YESTERDAY") || id.equals("TODAY")) {
+                return getValueFromSymbolicDate(id);
+            }
+
+            String[] chunks = id.split("-");
+            TimeDimensionValue  timeDim = new TimeDimensionValue(this);
+
+            switch (mappedPeriod) {
+            case HOUR:
+                timeDim.setHour(Integer.parseInt(chunks[3]));
+            case DAY:
+                timeDim.setDay(Integer.parseInt(chunks[2]));
+            case MONTH:
+                timeDim.setMonth(Integer.parseInt(chunks[1]));
+            case YEAR:
+                timeDim.setYear(Integer.parseInt(chunks[0]));
+
+                break;
+            default:
+                throw new Error("Never reached.");
+            }
+            return timeDim;
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Illegal time partitioning value : '" +id + "'");
         }
-
-        String[] chunks = id.split("-");
-        TimeDimensionValue  timeDim = new TimeDimensionValue(this);
-
-        switch (mappedPeriod) {
-        case HOUR:
-            timeDim.setHour(Integer.parseInt(chunks[3]));
-        case DAY:
-            timeDim.setDay(Integer.parseInt(chunks[2]));
-        case MONTH:
-            timeDim.setMonth(Integer.parseInt(chunks[1]));
-        case YEAR:
-            timeDim.setYear(Integer.parseInt(chunks[0]));
-
-            break;
-        default:
-            throw new Error("Never reached.");
-        }
-        return timeDim;
     }
 
     @Override
