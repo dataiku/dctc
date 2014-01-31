@@ -79,6 +79,7 @@ public class HdfsFile extends AbstractGFile {
     }
     @Override
     public boolean isFile() throws IOException {
+    	initFileSystem();
         return fileSystem.isFile(hdfsPath);
     }
     @Override
@@ -120,8 +121,8 @@ public class HdfsFile extends AbstractGFile {
                 recursiveList.add(PathManip.concat(path == null
                                                    ? ""
                                                    : path
-                                                   .toString()
-                                                   .substring(7)
+                                                   .toUri()
+                                                   .getPath()
                                                    , status
                                                    .getPath()
                                                    .getName()
@@ -183,6 +184,7 @@ public class HdfsFile extends AbstractGFile {
     }
     @Override
     public boolean delete() throws IOException {
+        initFileSystem();
         return fileSystem.delete(hdfsPath, true);
     }
     @Override
@@ -207,6 +209,12 @@ public class HdfsFile extends AbstractGFile {
         initStatus();
         return status.getModificationTime();
     }
+    @Override
+    public void setDate(long date) throws IOException {
+    	initFileSystem();
+    	fileSystem.setTimes(hdfsPath, date, date);
+    }
+
     @Override
     public long getSize() throws IOException{
         initStatus();
@@ -235,11 +243,12 @@ public class HdfsFile extends AbstractGFile {
     // Local Methods
     // Private
     private void initFileSystem() throws IOException {
+    	if (fileSystem != null) return;
         fileSystem = HadoopLoader.getFS();
     }
     private void initStatus() throws IOException {
         initFileSystem();
-        this.status = this.fileSystem.getFileStatus(hdfsPath);
+        status = fileSystem.getFileStatus(hdfsPath);
     }
 
     // Attributes
