@@ -229,6 +229,11 @@ public class SshFile extends AbstractGFile {
         return recursiveList;
     }
     @Override
+    public void invalidateListCache() {
+    	list = null;
+    	recursiveList = null;
+    }
+    @Override
     public SshFile createSubFile(String subpath
                                  , String fileSeparator)
         throws IOException {

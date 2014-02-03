@@ -156,6 +156,11 @@ public class LocalFile extends AbstractGFile {
         return recurList;
     }
     @Override
+    public void invalidateListCache() {
+    	l = null;
+    	recurList = null;
+    }
+    @Override
     public List<LocalFile> grecursiveList() throws IOException {
         return createInstanceFor(recursiveList());
     }

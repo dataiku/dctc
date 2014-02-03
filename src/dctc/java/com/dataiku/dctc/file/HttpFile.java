@@ -94,6 +94,11 @@ public class HttpFile extends AbstractGFile {
         return recursiveList;
     }
     @Override
+    public void invalidateListCache() {
+    	list = null;
+    	recursiveList = null;
+    }
+    @Override
     public void mkpath() throws IOException {
     }
 

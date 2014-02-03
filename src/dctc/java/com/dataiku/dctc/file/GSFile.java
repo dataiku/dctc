@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import com.amazonaws.services.sns.model.NotFoundException;
@@ -276,6 +277,11 @@ public class GSFile extends BucketBasedFile {
                                   + ": is a file");
         }
         return grecursiveList;
+    }
+    @Override
+    public void invalidateListCache() {
+    	// TODO - check invariants for this
+    	throw new NotImplementedException();
     }
     private void fill(List<StorageObject> sos) throws IOException {
         grecursiveList = new ArrayList<GSFile>();

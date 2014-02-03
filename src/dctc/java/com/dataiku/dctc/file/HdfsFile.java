@@ -138,6 +138,11 @@ public class HdfsFile extends AbstractGFile {
         return recursiveList;
     }
     @Override
+    public void invalidateListCache() {
+    	list = null;
+    	recursiveList = null;
+    }
+    @Override
     public List<HdfsFile> grecursiveList() throws IOException {
         return createInstanceFor(recursiveList());
     }

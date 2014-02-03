@@ -120,6 +120,9 @@ public class StandardFile implements GFile {
         throw new IOException("Not a directory");
     }
     @Override
+    public void invalidateListCache() {
+    }
+    @Override
     public String givenName() {
         return "-";
     }

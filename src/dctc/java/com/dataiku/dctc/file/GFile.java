@@ -36,6 +36,8 @@ public interface GFile extends Comparable<GFile> {
     public InputStream getRange(long begin, long length) throws IOException;
     public List<? extends GFile> glist() throws IOException;
     public List<? extends GFile> grecursiveList() throws IOException;
+    // Invalidate any cached list or recursive list of children
+    public void invalidateListCache();
 
     public String givenName();
     public String givenPath();

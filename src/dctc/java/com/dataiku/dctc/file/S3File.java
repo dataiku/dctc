@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.ClosedInputStream;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import com.amazonaws.AmazonClientException;
@@ -210,6 +211,11 @@ public class S3File extends BucketBasedFile {
             fill(recursiveFileList);
         }
         return grecursiveList;
+    }
+    @Override
+    public void invalidateListCache() {
+    	// TODO - check invariants for this
+    	throw new NotImplementedException();
     }
     private void fill(List<S3ObjectSummary> recursiveFileList) {
         grecursiveList = new ArrayList<S3File>();

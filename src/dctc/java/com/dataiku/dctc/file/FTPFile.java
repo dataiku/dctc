@@ -206,6 +206,11 @@ public class FTPFile extends AbstractGFile {
         return recurList;
     }
     @Override
+    public void invalidateListCache() {
+    	list = null;
+    	recurList = null;
+    }
+    @Override
     public String givenName() {
         return "ftp://" + PathManip.concat(server, path, fileSeparator());
     }
