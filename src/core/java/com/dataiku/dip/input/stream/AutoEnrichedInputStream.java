@@ -71,11 +71,14 @@ public abstract class AutoEnrichedInputStream implements EnrichedInputStream {
     @Override
     public InputStream decompressedHeadStream(long targetSize) throws IOException {
         if (isArchive()) {
-            /* Return the first stream in the archive */
+            /* Return the first file stream in the archive */
             ArchiveInputStream archiveStream = archiveContent();
-            ArchiveEntry entry = archiveStream.getNextEntry();
-            if (entry == null) return null;
-            else return archiveStream;
+            while (true) {
+                ArchiveEntry entry = archiveStream.getNextEntry();
+                if (entry == null) return null;
+                if (entry.isDirectory()) continue;
+                return archiveStream;
+            }
         } else {
             switch (getCompression()) {
             case GZIP:  return new GZIPInputStream(getBasicHeadInputStream(targetSize));
